@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by EAI (KPN Telecom) -->
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0381_PreQualificationCheck/1.0/Request" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0381_PreQualificationCheck/1.0/Request">
+	<xs:simpleType name="houseNumber_type">
+		<xs:annotation>
+			<xs:documentation>The Subscriber's house number.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dutchPostcode_type">
+		<xs:annotation>
+			<xs:documentation>The Postal Code of the Subscriber's residence.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="6"/>
+			<xs:pattern value="\d{4}[a-zA-Z]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="houseNumberExtension_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="6"/>
+			<xs:minLength value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumber_type">
+		<xs:annotation>
+			<xs:documentation>This field contains the requested phonenumber of the the customer adress</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="25"/>
+			<xs:pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>This is the BODY object for KPN EAI service number 0381 - PreQualificationCheck version 1.0 Request message.</xs:documentation>
+			<xs:documentation>Automatically generated schema for service:'PreQualificationCheck', version:'1.0'</xs:documentation>
+			<xs:documentation>Generated on 2008-12-10 11:19:37Z</xs:documentation>
+			<xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+			<xs:documentation>Service ID is:'0381'</xs:documentation>
+			<xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+			<xs:documentation>KPN EAI message body class.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:annotation>
+					<xs:documentation>Artificial sequence to separate.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="ORIGINATOR" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>A unique identification for the sender of the xml message. The value of the originator is coupled to a contract in KIWI. KIWI checks or there is a valid contract. If not KIWI will generaee the errorcode 504.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="END_USER_LOCATION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="HOUSE_NUMBER" type="tns:houseNumber_type">
+								<xs:annotation>
+									<xs:documentation>The Subscriber's house number.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DUTCH_POSTCODE" type="tns:dutchPostcode_type">
+								<xs:annotation>
+									<xs:documentation>The Postal Code of the Subscriber's residence.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ACCESS_ELEMENTS">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="ACCESS_CLASS_ID" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The access class must have one of the following values:
+- A2A: ATM-to-ATM
+- A2E: ATM-to-Ethernet
+- A2AE: ATM-to-ATM and ATM-to-Ethernet
+- E2E: Ethernet-to-Ethernet
+The previous value for accessclass in older B2B versions (V40) and older was standard and is replaced bij "A2A". </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="PORTFOLIO_ID" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The PORTFOLIO_ID  defins the allowed services a WSO is able to order. The WSO (defined in ORIGINATOR) must have a contract for that portfolio. When there is no valid contract the errorcode 504 will be returned.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CARRIER_TYPE" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The carrier type defines the carrier used in the subloop to connect the EAP to the DSLAM. It kan be one of the following values:
+Copper only: Acces without telephony
+Copper shared: Acces with telephony
+Fiber: Acces without POTS or ISDN</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TECHNOLOGY_TYPE" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The technology type defines the type of DSL access. Values:
+ADSL_POTS
+ASDL_ISDN
+ADSL2+_POTS
+ADSL2+_ISDN
+SDSL
+VDSL2
+EoF</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="INP_TYPE" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The INP_TYPE is an Impulse Noise Protecting setting needed for IPTV ans is only applicable for a DSL technology over copper lines (access class A2E, ARAE). The values are restricted by ordered product There are two INP settings available:
+INP 0: no impulse noise protected
+INP 4: impulse noise protection setting 4</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PHONE_NUMBER" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="REQUESTED_PHONE_NUMBER" type="tns:phoneNumber_type" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>This field contains the requested phonenumber of the the customer adress</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="REFERENCE_PHONE_NUMBER" type="tns:phoneNumber_type" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The reference phone number is used to identify the ISRA point. The access will not be delivered on this copper pair of the reference phone, but on a free copper pair within the same ISRA point.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ACCESS_INFORMATION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="XDF_ACCESS_SERVICE_ID" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The XDF_ACCESS_SERVICE_ID is another way to identify a specific copper pair (alternative to a the requested telephonenumber).</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SERVICE_INFORMATION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="PRODUCT_ELEMENTS" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="PRODUCT_TYPE_ID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The PRODUCT_TYPE_ID is an identifier of a product. A product is a preconigurated set of services which are interdependent and cannot be provided separately</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="PRODUCT_CLASS" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Currently there is only one product class: TV</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SERVICE_ELEMENTS" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="SERVICE_TYPE_ID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The service type is an identifier of a service type</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SERVICE_CLASS" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The SERVICE_CLASS is a hierarchical grouping of a set of services. The folllowing service classes are allowed:
+A2A VPVC
+A2E
+E2E
+And several service classes reserved for use within products (i.e. TV A2E Control, TV A2E Broadcast, TV A2E. These can not be ordered individually)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

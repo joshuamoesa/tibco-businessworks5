@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyHold.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyHold.xsd" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/NotifyHold.xsd"/>
+    <pd:name>EClipsAdapter/Test Processes/PortingServices/ReceivingHoldJMS_Driver.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>137</pd:startX>
+    <pd:startY>47</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>653</pd:endX>
+    <pd:endY>53</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>480</pd:x>
+        <pd:y>51</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.%%EClipsAdapter/ComponentDomain%%.%%EClipsAdapter/ComponentId%%.Subscribe.NotifyHold.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx:NotifyHold)"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>293</pd:x>
+        <pd:y>38</pd:y>
+        <config>
+            <element ref="pfx:NotifyHold"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:NotifyHold>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;0412&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;NotifyNumberInPortingHold&quot;"/>
+                    </ns1:NAME>
+                    <ns1:FID>
+                        <xsl:value-of select="&quot;987654321&quot;"/>
+                    </ns1:FID>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;1028.30&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;NotifyNumberInPortingHold&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env,'.FIXED.Operations.EClipsAdapter.Subscribe.NotifyHold.1')"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="eai:createGUID()"/>
+                        </ns1:MESSAGE_ID>
+                        <ns1:ITEM>
+                            <xsl:attribute name="ns1:APPINFO">
+                                <xsl:value-of select="&quot;PortingService&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:EVENT">
+                                <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns1:ITEM>
+                    </ns1:TRACKING>
+                </ns1:CMH>
+                <pfx:PORTING_ID>
+                    <xsl:value-of select="&quot;987654321&quot;"/>
+                </pfx:PORTING_ID>
+                <pfx:NOTES>
+                    <xsl:value-of select="&quot;Hold&quot;"/>
+                </pfx:NOTES>
+            </pfx:NotifyHold>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

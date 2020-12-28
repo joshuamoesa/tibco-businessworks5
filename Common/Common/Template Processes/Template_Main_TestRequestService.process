@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:eai="java://com.kpn.eai.tools.Tools" xmlns:ns41="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:eai1="java://com.kpn.eai.component.common.CommonXPathFunctions">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Request/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Response/TestRequestService.xsd"/>
+    <pd:name>Common/Template Processes/Template_Main_TestRequestService.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ReplyDestination" type="xsd:string"/>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>65</pd:startX>
+    <pd:startY>95</pd:startY>
+    <pd:returnBindings>
+        <ServiceOut>
+            <Body>
+                <ns5:TestRequestService>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="&quot;TestRequestService&quot;"/>
+                        </ns1:NAME>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="&quot;Dummy&quot;"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="&quot;TestComponent2&quot;"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/ns1:CMH/ns1:TO/@ns1:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                        <ns1:TRACKING>
+                            <ns1:MESSAGE_ID>
+                                <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                            </ns1:MESSAGE_ID>
+                        </ns1:TRACKING>
+                    </ns1:CMH>
+                    <ns5:RESULT_STATUS>
+                        <xsl:attribute name="ns6:STATUS">
+                            <xsl:value-of select="0"/>
+                        </xsl:attribute>
+                    </ns5:RESULT_STATUS>
+                    <ns5:ORDER_HEADER_OUT>
+                        <ns5:DOC_TYPE>
+                            <xsl:value-of select="&quot;a&quot;"/>
+                        </ns5:DOC_TYPE>
+                        <ns5:SALES_ORG>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns5:SALES_ORG>
+                        <ns5:DISTR_CHAIN>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns5:DISTR_CHAIN>
+                        <ns5:DIVISION>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns5:DIVISION>
+                        <ns5:REQ_DATE_H>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns5:REQ_DATE_H>
+                    </ns5:ORDER_HEADER_OUT>
+                    <ns5:ELEMENT2>
+                        <xsl:value-of select="&quot;a&quot;"/>
+                    </ns5:ELEMENT2>
+                    <ns5:ELEMENT3>
+                        <xsl:value-of select="&quot;b&quot;"/>
+                    </ns5:ELEMENT3>
+                </ns5:TestRequestService>
+            </Body>
+        </ServiceOut>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="ServiceOut">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:any/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>661</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:ErrorReply"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse Request">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>217</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx3:TestRequestService"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>267</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <message>
+                    <xsl:value-of select="eai1:getMessageText(&quot;TBD&quot;)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;TBD&quot;"/>
+                </messageCode>
+                <data>
+                    <pfx2:ErrorReply>
+                        <pfx2:Body>
+                            <ns5:TestRequestService>
+                                <xsl:copy-of select="$Parse-Request/pfx3:TestRequestService/ns1:CMH"/>
+                                <ns5:RESULT_STATUS>
+                                    <xsl:attribute name="ns6:STATUS">
+                                        <xsl:value-of select="1"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns6:MSG_CODE">
+                                        <xsl:value-of select="&quot;TBD&quot;"/>
+                                    </xsl:attribute>
+                                </ns5:RESULT_STATUS>
+                                <ns5:ORDER_HEADER_OUT>
+                                    <ns5:DOC_TYPE>
+                                        <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/pfx3:ORDER_HEADER_IN/pfx3:DOC_TYPE"/>
+                                    </ns5:DOC_TYPE>
+                                    <ns5:SALES_ORG>
+                                        <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/pfx3:ORDER_HEADER_IN/pfx3:SALES_ORG"/>
+                                    </ns5:SALES_ORG>
+                                    <ns5:DISTR_CHAIN>
+                                        <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/pfx3:ORDER_HEADER_IN/pfx3:DISTR_CHAIN"/>
+                                    </ns5:DISTR_CHAIN>
+                                    <ns5:DIVISION>
+                                        <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/pfx3:ORDER_HEADER_IN/pfx3:DIVISION"/>
+                                    </ns5:DIVISION>
+                                    <ns5:REQ_DATE_H>
+                                        <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/pfx3:ORDER_HEADER_IN/pfx3:REQ_DATE_H"/>
+                                    </ns5:REQ_DATE_H>
+                                </ns5:ORDER_HEADER_OUT>
+                                <ns5:ELEMENT2>
+                                    <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/pfx3:ELEMENT2"/>
+                                </ns5:ELEMENT2>
+                                <ns5:ELEMENT3>
+                                    <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/pfx3:ELEMENT3"/>
+                                </ns5:ELEMENT3>
+                            </ns5:TestRequestService>
+                        </pfx2:Body>
+                        <pfx2:Errors>
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;TBD&quot;"/>
+                                </pfx2:MsgCode>
+                                <xsl:if test="$Parse-Request/pfx3:TestRequestService/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                                    <pfx2:MsgId>
+                                        <xsl:value-of select="$Parse-Request/pfx3:TestRequestService/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                    </pfx2:MsgId>
+                                </xsl:if>
+                                <ns3:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </ns3:ErrorReport>
+                                <xsl:if test="$_error_Parse-Request/ActivityErrors">
+                                    <pfx2:ActivityError>
+                                        <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/@*"/>
+                                        <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/node()"/>
+                                    </pfx2:ActivityError>
+                                </xsl:if>
+                            </pfx2:Error>
+                        </pfx2:Errors>
+                    </pfx2:ErrorReply>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Specific implementation">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>379</pd:x>
+        <pd:y>103</pd:y>
+        <config>
+            <processName>/Common/Template Processes/Sub_Dummy.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Request</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Request</pd:from>
+        <pd:to>Specific implementation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Specific implementation</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Specific implementation</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

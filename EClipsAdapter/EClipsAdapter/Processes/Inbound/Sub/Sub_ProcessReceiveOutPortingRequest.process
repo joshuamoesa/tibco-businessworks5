@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" xmlns:pfx4="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberInPortingComplete" xmlns:pfx5="urn:NotifyNumberInportingComplete" xmlns:ns12="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx6="urn:StartNumberInporting" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx7="http://xmlns.kpn.com/fixed/coinadapter/publish/ReceivePlannedNumberDeactivation.xsd" xmlns:pfx8="urn:ReceivePlannedNumberDeactivation" xmlns:pfx9="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyPlannedNumberDeactivation.xsd" xmlns:pfx10="EcPsXsd_V0.2" xmlns:pfx11="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx12="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberOutPortingRequest.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/portingserviceswf/common/Customer.xsd" xmlns:ns6="http://xmlns.kpn.com/fixed/portingserviceswf/common/IndividualName.xsd" xmlns:ns7="http://xmlns.kpn.com/fixed/portingserviceswf/common/OrganizationName.xsd" xmlns:ns8="http://xmlns.kpn.com/fixed/portingserviceswf/common/PropertyAddress.xsd" xmlns:ns9="http://xmlns.kpn.com/fixed/portingserviceswf/common/NumberSerie.xsd" xmlns:ns10="http://xmlns.kpn.com/fixed/portingserviceswf/common/TariffInfo.xsd" xmlns:pfx13="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberInPortingComplete.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent1/Publish/TestPublicationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberInPortingComplete" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/NotifyNumberInPortingComplete.xsd"/>
+    <xsd:import namespace="urn:NotifyNumberInportingComplete" schemaLocation="/WSDL/NotifyNumberInportingComplete.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/coinadapter/publish/ReceivePlannedNumberDeactivation.xsd" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/ReceivePlannedNumberDeactivation.xsd"/>
+    <xsd:import namespace="urn:ReceivePlannedNumberDeactivation" schemaLocation="/WSDL/ReceivePlannedNumberDeactivation.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyPlannedNumberDeactivation.xsd" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/NotifyPlannedNumberDeactivation.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberOutPortingRequest.xsd" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/NotifyNumberOutPortingRequest.xsd"/>
+    <xsd:import namespace="EcPsXsd_V0.2" schemaLocation="/WSDL/EcnsPortingServices.xsd"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" location="/WSDL/EcnsPortingServices.wsdl"/>
+    <pd:name>EClipsAdapter/Processes/Inbound/Sub/Sub_ProcessReceiveOutPortingRequest.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>119</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>813</pd:endX>
+    <pd:endY>118</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse Publication">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>145</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx12:NotifyNumberOutPortingRequest"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>278</pd:x>
+        <pd:y>336</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <pfx2:Errors>
+                        <pfx2:Error>
+                            <pfx2:MsgCode>
+                                <xsl:value-of select="&quot;EClips-03002&quot;"/>
+                            </pfx2:MsgCode>
+                            <ns3:ErrorReport>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                            </ns3:ErrorReport>
+                            <xsl:if test="$_error_Parse-Publication/ActivityErrors">
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/node()"/>
+                                </pfx2:ActivityError>
+                            </xsl:if>
+                        </pfx2:Error>
+                    </pfx2:Errors>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>244</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>448</pd:width>
+        <pd:height>213</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map Data</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogSOAPResponse</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogSOAPRequest</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>LogSOAPRequest</pd:to>
+            <pd:xpathDescription>Trace</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("EClips-04001")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:xpathDescription>NoTrace</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>LogSOAPResponse</pd:to>
+            <pd:xpathDescription>Trace</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("EClips-04002")</pd:xpath>
+        </pd:transition>
+        <pd:activity name="LogSOAPRequest">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>401</pd:x>
+            <pd:y>148</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EClips-04001&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($Map-Data/pfx10:ReceivePortingRequestReqStruct)"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map Data">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>338</pd:x>
+            <pd:y>89</pd:y>
+            <config>
+                <element ref="pfx10:ReceivePortingRequestReqStruct"/>
+            </config>
+            <pd:inputBindings>
+                <pfx10:ReceivePortingRequestReqStruct>
+                    <pfx10:PortingId>
+                        <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:PORTING_ID"/>
+                    </pfx10:PortingId>
+                    <pfx10:RecipientNetworkOperator>
+                        <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:RECIPIENT_NETWORK_OPERATOR"/>
+                    </pfx10:RecipientNetworkOperator>
+                    <xsl:if test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:RECIPIENT_SERVICE_PROVIDER)">
+                        <xsl:if test="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:RECIPIENT_SERVICE_PROVIDER">
+                            <pfx10:RecipientServiceProvider>
+                                <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:RECIPIENT_SERVICE_PROVIDER"/>
+                            </pfx10:RecipientServiceProvider>
+                        </xsl:if>
+                    </xsl:if>
+                    <pfx10:DonorNetworkOperator>
+                        <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:DONOR_NETWORK_OPERATOR"/>
+                    </pfx10:DonorNetworkOperator>
+                    <xsl:if test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:DONOR_SERVICE_PROVIDER)">
+                        <xsl:if test="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:DONOR_SERVICE_PROVIDER">
+                            <pfx10:DonorServiceProvider>
+                                <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:DONOR_SERVICE_PROVIDER"/>
+                            </pfx10:DonorServiceProvider>
+                        </xsl:if>
+                    </xsl:if>
+                    <pfx10:CustomerInfoStruct>
+                        <xsl:if test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PARTY/INDIVIDUAL_NAME/ns6:INITIALS)">
+                            <pfx10:Initials>
+                                <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PARTY/INDIVIDUAL_NAME/ns6:INITIALS"/>
+                            </pfx10:Initials>
+                        </xsl:if>
+                        <xsl:if test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PARTY/INDIVIDUAL_NAME/ns6:FAMILY_NAME_PREFIX)">
+                            <pfx10:Prefix>
+                                <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PARTY/INDIVIDUAL_NAME/ns6:FAMILY_NAME_PREFIX"/>
+                            </pfx10:Prefix>
+                        </xsl:if>
+                        <xsl:if test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PARTY/INDIVIDUAL_NAME/ns6:FAMILY_NAME)">
+                            <pfx10:LastName>
+                                <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PARTY/INDIVIDUAL_NAME/ns6:FAMILY_NAME"/>
+                            </pfx10:LastName>
+                        </xsl:if>
+                        <xsl:if test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PARTY/ORGANIZATION_NAME/ns7:TRADING_NAME)">
+                            <pfx10:CompanyName>
+                                <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PARTY/ORGANIZATION_NAME/ns7:TRADING_NAME"/>
+                            </pfx10:CompanyName>
+                        </xsl:if>
+                        <xsl:choose>
+                            <xsl:when test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS)">
+                                <pfx10:Address>
+                                    <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:STREET_NAME"/>
+                                </pfx10:Address>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx10:Address>
+                                    <xsl:value-of select="&quot; &quot;"/>
+                                </pfx10:Address>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <pfx10:HouseNumber>
+                            <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:HOUSE_NUMBER"/>
+                        </pfx10:HouseNumber>
+                        <xsl:if test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:HOUSE_NUMBER_EXTENSION)">
+                            <xsl:if test="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:HOUSE_NUMBER_EXTENSION">
+                                <pfx10:HouseNrExt>
+                                    <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:HOUSE_NUMBER_EXTENSION"/>
+                                </pfx10:HouseNrExt>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if test="string-length(tib:trim($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:DUTCH_POSTCODE_NUMBERS))!=0">
+                            <pfx10:PostalCode>
+                                <xsl:value-of select="concat($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:DUTCH_POSTCODE_NUMBERS,$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:DUTCH_POSTCODE_LETTERS)"/>
+                            </pfx10:PostalCode>
+                        </xsl:if>
+                        <xsl:choose>
+                            <xsl:when test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS)">
+                                <pfx10:City>
+                                    <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:CITY_NAME"/>
+                                </pfx10:City>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx10:City>
+                                    <xsl:value-of select="&quot; &quot;"/>
+                                </pfx10:City>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:COUNTRY_CODE)">
+                                <pfx10:CountryCode>
+                                    <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:COUNTRY_CODE"/>
+                                </pfx10:CountryCode>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx10:CountryCode>
+                                    <xsl:value-of select="&quot; &quot;"/>
+                                </pfx10:CountryCode>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <pfx10:CustomerId>
+                            <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:CUSTOMER/ns5:PROPERTY_ADDRESS/ns8:COUNTRY_CODE"/>
+                        </pfx10:CustomerId>
+                    </pfx10:CustomerInfoStruct>
+                    <pfx10:WishDateTime>
+                        <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:PORTING_WISH_DATE_TIME"/>
+                    </pfx10:WishDateTime>
+                    <pfx10:TypeOfNumber>
+                        <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:TYPE_OF_NUMBER"/>
+                    </pfx10:TypeOfNumber>
+                    <xsl:if test="exists($Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:NOTES)">
+                        <xsl:if test="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:NOTES">
+                            <pfx10:Note>
+                                <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:NOTES"/>
+                            </pfx10:Note>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:for-each select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/pfx12:NUMBER_SEQUENCE">
+                        <pfx10:NumberOfRepeats>
+                            <pfx10:NumberSerieStruct>
+                                <pfx10:StartOfSerie>
+                                    <xsl:value-of select="current()/pfx12:NUMBER_SERIE/ns9:START_OF_SERIE"/>
+                                </pfx10:StartOfSerie>
+                                <pfx10:EndOfSerie>
+                                    <xsl:value-of select="current()/pfx12:NUMBER_SERIE/ns9:END_OF_SERIE"/>
+                                </pfx10:EndOfSerie>
+                            </pfx10:NumberSerieStruct>
+                            <xsl:if test="exists(pfx12:TARIFF_INFO)">
+                                <pfx10:TariffInfoStruct>
+                                    <pfx10:TariffPeak>
+                                        <xsl:value-of select="current()/pfx12:TARIFF_INFO/ns10:TARIFF_PEAK"/>
+                                    </pfx10:TariffPeak>
+                                    <pfx10:TariffOffPeak>
+                                        <xsl:value-of select="current()/pfx12:TARIFF_INFO/ns10:TARIFF_OFFPEAK"/>
+                                    </pfx10:TariffOffPeak>
+                                    <pfx10:TariffCurrency>
+                                        <xsl:value-of select="current()/pfx12:TARIFF_INFO/ns10:CURRENCY_CODE"/>
+                                    </pfx10:TariffCurrency>
+                                    <pfx10:TariffType>
+                                        <xsl:value-of select="current()/pfx12:TARIFF_INFO/ns10:CHARGE_TYPE"/>
+                                    </pfx10:TariffType>
+                                    <pfx10:TariffBtw>
+                                        <xsl:value-of select="current()/pfx12:TARIFF_INFO/ns10:TAX_EXEMPTION_CODE"/>
+                                    </pfx10:TariffBtw>
+                                </pfx10:TariffInfoStruct>
+                            </xsl:if>
+                            <xsl:if test="exists(current()/pfx12:POINT_OF_PRESENCE)">
+                                <pfx10:PointOfPresence>
+                                    <xsl:value-of select="current()/pfx12:POINT_OF_PRESENCE"/>
+                                </pfx10:PointOfPresence>
+                            </xsl:if>
+                        </pfx10:NumberOfRepeats>
+                    </xsl:for-each>
+                </pfx10:ReceivePortingRequestReqStruct>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogSOAPResponse">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>576</pd:x>
+            <pd:y>149</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EClips-04002&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Parse-Publication/pfx12:NotifyNumberOutPortingRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($SOAPRequestReply/outputMessage)"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPRequestReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>452</pd:x>
+            <pd:y>76</pd:y>
+            <config>
+                <timeout>%%EClipsAdapter/Inbound/SOAP/Timeout%%</timeout>
+                <service>pfx11:EcnsPortingServicesService</service>
+                <servicePort>ReceivePortingRequestAnswerHttpPort</servicePort>
+                <operation>ReceivePortingRequestOperation</operation>
+                <endpointURL>%%EClipsAdapter/Inbound/SOAP/EndPointURL/EcnsPortingService/ROPREndPoint%%</endpointURL>
+                <requireBasicAuth>false</requireBasicAuth>
+                <basicHttpAuthIdentity>/EClipsAdapter/Shared Resources/Soap User Identity.id</basicHttpAuthIdentity>
+                <soapAction>/ProcessDefinitions/V0.2/ReceivePortingRequestServer</soapAction>
+                <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                    <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                    <ns0:cert isRef="true">/EClipsAdapter/Shared Resources/Trusted Certificates/.folder</ns0:cert>
+                </ns0:ssl>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx10:EcnsReceivePortingRequestReq>
+                        <xsl:copy-of select="$Map-Data/pfx10:ReceivePortingRequestReqStruct"/>
+                    </pfx10:EcnsReceivePortingRequestReq>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

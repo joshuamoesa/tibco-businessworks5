@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/ProductGroup_Generic.xsd" xmlns:ns3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx2="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" xmlns:pfx3="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx5="http://kpn.com/eai/generic/order" xmlns:pfx6="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pfx7="http://kpn.com/eai/generic/order/weak/wsdl" xmlns:pfx8="http://kpn.com/eai/generic/order/weak/wsdl/UpdateWeakOrderStatusImpl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx9="http://xmlns.kpn.com/eai/common/errors" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns5="http://www.tibco.com/pe/EngineTypes">
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/UpdateOrderStatus.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/ProductGroup_Generic.xsd" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Product/ProductGroup_Generic.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Response/ValidateMessageResponse.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Request/ValidateMessageRequest.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/generic/order" schemaLocation="/WSDL/GenericOrderGateway/WeakOrderStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://schemas.xmlsoap.org/soap/envelope/" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/WSDL/SOAP1.1.xsd"/>
+    <wsdl:import namespace="http://kpn.com/eai/generic/order/weak/wsdl/UpdateWeakOrderStatusImpl" location="/WSDL/GenericOrderGateway/UpdateWeakOrderStatus.wsdl"/>
+    <pd:name>GenericOrderGateway/Processes/Inbound/Sub/UpdateStrongOrderStatus.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:UpdateOrderStatus"/>
+    <pd:startX>27</pd:startX>
+    <pd:startY>294</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1156</pd:endX>
+    <pd:endY>299</pd:endY>
+    <pd:errorSchemas>
+        <errorSchema ref="pfx9:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>143</pd:x>
+        <pd:y>6</pd:y>
+        <pd:width>927</pd:width>
+        <pd:height>560</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LocalNames</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send HTTP request</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Notify</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send HTTP Fault</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Validate message</pd:from>
+            <pd:to>SYNC OR ASYNC</pd:to>
+            <pd:xpathDescription>VALID</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Validate-message/output/isValid="true"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Validate message</pd:from>
+            <pd:to>Map SOAP Order Error</pd:to>
+            <pd:xpathDescription>INVALID</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map SOAP Order Error</pd:from>
+            <pd:to>Send HTTP Fault</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LocalNames</pd:from>
+            <pd:to>Mapgenerictostrong</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Mapgenerictostrong</pd:from>
+            <pd:to>SYNC OR ASYNC</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Mapgenerictostrong</pd:from>
+            <pd:to>Validate message</pd:to>
+            <pd:xpathDescription>VALIDATION</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_globalVariables/ns4:GlobalVariables/GenericOrderGateway/Services/Inbound/UpdateStrongOrderStatus/validation="true"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SYNC OR ASYNC</pd:from>
+            <pd:to>Send HTTP request</pd:to>
+            <pd:xpathDescription>ASYNC</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map SOAP Order Error</pd:from>
+            <pd:to>Log Validation Error</pd:to>
+            <pd:xpathDescription>TRACE</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn('GOG-03004')</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log Validation Error</pd:from>
+            <pd:to>Send HTTP Fault</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SYNC OR ASYNC</pd:from>
+            <pd:to>Find and Remove Order</pd:to>
+            <pd:xpathDescription>SYNC</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>upper-case($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARADIGM)="SYNCHRONOUS"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Find and Remove Order</pd:from>
+            <pd:to>Notify</pd:to>
+            <pd:lineType>Straight</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SYNC OR ASYNC</pd:from>
+            <pd:to>Log ASYNC HTTP Response</pd:to>
+            <pd:xpathDescription>TRACE</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("GOG-04006") and upper-case($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARADIGM)!="SYNCHRONOUS"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log ASYNC HTTP Response</pd:from>
+            <pd:to>Send HTTP request</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Find and Remove Order</pd:from>
+            <pd:to>Log SYNC Message</pd:to>
+            <pd:xpathDescription>TRACE</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("GOG-04003")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SYNC Message</pd:from>
+            <pd:to>Notify</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Send HTTP request">
+            <pd:type>com.tibco.plugin.http.client.HttpRequestActivity</pd:type>
+            <pd:resourceType>httppalette.httpRequest</pd:resourceType>
+            <pd:x>822</pd:x>
+            <pd:y>165</pd:y>
+            <config>
+                <inputOutputVersion>5.3.0</inputOutputVersion>
+                <newMimeSupport>true</newMimeSupport>
+                <serverhost>%%GenericOrderGateway/HTTP/Inbound/Server%%</serverhost>
+                <serverport>%%GenericOrderGateway/HTTP/Inbound/Port%%</serverport>
+                <InputHeaders>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="soapAction" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </InputHeaders>
+                <OutputHeaders>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Allow" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Encoding" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Date" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </OutputHeaders>
+            </config>
+            <pd:inputBindings>
+                <xsl:variable name="group" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                <xsl:variable name="productName" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_NAME"/>
+                <xsl:variable name="version" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_VERSION"/>
+                <xsl:variable name="action" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/ORDER_ITEM_HEADER/ORDER_ITEM_ACTION"/>
+                <xsl:variable name="paradigm" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARADIGM"/>
+                <RequestActivityInput>
+                    <Method>
+                        <xsl:value-of select="'POST'"/>
+                    </Method>
+                    <RequestURI>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/GenericOrderGateway/HTTP/Inbound/RequestURI"/>
+                    </RequestURI>
+                    <PostData>
+                        <xsl:value-of select="tib:render-xml($Mapgenerictostrong/Response/*,false(),true())"/>
+                    </PostData>
+                    <Timeout>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/GenericOrderGateway/HTTP/Inbound/Timeout"/>
+                    </Timeout>
+                    <Headers>
+                        <soapAction>
+                            <xsl:value-of select="concat($group,'_',$productName,'_',$version,'_',$action,'_',$paradigm)"/>
+                        </soapAction>
+                    </Headers>
+                </RequestActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Validate message">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>345</pd:x>
+            <pd:y>371</pd:y>
+            <config>
+                <processName>/GenericOrderGateway/Processes/Sub/ValidateMessage.process</processName>
+            </config>
+            <pd:inputBindings>
+                <input>
+                    <GUID>
+                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                    </GUID>
+                    <namespace>
+                        <xsl:value-of select="namespace-uri($Mapgenerictostrong/Response/*)"/>
+                    </namespace>
+                    <xmlMessage>
+                        <xsl:value-of select="tib:render-xml($Mapgenerictostrong/Response/*, false(), false())"/>
+                    </xmlMessage>
+                </input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Notify">
+            <pd:type>com.tibco.plugin.waitnotify.NotifyActivity</pd:type>
+            <pd:resourceType>ae.activities.notifyActivity</pd:resourceType>
+            <pd:x>928</pd:x>
+            <pd:y>230</pd:y>
+            <config>
+                <sharedConfig>/GenericOrderGateway/Shared Resources/StatusUpdateConfiguration.sharednotify</sharedConfig>
+            </config>
+            <pd:inputBindings>
+                <input>
+                    <key>
+                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                    </key>
+                    <timeout>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitOrder/notificationTimeout"/>
+                    </timeout>
+                    <Response>
+                        <xsl:copy-of select="$Mapgenerictostrong/Response/*"/>
+                    </Response>
+                </input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Send HTTP Fault">
+            <pd:type>com.tibco.plugin.http.client.HttpRequestActivity</pd:type>
+            <pd:resourceType>httppalette.httpRequest</pd:resourceType>
+            <pd:x>831</pd:x>
+            <pd:y>374</pd:y>
+            <config>
+                <inputOutputVersion>5.3.0</inputOutputVersion>
+                <newMimeSupport>true</newMimeSupport>
+                <serverhost>%%GenericOrderGateway/HTTP/Inbound/Server%%</serverhost>
+                <serverport>%%GenericOrderGateway/HTTP/Inbound/Port%%</serverport>
+                <InputHeaders>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="soapAction" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </InputHeaders>
+                <OutputHeaders>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Allow" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Encoding" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Date" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </OutputHeaders>
+            </config>
+            <pd:inputBindings>
+                <xsl:variable name="group" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                <xsl:variable name="productName" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_NAME"/>
+                <xsl:variable name="version" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_VERSION"/>
+                <xsl:variable name="action" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/ORDER_ITEM_HEADER/ORDER_ITEM_ACTION"/>
+                <xsl:variable name="paradigm" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARADIGM"/>
+                <RequestActivityInput>
+                    <Method>
+                        <xsl:value-of select="'POST'"/>
+                    </Method>
+                    <RequestURI>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/GenericOrderGateway/HTTP/Inbound/RequestURI"/>
+                    </RequestURI>
+                    <PostData>
+                        <xsl:value-of select="tib:render-xml($Map-SOAP-Order-Error/pfx6:Envelope/pfx6:Body/*[local-name()=&quot;Fault&quot;],false(),true())"/>
+                    </PostData>
+                    <Timeout>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/GenericOrderGateway/HTTP/Inbound/Timeout"/>
+                    </Timeout>
+                    <Headers>
+                        <soapAction>
+                            <xsl:value-of select="concat($group,'_',$productName,'_',$version,'_',$action,'_',$paradigm)"/>
+                        </soapAction>
+                    </Headers>
+                </RequestActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map SOAP Order Error">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>601</pd:x>
+            <pd:y>380</pd:y>
+            <config>
+                <element ref="pfx6:Envelope"/>
+            </config>
+            <pd:inputBindings>
+                <pfx6:Envelope>
+                    <pfx6:Body>
+                        <Fault>
+                            <faultcode>
+                                <xsl:value-of select="&quot;soap:server&quot;"/>
+                            </faultcode>
+                            <faultstring>
+                                <xsl:value-of select="&quot;EAI Error&quot;"/>
+                            </faultstring>
+                            <detail>
+                                <faultmessage>
+                                    <xsl:value-of select="&quot;Received invalid response from supplier&quot;"/>
+                                </faultmessage>
+                                <errorcode>
+                                    <xsl:value-of select="&quot;EAI-2001&quot;"/>
+                                </errorcode>
+                                <xsl:for-each select="$Validate-message/output/validationError">
+                                    <errordetail>
+                                        <xsl:value-of select="."/>
+                                    </errordetail>
+                                </xsl:for-each>
+                            </detail>
+                        </Fault>
+                    </pfx6:Body>
+                </pfx6:Envelope>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Find and Remove Order">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>699</pd:x>
+            <pd:y>239</pd:y>
+            <config>
+                <processName>/GenericOrderGateway/Processes/Sub/InsertFindRemove.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EXTERNAL_REFERENCE>
+                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                    </EXTERNAL_REFERENCE>
+                    <Insert>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </Insert>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log ASYNC HTTP Response">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>700</pd:x>
+            <pd:y>69</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <xsl:variable name="group" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                <xsl:variable name="productName" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_NAME"/>
+                <xsl:variable name="version" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_VERSION"/>
+                <xsl:variable name="action" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/ORDER_ITEM_HEADER/ORDER_ITEM_ACTION"/>
+                <xsl:variable name="paradigm" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARADIGM"/>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;GOG-04006&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <additionalLogID>
+                        <xsl:value-of select="concat('soapAction:',$group,'_',$productName,'_',$version,'_',$action,'_',$paradigm)"/>
+                    </additionalLogID>
+                    <Parameter>
+                        <xsl:value-of select="concat(' Sending HTTP Response on ACTION_PARADIGM-',upper-case($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARADIGM))"/>
+                    </Parameter>
+                    <Parameter>
+                        <xsl:value-of select="concat('message:',tib:render-xml($Mapgenerictostrong/Response/*,false(),true()))"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LocalNames">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>231</pd:x>
+            <pd:y>163</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="LocalNames">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="NAMES_CUSTOMORDERPARANMETERS" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                <xsd:element name="NAMES_CUSTOMITEMPARAMETERS" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                <xsd:element name="NAMES_ACTIONPARAMETERS" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT" type="ns3:Product_Type"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <LocalNames>
+                    <xsl:for-each select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ORDER_PARAMETERS/*">
+                        <NAMES_CUSTOMORDERPARANMETERS>
+                            <xsl:value-of select="local-name(.)"/>
+                        </NAMES_CUSTOMORDERPARANMETERS>
+                    </xsl:for-each>
+                    <xsl:for-each select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ITEM_PARAMETERS/*">
+                        <NAMES_CUSTOMITEMPARAMETERS>
+                            <xsl:value-of select="local-name(.)"/>
+                        </NAMES_CUSTOMITEMPARAMETERS>
+                    </xsl:for-each>
+                    <xsl:for-each select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARAMETERS/*">
+                        <NAMES_ACTIONPARAMETERS>
+                            <xsl:value-of select="local-name(.)"/>
+                        </NAMES_ACTIONPARAMETERS>
+                    </xsl:for-each>
+                </LocalNames>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Mapgenerictostrong">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>344</pd:x>
+            <pd:y>163</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="Response">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:any minOccurs="0" processContents="skip"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT" type="ns3:Product_Type"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <Response>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="COPNAMES" select="$LocalNames/LocalNames/NAMES_CUSTOMORDERPARANMETERS"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="CIPNAMES" select="$LocalNames/LocalNames/NAMES_CUSTOMITEMPARAMETERS"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="APNAMES" select="$LocalNames/LocalNames/NAMES_ACTIONPARAMETERS"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="GROUP" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="PRODUCT" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_NAME"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="VERSION" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_VERSION"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ACTION" select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/ORDER_ITEM_HEADER/ORDER_ITEM_ACTION"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ORDER_NAMESPACE" select="$_globalVariables/ns4:GlobalVariables/GenericOrderGateway/Services/Inbound/orderNamespace"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="PRODUCT_PREFIX" select="$_globalVariables/ns4:GlobalVariables/GenericOrderGateway/Services/Inbound/productNamespace"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="GROUP_NAMESPACE" select="concat($PRODUCT_PREFIX, $GROUP)"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="RESPONSE" select="concat($PRODUCT, $ACTION, 'Response')"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="PRODUCT_NAMESPACE" select="concat($GROUP_NAMESPACE, '/', $PRODUCT, '/data/v', $VERSION)"/>
+                    <xsl:element namespace="{$PRODUCT_NAMESPACE}" name="{$RESPONSE}">
+                        <xsl:element namespace="{$ORDER_NAMESPACE}" name="customerOrderId">
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                        </xsl:element>
+                        <xsl:element namespace="{$ORDER_NAMESPACE}" name="supplierOrderId">
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_ID"/>
+                        </xsl:element>
+                        <xsl:if test="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/STATUS_CODE!=0">
+                            <xsl:element namespace="{$ORDER_NAMESPACE}" name="error">
+                                <xsl:element namespace="{$ORDER_NAMESPACE}" name="code">
+                                    <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/STATUS_CODE"/>
+                                </xsl:element>
+                                <xsl:element namespace="{$ORDER_NAMESPACE}" name="detail">
+                                    <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/DELIVERY_STATUS_ADDITIONAL_INFORMATION"/>
+                                </xsl:element>
+                                <xsl:element namespace="{$ORDER_NAMESPACE}" name="description">
+                                    <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/DELIVERY_STATUS_DESCRIPTION"/>
+                                </xsl:element>
+                            </xsl:element>
+                        </xsl:if>
+                        <xsl:element namespace="{$PRODUCT_NAMESPACE}" name="status">
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/STATUS_DESCRIPTION"/>
+                        </xsl:element>
+                        <xsl:if test="count($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ORDER_PARAMETERS/*)>0">
+                            <xsl:element namespace="{$PRODUCT_NAMESPACE}" name="OrderStatusParameters">
+                                <xsl:for-each select="$COPNAMES">
+                                    <xsl:variable name="position" select="position()"/>
+                                    <xsl:variable name="item" select="$COPNAMES[$position]"/>
+                                    <xsl:element namespace="{$GROUP_NAMESPACE}" name="{$item}">
+                                        <xsl:copy-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ORDER_PARAMETERS/*[local-name()=$item]/@*"/>
+                                        <xsl:copy-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ORDER_PARAMETERS/*[local-name()=$item]/node()"/>
+                                    </xsl:element>
+                                </xsl:for-each>
+                            </xsl:element>
+                        </xsl:if>
+                        <xsl:if test="count($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ITEM_PARAMETERS)>0">
+                            <xsl:element namespace="{$PRODUCT_NAMESPACE}" name="OrderItem">
+                                <xsl:for-each select="$CIPNAMES">
+                                    <xsl:variable name="position" select="position()"/>
+                                    <xsl:variable name="item" select="$CIPNAMES[$position]"/>
+                                    <xsl:element namespace="{$GROUP_NAMESPACE}" name="{$item}">
+                                        <xsl:copy-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ITEM_PARAMETERS/*[local-name()=$item]/@*"/>
+                                        <xsl:copy-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ITEM_PARAMETERS/*[local-name()=$item]/node()"/>
+                                    </xsl:element>
+                                </xsl:for-each>
+                                <xsl:if test="count($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARAMETERS)>0">
+                                    <xsl:element namespace="{$PRODUCT_NAMESPACE}" name="Parameters">
+                                        <xsl:for-each select="$APNAMES">
+                                            <xsl:variable name="position" select="position()"/>
+                                            <xsl:variable name="item" select="$APNAMES[$position]"/>
+                                            <xsl:element namespace="{$PRODUCT_NAMESPACE}" name="{$item}">
+                                                <xsl:copy-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARAMETERS/*[local-name()=$item]/@*"/>
+                                                <xsl:copy-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARAMETERS/*[local-name()=$item]/node()"/>
+                                            </xsl:element>
+                                        </xsl:for-each>
+                                    </xsl:element>
+                                </xsl:if>
+                            </xsl:element>
+                        </xsl:if>
+                    </xsl:element>
+                </Response>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SYNC OR ASYNC">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>506</pd:x>
+            <pd:y>166</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Log Validation Error">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>739</pd:x>
+            <pd:y>476</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;GOG-03004&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="$Map-SOAP-Order-Error/pfx6:Envelope/pfx6:Body/*[1]"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log SYNC Message">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>852</pd:x>
+            <pd:y>300</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;GOG-04003&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <additionalLogID>
+                        <xsl:value-of select="if($Find-and-Remove-Order/root/found='true')&#xA;then&#xA;concat('Sending Synchronous message for ORDER-',$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE)&#xA;else&#xA;concat('ORDER ',$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE,' is not found')"/>
+                    </additionalLogID>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($Mapgenerictostrong/Response/*,false(),true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>179</pd:x>
+        <pd:y>664</pd:y>
+        <config>
+            <faultName>errorSchema</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="$_error_Validate-message">
+                            <xsl:copy-of select="$_error_Validate-message/pfx9:Error"/>
+                        </xsl:when>
+                        <xsl:when test="$_error_Find-and-Remove-Order">
+                            <xsl:copy-of select="$_error_Find-and-Remove-Order/pfx9:Error"/>
+                        </xsl:when>
+                        <xsl:when test="$_error_Send-HTTP-request">
+                            <pfx9:Error>
+                                <pfx9:MsgCode>
+                                    <xsl:value-of select="&quot;GOG-03005&quot;"/>
+                                </pfx9:MsgCode>
+                                <pfx9:Params>
+                                    <xsl:value-of select="$Mapgenerictostrong/Response/*"/>
+                                </pfx9:Params>
+                                <xsl:if test="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                                    <pfx9:MsgId>
+                                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                    </pfx9:MsgId>
+                                </xsl:if>
+                                <pfx9:ActivityError>
+                                    <xsl:copy-of select="$_error_Send-HTTP-request/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Send-HTTP-request/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_Send-HTTP-request/ActivityErrors/node()"/>
+                                </pfx9:ActivityError>
+                            </pfx9:Error>
+                        </xsl:when>
+                        <xsl:when test="$_error_Send-HTTP-Fault">
+                            <pfx9:Error>
+                                <pfx9:MsgCode>
+                                    <xsl:value-of select="&quot;GOG-03006&quot;"/>
+                                </pfx9:MsgCode>
+                                <pfx9:Params>
+                                    <xsl:value-of select="$Map-SOAP-Order-Error/pfx6:Envelope/pfx6:Body/*[1]"/>
+                                </pfx9:Params>
+                                <xsl:if test="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                                    <pfx9:MsgId>
+                                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                    </pfx9:MsgId>
+                                </xsl:if>
+                                <pfx9:ActivityError>
+                                    <xsl:copy-of select="$_error_Send-HTTP-Fault/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Send-HTTP-Fault/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_Send-HTTP-Fault/ActivityErrors/node()"/>
+                                </pfx9:ActivityError>
+                            </pfx9:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx9:Error>
+                                <pfx9:MsgCode>
+                                    <xsl:value-of select="&quot;GOG-03003&quot;"/>
+                                </pfx9:MsgCode>
+                                <pfx9:Params>
+                                    <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                                </pfx9:Params>
+                                <xsl:if test="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                                    <pfx9:MsgId>
+                                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                    </pfx9:MsgId>
+                                </xsl:if>
+                                <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                            </pfx9:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </pfx4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-3407821</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

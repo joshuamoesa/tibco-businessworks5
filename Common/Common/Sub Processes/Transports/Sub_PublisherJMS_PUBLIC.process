@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns13="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>Common/Sub Processes/Transports/Sub_PublisherJMS_PUBLIC.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="TransportPubIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Destination" type="xsd:string"/>
+                    <xsd:element name="ReplyToDestination" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="Body" type="xsd:string"/>
+                    <xsd:element name="MessageId" type="xsd:string"/>
+                    <xsd:element name="AdditionalLogID" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="JMS" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Selector" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Expiration" type="xsd:long" minOccurs="0"/>
+                                <xsd:element name="Priority" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="CorrelationId" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupSeq" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="Trace" minOccurs="0">
+                                    <xsd:complexType>
+                                        <xsd:choice>
+                                            <xsd:element name="header" type="xsd:anyType"/>
+                                            <xsd:element name="full" type="xsd:anyType"/>
+                                        </xsd:choice>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>73</pd:startX>
+    <pd:startY>68</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>404</pd:endX>
+    <pd:endY>68</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="JMS Topic Publisher">
+        <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
+        <pd:x>286</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination/>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS_PUBLIC Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <destinationTopic>
+                    <xsl:value-of select="$Start/TransportPubIn/Destination"/>
+                </destinationTopic>
+                <xsl:if test="$Start/TransportPubIn/ReplyToDestination">
+                    <replyToTopic>
+                        <xsl:value-of select="$Start/TransportPubIn/ReplyToDestination"/>
+                    </replyToTopic>
+                </xsl:if>
+                <xsl:if test="$Start/TransportPubIn/JMS/Expiration">
+                    <JMSExpiration>
+                        <xsl:value-of select="$Start/TransportPubIn/JMS/Expiration"/>
+                    </JMSExpiration>
+                </xsl:if>
+                <xsl:if test="$Start/TransportPubIn/JMS/Priority">
+                    <JMSPriority>
+                        <xsl:value-of select="$Start/TransportPubIn/JMS/Priority"/>
+                    </JMSPriority>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$Start/TransportPubIn/MessageId!=''">
+                        <JMSCorrelationID>
+                            <xsl:value-of select="$Start/TransportPubIn/MessageId"/>
+                        </JMSCorrelationID>
+                    </xsl:when>
+                    <xsl:when test="exists($Start/TransportPubIn/JMS/CorrelationId)">
+                        <xsl:if test="$Start/TransportPubIn/JMS/CorrelationId">
+                            <JMSCorrelationID>
+                                <xsl:value-of select="$Start/TransportPubIn/JMS/CorrelationId"/>
+                            </JMSCorrelationID>
+                        </xsl:if>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:if test="$Start/TransportPubIn/JMS/Type">
+                    <JMSType>
+                        <xsl:value-of select="$Start/TransportPubIn/JMS/Type"/>
+                    </JMSType>
+                </xsl:if>
+                <JMSProperties>
+                    <xsl:if test="$Start/TransportPubIn/JMS/XGroupID">
+                        <ns12:JMSXGroupID>
+                            <xsl:value-of select="$Start/TransportPubIn/JMS/XGroupID"/>
+                        </ns12:JMSXGroupID>
+                    </xsl:if>
+                    <xsl:if test="$Start/TransportPubIn/JMS/XGroupSeq">
+                        <ns12:JMSXGroupSeq>
+                            <xsl:value-of select="$Start/TransportPubIn/JMS/XGroupSeq"/>
+                        </ns12:JMSXGroupSeq>
+                    </xsl:if>
+                </JMSProperties>
+                <OtherProperties>
+                    <xsl:if test="$_globalVariables/ns2:GlobalVariables/Common/JMSPublic/JmsTibcoCompress=&quot;true&quot;">
+                        <JMS_TIBCO_COMPRESS>
+                            <xsl:value-of select="true()"/>
+                        </JMS_TIBCO_COMPRESS>
+                    </xsl:if>
+                    <xsl:if test="$_globalVariables/ns2:GlobalVariables/Common/JMSPublic/JmsTibcoPreserveUndelivered=&quot;true&quot;">
+                        <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                            <xsl:value-of select="true()"/>
+                        </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/TransportPubIn/JMS/Trace/full)">
+                            <JMS_TIBCO_MSG_TRACE>
+                                <xsl:value-of select="&quot;body&quot;"/>
+                            </JMS_TIBCO_MSG_TRACE>
+                        </xsl:when>
+                        <xsl:when test="exists($Start/TransportPubIn/JMS/Trace/header)">
+                            <JMS_TIBCO_MSG_TRACE>
+                                <xsl:value-of select="&quot;null&quot;"/>
+                            </JMS_TIBCO_MSG_TRACE>
+                        </xsl:when>
+                    </xsl:choose>
+                    <Service>
+                        <xsl:value-of select="$Start/TransportPubIn/Destination"/>
+                    </Service>
+                    <xsl:if test="$Start/TransportPubIn/JMS/Selector">
+                        <Selector>
+                            <xsl:value-of select="$Start/TransportPubIn/JMS/Selector"/>
+                        </Selector>
+                    </xsl:if>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="$Start/TransportPubIn/Body"/>
+                </Body>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>186</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04051&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Start/TransportPubIn/MessageId"/>
+                </MsgId>
+                <xsl:if test="$Start/TransportPubIn/AdditionalLogID">
+                    <additionalLogID>
+                        <xsl:value-of select="$Start/TransportPubIn/AdditionalLogID"/>
+                    </additionalLogID>
+                </xsl:if>
+                <Parameter>
+                    <xsl:value-of select="$Start/TransportPubIn/Destination"/>
+                </Parameter>
+                <xsl:choose>
+                    <xsl:when test="$Start/TransportPubIn/JMS">
+                        <Parameter>
+                            <xsl:value-of select="tib:render-xml($Start/TransportPubIn/JMS, false(), true())"/>
+                        </Parameter>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <Parameter>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </Parameter>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <Parameter>
+                    <xsl:value-of select="$Start/TransportPubIn/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>190</pd:x>
+        <pd:y>289</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns13:ActivityInput>
+                <message>
+                    <xsl:value-of select="eai:getMessageText(&quot;EAI-03051&quot;)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;EAI-03051&quot;"/>
+                </messageCode>
+                <data>
+                    <pfx:Error>
+                        <pfx:MsgCode>
+                            <xsl:value-of select="&quot;EAI-03051&quot;"/>
+                        </pfx:MsgCode>
+                        <pfx:MsgId>
+                            <xsl:value-of select="$Start/TransportPubIn/MessageId"/>
+                        </pfx:MsgId>
+                        <ns:ErrorReport>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/node()"/>
+                        </ns:ErrorReport>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error_JMS-Topic-Publisher)">
+                                <pfx:ActivityError>
+                                    <xsl:copy-of select="$_error_JMS-Topic-Publisher/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_JMS-Topic-Publisher/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_JMS-Topic-Publisher/ActivityErrors/node()"/>
+                                </pfx:ActivityError>
+                            </xsl:when>
+                        </xsl:choose>
+                    </pfx:Error>
+                </data>
+            </ns13:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log Message</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("EAI-04051")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Topic Publisher</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Message</pd:from>
+        <pd:to>JMS Topic Publisher</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Message</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Topic Publisher</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JMS Topic Publisher</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

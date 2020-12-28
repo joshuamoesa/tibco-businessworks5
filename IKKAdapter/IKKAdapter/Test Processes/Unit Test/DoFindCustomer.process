@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx2="urn:FindCustomer" xmlns:pfx3="urn:KTVAdapter.AddCustomerReference" xmlns:pfx4="urn:OrderManagerAdapter.AddCustomerReference" xmlns:pfx5="urn:OrderManagerAdapter.FindCustomer" xmlns:pfx6="urn:OrderManagerAdapter.GetCustomerBillRecipient" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx7="urn:OrderManagerAdapter.CreatePartyAGOP" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx8="urn:IKKAdapter.FindCity" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx9="urn:IKKAdapter.FindAccount" xmlns:pfx10="urn:IKKAdapter.FindCustomer" xmlns:pfx11="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/ErrorReport.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx12="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Services/FindCity.xsd" xmlns:pfx13="urn:IKKAdapter.FindPropertyAddress" xmlns:pfx14="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Services/FindCustomer.xsd">
+    <xsd:import namespace="urn:OrderManagerAdapter.CreatePartyAGOP" schemaLocation="/WSDL/OrderManagerAdapter/CreatePartyAGOPService.wsdl"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/ErrorReport.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Common/ErrorReport.xsd"/>
+    <xsd:import namespace="urn:IKKAdapter.FindCity" schemaLocation="/WSDL/IKKAdapter/FindCity.wsdl"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Services/FindCity.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Services/FindCity.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Services/FindCustomer.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Services/FindCustomer.xsd"/>
+    <xsd:import namespace="urn:IKKAdapter.FindCustomer" schemaLocation="/WSDL/IKKAdapter/FindCustomer.wsdl"/>
+    <wsdl:import namespace="" location=""/>
+    <wsdl:import namespace="urn:OrderManagerAdapter.FindCustomer" location="/WSDL/OrderManagerAdapter/FindCustomerService.wsdl"/>
+    <wsdl:import namespace="urn:OrderManagerAdapter.AddCustomerReference" location="/WSDL/OrderManagerAdapter/AddCustomerReferenceService.wsdl"/>
+    <wsdl:import namespace="urn:OrderManagerAdapter.CreatePartyAGOP" location="/WSDL/OrderManagerAdapter/CreatePartyAGOPService.wsdl"/>
+    <wsdl:import namespace="urn:IKKAdapter.FindCity" location="/WSDL/IKKAdapter/FindCity.wsdl"/>
+    <wsdl:import namespace="urn:IKKAdapter.FindPropertyAddress" location="/WSDL/IKKAdapter/FindPropertyAddress.wsdl"/>
+    <wsdl:import namespace="urn:IKKAdapter.FindCustomer" location="/WSDL/IKKAdapter/FindCustomer.wsdl"/>
+    <pd:name>IKKAdapter/Test Processes/Unit Test/DoFindCustomer.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>81</pd:startX>
+    <pd:startY>120</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>626</pd:endX>
+    <pd:endY>122</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>219</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <timeout>30</timeout>
+            <service>pfx10:FindCustomerService</service>
+            <servicePort>FindCustomerSoap</servicePort>
+            <operation>FindCustomer</operation>
+            <soapAction/>
+            <endpointURL>http://%%IKKAdapter/Outbound/SOAP/Hostname%%:%%IKKAdapter/Outbound/SOAP/Port%%/IKKAdapter/Processes/FindCustomer</endpointURL>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity>/OrderManagerAdapter/Test Processes/Identity crisis.id</basicHttpAuthIdentity>
+            <policies>
+                <incomingAttachmentPolicy>
+                    <writeToFile>false</writeToFile>
+                    <writeToFileDir>C:\temp</writeToFileDir>
+                    <writeToFileLimit>100000</writeToFileLimit>
+                </incomingAttachmentPolicy>
+            </policies>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx10:FindCustomerRequest>
+                    <pfx10:gebruikerCode>
+                        <xsl:value-of select="&quot;gebruikerCode&quot;"/>
+                    </pfx10:gebruikerCode>
+                    <pfx10:IKKStart>
+                        <xsl:value-of select="&quot;IKKStart&quot;"/>
+                    </pfx10:IKKStart>
+                    <pfx10:IKKMax>
+                        <xsl:value-of select="&quot;IKKMax&quot;"/>
+                    </pfx10:IKKMax>
+                    <pfx10:ckrNummer>
+                        <xsl:value-of select="&quot;ckrNummer&quot;"/>
+                    </pfx10:ckrNummer>
+                    <pfx10:geboorteDatum>
+                        <xsl:value-of select="&quot;2000-01-01&quot;"/>
+                    </pfx10:geboorteDatum>
+                    <pfx10:adresIndicator>
+                        <xsl:value-of select="&quot;adresIndicator&quot;"/>
+                    </pfx10:adresIndicator>
+                    <pfx10:rolIndicator>
+                        <xsl:value-of select="&quot;rolIndicator&quot;"/>
+                    </pfx10:rolIndicator>
+                    <pfx10:actiefIndicator>
+                        <xsl:value-of select="&quot;actiefIndicator&quot;"/>
+                    </pfx10:actiefIndicator>
+                    <pfx10:buitenlandIndicator>
+                        <xsl:value-of select="&quot;buitenlandIndicator&quot;"/>
+                    </pfx10:buitenlandIndicator>
+                    <pfx10:kvkNummer>
+                        <xsl:value-of select="&quot;kvkNummer&quot;"/>
+                    </pfx10:kvkNummer>
+                    <pfx10:maximumRecords>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </pfx10:maximumRecords>
+                    <pfx10:tinCode>
+                        <xsl:value-of select="&quot;tinCode&quot;"/>
+                    </pfx10:tinCode>
+                    <pfx10:naam>
+                        <xsl:value-of select="&quot;naam&quot;"/>
+                    </pfx10:naam>
+                    <pfx10:tcNummer>
+                        <xsl:value-of select="&quot;00501234567&quot;"/>
+                    </pfx10:tcNummer>
+                    <pfx10:selectieStartpunt>
+                        <xsl:value-of select="&quot;12&quot;"/>
+                    </pfx10:selectieStartpunt>
+                    <pfx10:PROPERTY_ADDRESS>
+                        <pfx10:straatNaam>
+                            <xsl:value-of select="&quot;straatNaam&quot;"/>
+                        </pfx10:straatNaam>
+                        <pfx10:huisNummer>
+                            <xsl:value-of select="&quot;huisnummer&quot;"/>
+                        </pfx10:huisNummer>
+                        <pfx10:huisNummerToevoeging>
+                            <xsl:value-of select="&quot;huisnummerToeverging&quot;"/>
+                        </pfx10:huisNummerToevoeging>
+                        <pfx10:postcodeCijfers>
+                            <xsl:value-of select="&quot;postcodeCijfers&quot;"/>
+                        </pfx10:postcodeCijfers>
+                        <pfx10:postcodeLetters>
+                            <xsl:value-of select="&quot;postcodeLetters&quot;"/>
+                        </pfx10:postcodeLetters>
+                        <pfx10:woonplaats>
+                            <xsl:value-of select="&quot;woonplaats&quot;"/>
+                        </pfx10:woonplaats>
+                        <pfx10:woonplaatsCode>
+                            <xsl:value-of select="&quot;woonplaatsCode&quot;"/>
+                        </pfx10:woonplaatsCode>
+                    </pfx10:PROPERTY_ADDRESS>
+                    <pfx10:CUSTOMER_REFERENCE>
+                        <pfx10:EXTERNAL_CUSTOMER_REFERENCE>
+                            <pfx10:dossierNummer>
+                                <xsl:value-of select="&quot;dossierNummer&quot;"/>
+                            </pfx10:dossierNummer>
+                        </pfx10:EXTERNAL_CUSTOMER_REFERENCE>
+                    </pfx10:CUSTOMER_REFERENCE>
+                </pfx10:FindCustomerRequest>
+                <ns:_configData/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Write File">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>499</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <createMissingDirectories>true</createMissingDirectories>
+        </config>
+        <pd:inputBindings>
+            <ns2:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/IKKAdapter/AppSetting/TestRootPath,&quot;266&quot;,&quot; - FindCustomer/SoapReply&quot;, if ($SOAPRequestReply/outputMessage/pfx10:FindCustomerResponse/pfx10:herkomstCode  = &quot;0&quot;) then &quot;&quot; else &quot;Exception&quot;,&quot;.xml&quot;)"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="$Render-XML/xmlString"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+            </ns2:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Render XML">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>358</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <renderAsText>text</renderAsText>
+            <validateInput>true</validateInput>
+            <textEncoding>UTF-8</textEncoding>
+            <renderDefaultPrefix>false</renderDefaultPrefix>
+            <term ref="pfx10:FindCustomerResponse"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$SOAPRequestReply/outputMessage/pfx10:FindCustomerResponse"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Render XML</pd:from>
+        <pd:to>Write File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write File</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Render XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

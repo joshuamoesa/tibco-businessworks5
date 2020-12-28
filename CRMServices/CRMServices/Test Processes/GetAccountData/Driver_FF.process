@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/CRMServices/Request/GetAccountData.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/CRMServices/Response/GetAccountData.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0418_GetAccountData/1.0/Request">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/CRMServices/Request/GetAccountData.xsd" schemaLocation="/XSDSchemas/CRMServices/Request/GetAccountData.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/CRMServices/Response/GetAccountData.xsd" schemaLocation="/XSDSchemas/CRMServices/Response/GetAccountData.xsd"/>
+    <pd:name>CRMServices/Test Processes/GetAccountData/Driver_FF.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVRequestActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVRequestActivity</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>180</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsXMLCompliantFieldNamesOutput>false</wantsXMLCompliantFieldNamesOutput>
+            <sharedChannel>/Common/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <subject>%%Env%%.FIXED.CRM.%%CRMServices/ComponentId%%.Request.GetAccountData.1</subject>
+            <xmlEncoding>true</xmlEncoding>
+            <inputXsdString ref="pfx:GetAccountDataRequest"/>
+            <outputXsdString ref="pfx2:GetAccountDataResponse"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="&quot;A&quot;"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="&quot;A&quot;"/>
+                        </ns:NAME>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="&quot;A&quot;"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="&quot;A&quot;"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="&quot;A&quot;"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="&quot;A&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:COMPONENT_VERSION">
+                                <xsl:value-of select="&quot;A&quot;"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="&quot;A&quot;"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                    </ns:CMH>
+                    <ns2:BODY>
+                        <SIEBEL_ACCOUNT_ID>
+                            <xsl:value-of select="&quot;A&quot;"/>
+                        </SIEBEL_ACCOUNT_ID>
+                    </ns2:BODY>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

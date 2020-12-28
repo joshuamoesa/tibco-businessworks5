@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:eai="java://com.kpn.eai.tools.Tools" xmlns:ns="http://tempuri.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/GetSNIConfigurationDetailsV2/Driver.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>154</pd:startX>
+    <pd:startY>132</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>674</pd:endX>
+    <pd:endY>141</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>279</pd:x>
+        <pd:y>151</pd:y>
+        <config>
+            <element ref="pfx:GenericMessage"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:GenericMessage>
+                <ns:Header>
+                    <ns:GUID>
+                        <xsl:value-of select="eai:createGUID()"/>
+                    </ns:GUID>
+                    <ns:managed_object_class>
+                        <xsl:value-of select="&quot;Trouble Report&quot;"/>
+                    </ns:managed_object_class>
+                    <ns:managed_object_class_extension>
+                        <xsl:value-of select="&quot;16&quot;"/>
+                    </ns:managed_object_class_extension>
+                </ns:Header>
+            </pfx:GenericMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>471</pd:x>
+        <pd:y>149</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>http://vm260:48093/ASTRIDAdapter/Processes/TroubleReportServices</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$Map-Data/pfx:GenericMessage"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

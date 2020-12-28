@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://www.example.com/1185805868757" xmlns:pfx1="http://www.tibco.com/CLEver/Lookup.xsd" xmlns:pfx0="http://www.tibco.com/CLEver/ExtraTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://www.tibco.com/CLEver/Transactional/Lookup" xmlns:ns="http://www.tibco.com/CLEver/FrontendServices/Transactional/Lookup/LookupInterfaceSpecs">
+    <wsdl:import namespace="http://www.tibco.com/CLEver/Transactional/Lookup" location="/Processes/FrontendServices/Transactional/Lookup/Lookup.wsdl"/>
+    <pd:name>Processes/FrontendServices/Transactional/Lookup/Retrieve.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx:Lookup_Retrieve_Input"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>52</pd:startY>
+    <pd:returnBindings>
+        <pfx:Lookup_Retrieve_Output>
+            <parameters>
+                <ns:Lookup_Retrieve_Output>
+                    <xsl:for-each select="$Retrieve/pfx1:Lookup_Output/pfx1:Names">
+                        <ns:Names>
+                            <ns:Name>
+                                <xsl:value-of select="pfx1:Name"/>
+                            </ns:Name>
+                        </ns:Names>
+                    </xsl:for-each>
+                </ns:Lookup_Retrieve_Output>
+            </parameters>
+        </pfx:Lookup_Retrieve_Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx:Lookup_Retrieve_Output"/>
+    <pd:endX>432</pd:endX>
+    <pd:endY>52</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Retrieve">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>56</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Transactional/Lookup/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Transactional/Lookup/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$Start/pfx:Lookup_Retrieve_Input/parameters/ns:Lookup_Retrieve_Input/pfx0:Security"/>
+                <Object>
+                    <xsl:value-of select="$Start/pfx:Lookup_Retrieve_Input/parameters/ns:Lookup_Retrieve_Input/ns:Object"/>
+                </Object>
+                <xsl:if test="$Start/pfx:Lookup_Retrieve_Input/parameters/ns:Lookup_Retrieve_Input/ns:Restriction">
+                    <Restriction>
+                        <xsl:value-of select="$Start/pfx:Lookup_Retrieve_Input/parameters/ns:Lookup_Retrieve_Input/ns:Restriction"/>
+                    </Restriction>
+                </xsl:if>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Retrieve</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Retrieve</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

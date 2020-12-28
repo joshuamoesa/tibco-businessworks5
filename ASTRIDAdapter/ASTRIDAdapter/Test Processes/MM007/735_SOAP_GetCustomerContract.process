@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:pfx2="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx3="urn:GET_CUSTOMER_DETAILS" xmlns:pfx4="urn:GET_CUSTOMER_CONTRACTS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="urn:GET_WORKORDERS" xmlns:pfx6="urn:GET_AGENDA" xmlns:pfx7="urn:UPGRADE_FORMULA" xmlns:pfx8="urn:CLOSE_INCIDENT" xmlns:pfx9="urn:CHECK_APPOINTMENT" xmlns:pfx10="urn:GET_DYNAMICSTRUCTURE">
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_DETAILS" location="/WSDL/EDTAdapter/002 - GET_CUSTOMER_DETAILS.wsdl"/>
+    <wsdl:import namespace="urn:GET_WORKORDERS" location="/WSDL/EDTAdapter/003 - GET_WORKORDERS.wsdl"/>
+    <wsdl:import namespace="urn:GET_AGENDA" location="/WSDL/ASTRIDAdapter/GET_AGENDA.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_CONTRACTS" location="/WSDL/ASTRIDAdapter/GET_CUSTOMER_CONTRACTS.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/735_SOAP_GetCustomerContract.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>277</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <timeout>90</timeout>
+            <endpointURL>http://localhost:%%ASTRIDAdapter/Outbound/SOAP/ServerPort%%/ASTRIDAdapter/Processes/GetCustomerContract</endpointURL>
+            <service>pfx4:GET_CUSTOMER_CONTRACTS_SERVICE</service>
+            <servicePort>GET_CUSTOMER_CONTRACTSSoap</servicePort>
+            <operation>GetCustomerContractsRequest</operation>
+            <soapAction>urn:GET_CUSTOMER_CONTRACTS/GetCustomerContracts</soapAction>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx4:GetCustomerContractsRequest>
+                    <pfx4:GUID>
+                        <xsl:value-of select="&quot;2143234&quot;"/>
+                    </pfx4:GUID>
+                    <pfx4:houseNumber>
+                        <xsl:value-of select="&quot;123&quot;"/>
+                    </pfx4:houseNumber>
+                    <pfx4:houseNumberExtension>
+                        <xsl:value-of select="&quot;a&quot;"/>
+                    </pfx4:houseNumberExtension>
+                    <pfx4:dutchPostcodeNums>
+                        <xsl:value-of select="&quot;1000&quot;"/>
+                    </pfx4:dutchPostcodeNums>
+                    <pfx4:dutchPostcodeChars>
+                        <xsl:value-of select="&quot;AA&quot;"/>
+                    </pfx4:dutchPostcodeChars>
+                    <pfx4:centralCustomerId>
+                        <xsl:value-of select="&quot;BBBB1234&quot;"/>
+                    </pfx4:centralCustomerId>
+                </pfx4:GetCustomerContractsRequest>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

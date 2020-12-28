@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by bhogeshwar k (Atos Origin Nederland B.V.) -->
+<!-- Created with Liquid XML Studio 1.0.6.0 (http://www.liquid-technologies.com) -->
+<xs:schema xmlns:tns="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Imported/Order.xsd"
+	 xmlns:prd="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:plep="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Imported/Order.xsd"
+	 targetNamespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Imported/Order.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd" schemaLocation="../Common/Product.xsd"/>
+	<xs:element name="ORDER_ITEM" type="plep:type_ORDER_ITEM"/>
+	<xs:complexType name="type_ORDER_ITEM">
+		<xs:sequence>
+			<xs:element name="PRODUCT_CATEGORY" type="xs:string" default="ZIPB IP"/>
+			<xs:element name="ORDER_ITEM_HEADER">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ORDER_ITEM_TYPE" type="xs:string"/>
+						<xs:element name="ORDER_ITEM_ID" type="xs:string" minOccurs="0"/>
+						<xs:element name="ORDER_ITEM_STATUS" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ORDER_ITEM_STATUS" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="prd:PRODUCTLIST" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ORDER" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ORDER_HEADER">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ORDER_TYPE" type="xs:string" default="ZIPB"/>
+										<xs:element name="ORDER_SUB_TYPE" type="xs:string" minOccurs="0"/>
+										<xs:element name="ORDER_ID" type="xs:string" minOccurs="0"/>
+										<xs:element name="CUSTOMER_ID" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ID_CKR"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ORDER_STATUS" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ORDER_STATUS" type="xs:string" minOccurs="0"/>
+													<xs:element name="ORDER_SUB_STATUS" type="xs:string" minOccurs="0"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="CUSTOMER_ACCOUNT" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ACCOUNT_NAME" type="xs:string" minOccurs="0"/>
+													<xs:element name="ACCOUNT_ID" type="xs:string" minOccurs="0"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="ORDER_ITEM" type="plep:type_ORDER_ITEM" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

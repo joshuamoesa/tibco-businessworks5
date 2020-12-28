@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated on 2008/11/04 14:33:19 with EAIPlugin 1.2.0 -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:grp="http://kpn.com/products/WMP" xmlns:ord="http://kpn.com/eai/generic/order/1.0" xmlns:prd="http://kpn.com/products/WMP/installationEngineer/data/v1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://kpn.com/products/WMP/installationEngineer/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/products/WMP/installationEngineer/v1">
+<wsdl:documentation>
+    Installation Engineer commercial product
+
+    Version History:
+    * 1.0 - Initial version
+</wsdl:documentation>
+<wsdl:types>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/WMP" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_activation  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_activation">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Active"/>
+      <xsd:enumeration value="Inactive"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_callBarringServiceNumbers  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_callBarringServiceNumbers">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="0906"/>
+      <xsd:enumeration value="0906-0909"/>
+      <xsd:enumeration value="0900-0906-0909"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_carrierType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_carrierType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="FTTC"/>
+      <xsd:enumeration value="FTTH"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_orderScenario  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_orderScenario">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="New"/>
+      <xsd:enumeration value="Migrate"/>
+      <xsd:enumeration value="Move"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_qualityOfService  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_qualityOfService">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Best Effort"/>
+      <xsd:enumeration value="Premium"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_telephoneNumber  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_telephoneNumber">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_zipcode  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_zipcode">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  WMPOrder  <<order>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="WMPOrder"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  WMPOrderItem  <<orderItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="WMPOrderItem">
+    <xsd:sequence>
+      <xsd:element name="requesterId" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="requiredProductInstanceId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="wegaId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="refOrderId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  WMPOrderStatus  <<orderStatus>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="WMPOrderStatus"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  WMPOrderStatusItem  <<orderStatusItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="WMPOrderStatusItem">
+    <xsd:sequence>
+      <xsd:element name="productInstanceId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="refOrderId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/eai/generic/order/1.0" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:simpleType name="OrderStatusEnumeration">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="INITIAL"/>
+      <xsd:enumeration value="ACCEPTED"/>
+      <xsd:enumeration value="REJECTED"/>
+      <xsd:enumeration value="ERROR"/>
+      <xsd:enumeration value="COMPLETED"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:complexType name="Error">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="detail" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Order">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="orderDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="OrderStatus">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="supplierOrderId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="error" type="ord:Error"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/WMP/installationEngineer/data/v1.0" version="1.0">
+  <xsd:import namespace="http://kpn.com/products/WMP"/>
+  <xsd:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+  <!-- ================================================== -->
+  <!-- =====  Element Declarations  -->
+  <!-- ================================================== -->
+  <xsd:element name="installationEngineercancelRequest" type="prd:installationEngineercancelRequest"/>
+  <xsd:element name="installationEngineercancelResponse" type="prd:installationEngineercancelResponse"/>
+  <xsd:element name="installationEngineercreateRequest" type="prd:installationEngineercreateRequest"/>
+  <xsd:element name="installationEngineercreateResponse" type="prd:installationEngineercreateResponse"/>
+  <xsd:element name="installationEngineerreplanRequest" type="prd:installationEngineerreplanRequest"/>
+  <xsd:element name="installationEngineerreplanResponse" type="prd:installationEngineerreplanResponse"/>
+  <xsd:element name="installationEngineerupdateRequest" type="prd:installationEngineerupdateRequest"/>
+  <xsd:element name="installationEngineerupdateResponse" type="prd:installationEngineerupdateResponse"/>
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerStatusEnum  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="installationEngineerStatusEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Rejected"/>
+      <xsd:enumeration value="Failed"/>
+      <xsd:enumeration value="Completed"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  cancelRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="cancelRequest">
+    <xsd:sequence>
+      <xsd:element name="appointmentId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  cancelResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="cancelResponse"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createRequest">
+    <xsd:sequence>
+      <xsd:element name="installationType" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="installationTypeItem" type="xsd:string"/>
+      <xsd:element name="wishDate" type="xsd:dateTime"/>
+      <xsd:element name="firstName" type="xsd:string"/>
+      <xsd:element name="lastName" type="xsd:string"/>
+      <xsd:element name="contactTelephoneNumber" type="grp:T_telephoneNumber"/>
+      <xsd:element name="street" type="xsd:string"/>
+      <xsd:element name="houseNumber" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="houseNumberExtension" type="xsd:string"/>
+      <xsd:element name="zipCode" type="grp:T_zipcode"/>
+      <xsd:element name="city" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="orderScenario" type="grp:E_orderScenario"/>
+      <xsd:element minOccurs="0" name="accessType" type="grp:E_carrierType"/>
+      <xsd:element minOccurs="0" name="israPointIdentification" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="portingPhoneNumber" type="grp:T_telephoneNumber"/>
+      <xsd:element minOccurs="0" name="ported" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="accessLinePhoneNumber" type="grp:T_telephoneNumber"/>
+      <xsd:element minOccurs="0" name="currentTelephonyType" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createResponse">
+    <xsd:sequence>
+      <xsd:element name="appointmentId" type="xsd:string"/>
+      <xsd:element name="plannerNotes" type="xsd:string"/>
+      <xsd:element name="engineerNotes" type="xsd:string"/>
+      <xsd:element name="plannedDateTime" type="xsd:dateTime"/>
+      <xsd:element name="plannedDuration" type="xsd:string"/>
+      <xsd:element name="changeReason" type="xsd:string"/>
+      <xsd:element name="changedBy" type="xsd:string"/>
+      <xsd:element name="attachementData" type="xsd:base64Binary"/>
+      <xsd:element name="attachementSize" type="xsd:int"/>
+      <xsd:element name="attachementName" type="xsd:string"/>
+      <xsd:element name="localPresenceInd" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineercancelRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineercancelRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderItem" type="prd:installationEngineercancelRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineercancelRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineercancelRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:cancelRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineercancelResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineercancelResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:installationEngineerStatusEnum"/>
+          <xsd:element name="OrderItem" type="prd:installationEngineercancelResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineercancelResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineercancelResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderStatusItem"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineercreateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineercreateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderItem" type="prd:installationEngineercreateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineercreateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineercreateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:createRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineercreateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineercreateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:installationEngineerStatusEnum"/>
+          <xsd:element name="OrderItem" type="prd:installationEngineercreateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineercreateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineercreateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:createResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerreplanRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineerreplanRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderItem" type="prd:installationEngineerreplanRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerreplanRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineerreplanRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:replanRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerreplanResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineerreplanResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:installationEngineerStatusEnum"/>
+          <xsd:element name="OrderItem" type="prd:installationEngineerreplanResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerreplanResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineerreplanResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:replanResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerupdateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineerupdateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderItem" type="prd:installationEngineerupdateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerupdateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineerupdateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:updateRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerupdateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineerupdateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:installationEngineerStatusEnum"/>
+          <xsd:element name="OrderItem" type="prd:installationEngineerupdateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  installationEngineerupdateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="installationEngineerupdateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:updateResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  replanRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="replanRequest">
+    <xsd:sequence>
+      <xsd:element name="appointmentId" type="xsd:string"/>
+      <xsd:element name="wishDate" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  replanResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="replanResponse">
+    <xsd:sequence>
+      <xsd:element name="wishDate" type="xsd:dateTime"/>
+      <xsd:element name="planDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  updateRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="updateRequest">
+    <xsd:sequence>
+      <xsd:element name="appointmentId" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="installationTypeItem" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  updateResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="updateResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdEngineer" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="plannerNotes" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="engineerNotes" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="plannedDateTime" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="plannedDuration" type="xsd:string"/>
+      <xsd:element name="changeReason" type="xsd:string"/>
+      <xsd:element name="changedBy" type="xsd:string"/>
+      <xsd:element name="attachementData" type="xsd:base64Binary"/>
+      <xsd:element minOccurs="0" name="attachementSize" type="xsd:int"/>
+      <xsd:element name="attachementName" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="localPresenceInd" type="xsd:string"/>
+      <xsd:element name="appointmentId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+</wsdl:types>
+<wsdl:message name="cancelStatusUpdateRequest">
+<wsdl:part element="prd:installationEngineercancelResponse" name="installationEngineercancelStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="replanStatusUpdateRequest">
+<wsdl:part element="prd:installationEngineerreplanResponse" name="installationEngineerreplanStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="replanRequest">
+<wsdl:part element="prd:installationEngineerreplanRequest" name="installationEngineerreplanRequest"/>
+</wsdl:message>
+<wsdl:message name="Error">
+<wsdl:part name="Error" type="ord:Error"/>
+</wsdl:message>
+<wsdl:message name="createStatusUpdateRequest">
+<wsdl:part element="prd:installationEngineercreateResponse" name="installationEngineercreateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="createRequest">
+<wsdl:part element="prd:installationEngineercreateRequest" name="installationEngineercreateRequest"/>
+</wsdl:message>
+<wsdl:message name="updateStatusUpdateRequest">
+<wsdl:part element="prd:installationEngineerupdateResponse" name="installationEngineerupdateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="cancelRequest">
+<wsdl:part element="prd:installationEngineercancelRequest" name="installationEngineercancelRequest"/>
+</wsdl:message>
+<wsdl:message name="updateRequest">
+<wsdl:part element="prd:installationEngineerupdateRequest" name="installationEngineerupdateRequest"/>
+</wsdl:message>
+<wsdl:portType name="installationEngineerServices">
+<wsdl:operation name="create">
+<wsdl:input message="tns:createRequest" name="createRequest"/>
+</wsdl:operation>
+<wsdl:operation name="update">
+<wsdl:input message="tns:updateRequest" name="updateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="replan">
+<wsdl:input message="tns:replanRequest" name="replanRequest"/>
+</wsdl:operation>
+<wsdl:operation name="cancel">
+<wsdl:input message="tns:cancelRequest" name="cancelRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:portType name="installationEngineerCallbackServices">
+<wsdl:operation name="replanStatusUpdate">
+<wsdl:input message="tns:replanStatusUpdateRequest" name="replanStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="createStatusUpdate">
+<wsdl:input message="tns:createStatusUpdateRequest" name="createStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="cancelStatusUpdate">
+<wsdl:input message="tns:cancelStatusUpdateRequest" name="cancelStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="updateStatusUpdate">
+<wsdl:input message="tns:updateStatusUpdateRequest" name="updateStatusUpdateRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="installationEngineerCallbackBindingSOAP" type="tns:installationEngineerCallbackServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="replanStatusUpdate">
+<soap:operation soapAction="WMP_installationEngineer_1.0_replan_Asynchronous" style="document"/>
+<wsdl:input name="replanStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="createStatusUpdate">
+<soap:operation soapAction="WMP_installationEngineer_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="cancelStatusUpdate">
+<soap:operation soapAction="WMP_installationEngineer_1.0_cancel_Asynchronous" style="document"/>
+<wsdl:input name="cancelStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="updateStatusUpdate">
+<soap:operation soapAction="WMP_installationEngineer_1.0_update_Asynchronous" style="document"/>
+<wsdl:input name="updateStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:binding name="installationEngineerBindingSOAP" type="tns:installationEngineerServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="create">
+<soap:operation soapAction="WMP_installationEngineer_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="update">
+<soap:operation soapAction="WMP_installationEngineer_1.0_update_Asynchronous" style="document"/>
+<wsdl:input name="updateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="replan">
+<soap:operation soapAction="WMP_installationEngineer_1.0_replan_Asynchronous" style="document"/>
+<wsdl:input name="replanRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="cancel">
+<soap:operation soapAction="WMP_installationEngineer_1.0_cancel_Asynchronous" style="document"/>
+<wsdl:input name="cancelRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="installationEngineer">
+<wsdl:port binding="tns:installationEngineerCallbackBindingSOAP" name="installationEngineerCallbackServices">
+<soap:address location="http://localhost:8080/path/installationEngineerCallbackServices"/>
+</wsdl:port>
+<wsdl:port binding="tns:installationEngineerBindingSOAP" name="installationEngineerServices">
+<soap:address location="http://localhost:8080/path/installationEngineerServices"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

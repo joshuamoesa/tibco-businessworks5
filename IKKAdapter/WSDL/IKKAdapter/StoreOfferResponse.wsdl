@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--WSDL created on 01-09-2006 -->
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:intf="http://www.kpn.com/EpiphanyBusinessConnector/StoreOfferResponse" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://www.kpn.com/EpiphanyBusinessConnector/StoreOfferResponse" targetNamespace="http://www.kpn.com/EpiphanyBusinessConnector/StoreOfferResponse">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.kpn.com/EpiphanyBusinessConnector/StoreOfferResponse">
+            <complexType name="type_StoreOfferResponseRequest">
+                <sequence>
+                    <element name="SessionId" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="CkrNr" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="MobielNummer" nillable="true" type="xsd:string"/>
+                    <element name="OfferNaam" nillable="true" type="xsd:string"/>
+                    <element name="OfferStatus" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="Reden" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ContextString" nillable="true" type="xsd:string"/>
+                    <element name="ChannelType" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ChannelId" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="TeamId" nillable="true" type="xsd:string"/>
+                    <element name="ServerId" nillable="true" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <element name="StoreOfferResponseRequest">
+                <complexType>
+                    <sequence>
+                        <element maxOccurs="unbounded" minOccurs="0" name="item" type="impl:type_StoreOfferResponseRequest"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <complexType name="type_status">
+                <sequence>
+                    <element name="STATUS_CODE" type="xsd:integer"/>
+                    <element maxOccurs="1" minOccurs="0" name="MSG_CODE" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ERROR_CODE" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ERROR_DESCRIPTION" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <element name="StoreOfferResponseResponse">
+                <complexType>
+                    <sequence>
+                        <element maxOccurs="unbounded" minOccurs="0" name="item" type="impl:type_status"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="StoreOfferResponseResponse">
+        <wsdl:part element="impl:StoreOfferResponseResponse" name="StoreOfferResponseResponse"/>
+    </wsdl:message>
+    <wsdl:message name="StoreOfferResponseRequest">
+        <wsdl:part element="impl:StoreOfferResponseRequest" name="StoreOfferResponseRequest"/>
+    </wsdl:message>
+    <wsdl:portType name="StoreOfferResponsePortType">
+        <wsdl:operation name="StoreOfferResponse" parameterOrder="StoreOfferResponseRequest">
+            <wsdl:input message="impl:StoreOfferResponseRequest" name="StoreOfferResponseRequest"/>
+            <wsdl:output message="impl:StoreOfferResponseResponse" name="StoreOfferResponseResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="StoreOfferResponseSoapSoapBinding" type="impl:StoreOfferResponsePortType">
+        <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="StoreOfferResponse">
+            <wsdlsoap:operation soapAction=""/>
+            <wsdl:input name="StoreOfferResponseRequest">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="StoreOfferResponseResponse">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="StoreOfferResponseService">
+        <wsdl:port binding="impl:StoreOfferResponseSoapSoapBinding" name="StoreOfferResponseSoap">
+            <wsdlsoap:address location="http://hdxs7q.telecom.ptt.nl:9080/EBC/services/StoreOfferResponseSoap"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

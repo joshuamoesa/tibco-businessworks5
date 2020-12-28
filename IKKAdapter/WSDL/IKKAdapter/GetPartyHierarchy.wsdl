@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.GetPartyHierarchy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GetPartyHierarchy" targetNamespace="urn:IKKAdapter.GetPartyHierarchy">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.GetPartyHierarchy">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/GetPartyHierarchy.xsd"/>
+            <xsd:element name="GetPartyHierarchyRequest" type="ikk:GetPartyHierarchyRequest"/>
+            <xsd:element name="GetPartyHierarchyResponse" type="ikk:GetPartyHierarchyResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="GetPartyHierarchyRequest">
+        <part element="ikk:GetPartyHierarchyRequest" name="parameters"/>
+    </message>
+    <message name="GetPartyHierarchyResponse">
+        <part element="ikk:GetPartyHierarchyResponse" name="parameters"/>
+    </message>
+    <portType name="GetPartyHierarchyPortType">
+        <operation name="GetPartyHierarchy">
+            <input message="ikk:GetPartyHierarchyRequest"/>
+            <output message="ikk:GetPartyHierarchyResponse"/>
+        </operation>
+    </portType>
+    <binding name="GetPartyHierarchySoapBinding" type="ikk:GetPartyHierarchyPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetPartyHierarchy">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetPartyHierarchyService">
+        <port binding="ikk:GetPartyHierarchySoapBinding" name="GetPartyHierarchySoap">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/GetPartyHierarchy"/>
+        </port>
+    </service>
+</definitions>

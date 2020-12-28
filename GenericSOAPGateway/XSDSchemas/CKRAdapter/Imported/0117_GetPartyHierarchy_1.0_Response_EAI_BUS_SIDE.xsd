@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0117_GetPartyHierarchy/1.0/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0117_GetPartyHierarchy/1.0/Response" elementFormDefault="qualified">
+	<xs:simpleType name="legalFormCode_type">
+		<xs:restriction base="xs:string">
+			<xs:annotation>
+				<xs:documentation>DEFINITIONS:
+[generic] The legal form code identifies the legal representation of a party in the legaslatory sense.
+
+TYPE:
+String (2) (enumerated)
+
+VALUES: (taken from CKR's coderingsBoekje)
+00	onbekend (kvk)
+01	eenmanszaak met 1 eigenaar
+02	eenmanszaak met 2 eigenaren
+03	eenmanszaak NV/BV IO A-formulier
+05	rederij
+10	vennootschap onder firma (VOF)
+11	vennootschap onder firma
+12	NV/BV IO B-formulier
+20	commanditaire vennootschap (CV)
+21	1 beherende vennoot
+22	meer beh. vennoten
+23	NV/BV IO D-formulier
+40	besloten vennootschap (BV)
+41	gewone structuur
+42	struct. vennootschap
+50	naamloze vennootschap (NV)
+51	gewone structuur
+52	structuurvennootschap
+53	beleggings mij verand kap
+54	BM/struct. venn. sch.
+60	cooperatieve vereniging
+61	UA gewone structuur
+62	UA structuur vennootschap
+63	WA gewone structuur
+64	WA structuurvennootschap
+65	BA gewone structuur
+66	BA structuurvennootschap
+70	vereniging (ingeschreven)
+71	met volle rechtsbevoegdheid
+72	met beperkte rechtsbevoegdh
+73	kerkgenootschap
+74	stichting
+80	onderlinge waarborg maatschappij
+81	UA gewone structuur
+82	UA structuurvennootschap
+83	WA gewone structuur
+84	WA structuurvennootschap
+85	BA gewone structuur
+86	BA structuurvennootschap
+90	nevenv van een buitenl hoofdzaak
+91	buitenlandse RV/onderneming
+92	nevenvest met vest buiten NL
+93	Europees econ samenw. verb
+94	Buitenl EG vennootschap met onderneming in NL
+95	Buitenl EG vennootschap met hoofdvestiging in NL
+96	Buitenl op EG vennootschap lijkende onderneming in NL
+97	Buitenl op EG vennootschap lijkende vennootschap met hoofdvest in NL
+BT	buitenl rechtspersoon z vest in NL
+KG	kerkgenootschap
+MT	maatschap
+NP	natuurlijk persoon
+PR	publiekrechtelijk lichaam (overheid+ambassades etc.)
+SV	samenwerkingsverband
+VG	vereniging, niet ingeschreven
+</xs:documentation>
+				<xs:documentation>Default value is:''</xs:documentation>
+				<xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+			</xs:annotation>
+			<xs:maxLength value="02"/>
+			<xs:enumeration value="00"/>
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="20"/>
+			<xs:enumeration value="21"/>
+			<xs:enumeration value="22"/>
+			<xs:enumeration value="23"/>
+			<xs:enumeration value="40"/>
+			<xs:enumeration value="41"/>
+			<xs:enumeration value="42"/>
+			<xs:enumeration value="50"/>
+			<xs:enumeration value="51"/>
+			<xs:enumeration value="52"/>
+			<xs:enumeration value="53"/>
+			<xs:enumeration value="54"/>
+			<xs:enumeration value="60"/>
+			<xs:enumeration value="61"/>
+			<xs:enumeration value="62"/>
+			<xs:enumeration value="63"/>
+			<xs:enumeration value="64"/>
+			<xs:enumeration value="65"/>
+			<xs:enumeration value="66"/>
+			<xs:enumeration value="70"/>
+			<xs:enumeration value="71"/>
+			<xs:enumeration value="72"/>
+			<xs:enumeration value="73"/>
+			<xs:enumeration value="74"/>
+			<xs:enumeration value="80"/>
+			<xs:enumeration value="81"/>
+			<xs:enumeration value="82"/>
+			<xs:enumeration value="83"/>
+			<xs:enumeration value="84"/>
+			<xs:enumeration value="85"/>
+			<xs:enumeration value="86"/>
+			<xs:enumeration value="90"/>
+			<xs:enumeration value="91"/>
+			<xs:enumeration value="92"/>
+			<xs:enumeration value="93"/>
+			<xs:enumeration value="94"/>
+			<xs:enumeration value="95"/>
+			<xs:enumeration value="96"/>
+			<xs:enumeration value="97"/>
+			<xs:enumeration value="BT"/>
+			<xs:enumeration value="KG"/>
+			<xs:enumeration value="MT"/>
+			<xs:enumeration value="NP"/>
+			<xs:enumeration value="PR"/>
+			<xs:enumeration value="SV"/>
+			<xs:enumeration value="VG"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dateOfBirth_type">
+		<xs:annotation>
+			<xs:documentation>DEFINITIONS:
+[general] The birth-date of a party is the date at which the party was initiated. For individuals this actually means the birth date and for organizations this means the date of registration in the authorized administrations. 
+
+TYPE:
+&lt;&lt;attribute&gt;&gt; Date
+
+FORMAT:
+&lt;&lt;attribute&gt;&gt; Date
+
+NOTES:
+The attributes is derived from the Date attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="partyName_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="132"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="kvkNumber_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="13"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="validFromDate_type">
+		<xs:annotation>
+			<xs:documentation>DEFINITIONS:
+The valid From Date is used in the context of a validity perion object. It is usually paired with the validUntilDate attribute.
+
+NOTES:
+See Date for definitions.
+</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="branchName_type">
+		<xs:restriction base="xs:string">
+			<xs:annotation>
+				<xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+			</xs:annotation>
+			<xs:maxLength value="46"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="streetName_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="24"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="houseNumber_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dutchPostcodeNumbers_type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dutchPostcodeLetters_type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="cityName_type">
+		<xs:restriction base="xs:string">
+			<xs:annotation>
+				<xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+			</xs:annotation>
+			<xs:maxLength value="18"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="cityCode_type">
+		<xs:restriction base="xs:string">
+			<xs:annotation>
+				<xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+			</xs:annotation>
+			<xs:maxLength value="06"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="centralCustomerId_type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z,0-9]{8}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>This is the BODY object for KPN EAI service number 0117 - GetPartyHierarchy version 1.0 Response message.</xs:documentation>
+			<xs:documentation>Automatically generated schema for service:'GetPartyHierarchy', version:'1.0'</xs:documentation>
+			<xs:documentation>Generated on 2007-04-12 16:25:28Z</xs:documentation>
+			<xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+			<xs:documentation>Service ID is:'0117'</xs:documentation>
+			<xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+			<xs:documentation>KPN EAI message body class.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:annotation>
+					<xs:documentation>Artificial sequence to separate.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="PARTY" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="PROPERTY_ADDRESS">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="STREET_NAME" type="tns:streetName_type" minOccurs="0"/>
+										<xs:element name="HOUSE_NUMBER" type="tns:houseNumber_type" minOccurs="0"/>
+										<xs:element name="HOUSE_NUMBER_EXTENSION" type="xs:string" minOccurs="0"/>
+										<xs:element name="DUTCH_POSTCODE_NUMBERS" type="tns:dutchPostcodeNumbers_type" minOccurs="0"/>
+										<xs:element name="DUTCH_POSTCODE_LETTERS" type="tns:dutchPostcodeLetters_type" minOccurs="0"/>
+										<xs:element name="ZIPCODE_BEFORE" type="xs:string" minOccurs="0"/>
+										<xs:element name="CITY_NAME" type="tns:cityName_type" minOccurs="0"/>
+										<xs:element name="ZIPCODE_AFTER" type="xs:string" minOccurs="0"/>
+										<xs:element name="COUNTRY" type="xs:string" minOccurs="0"/>
+										<xs:element name="CITY_CODE" type="tns:cityCode_type" minOccurs="0"/>
+										<xs:element name="ADDRESS_STATUS" type="xs:string" minOccurs="0"/>
+										<xs:element name="ADDRESS_CREATION_DATE" type="xs:date" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>TYPE:
+&lt;&lt;attribute&gt;&gt; Date
+
+FORMAT:
+&lt;&lt;attribute&gt;&gt; Date</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ADDRESS_LAST_CHANGED_DATE" type="xs:date" minOccurs="0"/>
+										<xs:element name="ADDRESS_LAST_CHANGED_BY" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CUSTOMER" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="CENTRAL_CUSTOMER_ID" type="tns:centralCustomerId_type" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="KVK_NUMBER" type="tns:kvkNumber_type" minOccurs="0"/>
+							<xs:element name="VALID_FROM_DATE" type="tns:validFromDate_type" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>DEFINITIONS:
+The valid From Date is used in the context of a validity perion object. It is usually paired with the validUntilDate attribute.
+
+NOTES:
+See Date for definitions.
+</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="VALID_TO_DATE" type="xs:date" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>TYPE:
+&lt;&lt;attribute&gt;&gt; Date
+
+FORMAT:
+&lt;&lt;attribute&gt;&gt; Date</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="IS_ACTIVE" type="xs:string" minOccurs="0"/>
+							<xs:element name="BRANCH_NAME_DIACRITICS" type="xs:string" minOccurs="0"/>
+							<xs:element name="BRANCH_NAME" type="tns:branchName_type" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="MAIN" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="CENTRAL_CUSTOMER_ID" type="tns:centralCustomerId_type" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PARTY_NAME_DIACRITICS" type="xs:string" minOccurs="0"/>
+				<xs:element name="LEGAL_FORM_CODE" type="tns:legalFormCode_type" minOccurs="0"/>
+				<xs:element name="DATE_OF_BIRTH" type="tns:dateOfBirth_type" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>DEFINITIONS:
+[general] The birth-date of a party is the date at which the party was initiated. For individuals this actually means the birth date and for organizations this means the date of registration in the authorized administrations. 
+
+TYPE:
+&lt;&lt;attribute&gt;&gt; Date
+
+FORMAT:
+&lt;&lt;attribute&gt;&gt; Date
+
+NOTES:
+The attributes is derived from the Date attribute.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="NUMBER_OF_RECORDS" type="xs:integer" minOccurs="0"/>
+				<xs:element name="PARTY_NAME" type="tns:partyName_type" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

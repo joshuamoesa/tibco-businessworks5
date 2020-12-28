@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.GetLineDetails" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GetLineDetails" targetNamespace="urn:IKKAdapter.GetLineDetails">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.GetLineDetails">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/GetLineDetails.xsd"/>
+            <xsd:element name="GetLineDetailsRequest" type="ikk:GetLineDetailsRequest"/>
+            <xsd:element name="GetLineDetailsResponse" type="ikk:GetLineDetailsResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="GetLineDetailsRequest">
+        <part element="ikk:GetLineDetailsRequest" name="parameters"/>
+    </message>
+    <message name="GetLineDetailsResponse">
+        <part element="ikk:GetLineDetailsResponse" name="parametesr"/>
+    </message>
+    <portType name="GetLineDetailsPortType">
+        <operation name="GetLineDetails">
+            <input message="ikk:GetLineDetailsRequest"/>
+            <output message="ikk:GetLineDetailsResponse"/>
+        </operation>
+    </portType>
+    <binding name="GetLineDetailsSoapBinding" type="ikk:GetLineDetailsPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetLineDetails">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetLineDetailsService">
+        <port binding="ikk:GetLineDetailsSoapBinding" name="GetLineDetails">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/GetLineDetails"/>
+        </port>
+    </service>
+</definitions>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 sp2 U (http://www.altova.com) by Hans vd Molen (Atos Origin Nederland B.V.) -->
+<!--Created by TIBCO WSDL-->
+<!-- WSDL Version: 1.0 (03-01-2008), Hans van der Molen, Initial version -->
+<wsdl:definitions xmlns:ecnsxs="EcNuXsd_V0.2" xmlns:ecnuws="http://webservices.kpn-lls.com/V0.2/EcnsNumbes.wsdl" xmlns:ns1="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://webservices.kpn-lls.com/V0.2/EcnsNumbes.wsdl" name="Untitled">
+	<wsdl:import namespace="EcNuXsd_V0.2" location="EcnsNumbes.xsd"/>
+	<wsdl:message name="GetNumberInfoReqMsg">
+		<wsdl:part name="GetNumberInfoReqPart" element="ecnsxs:EcnsGetNumberInfoReq"/>
+	</wsdl:message>
+	<wsdl:message name="GetNumberInfoRespMsg">
+		<wsdl:part name="GetNumberInfoRespPart" element="ecnsxs:EcnsGetNumberInfoResp"/>
+	</wsdl:message>
+	<wsdl:portType name="EcnsNumbes">
+		<!-- Definition of KPN's functional operations -->
+		<wsdl:operation name="GetNumberInfoOperation">
+			<wsdl:input message="ecnuws:GetNumberInfoReqMsg"/>
+			<wsdl:output message="ecnuws:GetNumberInfoRespMsg"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="EcnsSoapBinding" type="ecnuws:EcnsNumbes">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<!-- Definition of the operations provided by EAI-PS -->
+		<wsdl:operation name="GetNumberInfoOperation">
+			<soap:operation style="document"/>
+			<wsdl:input>
+				<soap:body parts="GetNumberInfoReqPart" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="GetNumberInfoRespPart" use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="EcnsNumbesService">
+		<!-- ===============   EAI NUMBES WEBSERVICES =============================-->
+		<wsdl:port name="GetNumberInfoHttpPort" binding="ecnuws:EcnsSoapBinding">
+			<soap:address location="http://localhost:6070/EClipsAdapter/Processes/GetNumberInfo"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

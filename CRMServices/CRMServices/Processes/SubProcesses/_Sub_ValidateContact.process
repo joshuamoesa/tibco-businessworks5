@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/UCMAdapter/Request/AddAccountReference.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/CRMServices/Response/GetAccountHierarchy.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/UCMAdapter/Response/AddAccountReference.xsd" xmlns:pfx4="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0422_AddAccountReference/1.0/Response" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx5="http://xmlns.kpn.com/fixed/UCMAdapter/Request/GetAccountHierarchy.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/UCMAdapter/Response/GetAccountHierarchy.xsd" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx7="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:pfx8="http://xmlns.kpn.com/fixed/CDCAdapter/Request/0425_ValidateContact.xsd" xmlns:pfx9="http://xmlns.kpn.com/fixed/CDCAdapter/Response/0425_ValidateContact.xsd" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0425_ValidateContact/1.0/Response" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0425_ValidateContact/1.0/Request">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Request/AddAccountReference.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Request/AddAccountReference.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Request/GetAccountHierarchy.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Request/GetAccountHierarchy.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Response/GetAccountHierarchy.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Response/GetAccountHierarchy.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/CDCAdapter/Request/0425_ValidateContact.xsd" schemaLocation="/XSDSchemas/CDCAdapter/Request/0425_ValidateContact.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/eai/common/errors"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/CDCAdapter/Response/0425_ValidateContact.xsd" schemaLocation="/XSDSchemas/CDCAdapter/Response/0425_ValidateContact.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/_Sub_ValidateContact.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx8:ValidateContactRequest"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Map-Data/pfx9:ValidateContactResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx9:ValidateContactResponse"/>
+    <pd:endX>628</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas>
+        <Schema0 ref="pfx4:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>264</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Requester.process</processName>
+        </config>
+        <pd:inputBindings>
+            <RequesterIn>
+                <Destination>
+                    <xsl:value-of select="$Start/pfx8:ValidateContactRequest/ns1:CMH/ns1:TO/@ns1:DESTINATION"/>
+                </Destination>
+                <Timeout>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/CRMServices/RV/Timeout"/>
+                </Timeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx8:ValidateContactRequest"/>
+                </Body>
+            </RequesterIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>369</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx9:ValidateContactResponse"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Call-Process/RequesterOut/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>243</pd:y>
+        <config>
+            <faultName>Schema0</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="$_error_Call-Process">
+                            <pfx4:Errors>
+                                <xsl:copy-of select="$_error_Call-Process/pfx4:Error"/>
+                            </pfx4:Errors>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx4:Errors>
+                                <pfx4:Error>
+                                    <pfx4:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                    </pfx4:MsgCode>
+                                    <pfx4:Params>
+                                        <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                                    </pfx4:Params>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                                </pfx4:Error>
+                            </pfx4:Errors>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>451</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <element ref="pfx9:ValidateContactResponse"/>
+        </config>
+        <pd:inputBindings>
+            <pfx9:ValidateContactResponse>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateContactResponse/ns1:CMH"/>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateContactResponse/pfx9:RESULT_STATUS"/>
+                <xsl:choose>
+                    <xsl:when test="exists($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY)">
+                        <ns5:BODY>
+                            <ns5:CONTACT_PERSON>
+                                <xsl:choose>
+                                    <xsl:when test="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:OVERRIDE_VALIDATION=&quot;true&quot;">
+                                        <ns5:VALIDATION_WARNING_COUNT>
+                                            <xsl:value-of select="&quot;0&quot;"/>
+                                        </ns5:VALIDATION_WARNING_COUNT>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_WARNING_COUNT">
+                                            <ns5:VALIDATION_WARNING_COUNT>
+                                                <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_WARNING_COUNT"/>
+                                            </ns5:VALIDATION_WARNING_COUNT>
+                                        </xsl:if>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:if test="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:VALIDATION_ERROR_COUNT">
+                                    <ns5:VALIDATION_ERROR_COUNT>
+                                        <xsl:value-of select="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:VALIDATION_ERROR_COUNT"/>
+                                    </ns5:VALIDATION_ERROR_COUNT>
+                                </xsl:if>
+                                <xsl:choose>
+                                    <xsl:when test="(exists($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_WARNING_COUNT) and $Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_WARNING_COUNT>0) or (exists($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_ERROR_COUNT) and $Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_ERROR_COUNT >0)">
+                                        <ns5:VALIDATION_TOTAL_WARNING_COUNT>
+                                            <xsl:value-of select="number($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_WARNING_COUNT)+sum($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:ADDRESS/ns5:VALIDATION_WARNING_COUNT)"/>
+                                        </ns5:VALIDATION_TOTAL_WARNING_COUNT>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <ns5:VALIDATION_TOTAL_WARNING_COUNT>
+                                            <xsl:value-of select="&quot;0&quot;"/>
+                                        </ns5:VALIDATION_TOTAL_WARNING_COUNT>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:choose>
+                                    <xsl:when test="(exists($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_WARNING_COUNT) and $Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_WARNING_COUNT>0) or (exists($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_ERROR_COUNT) and $Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_ERROR_COUNT >0)">
+                                        <ns5:VALIDATION_TOTAL_ERROR_COUNT>
+                                            <xsl:value-of select="number($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_ERROR_COUNT)+sum($Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:ADDRESS/ns5:VALIDATION_ERROR_COUNT)"/>
+                                        </ns5:VALIDATION_TOTAL_ERROR_COUNT>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <ns5:VALIDATION_TOTAL_ERROR_COUNT>
+                                            <xsl:value-of select="&quot;0&quot;"/>
+                                        </ns5:VALIDATION_TOTAL_ERROR_COUNT>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:CONTACT_PERSON_ID">
+                                    <ns5:CONTACT_PERSON_ID>
+                                        <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:CONTACT_PERSON_ID"/>
+                                    </ns5:CONTACT_PERSON_ID>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:INITIALS">
+                                    <ns5:INITIALS>
+                                        <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:INITIALS"/>
+                                    </ns5:INITIALS>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:FAMILY_NAME_PREFIX">
+                                    <ns5:FAMILY_NAME_PREFIX>
+                                        <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:FAMILY_NAME_PREFIX"/>
+                                    </ns5:FAMILY_NAME_PREFIX>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:FAMILY_NAME">
+                                    <ns5:FAMILY_NAME>
+                                        <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:FAMILY_NAME"/>
+                                    </ns5:FAMILY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:FAMILY_NAME_POSTFIX">
+                                    <ns5:FAMILY_NAME_POSTFIX>
+                                        <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:FAMILY_NAME_POSTFIX"/>
+                                    </ns5:FAMILY_NAME_POSTFIX>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:PREFERRED_NAME">
+                                    <ns5:PREFERRED_NAME>
+                                        <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:PREFERRED_NAME"/>
+                                    </ns5:PREFERRED_NAME>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:DATE_OF_BIRTH">
+                                    <ns5:DATE_OF_BIRTH>
+                                        <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:DATE_OF_BIRTH"/>
+                                    </ns5:DATE_OF_BIRTH>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:ACADEMIC_TITLE">
+                                    <ns5:ACADEMIC_TITLE>
+                                        <xsl:value-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:ACADEMIC_TITLE"/>
+                                    </ns5:ACADEMIC_TITLE>
+                                </xsl:if>
+                                <xsl:copy-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:CONTACT_MEDIUM"/>
+                                <xsl:for-each select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:VALIDATION_RESULT">
+                                    <ns5:VALIDATION_RESULT>
+                                        <ns5:SEVERITY>
+                                            <xsl:value-of select="ns5:SEVERITY"/>
+                                        </ns5:SEVERITY>
+                                        <ns5:CODE>
+                                            <xsl:value-of select="ns5:CODE"/>
+                                        </ns5:CODE>
+                                        <ns5:DESCRIPTION>
+                                            <xsl:value-of select="ns5:DESCRIPTION"/>
+                                        </ns5:DESCRIPTION>
+                                    </ns5:VALIDATION_RESULT>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:ADDRESS">
+                                    <xsl:variable name="IDX" select="position()"/>
+                                    <xsl:variable name="SFA_ADDRESS" select="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:ADDRESS[$IDX]"/>
+                                    <ns5:ADDRESS>
+                                        <xsl:if test="@language">
+                                            <xsl:attribute name="language">
+                                                <xsl:value-of select="@language"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:choose>
+                                            <xsl:when test="$SFA_ADDRESS/ns6:OVERRIDE_VALIDATION='true'">
+                                                <ns5:VALIDATION_WARNING_COUNT>
+                                                    <xsl:value-of select="&quot;0&quot;"/>
+                                                </ns5:VALIDATION_WARNING_COUNT>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <ns5:VALIDATION_WARNING_COUNT>
+                                                    <xsl:value-of select="./ns5:VALIDATION_WARNING_COUNT"/>
+                                                </ns5:VALIDATION_WARNING_COUNT>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                        <xsl:if test="ns5:VALIDATION_ERROR_COUNT">
+                                            <ns5:VALIDATION_ERROR_COUNT>
+                                                <xsl:value-of select="ns5:VALIDATION_ERROR_COUNT"/>
+                                            </ns5:VALIDATION_ERROR_COUNT>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:STREET_NAME">
+                                            <ns5:STREET_NAME>
+                                                <xsl:if test="ns5:STREET_NAME/@namingConvention">
+                                                    <xsl:attribute name="namingConvention">
+                                                        <xsl:value-of select="ns5:STREET_NAME/@namingConvention"/>
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:value-of select="ns5:STREET_NAME"/>
+                                            </ns5:STREET_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:HOUSE_NUMBER">
+                                            <ns5:HOUSE_NUMBER>
+                                                <xsl:value-of select="ns5:HOUSE_NUMBER"/>
+                                            </ns5:HOUSE_NUMBER>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:HOUSE_NUMBER_EXTENSION">
+                                            <ns5:HOUSE_NUMBER_EXTENSION>
+                                                <xsl:value-of select="ns5:HOUSE_NUMBER_EXTENSION"/>
+                                            </ns5:HOUSE_NUMBER_EXTENSION>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:POSTCODE">
+                                            <ns5:POSTCODE>
+                                                <xsl:value-of select="ns5:POSTCODE"/>
+                                            </ns5:POSTCODE>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:CITY_NAME">
+                                            <ns5:CITY_NAME>
+                                                <xsl:value-of select="ns5:CITY_NAME"/>
+                                            </ns5:CITY_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:COUNTRY">
+                                            <ns5:COUNTRY>
+                                                <xsl:value-of select="ns5:COUNTRY"/>
+                                            </ns5:COUNTRY>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:COUNTRY_CODE">
+                                            <ns5:COUNTRY_CODE>
+                                                <xsl:value-of select="ns5:COUNTRY_CODE"/>
+                                            </ns5:COUNTRY_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:ADDRESS_TYPE">
+                                            <ns5:ADDRESS_TYPE>
+                                                <xsl:value-of select="ns5:ADDRESS_TYPE"/>
+                                            </ns5:ADDRESS_TYPE>
+                                        </xsl:if>
+                                        <xsl:if test="ns5:LOCATION_DESCRIPTION">
+                                            <ns5:LOCATION_DESCRIPTION>
+                                                <xsl:value-of select="ns5:LOCATION_DESCRIPTION"/>
+                                            </ns5:LOCATION_DESCRIPTION>
+                                        </xsl:if>
+                                        <xsl:if test="exists(ns5:UNFORMATTED_ADDRESS)">
+                                            <ns5:UNFORMATTED_ADDRESS>
+                                                <xsl:copy-of select="ns5:UNFORMATTED_ADDRESS/ns5:ADDRESS_LINE"/>
+                                            </ns5:UNFORMATTED_ADDRESS>
+                                        </xsl:if>
+                                        <xsl:copy-of select="ns5:RUNTIME_PARAMETERS"/>
+                                        <xsl:copy-of select="ns5:VALIDITY"/>
+                                        <xsl:for-each select="ns5:VALIDATION_RESULT">
+                                            <ns5:VALIDATION_RESULT>
+                                                <ns5:SEVERITY>
+                                                    <xsl:value-of select="ns5:SEVERITY"/>
+                                                </ns5:SEVERITY>
+                                                <ns5:CODE>
+                                                    <xsl:value-of select="ns5:CODE"/>
+                                                </ns5:CODE>
+                                                <ns5:DESCRIPTION>
+                                                    <xsl:value-of select="ns5:DESCRIPTION"/>
+                                                </ns5:DESCRIPTION>
+                                            </ns5:VALIDATION_RESULT>
+                                        </xsl:for-each>
+                                    </ns5:ADDRESS>
+                                </xsl:for-each>
+                                <xsl:copy-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:SIEBEL_ACCOUNT_REFERENCE"/>
+                                <ns5:RUNTIME_PARAMETERS>
+                                    <xsl:if test="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:RUNTIME_PARAMETERS/ns6:INTEGRATION_ID">
+                                        <ns5:INTEGRATION_ID>
+                                            <xsl:value-of select="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:RUNTIME_PARAMETERS/ns6:INTEGRATION_ID"/>
+                                        </ns5:INTEGRATION_ID>
+                                    </xsl:if>
+                                    <xsl:if test="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:RUNTIME_PARAMETERS/ns6:UCM_ROW_ID">
+                                        <ns5:UCM_ROW_ID>
+                                            <xsl:value-of select="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:RUNTIME_PARAMETERS/ns6:UCM_ROW_ID"/>
+                                        </ns5:UCM_ROW_ID>
+                                    </xsl:if>
+                                    <xsl:if test="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:RUNTIME_PARAMETERS/ns6:ID">
+                                        <ns5:ID>
+                                            <xsl:value-of select="$Start/pfx8:ValidateContactRequest/ns6:BODY/ns6:CONTACT_PERSON/ns6:RUNTIME_PARAMETERS/ns6:ID"/>
+                                        </ns5:ID>
+                                    </xsl:if>
+                                </ns5:RUNTIME_PARAMETERS>
+                                <xsl:copy-of select="$Parse-XML/pfx9:ValidateContactResponse/ns5:BODY/ns5:CONTACT_PERSON/ns5:CROSS_REFERENCE"/>
+                            </ns5:CONTACT_PERSON>
+                        </ns5:BODY>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                </xsl:choose>
+            </pfx9:ValidateContactResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx4="http://xmlns.kpn.com/fixed/UCMAdapter/Publish/0429_UpsertContactPub.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/UCMAdapter/Request/AddAccountReference.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0422_AddAccountReference/1.0/Request" xmlns:pfx6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:pfx7="http://xmlns.kpn.com/fixed/UCMAdapter/Response/AddAccountReference.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Publish/0429_UpsertContactPub.xsd" schemaLocation="/XSDSchemas/CRMServices/Publish/0429_UpsertContactPub.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent1/Publish/TestPublicationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Request/AddAccountReference.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Request/AddAccountReference.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/_CallAddAccountReferenceFromUpsertContactPub.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                    <xsd:element name="redeliver" type="xsd:boolean" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>65</pd:startX>
+    <pd:startY>95</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>573</pd:endX>
+    <pd:endY>95</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <ErrorCodes>
+            <xsd:element name="Code0" type="xsd:string"/>
+        </ErrorCodes>
+    </pd:processVariables>
+    <pd:activity name="Parse Publication">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx5:AddAccountReferenceRequest"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>269</pd:x>
+        <pd:y>330</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="$_error_Parse-Publication">
+                            <pfx2:Errors>
+                                <pfx2:Error>
+                                    <pfx2:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03003&quot;"/>
+                                    </pfx2:MsgCode>
+                                    <ns3:ErrorReport>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                    </ns3:ErrorReport>
+                                    <xsl:if test="$_error_Parse-Publication/ActivityErrors">
+                                        <pfx2:ActivityError>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/@*"/>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/node()"/>
+                                        </pfx2:ActivityError>
+                                    </xsl:if>
+                                </pfx2:Error>
+                            </pfx2:Errors>
+                        </xsl:when>
+                        <xsl:when test="$_error_Call-AddAccountReference">
+                            <pfx2:Errors>
+                                <xsl:copy-of select="$_error_Call-AddAccountReference/pfx2:Errors/pfx2:Error"/>
+                            </pfx2:Errors>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx2:Errors>
+                                <pfx2:Error>
+                                    <pfx2:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                    </pfx2:MsgCode>
+                                    <ns3:ErrorReport>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                    </ns3:ErrorReport>
+                                    <xsl:if test="$_error_Parse-Publication/ActivityErrors">
+                                        <pfx2:ActivityError>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/@*"/>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/node()"/>
+                                        </pfx2:ActivityError>
+                                    </xsl:if>
+                                </pfx2:Error>
+                            </pfx2:Errors>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call AddAccountReference">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>355</pd:x>
+        <pd:y>99</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/Sub_AddAccountReference.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:AddAccountReferenceRequest>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:ID"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:NAME"/>
+                    </ns1:NAME>
+                    <xsl:if test="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:FID">
+                        <ns1:FID>
+                            <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:FID"/>
+                        </ns1:FID>
+                    </xsl:if>
+                    <xsl:if test="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:MID">
+                        <ns1:MID>
+                            <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:MID"/>
+                        </ns1:MID>
+                    </xsl:if>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:PARADIGM"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;SIEBEL_ADCCOUNT_ID&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:VERSION"/>
+                    </ns1:VERSION>
+                    <xsl:copy-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:FROM"/>
+                    <xsl:copy-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:TO"/>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </ns1:MESSAGE_ID>
+                        <xsl:if test="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF">
+                            <ns1:EXTERNAL_REF>
+                                <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF"/>
+                            </ns1:EXTERNAL_REF>
+                        </xsl:if>
+                        <xsl:copy-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:TRACKING/ns1:ITEM" copy-namespaces="no"/>
+                        <ns1:ITEM>
+                            <xsl:attribute name="ns1:APPINFO">
+                                <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:TRACKING/ns1:ITEM[last()]/@ns1:APPINFO"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:EVENT">
+                                <xsl:value-of select="&quot;AddAccountReferenceRequest&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns1:ITEM>
+                    </ns1:TRACKING>
+                    <xsl:copy-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:ATTRIBUTE"/>
+                </ns1:CMH>
+                <xsl:copy-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns5:BODY"/>
+            </pfx5:AddAccountReferenceRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Error Mail">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>530</pd:x>
+        <pd:y>192</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/Send Mail.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <MessageId>
+                    <xsl:value-of select="$Parse-Publication/pfx5:AddAccountReferenceRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                </MessageId>
+                <Body>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;,$_error/ns3:ErrorReport/Msg,&quot;&#xD;&#xA;&quot;,&quot; Message cousing error is:&quot;,&quot;&#xD;&#xA;&quot;,&#xA;tib:render-xml($Parse-Publication/pfx5:AddAccountReferenceRequest,false(),true()))"/>
+                </Body>
+                <Subject>
+                    <xsl:value-of select="&quot;Error in 0429-UpsertContactPub&quot;"/>
+                </Subject>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>469</pd:x>
+        <pd:y>327</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <pfx2:Errors>
+                    <xsl:for-each select="$_error_Call-AddAccountReference/pfx2:Errors/pfx2:Error">
+                        <pfx2:Error>
+                            <pfx2:MsgCode>
+                                <xsl:value-of select="pfx2:MsgCode"/>
+                            </pfx2:MsgCode>
+                            <xsl:for-each select="pfx2:Params">
+                                <pfx2:Params>
+                                    <xsl:value-of select="."/>
+                                </pfx2:Params>
+                            </xsl:for-each>
+                            <pfx2:MsgId>
+                                <xsl:value-of select="pfx2:MsgId"/>
+                            </pfx2:MsgId>
+                            <xsl:for-each select="ns3:ErrorReport">
+                                <ns3:ErrorReport>
+                                    <StackTrace>
+                                        <xsl:value-of select="StackTrace"/>
+                                    </StackTrace>
+                                    <Msg>
+                                        <xsl:value-of select="Msg"/>
+                                    </Msg>
+                                    <FullClass>
+                                        <xsl:value-of select="FullClass"/>
+                                    </FullClass>
+                                    <Class>
+                                        <xsl:value-of select="Class"/>
+                                    </Class>
+                                    <ProcessStack>
+                                        <xsl:value-of select="ProcessStack"/>
+                                    </ProcessStack>
+                                    <MsgCode>
+                                        <xsl:value-of select="MsgCode"/>
+                                    </MsgCode>
+                                    <xsl:for-each select="Data">
+                                        <Data>
+                                            <xsl:copy-of select="*"/>
+                                        </Data>
+                                    </xsl:for-each>
+                                </ns3:ErrorReport>
+                            </xsl:for-each>
+                            <pfx2:ActivityError>
+                                <xsl:value-of select="pfx2:ActivityError"/>
+                            </pfx2:ActivityError>
+                            <pfx2:ApplicationError>
+                                <xsl:value-of select="string(pfx2:ApplicationError)"/>
+                            </pfx2:ApplicationError>
+                        </pfx2:Error>
+                    </xsl:for-each>
+                </pfx2:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetErrorCode">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>404</pd:x>
+        <pd:y>211</pd:y>
+        <config>
+            <variableName>ErrorCodes</variableName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$_error_Call-AddAccountReference/pfx2:Errors/pfx2:Error/pfx2:ApplicationError" type="pfx6:ResultStatus"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="$_error_Call-AddAccountReference/pfx2:Errors/pfx2:Error/pfx2:ApplicationError">
+                    <Code0>
+                        <xsl:value-of select="$_error_Call-AddAccountReference/pfx2:Errors/pfx2:Error[1]/pfx2:ApplicationError/@pfx6:ERROR_CODE"/>
+                    </Code0>
+                </xsl:when>
+                <xsl:otherwise>
+                    <Code0>
+                        <xsl:value-of select="&quot;10001&quot;"/>
+                    </Code0>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Call AddAccountReference</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call AddAccountReference</pd:from>
+        <pd:to>SetErrorCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call AddAccountReference</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Error Mail</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>Send Error Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetErrorCode</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:xpathDescription>if TimeOut</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>($_error_Call-AddAccountReference/pfx2:Errors/pfx2:Error[1]/pfx2:MsgCode="EAI-03004" or 
+$_error/ns3:ErrorReport/Msg="BWENGINE-100067" or
+$ErrorCodes/Code0="10000") and $Start/ServiceIn/redeliver="true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetErrorCode</pd:from>
+        <pd:to>LogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

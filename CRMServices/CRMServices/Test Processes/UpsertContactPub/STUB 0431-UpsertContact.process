@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/SFAAdapter/Request/0431_UpsertContact.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/SFAAdapter/Response/0431_UpsertContact.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/EAI/fixed/0431_UpsertContact/1.0/Request" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0431_UpsertContact/1.0/Response">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Request/0431_UpsertContact.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Request/0431_UpsertContact.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Response/0431_UpsertContact.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Response/0431_UpsertContact.xsd"/>
+    <pd:name>CRMServices/Test Processes/UpsertContactPub/STUB 0431-UpsertContact.process</pd:name>
+    <pd:startName>Rendezvous Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Rendezvous Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>82</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsRawRVObjectForOutput>false</wantsRawRVObjectForOutput>
+            <subject>%%Env%%.FIXED.CRM.SFAAdapter.Request.UpsertContact.1</subject>
+            <sharedChannel>/Common/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx:UpsertContactRequest"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>265</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <element ref="pfx2:UpsertContactResponse"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:UpsertContactResponse>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;1063&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                    </ns1:NAME>
+                    <xsl:if test="$Rendezvous-Subscriber/ActivityOutput/body/ns1:CMH/ns1:FID">
+                        <ns1:FID>
+                            <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns1:CMH/ns1:FID"/>
+                        </ns1:FID>
+                    </xsl:if>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;1063.30&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns1:CMH/ns1:OBJECT"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="&quot;SFAAdapter&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="&quot;X.X.X&quot;"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/replySubject"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </ns1:MESSAGE_ID>
+                        <xsl:if test="$Rendezvous-Subscriber/ActivityOutput/body/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF">
+                            <ns1:EXTERNAL_REF>
+                                <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF"/>
+                            </ns1:EXTERNAL_REF>
+                        </xsl:if>
+                        <xsl:copy-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns1:CMH/ns1:TRACKING/ns1:ITEM"/>
+                        <ns1:ITEM>
+                            <xsl:attribute name="ns1:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns2:GlobalVariables/CRMServices/ComponentId)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:EVENT">
+                                <xsl:value-of select="&quot;UpsertContactResponse&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns1:ITEM>
+                    </ns1:TRACKING>
+                    <ns1:ATTRIBUTE>
+                        <xsl:attribute name="ns1:NAME">
+                            <xsl:value-of select="&quot;OPERATION&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:VALUE">
+                            <xsl:value-of select="&quot;Create&quot;"/>
+                        </xsl:attribute>
+                    </ns1:ATTRIBUTE>
+                </ns1:CMH>
+                <pfx2:RESULT_STATUS>
+                    <xsl:attribute name="ns:STATUS">
+                        <xsl:value-of select="0"/>
+                    </xsl:attribute>
+                </pfx2:RESULT_STATUS>
+                <ns4:BODY>
+                    <xsl:for-each select="$Rendezvous-Subscriber/ActivityOutput/body/ns3:BODY/ns3:CONTACT_PERSON">
+                        <ns4:CONTACT_PERSON>
+                            <xsl:if test="ns3:OVERRIDE_VALIDATION">
+                                <ns4:OVERRIDE_VALIDATION>
+                                    <xsl:value-of select="ns3:OVERRIDE_VALIDATION"/>
+                                </ns4:OVERRIDE_VALIDATION>
+                            </xsl:if>
+                            <xsl:if test="ns3:VALIDATION_WARNING_COUNT">
+                                <ns4:VALIDATION_WARNING_COUNT>
+                                    <xsl:value-of select="ns3:VALIDATION_WARNING_COUNT"/>
+                                </ns4:VALIDATION_WARNING_COUNT>
+                            </xsl:if>
+                            <xsl:if test="ns3:VALIDATION_ERROR_COUNT">
+                                <ns4:VALIDATION_ERROR_COUNT>
+                                    <xsl:value-of select="ns3:VALIDATION_ERROR_COUNT"/>
+                                </ns4:VALIDATION_ERROR_COUNT>
+                            </xsl:if>
+                            <xsl:if test="ns3:VALIDATION_TOTAL_WARNING_COUNT">
+                                <ns4:VALIDATION_TOTAL_WARNING_COUNT>
+                                    <xsl:value-of select="ns3:VALIDATION_TOTAL_WARNING_COUNT"/>
+                                </ns4:VALIDATION_TOTAL_WARNING_COUNT>
+                            </xsl:if>
+                            <xsl:if test="ns3:VALIDATION_TOTAL_ERROR_COUNT">
+                                <ns4:VALIDATION_TOTAL_ERROR_COUNT>
+                                    <xsl:value-of select="ns3:VALIDATION_TOTAL_ERROR_COUNT"/>
+                                </ns4:VALIDATION_TOTAL_ERROR_COUNT>
+                            </xsl:if>
+                            <xsl:if test="ns3:CONTACT_PERSON_ID">
+                                <ns4:CONTACT_PERSON_ID>
+                                    <xsl:value-of select="ns3:CONTACT_PERSON_ID"/>
+                                </ns4:CONTACT_PERSON_ID>
+                            </xsl:if>
+                            <xsl:if test="ns3:INITIALS">
+                                <ns4:INITIALS>
+                                    <xsl:value-of select="ns3:INITIALS"/>
+                                </ns4:INITIALS>
+                            </xsl:if>
+                            <xsl:if test="ns3:FAMILY_NAME_PREFIX">
+                                <ns4:FAMILY_NAME_PREFIX>
+                                    <xsl:value-of select="ns3:FAMILY_NAME_PREFIX"/>
+                                </ns4:FAMILY_NAME_PREFIX>
+                            </xsl:if>
+                            <xsl:if test="ns3:FAMILY_NAME">
+                                <ns4:FAMILY_NAME>
+                                    <xsl:value-of select="ns3:FAMILY_NAME"/>
+                                </ns4:FAMILY_NAME>
+                            </xsl:if>
+                            <xsl:if test="ns3:FAMILY_NAME_POSTFIX">
+                                <ns4:FAMILY_NAME_POSTFIX>
+                                    <xsl:value-of select="ns3:FAMILY_NAME_POSTFIX"/>
+                                </ns4:FAMILY_NAME_POSTFIX>
+                            </xsl:if>
+                            <xsl:if test="ns3:PREFERRED_NAME">
+                                <ns4:PREFERRED_NAME>
+                                    <xsl:value-of select="ns3:PREFERRED_NAME"/>
+                                </ns4:PREFERRED_NAME>
+                            </xsl:if>
+                            <xsl:if test="ns3:DATE_OF_BIRTH">
+                                <ns4:DATE_OF_BIRTH>
+                                    <xsl:value-of select="ns3:DATE_OF_BIRTH"/>
+                                </ns4:DATE_OF_BIRTH>
+                            </xsl:if>
+                            <xsl:if test="ns3:ACADEMIC_TITLE">
+                                <ns4:ACADEMIC_TITLE>
+                                    <xsl:value-of select="ns3:ACADEMIC_TITLE"/>
+                                </ns4:ACADEMIC_TITLE>
+                            </xsl:if>
+                            <xsl:for-each select="ns3:CONTACT_MEDIUM">
+                                <ns4:CONTACT_MEDIUM>
+                                    <xsl:if test="ns3:TELEPHONE">
+                                        <ns4:TELEPHONE>
+                                            <xsl:value-of select="ns3:TELEPHONE"/>
+                                        </ns4:TELEPHONE>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:FAX">
+                                        <ns4:FAX>
+                                            <xsl:value-of select="ns3:FAX"/>
+                                        </ns4:FAX>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:EMAIL_ADDRESS">
+                                        <ns4:EMAIL_ADDRESS>
+                                            <xsl:value-of select="ns3:EMAIL_ADDRESS"/>
+                                        </ns4:EMAIL_ADDRESS>
+                                    </xsl:if>
+                                    <xsl:for-each select="ns3:USAGE">
+                                        <ns4:USAGE>
+                                            <xsl:if test="ns3:SUPPRESS_ALL_EMAILS">
+                                                <ns4:SUPPRESS_ALL_EMAILS>
+                                                    <xsl:value-of select="ns3:SUPPRESS_ALL_EMAILS"/>
+                                                </ns4:SUPPRESS_ALL_EMAILS>
+                                            </xsl:if>
+                                        </ns4:USAGE>
+                                    </xsl:for-each>
+                                </ns4:CONTACT_MEDIUM>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns3:VALIDATION_RESULT">
+                                <ns4:VALIDATION_RESULT>
+                                    <ns4:SEVERITY>
+                                        <xsl:value-of select="ns3:SEVERITY"/>
+                                    </ns4:SEVERITY>
+                                    <ns4:CODE>
+                                        <xsl:value-of select="ns3:CODE"/>
+                                    </ns4:CODE>
+                                    <ns4:DESCRIPTION>
+                                        <xsl:value-of select="ns3:DESCRIPTION"/>
+                                    </ns4:DESCRIPTION>
+                                </ns4:VALIDATION_RESULT>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns3:ADDRESS">
+                                <ns4:ADDRESS>
+                                    <xsl:if test="@language">
+                                        <xsl:attribute name="language">
+                                            <xsl:value-of select="@language"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:OVERRIDE_VALIDATION">
+                                        <ns4:OVERRIDE_VALIDATION>
+                                            <xsl:value-of select="ns3:OVERRIDE_VALIDATION"/>
+                                        </ns4:OVERRIDE_VALIDATION>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:VALIDATION_WARNING_COUNT">
+                                        <ns4:VALIDATION_WARNING_COUNT>
+                                            <xsl:value-of select="ns3:VALIDATION_WARNING_COUNT"/>
+                                        </ns4:VALIDATION_WARNING_COUNT>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:VALIDATION_ERROR_COUNT">
+                                        <ns4:VALIDATION_ERROR_COUNT>
+                                            <xsl:value-of select="ns3:VALIDATION_ERROR_COUNT"/>
+                                        </ns4:VALIDATION_ERROR_COUNT>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:STREET_NAME">
+                                        <ns4:STREET_NAME>
+                                            <xsl:if test="ns3:STREET_NAME/@namingConvention">
+                                                <xsl:attribute name="namingConvention">
+                                                    <xsl:value-of select="ns3:STREET_NAME/@namingConvention"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:value-of select="ns3:STREET_NAME"/>
+                                        </ns4:STREET_NAME>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:HOUSE_NUMBER">
+                                        <ns4:HOUSE_NUMBER>
+                                            <xsl:value-of select="ns3:HOUSE_NUMBER"/>
+                                        </ns4:HOUSE_NUMBER>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:HOUSE_NUMBER_EXTENSION">
+                                        <ns4:HOUSE_NUMBER_EXTENSION>
+                                            <xsl:value-of select="ns3:HOUSE_NUMBER_EXTENSION"/>
+                                        </ns4:HOUSE_NUMBER_EXTENSION>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:POSTCODE">
+                                        <ns4:POSTCODE>
+                                            <xsl:value-of select="ns3:POSTCODE"/>
+                                        </ns4:POSTCODE>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:CITY_NAME">
+                                        <ns4:CITY_NAME>
+                                            <xsl:value-of select="ns3:CITY_NAME"/>
+                                        </ns4:CITY_NAME>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:COUNTRY">
+                                        <ns4:COUNTRY>
+                                            <xsl:value-of select="ns3:COUNTRY"/>
+                                        </ns4:COUNTRY>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:COUNTRY_CODE">
+                                        <ns4:COUNTRY_CODE>
+                                            <xsl:value-of select="ns3:COUNTRY_CODE"/>
+                                        </ns4:COUNTRY_CODE>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:ADDRESS_TYPE">
+                                        <ns4:ADDRESS_TYPE>
+                                            <xsl:value-of select="ns3:ADDRESS_TYPE"/>
+                                        </ns4:ADDRESS_TYPE>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:LOCATION_DESCRIPTION">
+                                        <ns4:LOCATION_DESCRIPTION>
+                                            <xsl:value-of select="ns3:LOCATION_DESCRIPTION"/>
+                                        </ns4:LOCATION_DESCRIPTION>
+                                    </xsl:if>
+                                    <xsl:for-each select="ns3:UNFORMATTED_ADDRESS">
+                                        <ns4:UNFORMATTED_ADDRESS>
+                                            <xsl:for-each select="ns3:ADDRESS_LINE">
+                                                <ns4:ADDRESS_LINE>
+                                                    <xsl:attribute name="sequenceNumber">
+                                                        <xsl:value-of select="@sequenceNumber"/>
+                                                    </xsl:attribute>
+                                                    <xsl:value-of select="."/>
+                                                </ns4:ADDRESS_LINE>
+                                            </xsl:for-each>
+                                        </ns4:UNFORMATTED_ADDRESS>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns3:RUNTIME_PARAMETERS">
+                                        <ns4:RUNTIME_PARAMETERS>
+                                            <xsl:if test="ns3:SPECIAL_DESCRIPTION">
+                                                <ns4:SPECIAL_DESCRIPTION>
+                                                    <xsl:value-of select="ns3:SPECIAL_DESCRIPTION"/>
+                                                </ns4:SPECIAL_DESCRIPTION>
+                                            </xsl:if>
+                                            <xsl:if test="ns3:POSTCODE_SUFFIX">
+                                                <ns4:POSTCODE_SUFFIX>
+                                                    <xsl:value-of select="ns3:POSTCODE_SUFFIX"/>
+                                                </ns4:POSTCODE_SUFFIX>
+                                            </xsl:if>
+                                            <xsl:if test="ns3:IS_FUTURE_PRIMARY_ADDRESS">
+                                                <ns4:IS_FUTURE_PRIMARY_ADDRESS>
+                                                    <xsl:value-of select="ns3:IS_FUTURE_PRIMARY_ADDRESS"/>
+                                                </ns4:IS_FUTURE_PRIMARY_ADDRESS>
+                                            </xsl:if>
+                                            <xsl:if test="ns3:IS_PRIMARY_LOGICAL_ADDRESS">
+                                                <ns4:IS_PRIMARY_LOGICAL_ADDRESS>
+                                                    <xsl:value-of select="ns3:IS_PRIMARY_LOGICAL_ADDRESS"/>
+                                                </ns4:IS_PRIMARY_LOGICAL_ADDRESS>
+                                            </xsl:if>
+                                            <xsl:if test="ns3:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                                <ns4:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                                    <xsl:value-of select="ns3:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                                </ns4:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                            </xsl:if>
+                                        </ns4:RUNTIME_PARAMETERS>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns3:VALIDITY">
+                                        <ns4:VALIDITY>
+                                            <xsl:if test="ns3:ADDRESS_STATUS">
+                                                <ns4:ADDRESS_STATUS>
+                                                    <xsl:value-of select="ns3:ADDRESS_STATUS"/>
+                                                </ns4:ADDRESS_STATUS>
+                                            </xsl:if>
+                                            <xsl:if test="ns3:VALID_FROM_DATE">
+                                                <ns4:VALID_FROM_DATE>
+                                                    <xsl:value-of select="ns3:VALID_FROM_DATE"/>
+                                                </ns4:VALID_FROM_DATE>
+                                            </xsl:if>
+                                            <xsl:if test="ns3:VALID_UNTIL_DATE">
+                                                <ns4:VALID_UNTIL_DATE>
+                                                    <xsl:value-of select="ns3:VALID_UNTIL_DATE"/>
+                                                </ns4:VALID_UNTIL_DATE>
+                                            </xsl:if>
+                                        </ns4:VALIDITY>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns3:VALIDATION_RESULT">
+                                        <ns4:VALIDATION_RESULT>
+                                            <ns4:SEVERITY>
+                                                <xsl:value-of select="ns3:SEVERITY"/>
+                                            </ns4:SEVERITY>
+                                            <ns4:CODE>
+                                                <xsl:value-of select="ns3:CODE"/>
+                                            </ns4:CODE>
+                                            <ns4:DESCRIPTION>
+                                                <xsl:value-of select="ns3:DESCRIPTION"/>
+                                            </ns4:DESCRIPTION>
+                                        </ns4:VALIDATION_RESULT>
+                                    </xsl:for-each>
+                                </ns4:ADDRESS>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns3:SIEBEL_ACCOUNT_REFERENCE">
+                                <ns4:SIEBEL_ACCOUNT_REFERENCE>
+                                    <xsl:if test="ns3:SIEBEL_ACCOUNT_ID">
+                                        <ns4:SIEBEL_ACCOUNT_ID>
+                                            <xsl:value-of select="ns3:SIEBEL_ACCOUNT_ID"/>
+                                        </ns4:SIEBEL_ACCOUNT_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:UCM_ROW_ID">
+                                        <ns4:UCM_ROW_ID>
+                                            <xsl:value-of select="ns3:UCM_ROW_ID"/>
+                                        </ns4:UCM_ROW_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:INTEGRATION_ID">
+                                        <ns4:INTEGRATION_ID>
+                                            <xsl:value-of select="ns3:INTEGRATION_ID"/>
+                                        </ns4:INTEGRATION_ID>
+                                    </xsl:if>
+                                </ns4:SIEBEL_ACCOUNT_REFERENCE>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns3:RUNTIME_PARAMETERS">
+                                <ns4:RUNTIME_PARAMETERS>
+                                    <xsl:if test="ns3:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                        <ns4:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                            <xsl:value-of select="ns3:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                        </ns4:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:INTEGRATION_ID">
+                                        <ns4:INTEGRATION_ID>
+                                            <xsl:value-of select="ns3:INTEGRATION_ID"/>
+                                        </ns4:INTEGRATION_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:UCM_ROW_ID">
+                                        <ns4:UCM_ROW_ID>
+                                            <xsl:value-of select="ns3:UCM_ROW_ID"/>
+                                        </ns4:UCM_ROW_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:ID">
+                                        <ns4:ID>
+                                            <xsl:value-of select="ns3:ID"/>
+                                        </ns4:ID>
+                                    </xsl:if>
+                                </ns4:RUNTIME_PARAMETERS>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns3:CROSS_REFERENCE">
+                                <ns4:CROSS_REFERENCE>
+                                    <xsl:if test="ns3:CONTACT_ID">
+                                        <ns4:CONTACT_ID>
+                                            <xsl:value-of select="ns3:CONTACT_ID"/>
+                                        </ns4:CONTACT_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:CIF_SYSTEM_ID">
+                                        <ns4:CIF_SYSTEM_ID>
+                                            <xsl:value-of select="ns3:CIF_SYSTEM_ID"/>
+                                        </ns4:CIF_SYSTEM_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:EXTERNAL_ID1">
+                                        <ns4:EXTERNAL_ID1>
+                                            <xsl:value-of select="ns3:EXTERNAL_ID1"/>
+                                        </ns4:EXTERNAL_ID1>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:SYSTEM_NAME">
+                                        <ns4:SYSTEM_NAME>
+                                            <xsl:value-of select="ns3:SYSTEM_NAME"/>
+                                        </ns4:SYSTEM_NAME>
+                                    </xsl:if>
+                                    <xsl:if test="ns3:SYSTEM_NUMBER">
+                                        <ns4:SYSTEM_NUMBER>
+                                            <xsl:value-of select="ns3:SYSTEM_NUMBER"/>
+                                        </ns4:SYSTEM_NUMBER>
+                                    </xsl:if>
+                                </ns4:CROSS_REFERENCE>
+                            </xsl:for-each>
+                        </ns4:CONTACT_PERSON>
+                    </xsl:for-each>
+                </ns4:BODY>
+            </pfx2:UpsertContactResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Reply to Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>447</pd:x>
+        <pd:y>178</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>Rendezvous Subscriber</eventSource>
+            <xsdString ref="pfx2:UpsertContactResponse"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <xsl:copy-of select="$Map-Data/pfx2:UpsertContactResponse/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Map-Data/pfx2:UpsertContactResponse/@*"/>
+                    <xsl:copy-of select="$Map-Data/pfx2:UpsertContactResponse/node()"/>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Rendezvous Subscriber</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Reply to Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

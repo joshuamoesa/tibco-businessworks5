@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns0="http://www.tibco.com/pe/WriteToLogActivitySchema">
+    <pd:name>Common/Sub Processes/Sub_Trace.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="TraceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="MsgCode" type="xsd:string"/>
+                    <xsd:element name="MsgId" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="additionalLogID" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="Parameter" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>58</pd:startX>
+    <pd:startY>68</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>294</pd:endX>
+    <pd:endY>67</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Trace">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>172</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <fileName>Sub_TraceTrace</fileName>
+            <packageName>Common.SubProcesses.Sub_Trace</packageName>
+            <fullsource>package Common.SubProcesses.Sub_Trace;
+import java.util.*;
+import java.io.*;
+
+import com.tibco.share.util.Trace;
+import com.tibco.sdk.MMessageBundle;
+
+
+public class Sub_TraceTrace{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String msgCode = "";
+	protected String msgId = "";
+	protected String additionalLogID = "";
+	protected String[] params = null;
+	public String getmsgCode() {
+		return msgCode;
+	}
+	public void setmsgCode(String val) {
+		msgCode = val;
+	}
+	public String getmsgId() {
+		return msgId;
+	}
+	public void setmsgId(String val) {
+		msgId = val;
+	}
+	public String getadditionalLogID() {
+		return additionalLogID;
+	}
+	public void setadditionalLogID(String val) {
+		additionalLogID = val;
+	}
+	public String[] getparams() {
+		return params;
+	}
+	public void setparams(String[] val) {
+		params = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public Sub_TraceTrace() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String msgCode
+	In  : String msgId
+	In  : String additionalLogID
+	In  : String[] params
+* Available Variables: DO NOT MODIFY *****/
+
+String role = MMessageBundle.getRole(msgCode);
+
+if ( role == null || role.equals(""))
+{
+	Trace errtrc = Trace.lookupTraceObject("errorRole");
+	if (errtrc != null)
+		errtrc.trace("EAI-03500", "errorRole", "Trace", "Message " + msgCode + " not defined");
+	return;
+}
+
+if ( role.equals("activityRole" ))
+	role = "Activity";
+
+
+Trace trc = Trace.lookupTraceObject(role);
+if (trc == null)
+{
+	Trace errtrc = Trace.lookupTraceObject("errorRole");
+	if (errtrc != null)
+		errtrc.trace("EAI-03501", "errorRole", "Trace", "Role [" + role + "] not defined for message " + msgCode);
+	return;
+}
+
+if (trc.isOn())
+{
+	String category = MMessageBundle.getCategory(msgCode);
+	String message = MMessageBundle.getMessage(msgCode, params);
+	if (msgId != null &amp;&amp; !msgId.equals(""))
+	   message = "MSGID=" + msgId + " " + message;
+	if (additionalLogID != null &amp;&amp; !additionalLogID.equals(""))
+	   message = additionalLogID + " " + message ;
+
+	trc.trace(msgCode, role, category, message);
+}
+}
+}
+</fullsource>
+            <inputData>
+                <row>
+                    <fieldName>msgCode</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>msgId</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>additionalLogID</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>params</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>repeating</fieldRequired>
+                </row>
+            </inputData>
+            <byteCode>
+                <class>
+                    <name>Sub_TraceTrace</name>
+                    <byteCode>yv66vgAAADEAcAkAHgA7CQAeADwJAB4APQkAHgA+CgAfAD8IAEAKAEEAQgoAQwBECABFCgBGAEcIAEgIAEkHAEoKAA0APwgASwoADQBMCABNCgANAE4KAEYATwgAUAgAUQgAUggAUwgAVAoARgBVCgBBAFYKAEEAVwgAWAgAWQcAWgcAWwEAB21zZ0NvZGUBABJMamF2YS9sYW5nL1N0cmluZzsBAAVtc2dJZAEAD2FkZGl0aW9uYWxMb2dJRAEABnBhcmFtcwEAE1tMamF2YS9sYW5nL1N0cmluZzsBAApnZXRtc2dDb2RlAQAUKClMamF2YS9sYW5nL1N0cmluZzsBAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQAKc2V0bXNnQ29kZQEAFShMamF2YS9sYW5nL1N0cmluZzspVgEACGdldG1zZ0lkAQAIc2V0bXNnSWQBABJnZXRhZGRpdGlvbmFsTG9nSUQBABJzZXRhZGRpdGlvbmFsTG9nSUQBAAlnZXRwYXJhbXMBABUoKVtMamF2YS9sYW5nL1N0cmluZzsBAAlzZXRwYXJhbXMBABYoW0xqYXZhL2xhbmcvU3RyaW5nOylWAQAGPGluaXQ+AQADKClWAQAGaW52b2tlAQAKRXhjZXB0aW9ucwcAXAEAClNvdXJjZUZpbGUBABNTdWJfVHJhY2VUcmFjZS5qYXZhDAAgACEMACIAIQwAIwAhDAAkACUMADQANQEAAAcAXQwAXgBfBwBgDABhAGIBAAllcnJvclJvbGUHAGMMAGQAZQEACUVBSS0wMzUwMAEABVRyYWNlAQAXamF2YS9sYW5nL1N0cmluZ0J1aWxkZXIBAAhNZXNzYWdlIAwAZgBnAQAMIG5vdCBkZWZpbmVkDABoACcMAGkAagEADGFjdGl2aXR5Um9sZQEACEFjdGl2aXR5AQAJRUFJLTAzNTAxAQAGUm9sZSBbAQAaXSBub3QgZGVmaW5lZCBmb3IgbWVzc2FnZSAMAGsAbAwAbQBfDABuAG8BAAZNU0dJRD0BAAEgAQAsQ29tbW9uL1N1YlByb2Nlc3Nlcy9TdWJfVHJhY2UvU3ViX1RyYWNlVHJhY2UBABBqYXZhL2xhbmcvT2JqZWN0AQATamF2YS9sYW5nL0V4Y2VwdGlvbgEAHGNvbS90aWJjby9zZGsvTU1lc3NhZ2VCdW5kbGUBAAdnZXRSb2xlAQAmKExqYXZhL2xhbmcvU3RyaW5nOylMamF2YS9sYW5nL1N0cmluZzsBABBqYXZhL2xhbmcvU3RyaW5nAQAGZXF1YWxzAQAVKExqYXZhL2xhbmcvT2JqZWN0OylaAQAaY29tL3RpYmNvL3NoYXJlL3V0aWwvVHJhY2UBABFsb29rdXBUcmFjZU9iamVjdAEAMChMamF2YS9sYW5nL1N0cmluZzspTGNvbS90aWJjby9zaGFyZS91dGlsL1RyYWNlOwEABmFwcGVuZAEALShMamF2YS9sYW5nL1N0cmluZzspTGphdmEvbGFuZy9TdHJpbmdCdWlsZGVyOwEACHRvU3RyaW5nAQAFdHJhY2UBAEsoTGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7KVYBAARpc09uAQADKClaAQALZ2V0Q2F0ZWdvcnkBAApnZXRNZXNzYWdlAQA5KExqYXZhL2xhbmcvU3RyaW5nO1tMamF2YS9sYW5nL09iamVjdDspTGphdmEvbGFuZy9TdHJpbmc7ACEAHgAfAAAABAAEACAAIQAAAAQAIgAhAAAABAAjACEAAAAEACQAJQAAAAoAAQAmACcAAQAoAAAAHQABAAEAAAAFKrQAAbAAAAABACkAAAAGAAEAAAAQAAEAKgArAAEAKAAAACIAAgACAAAABiortQABsQAAAAEAKQAAAAoAAgAAABMABQAUAAEALAAnAAEAKAAAAB0AAQABAAAABSq0AAKwAAAAAQApAAAABgABAAAAFgABAC0AKwABACgAAAAiAAIAAgAAAAYqK7UAArEAAAABACkAAAAKAAIAAAAZAAUAGgABAC4AJwABACgAAAAdAAEAAQAAAAUqtAADsAAAAAEAKQAAAAYAAQAAABwAAQAvACsAAQAoAAAAIgACAAIAAAAGKiu1AAOxAAAAAQApAAAACgACAAAAHwAFACAAAQAwADEAAQAoAAAAHQABAAEAAAAFKrQABLAAAAABACkAAAAGAAEAAAAiAAEAMgAzAAEAKAAAACIAAgACAAAABiortQAEsQAAAAEAKQAAAAoAAgAAACUABQAmAAEANAA1AAEAKAAAAEgAAgABAAAAHCq3AAUqEga1AAEqEga1AAIqEga1AAMqAbUABLEAAAABACkAAAAaAAYAAAAoAAQACwAKAAwAEAANABYADgAbACkAAQA2ADUAAgAoAAABjAAGAAUAAAEcKrQAAbgAB0wrxgAMKxIGtgAImQAzEgm4AApNLMYAKCwSCxIJEgy7AA1ZtwAOEg+2ABAqtAABtgAQEhG2ABC2ABK2ABOxKxIUtgAImQAGEhVMK7gACk0sxwA3Egm4AApOLcYALC0SFhIJEgy7AA1ZtwAOEhe2ABArtgAQEhi2ABAqtAABtgAQtgAStgATsSy2ABmZAIkqtAABuAAaTiq0AAEqtAAEuAAbOgQqtAACxgAxKrQAAhIGtgAImgAluwANWbcADhIctgAQKrQAArYAEBIdtgAQGQS2ABC2ABI6BCq0AAPGACwqtAADEga2AAiaACC7AA1ZtwAOKrQAA7YAEBIdtgAQGQS2ABC2ABI6BCwqtAABKy0ZBLYAE7EAAAABACkAAABeABcAAAAyAAgANAAVADYAGwA3AB8AOABEADkARQA8AE4APQBRAEAAVgBBAFoAQwBgAEQAZABFAI0ARgCOAEkAlQBLAJ0ATACqAE0AvQBOAN8ATwDyAFABDwBSARsAVAA3AAAABAABADgAAQA5AAAAAgA6</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <msgCode>
+                    <xsl:value-of select="$Start/TraceIn/MsgCode"/>
+                </msgCode>
+                <xsl:if test="$Start/TraceIn/MsgId">
+                    <msgId>
+                        <xsl:value-of select="$Start/TraceIn/MsgId"/>
+                    </msgId>
+                </xsl:if>
+                <xsl:if test="$Start/TraceIn/additionalLogID">
+                    <additionalLogID>
+                        <xsl:value-of select="$Start/TraceIn/additionalLogID"/>
+                    </additionalLogID>
+                </xsl:if>
+                <xsl:for-each select="$Start/TraceIn/Parameter">
+                    <params>
+                        <xsl:value-of select="."/>
+                    </params>
+                </xsl:for-each>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="IgnoreError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>186</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Trace</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Trace</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Trace</pd:from>
+        <pd:to>IgnoreError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>IgnoreError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IgnoreError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

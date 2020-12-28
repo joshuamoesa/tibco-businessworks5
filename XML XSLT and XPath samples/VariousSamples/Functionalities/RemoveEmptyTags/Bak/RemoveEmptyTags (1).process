@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.ziggo.nl/example">
+    <xsd:import namespace="http://www.ziggo.nl/example" schemaLocation="/Functionalities/RemoveEmptyTags/Resources/XSD/Schema.xsd"/>
+    <pd:name>Functionalities/RemoveEmptyTags/Bak/RemoveEmptyTags (1).process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:input"/>
+    <pd:startX>91</pd:startX>
+    <pd:startY>84</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Parse-XMLstring-into-XML/pfx:input"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:input"/>
+    <pd:endX>526</pd:endX>
+    <pd:endY>86</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1390827512837</pd:targetNamespace>
+    <pd:activity name="Parse XMLstring into XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>379</pd:x>
+        <pd:y>93</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:input"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Remove-empty-tags/xmlString"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Remove empty tags">
+        <pd:type>com.tibco.plugin.xml.XMLTransformActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLTransformActivity</pd:resourceType>
+        <pd:x>236</pd:x>
+        <pd:y>84</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <engine>Saxon</engine>
+            <stylesheet>/Functionalities/RemoveEmptyTags/Resources/XSLT/RemEmptyTags_all.xslt</stylesheet>
+        </config>
+        <pd:inputBindings>
+            <textInput>
+                <xmlString>
+                    <xsl:value-of select="tib:render-xml($Start/pfx:input)"/>
+                </xmlString>
+            </textInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Remove empty tags</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Remove empty tags</pd:from>
+        <pd:to>Parse XMLstring into XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XMLstring into XML</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>&lt;?xml version = "1.0" encoding = "UTF-8"?&gt;
+&lt;!-- EXAMPLE 1--&gt;
+&lt;root&gt;
+   &lt;paramRoot&gt;Hello&lt;/paramRoot&gt;
+      &lt;groupList&gt;
+         &lt;group&gt;
+            &lt;paramGroup/&gt;
+         &lt;/group&gt;
+         &lt;group&gt;
+            &lt;paramGroup&gt;Joshua&lt;/paramGroup&gt;
+         &lt;/group&gt;
+      &lt;/groupList&gt;
+&lt;/root&gt;</pd:description>
+        <pd:x>200</pd:x>
+        <pd:y>271</pd:y>
+        <pd:width>269</pd:width>
+        <pd:height>218</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (1)</pd:name>
+        <pd:description>&lt;?xml version = "1.0" encoding = "UTF-8"?&gt;
+&lt;!-- EXAMPLE 2--&gt;
+&lt;root&gt;
+   &lt;paramRoot&gt;Hello&lt;/paramRoot&gt;
+      &lt;groupList&gt;
+         &lt;group&gt;
+         &lt;/group&gt;
+         &lt;group&gt;
+            &lt;paramGroup&gt;Joshua&lt;/paramGroup&gt;
+         &lt;/group&gt;
+      &lt;/groupList&gt;
+&lt;/root&gt;</pd:description>
+        <pd:x>515</pd:x>
+        <pd:y>405</pd:y>
+        <pd:width>346</pd:width>
+        <pd:height>225</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (2)</pd:name>
+        <pd:description>&lt;?xml version = "1.0" encoding = "UTF-8"?&gt;
+&lt;input xmlns = "http://www.ziggo.nl/example"&gt;
+   &lt;customerNumber/&gt;
+   &lt;customerName&gt;Joshua&lt;/customerName&gt;
+   &lt;customerAge xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:nil = "true"/&gt;
+&lt;/input&gt;</pd:description>
+        <pd:x>605</pd:x>
+        <pd:y>227</pd:y>
+        <pd:width>536</pd:width>
+        <pd:height>113</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

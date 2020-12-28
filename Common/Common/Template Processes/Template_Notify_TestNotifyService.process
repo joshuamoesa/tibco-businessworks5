@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns3="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Common/Test Resources/TestPublication.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent1/Publish/TestPublicationService.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Notify/TestNotificationService.xsd"/>
+    <pd:name>Common/Template Processes/Template_Notify_TestNotifyService.process</pd:name>
+    <pd:startName>Specific starter</pd:startName>
+    <pd:startX>86</pd:startX>
+    <pd:startY>95</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>541</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send Notification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>387</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Notifier.process</processName>
+        </config>
+        <pd:inputBindings>
+            <NotifierIn>
+                <Destination>
+                    <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env, &quot;.FIXED.Operations.TestComponent2.Notify.TestNotificationService.1&quot;)"/>
+                </Destination>
+                <Body>
+                    <ns3:TestNotificationService>
+                        <ns1:CMH>
+                            <ns1:ID>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </ns1:ID>
+                            <ns1:NAME>
+                                <xsl:value-of select="&quot;TestNotificationService&quot;"/>
+                            </ns1:NAME>
+                            <ns1:PARADIGM>
+                                <xsl:value-of select="&quot;NOTIFY&quot;"/>
+                            </ns1:PARADIGM>
+                            <ns1:OBJECT>
+                                <xsl:value-of select="&quot;Dummy&quot;"/>
+                            </ns1:OBJECT>
+                            <ns1:VERSION>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns1:VERSION>
+                            <ns1:FROM>
+                                <xsl:attribute name="ns1:COMPONENT_ID">
+                                    <xsl:value-of select="&quot;TestComponent1&quot;"/>
+                                </xsl:attribute>
+                            </ns1:FROM>
+                            <ns1:TO>
+                                <xsl:attribute name="ns1:DESTINATION">
+                                    <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env, &quot;.FIXED.Operations.TestComponent2.Notify.TestNotificationService.1&quot;)"/>
+                                </xsl:attribute>
+                            </ns1:TO>
+                            <ns1:TRACKING>
+                                <ns1:MESSAGE_ID>
+                                    <xsl:value-of select="eai:createGUID()"/>
+                                </ns1:MESSAGE_ID>
+                                <ns1:ITEM>
+                                    <xsl:attribute name="ns1:APPINFO">
+                                        <xsl:value-of select="&quot;a&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns1:EVENT">
+                                        <xsl:value-of select="&quot;b&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns1:TIMESTAMP">
+                                        <xsl:value-of select="&quot;123&quot;"/>
+                                    </xsl:attribute>
+                                </ns1:ITEM>
+                                <ns1:ITEM>
+                                    <xsl:attribute name="ns1:APPINFO">
+                                        <xsl:value-of select="&quot;d&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns1:EVENT">
+                                        <xsl:value-of select="&quot;e&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns1:TIMESTAMP">
+                                        <xsl:value-of select="&quot;456&quot;"/>
+                                    </xsl:attribute>
+                                </ns1:ITEM>
+                            </ns1:TRACKING>
+                        </ns1:CMH>
+                        <ns3:ORDER_HEADER_IN>
+                            <ns3:DOC_TYPE>
+                                <xsl:value-of select="&quot;A&quot;"/>
+                            </ns3:DOC_TYPE>
+                            <ns3:SALES_ORG>
+                                <xsl:value-of select="&quot;B&quot;"/>
+                            </ns3:SALES_ORG>
+                            <ns3:DISTR_CHAIN>
+                                <xsl:value-of select="&quot;C&quot;"/>
+                            </ns3:DISTR_CHAIN>
+                            <ns3:DIVISION>
+                                <xsl:value-of select="&quot;D&quot;"/>
+                            </ns3:DIVISION>
+                            <ns3:REQ_DATE_H>
+                                <xsl:value-of select="&quot;E&quot;"/>
+                            </ns3:REQ_DATE_H>
+                        </ns3:ORDER_HEADER_IN>
+                        <ns3:ELEMENT2>
+                            <xsl:value-of select="&quot;elem2&quot;"/>
+                        </ns3:ELEMENT2>
+                        <ns3:ELEMENT3>
+                            <xsl:value-of select="&quot;elem3&quot;"/>
+                        </ns3:ELEMENT3>
+                    </ns3:TestNotificationService>
+                </Body>
+            </NotifierIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Specific Implementation">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>237</pd:x>
+        <pd:y>102</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>390</pd:x>
+        <pd:y>228</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <ns4:Errors>
+                    <xsl:copy-of select="$_error_Send-Notification/ns4:Error"/>
+                </ns4:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Send Notification</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Specific starter</pd:from>
+        <pd:to>Specific Implementation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Specific Implementation</pd:from>
+        <pd:to>Send Notification</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Notification</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:GET_DYNAMICSTRUCTURE" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="urn:NotifyNumberInportingComplete" xmlns:pfx4="http://xmlns.kpn.com/fixed/portingservices/publish/NotifyNumberInportingComplete" xmlns:pfx5="urn:ASTRIDAdapter.GetDslamInfo">
+    <xsd:import namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/NIMAllIPAdapter/Call_GenericMessage_CBS_UAT_Defect_240.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>31</pd:startX>
+    <pd:startY>52</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>423</pd:endX>
+    <pd:endY>56</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>277</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>http://localhost:%%ASTRIDAdapter/Outbound/SOAP/ServerPort%%/ASTRIDAdapter/Processes/TroubleReportServices</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$Parse-XML/pfx:GenericMessage"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>147</pd:x>
+        <pd:y>54</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:GenericMessage"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="'&lt;ns:GenericMessage xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:ns1=&quot;http://tempuri.org&quot; xmlns:ns=&quot;urn:GenericMessageRequest&quot;>&#xA;    &lt;ns1:Header>&#xA;        &lt;ns1:GUID>IF221658899700R#PC1wADQIUAykEA&lt;/ns1:GUID>&#xA;        &lt;ns1:managed_object_class>Trouble Report&lt;/ns1:managed_object_class>&#xA;        &lt;ns1:managed_object_class_extension>10&lt;/ns1:managed_object_class_extension>&#xA;        &lt;ns1:managed_object_class_version>0.1&lt;/ns1:managed_object_class_version>&#xA;        &lt;ns1:message_origination_it_domain>ASTRID&lt;/ns1:message_origination_it_domain>&#xA;        &lt;ns1:message_instance xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:message_creation_time xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:message_destination_it_domain>NIM&lt;/ns1:message_destination_it_domain>&#xA;    &lt;/ns1:Header>&#xA;    &lt;ns1:General>&#xA;        &lt;ns1:customer_service_incident_report_identifier xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:customer_service_incident_report_initiation xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_report_identifier>CC0000002924255&lt;/ns1:trouble_report_identifier>&#xA;        &lt;ns1:alarm_report_identifier xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:service_provider_trouble_report_identifier xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:event_time xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:error xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:error_message xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:error_status xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:impact xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:urgency xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:priority xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:perceived_trouble_severity xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:activity_information xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:activity_information_list/>&#xA;        &lt;ns1:analysis_information xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:question_list/>&#xA;        &lt;ns1:closure_service_type xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:probable_cause xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:sla_clearing_time xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:sla_function xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:sla_name xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:reply_subject xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:incident_found xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:incident_report_state xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:incident_report_date xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:network_class xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_type xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:request_type>nodePortOdfInfo&lt;/ns1:request_type>&#xA;        &lt;ns1:creation_type>NNI&lt;/ns1:creation_type>&#xA;        &lt;ns1:trouble_description_short xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_description_long xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_detection_time xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_found xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_report_state xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_report_changedate xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_report_status_line xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_report_status_line_date xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_report_status_line_date_send xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:trouble_report_number_updates xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:end_user_name xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:end_user_telephone xsi:nil=&quot;true&quot;/>&#xA;    &lt;/ns1:General>&#xA;    &lt;ns1:Customer_info>&#xA;        &lt;ns1:customer_organization xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:manager_contact_person xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_city xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_contact_person xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_contact_person_electronic_mail_address xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_contact_person_fax_number xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_contact_person_telephone_number xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_country xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_house_number xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_house_number_extension xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_incident_reporter xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_incident_reporter_electronic_mail_address xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_incident_reporter_fax_number xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_incident_reporter_telephone_number xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_street xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:co_zip_code xsi:nil=&quot;true&quot;/>&#xA;    &lt;/ns1:Customer_info>&#xA;    &lt;ns1:Managed_Object_Info>&#xA;        &lt;ns1:managed_object_instance>GV-BZH-PB/DSLA/0002&lt;/ns1:managed_object_instance>&#xA;        &lt;ns1:mo_managed_object_backup xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_managed_object_class xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_managed_object_graphical_representation xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_managed_object_instance>1&lt;/ns1:mo_managed_object_instance>&#xA;        &lt;ns1:mo_mol_city xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_mol_country xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_mol_house_number xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_mol_house_number_extension xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_mol_location_code xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_mol_street xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_mol_zip_code xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_network_class xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_network_instance xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_ssl_city xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_ssl_country xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_ssl_house_number xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_ssl_house_number_extension xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_ssl_location_code xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_ssl_street xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_ssl_zip_code xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_attribute_name xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_attribute_value xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:MOR0/>&#xA;        &lt;ns1:mo_supported_service_status xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_uptime xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_modify_date xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_repairtime xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_repairendtime xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_backup xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_class xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_graphical_representation xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:mo_supported_service_instance xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:service_instance_list/>&#xA;    &lt;/ns1:Managed_Object_Info>&#xA;    &lt;ns1:Managed_object_in_trouble_info>&#xA;        &lt;ns1:moit_managed_object_class>0&lt;/ns1:moit_managed_object_class>&#xA;        &lt;ns1:moit_managed_object_instance>0&lt;/ns1:moit_managed_object_instance>&#xA;        &lt;ns1:moit_network_class xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_network_instance xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_ssl_city xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_ssl_country xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_ssl_house_number xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_ssl_house_number_extension xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_ssl_street xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_ssl_zip_code xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_supported_service_attribute_name xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_supported_service_attribute_value xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_supported_service_class xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:moit_supported_service_instance>19&lt;/ns1:moit_supported_service_instance>&#xA;    &lt;/ns1:Managed_object_in_trouble_info>&#xA;    &lt;ns1:Attachments>&#xA;        &lt;ns1:attachment_1_attachmentName xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:attachment_1_attachmentData xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:attachment_1_attachmentOrigSize xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:attachment_2_attachmentName xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:attachment_2_attachmentData xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:attachment_2_attachmentOrigSize xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:attachment_3_attachmentName xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:attachment_3_attachmentData xsi:nil=&quot;true&quot;/>&#xA;        &lt;ns1:attachment_3_attachmentOrigSize xsi:nil=&quot;true&quot;/>&#xA;    &lt;/ns1:Attachments>&#xA;&lt;/ns:GenericMessage>&#xA;&#xA;'"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

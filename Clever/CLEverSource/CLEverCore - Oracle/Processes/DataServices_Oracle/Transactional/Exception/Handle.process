@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ExceptionRuleXslt="java://XSLTTransform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/CLEver/Resolution" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/CLEver/Channel" xmlns:pfx3="http://www.tibco.com/CLEver/Notification" xmlns:pfx2="http://www.tibco.com/CLEver/Policy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Resolution" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Resolution.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/Transactional/Exception/Handle.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:Exception"/>
+    <pd:startX>51</pd:startX>
+    <pd:startY>41</pd:startY>
+    <pd:returnBindings>
+        <Return/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Return">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ExceptionID" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>803</pd:endX>
+    <pd:endY>43</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1296764322749</pd:targetNamespace>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>222</pd:x>
+        <pd:y>42</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="RuleResult" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <RuleResult>
+                    <xsl:value-of select="ExceptionRuleXslt:executeXslt('ExceptionRule',tib:render-xml($Add-Custom-Timefields/Exception), true())"/>
+                </RuleResult>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>333</pd:x>
+        <pd:y>42</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx2:PolicyFull" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Map-Data/root/RuleResult"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>333</pd:x>
+        <pd:y>238</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Add Custom Timefields">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>139</pd:x>
+        <pd:y>50</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Exception">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="ns:ProcessContext"/>
+                            <xsd:element name="ExceptionDetail">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="ExceptionCategory" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="ExceptionSeverity" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="ExceptionType" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="ExceptionCode" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="ReplyDestination" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="TransactionData" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="DumpAnalysis" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="Custom">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Hours" type="xsd:string"/>
+                                        <xsd:element name="Date" type="xsd:string"/>
+                                        <xsd:element name="Day" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Exception>
+                <xsl:copy-of select="$Start/pfx:Exception/ns:ProcessContext"/>
+                <xsl:for-each select="$Start/pfx:Exception/pfx:ExceptionDetail">
+                    <ExceptionDetail>
+                        <ExceptionCategory>
+                            <xsl:value-of select="pfx:ExceptionCategory"/>
+                        </ExceptionCategory>
+                        <ExceptionSeverity>
+                            <xsl:value-of select="pfx:ExceptionSeverity"/>
+                        </ExceptionSeverity>
+                        <ExceptionType>
+                            <xsl:value-of select="pfx:ExceptionType"/>
+                        </ExceptionType>
+                        <ExceptionCode>
+                            <xsl:value-of select="pfx:ExceptionCode"/>
+                        </ExceptionCode>
+                        <Message>
+                            <xsl:value-of select="pfx:Message"/>
+                        </Message>
+                        <ReplyDestination>
+                            <xsl:value-of select="pfx:ReplyDestination"/>
+                        </ReplyDestination>
+                        <TransactionData>
+                            <xsl:value-of select="pfx:TransactionData"/>
+                        </TransactionData>
+                        <DumpAnalysis>
+                            <xsl:value-of select="pfx:DumpAnalysis"/>
+                        </DumpAnalysis>
+                        <Status>
+                            <xsl:value-of select="pfx:Status"/>
+                        </Status>
+                    </ExceptionDetail>
+                </xsl:for-each>
+                <Custom>
+                    <Hours>
+                        <xsl:value-of select="round(tib:format-dateTime('HHmm',$Start/pfx:Exception/ns:ProcessContext/ns:DateTime))"/>
+                    </Hours>
+                    <Date>
+                        <xsl:value-of select="tib:format-dateTime('yyyyMMdd',$Start/pfx:Exception/ns:ProcessContext/ns:DateTime)"/>
+                    </Date>
+                    <Day>
+                        <xsl:value-of select="tib:format-dateTime('E',$Start/pfx:Exception/ns:ProcessContext/ns:DateTime)"/>
+                    </Day>
+                </Custom>
+            </Exception>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>431</pd:x>
+        <pd:y>104</pd:y>
+        <pd:width>340</pd:width>
+        <pd:height>258</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Parse-XML/root/pfx2:PolicyFull</pd:over>
+            <pd:iterationElementSlot>Policy</pd:iterationElementSlot>
+            <pd:indexSlot>a</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Send Resolution</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Send Notifications</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send Resolution</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send Notifications</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:group name="Send Notifications">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>507</pd:x>
+            <pd:y>139</pd:y>
+            <pd:width>191</pd:width>
+            <pd:height>122</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$Policy/pfx2:PolicyFull/pfx3:NotificationsFull/pfx3:NotificationFull</pd:over>
+                <pd:iterationElementSlot>Notification</pd:iterationElementSlot>
+                <pd:indexSlot>b</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>Send Notification</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Send Notification</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="Send Notification">
+                <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+                <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+                <pd:x>603</pd:x>
+                <pd:y>207</pd:y>
+                <config>
+                    <PermittedMessageType>XML Text</PermittedMessageType>
+                    <SessionAttributes>
+                        <transacted>false</transacted>
+                        <acknowledgeMode>1</acknowledgeMode>
+                        <maxSessions>1</maxSessions>
+                        <destination>%%Naming/Environment%%.%%Naming/Organisation%%.%%Naming/FunctionalDomain%%.%%Naming/Application%%.%%Connections/JMS/EventBus/NotificationQueue%%</destination>
+                    </SessionAttributes>
+                    <ConfigurableHeaders>
+                        <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                        <JMSExpiration>0</JMSExpiration>
+                        <JMSPriority>4</JMSPriority>
+                    </ConfigurableHeaders>
+                    <ConnectionReference>/Shared Resources/Connections/JMS/JMS.sharedjmscon</ConnectionReference>
+                    <InDataxsdString>
+                        <xsd:element name="input">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element ref="pfx3:NotificationFull"/>
+                                    <xsd:element ref="pfx:Exception"/>
+                                    <xsd:element ref="pfx2:PolicyFull"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </InDataxsdString>
+                </config>
+                <pd:inputBindings>
+                    <ns1:ActivityInput>
+                        <Body>
+                            <input>
+                                <xsl:copy-of select="$Notification/pfx3:NotificationFull"/>
+                                <xsl:copy-of select="$Start/pfx:Exception"/>
+                                <xsl:copy-of select="$Policy/pfx2:PolicyFull"/>
+                            </input>
+                        </Body>
+                    </ns1:ActivityInput>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="Send Resolution">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>595</pd:x>
+            <pd:y>310</pd:y>
+            <config>
+                <PermittedMessageType>XML Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>%%Naming/Environment%%.%%Naming/Organisation%%.%%Naming/FunctionalDomain%%.%%Naming/Application%%.%%Connections/JMS/EventBus/ResolutionQueue%%</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/Shared Resources/Connections/JMS/JMS.sharedjmscon</ConnectionReference>
+                <InDataxsdString>
+                    <xsd:element name="input">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="pfx5:ResolutionFull"/>
+                                <xsd:element ref="pfx:Exception"/>
+                                <xsd:element ref="pfx2:PolicyFull"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </InDataxsdString>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput>
+                    <Body>
+                        <input>
+                            <xsl:copy-of select="$Policy/pfx2:PolicyFull/pfx5:ResolutionFull"/>
+                            <xsl:copy-of select="$Start/pfx:Exception"/>
+                            <xsl:copy-of select="$Policy/pfx2:PolicyFull"/>
+                        </input>
+                    </Body>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Add Custom Timefields</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Add Custom Timefields</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

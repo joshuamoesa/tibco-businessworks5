@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx2="urn:FindCustomer" xmlns:pfx3="urn:KTVAdapter.AddCustomerReference" xmlns:pfx4="urn:OrderManagerAdapter.AddCustomerReference" xmlns:pfx5="urn:OrderManagerAdapter.FindCustomer" xmlns:pfx6="urn:OrderManagerAdapter.GetCustomerBillRecipient" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx7="urn:OrderManagerAdapter.CreatePartyAGOP" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx8="urn:IKKAdapter.FindPropertyAddressAGOP" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx9="urn:IKKAdapter.FindAccount" xmlns:pfx10="urn:IKKAdapter.FindCustomer" xmlns:pfx11="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/ErrorReport.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx12="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Services/FindPropertyAddressAGOP.xsd" xmlns:pfx13="urn:IKKAdapter.FindPropertyAddress" xmlns:pfx14="urn:IKKAdapter.GetAccount" xmlns:pfx15="urn:IKKAdapter.FindCity">
+    <xsd:import namespace="urn:OrderManagerAdapter.CreatePartyAGOP" schemaLocation="/WSDL/OrderManagerAdapter/CreatePartyAGOPService.wsdl"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/ErrorReport.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Common/ErrorReport.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Services/FindPropertyAddressAGOP.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Services/FindPropertyAddressAGOP.xsd"/>
+    <xsd:import namespace="urn:IKKAdapter.FindPropertyAddressAGOP" schemaLocation="/WSDL/IKKAdapter/FindPropertyAddressAGOP.wsdl"/>
+    <wsdl:import namespace="" location=""/>
+    <wsdl:import namespace="urn:OrderManagerAdapter.FindCustomer" location="/WSDL/OrderManagerAdapter/FindCustomerService.wsdl"/>
+    <wsdl:import namespace="urn:OrderManagerAdapter.AddCustomerReference" location="/WSDL/OrderManagerAdapter/AddCustomerReferenceService.wsdl"/>
+    <wsdl:import namespace="urn:OrderManagerAdapter.CreatePartyAGOP" location="/WSDL/OrderManagerAdapter/CreatePartyAGOPService.wsdl"/>
+    <wsdl:import namespace="urn:IKKAdapter.FindCustomer" location="/WSDL/IKKAdapter/FindCustomer.wsdl"/>
+    <wsdl:import namespace="urn:IKKAdapter.GetAccount" location="/WSDL/IKKAdapter/GetAccount.wsdl"/>
+    <wsdl:import namespace="urn:IKKAdapter.FindPropertyAddressAGOP" location="/WSDL/IKKAdapter/FindPropertyAddressAGOP.wsdl"/>
+    <pd:name>IKKAdapter/Test Processes/Unit Test/DoFindPropertyAddressAGOP.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>81</pd:startX>
+    <pd:startY>120</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>626</pd:endX>
+    <pd:endY>122</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>208</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <timeout>30</timeout>
+            <service>pfx8:FindPropertyAddressAGOPService</service>
+            <servicePort>FindPropertyAddressAGOPSoap</servicePort>
+            <operation>FindPropertyAddressAGOP</operation>
+            <soapAction/>
+            <endpointURL>http://%%IKKAdapter/Outbound/SOAP/Hostname%%:%%IKKAdapter/Outbound/SOAP/Port%%/IKKAdapter/Processes/FindPropertyAddressAGOP</endpointURL>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity>/OrderManagerAdapter/Test Processes/Identity crisis.id</basicHttpAuthIdentity>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx8:FindPropertyAddressAGOPRequest>
+                    <pfx8:gebruikerCode>
+                        <xsl:value-of select="&quot;gebruikerCode&quot;"/>
+                    </pfx8:gebruikerCode>
+                    <pfx8:postcodeCijfers>
+                        <xsl:value-of select="&quot;postcodeCijfers&quot;"/>
+                    </pfx8:postcodeCijfers>
+                    <pfx8:postcodeLetters>
+                        <xsl:value-of select="&quot;postcodeLetters&quot;"/>
+                    </pfx8:postcodeLetters>
+                    <pfx8:huisNummer>
+                        <xsl:value-of select="&quot;huisNummer&quot;"/>
+                    </pfx8:huisNummer>
+                    <pfx8:straatNaam>
+                        <xsl:value-of select="&quot;straatNaam&quot;"/>
+                    </pfx8:straatNaam>
+                    <pfx8:plaatsNaam>
+                        <xsl:value-of select="&quot;plaatsNaam&quot;"/>
+                    </pfx8:plaatsNaam>
+                    <pfx8:woonplaatsCode>
+                        <xsl:value-of select="&quot;woonplaatsCode&quot;"/>
+                    </pfx8:woonplaatsCode>
+                </pfx8:FindPropertyAddressAGOPRequest>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Write File">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>498</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <createMissingDirectories>true</createMissingDirectories>
+        </config>
+        <pd:inputBindings>
+            <ns2:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/IKKAdapter/AppSetting/TestRootPath,&quot;273&quot;, &quot; - FindPropertyAddressAGOP/SoapReply&quot;, if ($SOAPRequestReply/outputMessage/pfx8:FindPropertyAddressAGOPResponse/pfx8:herkomstCode = &quot;0&quot;) then &quot;&quot; else &quot;Exception&quot;,&quot;.xml&quot;)"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="$Render-XML/xmlString"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+            </ns2:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Render XML">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>358</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <renderAsText>text</renderAsText>
+            <validateInput>true</validateInput>
+            <textEncoding>UTF-8</textEncoding>
+            <renderDefaultPrefix>false</renderDefaultPrefix>
+            <term ref="pfx8:FindPropertyAddressAGOPResponse"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$SOAPRequestReply/outputMessage/pfx8:FindPropertyAddressAGOPResponse"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Render XML</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render XML</pd:from>
+        <pd:to>Write File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write File</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

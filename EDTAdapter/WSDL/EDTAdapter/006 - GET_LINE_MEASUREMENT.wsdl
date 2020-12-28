@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_LINE_MEASUREMENT" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_LINE_MEASUREMENT">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_LINE_MEASUREMENT">
+            <xsd:element name="GetLineMeasurement" type="s:KSD_GetLineMeasurement"/>
+            <xsd:complexType name="KSD_GetLineMeasurement">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="Telefoonnummer" type="xsd:string"/>
+                    <xsd:element name="KlachtCode" type="xsd:string"/>
+                    <xsd:element name="TCRCode" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="GetLineMeasurementResponse" type="s:KSD_LineMeasurementAck"/>
+            <xsd:complexType name="KSD_LineMeasurementAck">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="GetLineMeasurementRequestMsg">
+        <part name="parameters" element="s:GetLineMeasurement"/>
+    </message>
+    <message name="GetLineMeasurementResponseMsg">
+        <part name="parameters" element="s:GetLineMeasurementResponse"/>
+    </message>
+    <portType name="GET_LINE_MEASUREMENTPortType">
+        <operation name="GetLineMeasurement">
+            <input message="s:GetLineMeasurementRequestMsg"/>
+            <output message="s:GetLineMeasurementResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="GET_LINE_MEASUREMENTSoapBinding" type="s:GET_LINE_MEASUREMENTPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetLineMeasurement">
+            <soap:operation soapAction="urn:GET_LINE_MEASUREMENT/GetLineMeasurement" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GET_LINE_MEASUREMENT_SERVICE">
+        <port name="GET_LINE_MEASUREMENTSoap" binding="s:GET_LINE_MEASUREMENTSoapBinding">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/GetLineMeasurements"/>
+        </port>
+    </service>
+</definitions>

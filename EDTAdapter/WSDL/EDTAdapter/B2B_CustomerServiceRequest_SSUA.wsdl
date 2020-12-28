@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:B2B_CustomerServiceRequest_SSUA" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:B2B_CustomerServiceRequest_SSUA" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <wsdl:types>
+  <xsd:schema elementFormDefault="qualified" targetNamespace="urn:B2B_CustomerServiceRequest_SSUA">
+   <xsd:import namespace="http://tempuri.org"/>
+   <xsd:element name="Create" type="ns0:Message"/>
+   <xsd:element name="CreateResponse" type="s:CreateOutputMap"/>
+   <xsd:complexType name="CreateOutputMap">
+    <xsd:sequence>
+     <xsd:element name="GUID" type="xsd:string"/>
+     <xsd:element name="STATUS" type="xsd:int"/>
+     <xsd:element name="MSG_CODE" type="xsd:string"/>
+     <xsd:element name="ERROR_CODE" type="xsd:string"/>
+     <xsd:element name="ERROR_DESCRIPTION" type="xsd:string"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="AuthenticationInfo" type="s:AuthenticationInfo"/>
+   <xsd:complexType name="AuthenticationInfo">
+    <xsd:sequence>
+     <xsd:element name="userName" type="xsd:string"/>
+     <xsd:element name="password" type="xsd:string"/>
+     <xsd:element minOccurs="0" name="authentication" type="xsd:string"/>
+     <xsd:element minOccurs="0" name="locale" type="xsd:string"/>
+     <xsd:element minOccurs="0" name="timeZone" type="xsd:string"/>
+    </xsd:sequence>
+   </xsd:complexType>
+  </xsd:schema>
+  <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://tempuri.org" xmlns="http://tempuri.org" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+	     <xs:complexType name="Message">
+
+
+		       <xs:sequence>
+
+
+			         <xs:element minOccurs="0" name="GUID" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="managed_object_class" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="message_origination_it_domain" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="message_destination_it_domain" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="message_creation_time" nillable="true" type="xs:dateTime"/>
+
+
+			         <xs:element minOccurs="0" name="status" nillable="true" type="xs:int"/>
+
+
+			         <xs:element minOccurs="0" name="msg_code" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="error_code" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="error_description" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="customer_service_request_reference_number" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="customer_service_request_identifier" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="customer_service_request_number" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="acknowledgement_type" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="acknowledgement_description" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="acknowledgement_code" nillable="true" type="xs:string"/>
+
+
+			         <xs:element minOccurs="0" name="acknowledgement_accepted" nillable="true" type="xs:string"/>
+
+
+		       </xs:sequence>
+
+
+	     </xs:complexType>
+
+
+   </xs:schema>
+ </wsdl:types>
+
+   <wsdl:message name="ARAuthenticate">
+
+      <wsdl:part element="s:AuthenticationInfo" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="CreateSoapIn">
+
+      <wsdl:part element="s:Create" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="CreateSoapOut">
+
+      <wsdl:part element="s:CreateResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="B2B_CustomerServiceRequest_SSUAPortType">
+
+      <wsdl:operation name="Create">
+
+         <wsdl:input message="s:CreateSoapIn"/>
+
+         <wsdl:output message="s:CreateSoapOut"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="B2B_CustomerServiceRequest_SSUASoapBinding" type="s:B2B_CustomerServiceRequest_SSUAPortType">
+
+      <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="Create">
+
+         <soap:operation soapAction="urn:B2B_CustomerServiceRequest_SSUA/Create" style="document"/>
+
+         <wsdl:input>
+
+            <soap:header message="s:ARAuthenticate" part="parameters" use="literal">
+
+            </soap:header>
+
+            <soap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output>
+
+            <soap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="B2B_CustomerServiceRequest_SSUAService">
+
+      <wsdl:port binding="s:B2B_CustomerServiceRequest_SSUASoapBinding" name="B2B_CustomerServiceRequest_SSUASoap">
+
+         <soap:address location="http://manlab9/arsys/services/ARService?server=manlab9&amp;webService=B2B_CustomerServiceRequest_SSUA"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
+

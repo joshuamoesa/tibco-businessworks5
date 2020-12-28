@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:ASTRIDAdapter.GetDslamInfo" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GetDslamInfo" targetNamespace="urn:ASTRIDAdapter.GetDslamInfo">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ASTRIDAdapter.GetDslamInfo">
+            <xsd:element name="GetDslamInfoRequest" type="s:type_GetDslamInfoRequest"/>
+            <xsd:complexType name="type_GetDslamInfoRequest">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="managed_object_class" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="managed_object_class_extension" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="managed_object_class_version" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="message_origination_it_domain" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="message_instance" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="message_creation_time" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="message_destination_it_domain" type="xsd:string"/>
+                    <xsd:element name="request_type">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:enumeration value="nodeInfo"/>
+                                <xsd:enumeration value="nodePortOdfInfo"/>
+                                <xsd:enumeration value="cardInfo"/>
+                                <xsd:enumeration value="portInfo"/>
+                                <xsd:enumeration value="serviceInfo"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:element>
+                    <xsd:element minOccurs="0" name="managed_object_instance" type="xsd:string"/>
+					<!--xsd:element minOccurs = "0" name = "PORT_ID" type = "xsd:string"/-->
+                    <xsd:element minOccurs="0" name="moit_managed_object_class" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="moit_managed_object_instance" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="moit_supported_service_instance" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="creation_type" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="mo_managed_object_instance" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="mo_supported_service_instance" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="GetDslamInfoResponse" type="s:type_GetDslamInfoResponse"/>
+            <xsd:complexType name="type_GetDslamInfoResponse">
+                <xsd:sequence>
+                    <xsd:element name="STATUS" type="s:type_status"/>
+                    <xsd:element name="MO_MOL_STREET" type="xsd:string"/>
+                    <xsd:element name="MO_MOL_HOUSE_NUMBER" type="xsd:string"/>
+                    <xsd:element name="MO_MOL_HOUSE_NUMBER_EXTENSION" type="xsd:string"/>
+                    <xsd:element name="MO_MOL_ZIP_CODE" type="xsd:string"/>
+                    <xsd:element name="MO_MOL_CITY" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME_1" type="s:MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME_1_type"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="attribute_type">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="MO_SUPPORTED_SERVICE_ATTRIBUTE_VALUE" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME_1_type">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="MO_SUPPORTED_SERVICE_ATTRIBUTE_VALUE" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME_2" type="s:MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME_2_type"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME_2_type">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="MO_SUPPORTED_SERVICE_ATTRIBUTE_NAME" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="MO_SUPPORTED_SERVICE_ATTRIBUTE_VALUE" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="type_status">
+                <xsd:sequence>
+                    <xsd:element name="STATUS_CODE" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="ERROR_CODE" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="ERROR_DESCRIPTION" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="GetDslamInfoRequest">
+        <part element="s:GetDslamInfoRequest" name="parameters"/>
+    </message>
+    <message name="GetDslamInfoResponse">
+        <part element="s:GetDslamInfoResponse" name="parameters"/>
+    </message>
+    <portType name="GetDslamInfoPortType">
+        <operation name="GetDslamInfo">
+            <input message="s:GetDslamInfoRequest"/>
+            <output message="s:GetDslamInfoResponse"/>
+        </operation>
+    </portType>
+    <binding name="GetDslamInfoSoapBinding" type="s:GetDslamInfoPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetDslamInfo">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetDslamInfoService">
+        <port binding="s:GetDslamInfoSoapBinding" name="GetDslamInfoSoap">
+            <soap:address location="http://manlab10/arsys/services/ARService?server=manlab10&amp;webService=GetDslamInfo"/>
+        </port>
+    </service>
+</definitions>

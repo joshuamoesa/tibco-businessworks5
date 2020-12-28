@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ExceptionRuleXslt="java://XSLTTransform">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/Transactional/Exception/UpdateStatus.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ID" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="Status" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>53</pd:startX>
+    <pd:startY>71</pd:startY>
+    <pd:returnBindings>
+        <Return>
+            <xsl:if test="string-length($InsertException/resultSet/outputSet/EXCEPTIONID)>0">
+                <ExceptionID>
+                    <xsl:value-of select="$InsertException/resultSet/outputSet/EXCEPTIONID"/>
+                </ExceptionID>
+            </xsl:if>
+        </Return>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>443</pd:endX>
+    <pd:endY>75</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>179</pd:x>
+        <pd:y>164</pd:y>
+        <pd:width>133</pd:width>
+        <pd:height>137</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>errorLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:errorCondition>$i&gt;3</pd:errorCondition>
+            <pd:suspendAfterErrorRetry>false</pd:suspendAfterErrorRetry>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>JDBC Call Procedure</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC Call Procedure</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="JDBC Call Procedure">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>244</pd:x>
+            <pd:y>247</pd:y>
+            <config>
+                <timeout>%%Connections/DB/Oracle/MainStorage/ExecutionTimeOut%%</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/Shared Resources/Connections/DB/Oracle/MainStorage.sharedjdbc</jdbcSharedConfig>
+                <ProcedureName>TDA_UPDATEEXCEPTIONSTATE</ProcedureName>
+                <parameterTypes>
+                    <parameter>
+                        <colName>STATUS</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>EXCEPTIONID</colName>
+                        <colType>1</colType>
+                        <dataType>2</dataType>
+                        <typeName>NUMBER</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <STATUS>
+                            <xsl:value-of select="$Start/Input/Status"/>
+                        </STATUS>
+                        <EXCEPTIONID>
+                            <xsl:choose>
+                                <xsl:when test="exists($Start/Input/ID)">
+                                    <xsl:value-of select="$Start/Input/ID"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </EXCEPTIONID>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Not stored</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>string-length($Start/Input/ID)=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

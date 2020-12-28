@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" schemaLocation="/XSDSchemas/Common/ErrorMessage.xsd"/>
+    <pd:name>Common/Test Processes/Test stackTraceParser.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>103</pd:startX>
+    <pd:startY>85</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>470</pd:endX>
+    <pd:endY>91</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Variable0>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="test" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </Variable0>
+    </pd:processVariables>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>286</pd:x>
+        <pd:y>90</pd:y>
+        <config>
+            <element ref="pfx:ErrorMessage"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:ErrorMessage>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="1"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="1"/>
+                    </ns2:NAME>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="1"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="1"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="1"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                </ns2:CMH>
+                <pfx:RESULT_STATUS>
+                    <xsl:attribute name="ns1:STATUS">
+                        <xsl:value-of select="11"/>
+                    </xsl:attribute>
+                </pfx:RESULT_STATUS>
+            </pfx:ErrorMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map-Data-1">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>260</pd:y>
+        <config>
+            <element>
+                <xsd:element name="output">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="laatmaarzien" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <output>
+                <laatmaarzien>
+                    <xsl:value-of select="eai:parseStackTrace($_error/ns:ErrorReport/FullClass, $_error/ns:ErrorReport/StackTrace, true())"/>
+                </laatmaarzien>
+            </output>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Map-Data-1</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map-Data-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

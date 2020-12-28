@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/SiebelZM/SubmitOrder.1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://www.kpn.com/StreamServeRequest" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0248_ProcessProvisioningWorkOrder/2.0/Subscribe" xmlns:pfx3="http://xmlns.kpn.com/fixed/SiebelZM/UpdateOrderStatus.1">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.kpn.com/StreamServeRequest" schemaLocation="/XSDSchemas/SiebelZM/Request/kzmstreamserve.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0248_ProcessProvisioningWorkOrder/2.0/Subscribe" schemaLocation="/XSDSchemas/OrderServicesAdapter/Imported/PRODUCT.xsd"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/SubmitOrder.1" location="/WSDL/SiebelZMAdapter/SubmitOrder.wsdl"/>
+    <pd:name>SiebelZMAdapter/Test Processes/SiebelZM/SOAP_SubmitOrder.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>299</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx:SubmitOrder</service>
+            <servicePort>SubmitOrder.1.PortTypeEndpoint</servicePort>
+            <operation>SubmitOrder.1</operation>
+            <soapAction>SubmitOrder</soapAction>
+            <endpointURL>http://vm277:7212/SiebelZMAdapter/Processes/SubmitOrder</endpointURL>
+            <useProxy>false</useProxy>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity/>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:Request>
+                    <ns:BODY>
+                        <ns:ORDER>
+                            <ns:ORDER_HEADER>
+                                <ns:OTHER_REFERENCE>
+                                    <ns:ORIGIN>
+                                        <xsl:value-of select="&quot;Origin&quot;"/>
+                                    </ns:ORIGIN>
+                                    <ns:REFERENCE>
+                                        <xsl:value-of select="&quot;Reference&quot;"/>
+                                    </ns:REFERENCE>
+                                </ns:OTHER_REFERENCE>
+                                <ns:PARENT_ORDER>
+                                    <ns:PARENT_ORDER_ID>
+                                        <xsl:value-of select="&quot;PO_ID&quot;"/>
+                                    </ns:PARENT_ORDER_ID>
+                                </ns:PARENT_ORDER>
+                                <ns:CUSTOMER_ID>
+                                    <ns:ID_CKR>
+                                        <xsl:value-of select="&quot;CKRID001&quot;"/>
+                                    </ns:ID_CKR>
+                                    <ns:ID_MCCS>
+                                        <xsl:value-of select="&quot;MCCSID01&quot;"/>
+                                    </ns:ID_MCCS>
+                                </ns:CUSTOMER_ID>
+                                <ns:ORDER_STATUS>
+                                    <ns:ORDER_STATUS>
+                                        <xsl:value-of select="&quot;0&quot;"/>
+                                    </ns:ORDER_STATUS>
+                                    <ns:ERROR_CODE>
+                                        <xsl:value-of select="&quot;0000&quot;"/>
+                                    </ns:ERROR_CODE>
+                                    <ns:ERROR_DESCRIPTION>
+                                        <xsl:value-of select="&quot;No Error&quot;"/>
+                                    </ns:ERROR_DESCRIPTION>
+                                </ns:ORDER_STATUS>
+                                <ns:ORDER_TYPE>
+                                    <xsl:value-of select="&quot;ZIPB&quot;"/>
+                                </ns:ORDER_TYPE>
+                                <ns:ORDER_ID>
+                                    <xsl:value-of select="&quot;ID&quot;"/>
+                                </ns:ORDER_ID>
+                                <ns:EXTERNAL_REFERENCE>
+                                    <xsl:value-of select="&quot;Ref&quot;"/>
+                                </ns:EXTERNAL_REFERENCE>
+                                <ns:CREATION_DATE>
+                                    <xsl:value-of select="tib:create-dateTime(2006,10,10,10,10,10)"/>
+                                </ns:CREATION_DATE>
+                                <ns:DUE_DATE>
+                                    <xsl:value-of select="tib:create-dateTime(2007,10,10,10,10,10)"/>
+                                </ns:DUE_DATE>
+                                <ns:ORDER_PRIORITY>
+                                    <xsl:value-of select="1"/>
+                                </ns:ORDER_PRIORITY>
+                            </ns:ORDER_HEADER>
+                            <ns:ORDER_ITEM>
+                                <ns:ORDER_ITEM_HEADER>
+                                    <ns:ORDER_ITEM_TYPE>
+                                        <xsl:value-of select="&quot;type&quot;"/>
+                                    </ns:ORDER_ITEM_TYPE>
+                                    <ns:ORDER_ITEM_ID>
+                                        <xsl:value-of select="&quot;ID&quot;"/>
+                                    </ns:ORDER_ITEM_ID>
+                                    <ns:EXTERNAL_REFERENCE>
+                                        <xsl:value-of select="&quot;Ext_Ref&quot;"/>
+                                    </ns:EXTERNAL_REFERENCE>
+                                    <ns:ORDER_ITEM_STATUS>
+                                        <xsl:value-of select="&quot;0&quot;"/>
+                                    </ns:ORDER_ITEM_STATUS>
+                                    <ns:DUE_DATE>
+                                        <xsl:value-of select="tib:create-dateTime(2007,10,10,10,10,10)"/>
+                                    </ns:DUE_DATE>
+                                    <ns:REMARK>
+                                        <ns:TYPE>
+                                            <xsl:value-of select="&quot;type&quot;"/>
+                                        </ns:TYPE>
+                                        <ns:REMARK>
+                                            <xsl:value-of select="&quot;remark&quot;"/>
+                                        </ns:REMARK>
+                                    </ns:REMARK>
+                                </ns:ORDER_ITEM_HEADER>
+                                <ns:PRODUCT_CATEGORY>
+                                    <xsl:value-of select="&quot;NEW_ZIPB&quot;"/>
+                                </ns:PRODUCT_CATEGORY>
+                                <ns:PRODUCT>
+                                    <ns2:SERVICE_VISIT_PRODUCT/>
+                                </ns:PRODUCT>
+                                <ns:CONTRACT>
+                                    <ns:CONTRACT_NUMBER>
+                                        <xsl:value-of select="&quot;Number&quot;"/>
+                                    </ns:CONTRACT_NUMBER>
+                                    <ns:CONTRACT_VERSION>
+                                        <xsl:value-of select="&quot;Version&quot;"/>
+                                    </ns:CONTRACT_VERSION>
+                                </ns:CONTRACT>
+                            </ns:ORDER_ITEM>
+                        </ns:ORDER>
+                    </ns:BODY>
+                </pfx:Request>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="JSON" type="JSONType"/>
+	<xs:complexType name="reporterType">
+		<xs:all>
+			<xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+			<xs:element name="displayName" type="xs:string" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="customfield_10614Type">
+		<xs:all>
+			<xs:element name="value" type="xs:string" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="issuesType">
+		<xs:all>
+			<xs:element name="id" type="xs:int" minOccurs="0"/>
+			<xs:element name="self" type="xs:string" minOccurs="0"/>
+			<xs:element name="key" type="xs:string" minOccurs="0"/>
+			<xs:element name="fields" type="fieldsType" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="priorityType">
+		<xs:all>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+			<xs:element name="id" type="xs:byte" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="assigneeType">
+		<xs:all>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="fieldsType">
+		<xs:all>
+			<xs:element name="summary" type="xs:string" minOccurs="0"/>
+			<xs:element name="customfield_10614" type="customfield_10614Type" minOccurs="0"/>
+			<xs:element name="reporter" type="reporterType" minOccurs="0"/>
+			<xs:element name="created" type="xs:string" minOccurs="0"/>
+			<xs:element name="priority" type="priorityType" minOccurs="0"/>
+			<xs:element name="assignee" type="assigneeType" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="JSONType">
+		<xs:sequence>
+			<xs:element name="total" type="xs:byte" minOccurs="0"/>
+			<xs:element name="issues" type="issuesType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

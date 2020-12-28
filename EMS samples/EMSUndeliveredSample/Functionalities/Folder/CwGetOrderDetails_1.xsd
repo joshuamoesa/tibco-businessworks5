@@ -1,0 +1,1775 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2012 rel. 2 (x64) (http://www.altova.com) by Mohammed AlAtrash (TMNS bv) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cdm="http://www.ziggo.nl/Integration/ESB/Services/ProductOrder/CwGetOrderDetails/1/Schema" xmlns:bi="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0" targetNamespace="http://www.ziggo.nl/Integration/ESB/Services/ProductOrder/CwGetOrderDetails/1/Schema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0" schemaLocation="../../../../../CMM/Resources/Schemas/cmm_3.xsd"/>
+	<xs:simpleType name="AddressType">
+		<xs:annotation>
+			<xs:documentation>AddressType has enumerations PROPERTY_ADDRESS, POBOX_ADDRESS and FREEPOST_ADDRESS.
+PROPERTY_ADDRESS «- An actual phsical address of a property. Examples: address where customer actually lives; address where engineer can be sent to.
+POBOX_ADDRESS    «- When this type is selected, the convention is that the houseNumber contains the POBOX number.
+FREEPOST_ADDRESS «- When this type is selected, the convention is that the houseNumber contains the FREEPOST number.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FREEPOST_ADDRESS"/>
+			<xs:enumeration value="POBOX_ADDRESS"/>
+			<xs:enumeration value="PROPERTY_ADDRESS"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BillingAccountType">
+		<xs:annotation>
+			<xs:documentation>Type of customer account. Not presently used in any component, therefore no examples can be given. (Restriction of minLength=1 prevents problems caused by this element being left empty [i.e. empty tags] in messages).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CurrencyCode">
+		<xs:annotation>
+			<xs:documentation>The currency code is the internationally used code for currencies throughout the financial industry. The codes are defined in ISO 4217 a standard published by the International Standards Organization, which delineates currency designators, country codes (alpha and numeric), and references to minor units.
+NOTE: The list of currencies provided here is not exhaustive, merely indicative!</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="NonEmptyString">
+		<xs:annotation>
+			<xs:documentation>Generic string type which must have at least one character to be valid.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Priority">
+		<xs:annotation>
+			<xs:documentation>The Priority enumeration specifies various levels or priorities that can be assigned to items such as orders, requests, etc. to make them more relevant to process than others. Usually this translates into higher priority items being 'processed' before lower priority items. Care must be taken that priorities are assigned in a balanced manner such that not too items are assigned a high priority resulting in low priority items never being processed. The priority has a strong relation to the JMS message queue priority values for which translation values are given for each priority enumeration. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DEFAULT">
+				<xs:annotation>
+					<xs:documentation>corresponds to a JMS priority 4</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EMERGENCY">
+				<xs:annotation>
+					<xs:documentation>corresponds to a JMS priority 9</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="HIGH">
+				<xs:annotation>
+					<xs:documentation>corresponds to a JMS priority 6</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="HIGHEST">
+				<xs:annotation>
+					<xs:documentation>corresponds to a JMS priority 8</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LOW">
+				<xs:annotation>
+					<xs:documentation>corresponds to a JMS priority 2</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LOWEST">
+				<xs:annotation>
+					<xs:documentation>corresponds to a JMS priority 0</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ProductCategory">
+		<xs:annotation>
+			<xs:documentation>A dedicated simple type that is used for the category element of the ProductFilter entity.
+Note: it may be used by any Product entity (e.g. ProductIdentifier, -Reference, -Filter).
+This is currently a string based type with no restrictions.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="ProductOrderLineStatus">
+		<xs:annotation>
+			<xs:documentation>A dedicated simple type intended for use by a status element in a ProductOrderLine entity (e.g. ProductOrderLine; ProductOrderLineIdentifier, -Reference) to indicate the current status of an order line on a product order. 
+This is currently a string based type with no restrictions.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="ProductOrderStatus">
+		<xs:annotation>
+			<xs:documentation>A dedicated simple type intended for use by a status element in a ProductOrder entity (e.g. ProductOrder; ProductOrderIdentifier, -Reference) to indicate the current status of a product order. 
+This is currently a string based type with no restrictions.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="ProductStatus">
+		<xs:annotation>
+			<xs:documentation>A dedicated simple type intended for use by a status element in a Product entity (e.g. Product; ProductIdentifier, -Reference, -Filter) to indicate the current status of a Product. 
+This is currently a string based type with no restrictions.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="ResourceStatus">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="ServiceType">
+		<xs:annotation>
+			<xs:documentation>Indicates the type of the service being either a CUSTOMER_FACING_SERVICE or RESOURCE_FACING_SERVICE.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CUSTOMER_FACING_SERVICE"/>
+			<xs:enumeration value="RESOURCE_FACING_SERVICE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SimplePeriod">
+		<xs:annotation>
+			<xs:documentation>A simple period is a period that is expressed as a number of a specific time-units. For example "P3M" for 3 months. 
+The type is based on the ISO-8601 duration which has support for the units for year (Y), month (M), week (W), day (D), hour (H), minute (M) and second (S).
+</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="P(\d+(\.\d+)?[YMWD]|T\d+(\.\d+)?[HMS])">
+				<xs:annotation>
+					<xs:documentation>"P" followed by a decimal number followed by one of "Y", "M", "W" or "D".
+-or-
+"PT" followed by a decimal number followed by one of "H", "M", or "S".
+</xs:documentation>
+				</xs:annotation>
+			</xs:pattern>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="AddressIdentifier">
+		<xs:annotation>
+			<xs:documentation>See ICC Architecture guidelines for explanation of entities with the -Identifier suffix. 
+Note that the identifier is local to the context in which the address is used. For instance a list of addresses might be provided with an Order and each address is referred to from the various Order lines. The ID of the address must be unique within the context of the Order, but not outside of the Order.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>An optional identifier of the address, note that the identifier might be local to the context in which the address is used such as an order. The id has no use outside such a context.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="externalID" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute ref="cdm:keyField"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="localReference" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The localReference element is an element used whenever the ID element of the entity in question cannot be used. Reasons for this are for instance that no value is available to uniquely identify the entity by. Still it must be possible to refer to the entity within the context of a message. To avoid the use of the ID element and its (mandatory) keyField and associated meanings, the localReference element can used.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="addressType" type="cdm:AddressType">
+			<xs:annotation>
+				<xs:documentation>This attribute is of type AddressType, which uses enumerated values. See AddressType annotation for description of the enumarated values.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AppointmentIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="localReference" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BillingAccountIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="cdm:NonEmptyString">
+							<xs:attribute name="keyField" type="xs:string" use="required" fixed="cdm:customerAccountID"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="externalID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The externalID is a unique identifier for the BillingAccount other than the unique identifier used by the application that masters BillingAccount data. 
+This can be a secondary identifier in the same application, or an identifier in a slave application. 
+When externalID is used, the @keyField attribute must be provided to specify [a] the source application for the ID and [b] the name of the ID in the source application (may be different name to CDM). 
+E.g. ebs:subscriberId; cw:billingAccountId
+See the annotation for the @keyField attribute for more detailed description of using the attribute.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="cdm:NonEmptyString">
+							<xs:attribute ref="cdm:keyField"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="localReference" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The local reference of the CustomerAccount is used within the context of a single message only in cases where the actual ID of the CustomerAccount is not known.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="type" type="cdm:BillingAccountType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A type for the customer account</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BillingAccountReference">
+		<xs:complexContent>
+			<xs:extension base="cdm:BillingAccountIdentifier">
+				<xs:sequence>
+					<xs:element name="customer" type="cdm:CustomerIdentifier" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Charge">
+		<xs:annotation>
+			<xs:documentation>The charge entity models a single (monetary) charge which applies to products and services provided to customer.
+A charge has an amount, (optionally) a currency, which when omitted defaults to "EUR", a frequency (optional) and a type.
+When a frequency is specified, it automatically implies that the charge is a recurring charge. Alternatively, the charge is non-recurring when no frequency is specified.
+The type can be used to specify what the charge is for, for example "TERMINATION_FEE", "CONNECTION_FEE", "SUBSCRIPTION", etc.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="cdm:MonetaryAmount">
+				<xs:sequence>
+					<xs:element name="frequency" type="cdm:SimplePeriod" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>When specified, the frequency indicates how often the charge is applied. Also this implies the charge is a recurring charge.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="type" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The type of the charge specifies what the charge is for. For example the charge can be a connection fee or termination fee. Note that this field does not indicate whether or not the charge is recurring, this is indicated by the presence or absence of a valid period.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ContactPersonIdentifier">
+		<xs:annotation>
+			<xs:documentation>See ICC Architecture guidelines for explanation of entities with the -Identifier suffix.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The unique ID of the Contact Person entity in the Ziggo application that masters (owns) the Contact Person data.
+This is typically a Zumba application or a legacy or interim application that is temporarily being used as the master application.
+Note if an ID is not owned by the master application, use externalID instead.
+For example, if the ConceptWave Customer ID is used to identify the Contact Person, then that should go in externalID instead, with @keyField="cw:customerId"</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="externalID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>An external ID of the Contact Person can be represented here. 
+An external ID is a unique identifier in an application that is not the owner of the entity (i.e. not the master).
+the @keyField attribute must always be used to identify the source and name of the identifier (see the @keyField attribute annotation for details).</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute ref="cdm:keyField"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="localReference" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The localReference element is an element used whenever the ID element of the entity in question cannot be used. Reasons for this are for instance that no value is available to uniquely identify the entity by. Still it must be possible to refer to the entity within the context of a message. To avoid the use of the ID element and its (mandatory) keyField and associated meanings, the localReference element can used.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ContractIdentifier">
+		<xs:annotation>
+			<xs:documentation>See ICC Architecture guidelines for explanation of entities with the -Identifier suffix. The ContractIdentifier contains elements to help uniquely identify a contract.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Identifies the contract uniquely within Ziggo.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" fixed="cdm:contractID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:contractID"»12345678«/ID» is logged as: «name»cdm:contractID«/name»«value»12345678«/value».</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="localReference" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A local reference to a contract when the ID of the contract is not known or available. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The ID of the customer being referenced.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" type="xs:string" use="required" fixed="cdm:customerID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="type" type="cdm:CustomerType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Type of Customer such as 'RESIDENTIAL', 'BUSINESS' or 'WHOLESALE'.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="externalID" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute ref="cdm:keyField"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerType">
+		<xs:annotation>
+			<xs:documentation>A dedicated type that is used to model the type of Customer. Examples are: RESIDENTIAL, BUSINESS, WHOLESALE.
+Ziggo systems that deal with CustomerType are for example: Oracle eBS, RBM. Process components that deal with it are for example: prcCustomer.
+Notes: A complex type is used to allow for addition of an attribute (keyField), which is not possible for simple types; This is currently a string based type with no restrictions.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="keyField" type="xs:string" use="required" fixed="cdm:customerType">
+					<xs:annotation>
+						<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Discount">
+		<xs:annotation>
+			<xs:documentation>A Discount entity describes a discount which will be applied to a charge. Similar to charges, a discount can be one-time or recurring which is indicated by the presence of a frequency.
+If recurring the discount must also have a validity and/or a duration to specify when the discount expires. If not provided, it is assumed the discount is applicable until further notice.
+The type element of discount indicates to what charge the discount applies to, for example 'INSTALLATION_FEE' or 'TERMINATION_FEE'.
+The flag 'absoluteDiscountFlag' indicates whether the amount specified is an absolute value (in money) or a relative value (in percentiles).
+It is possible to provide discounts of the following complexity: 'A bi-weekly discount for 4 months starting in the 2nd month' by specifying a frequency of 'P2M', a duration of 'P4M' and a startAt of '2'.
+</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="amount" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The amount of the discount given. This amount can be an absolute value (e.g. € 5,00) or relative (e.g. 10%) which is indicated by the absoluteDiscountFlag.
+When the amount represents an absolute value, the currency is the same as the charge's currency to which the discount applies. When the amount represents a relative value then the amount is a percentage in percentile value so 25% is 25.0.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="absoluteDiscountFlag" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies whether or not the amount is absolute or relative. When true, the amount element represents a monetary amount of the same currency as the charge the discount applies to. When false the amount represents a percentage which is in relation to the charge the discount applies to.
+Percentages are expressed as percentile values, so a discount of 25% corresponds to an amount of 25.0.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="frequency" type="cdm:SimplePeriod" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>When specified, the frequency indicates how often the discount is applied. Also this implies the discount is a recurring discount.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="type" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indicates the type of discount which must be enough to determine to what charge the discount applies.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="validity" type="cdm:TimePeriod" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the validity period within which the discount is to be applied. 
+Note that the validity period describes an absolute period in time. However this might not be known yet. For example by business rule definition, a discount is applied at the moment the product is delivered, but during ordering the product is obviously not yet delivered. In this scenario, the duration element can be used to indicate that a dicount will be valid for a year ("P1Y")
+Note that the standard duration of the xml-schema specificaiton does NOT support the week-unit.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="duration" type="cdm:SimplePeriod" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the duration of the validity period when the validity itself is not yet determined. Note that the standard duration of the xml-schema specificaiton does NOT support the week-unit. The duration element can be used to indicate the length of the validity element when the discount is not yet applied. For instance a business rule might define that a discount is applied only when a product is activated and not sooner. So the absolute time period of the discount (whcih is specified in the validity) is not known until the product is activated, yet the duration will be known. through the duration element.
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="startAt" type="xs:positiveInteger" default="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies at which moment the discount is applied. The value in this tag is an integer and has the same unit as the frequency. This is useful for advanced promotions in which several discounts are applied in sequence. For instance first 3 months 50% discount, the second 3 months 25%. The value for startAt for each disount is 1 and 4 respectively for this example.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="description" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A human understandable description of the discount</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MonetaryAmount">
+		<xs:annotation>
+			<xs:documentation>The MonetaryAmount entity models a monetary amount by providing a decimal amount element and a currency (unrestricted string) element.</xs:documentation>
+			<xs:documentation>An amount in money.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="amount" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The amount of money, without its currency.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="currencyCode" type="cdm:CurrencyCode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The currency for the amount of money.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Product">
+		<xs:annotation>
+			<xs:documentation>A ProductOffering procured by a Customer, or other interested Party playing a PartyRole, appearing as a BusinessInteractionItem, which could take the form of a Agreement. ProductSpecificationCharacteristic(s) in part define the Product. A Product is realized as one or more Service(s) and/or Resource(s).</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="cdm:ProductReference">
+				<xs:sequence>
+					<xs:element name="statusDateTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates when the status of this product has changed to its current value.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="createdDateTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates when this product instance has been created.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="activatedDateTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates when the product has been activated for the first time.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="deactivatedDateTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Specifies the moment at which the product has been (administratively) deactivated.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="cdm:ProductCategory" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A category to which the product belongs to.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="productOffering" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Specifies the productOffering under which this product has been/is being purchased. Note that products and product offerings have a many-to-many relationship which is not expressed using this element!</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="cdm:ProductOfferingIdentifier">
+									<xs:sequence minOccurs="0">
+										<xs:element name="price" type="cdm:ProductOfferingPrice" minOccurs="0"/>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="characteristics" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A list of ProductCharacteristicValues specifying certain characteristics of the Product. Note that characteristics can be nested, but this is discouraged. Also the level of nesting is limited to one level. This means that a characteristic may contain one sub-characteristic, but there can be no sub-sub-characteristics</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="characteristic" type="cdm:ProductCharacteristicValue" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>A ProductCharacteristicValue specificing a single characteristic of the product as defined in the ProductCharacteristicSpecification and ProductSpecification.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+							<xs:attribute ref="cdm:modifier"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="description" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>An free format explanation of what the product is.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="customer" type="cdm:CustomerIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>References the customer to which this product belongs.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="customerAccount" type="cdm:BillingAccountIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Refers to the customerAccount the product belongs to.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="contract" type="cdm:ContractIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Identifies the contract under which the product has been procured.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="usageRights" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The usage rights procured along with the product. Every product has its own set of rights which are specified in the product specification.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="usageRight" type="cdm:UsageRight" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="productBundle" type="cdm:ProductIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The bundle element refers to the product (instance) this product is a component of. In a sense the product refered to by the bundle element is the parent product of this product. It is used to indicate the composition of products.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="products" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Any optional 'nested' product. This can be used to order complex bundled products and to indicate dependencies among products. The products references by this list are depended upon by this product.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="product" type="cdm:ProductReference" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="services" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains references or entities of the (CustomerFacing)Services that this product is realized by. Note that the entity could be nested or that only it's ID could is provided. It is recommended to not use nesting but to use referencing instead.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="service" type="cdm:ServiceReference" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>One of the possibly many (CustomerFacing)Services that realize this product. 
+Note that the entity could be nested or that only it's ID could is provided.
+It is recommended to not use nesting but to use referencing instead.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="serviceLocation" type="cdm:AddressIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates a delivery- or endpoint to where the services - decomposed from this product -  must be terminated.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="resources" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains references or entities of the Resources that this product is realized by. Note that the entity could be nested or that only it's ID could is provided. It is recommended to not use nesting but to use referencing instead.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="resource" type="cdm:ResourceReference" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>One of the possibly many Resources that realize this product. 
+Note that the entity could be nested in its entirety, or that only it's ID could be provided.
+It is recommended to not use nesting but to use referencing instead.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="billingFrequencyOverride" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Enables the product to be billed using a different frequency than indicated by the CustomerBillSpecification/billingFrequency. Typically used in cases where the cost of the product is too low or a yearly subscription fee is applicable.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:pattern value="P\d+[DWM]">
+									<xs:annotation>
+										<xs:documentation>Allows for whole periods days, weeks or months (years possible using months: see example). E.g. to specifify a bi-weekly frequency use 'P2W'. E.g. to specify an anual (yearly) frequency use 'P12M'.</xs:documentation>
+									</xs:annotation>
+								</xs:pattern>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProductCharacteristicValue">
+		<xs:annotation>
+			<xs:documentation>A ProductCharacteristicValue specifies a value for a ProductCharacteristic that is defined as a ProductCharacteristicSpecification of a ProductSpecification.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Unique identifier for the ProductCharacteristicValue.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="specificationID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A unique ID identifying the ProductCharacteristicSpecification. This can be used to identify the value(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A readable name for the product characteristic. The name is defined as part of the ProductCharacteristicSpecification and can be used to identify the value(s). It is unique at least within the scope of it's product specification.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="values" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="value" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>A single product characteristic value. The value is a simple type such as string, integer, date or boolean.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<!--Use the following xpath on the value to get the appropriate default for that value:
+following-sibling::*[ position()=1 and local-name()="default" ][1]-->
+						<xs:element name="default" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The default value for the characteristic. Note that the default immediately succeeds its value in case of multiple value.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="cdm:modifier"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProductIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The identifier of the specific Product (instance) to which this reference refers.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" use="required" fixed="cdm:productID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="localReference" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Used in message context to refer to a product while the official Product ID (MDM) is not available.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="externalID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The externalID is a unique identifier for the Product other than the unique identifier used by the application that masters the data for the Product. 
+This can be a secondary identifier in the same application, or an identifier owned by another (slave) application. 
+When externalID is used, the @keyField attribute must be filled in to specify the source application for the ID and the name of the ID field. 
+E.g. ebs:subscriberId
+See the annotation for the @keyField attribute for more detailed description of using the attribute.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute ref="cdm:keyField"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProductOfferingIdentifier">
+		<xs:annotation>
+			<xs:documentation>A unique identifier for a ProductOffering which is to be used by all elements that need to refer to a ProductOffering</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" type="xs:string" default="cdm:productOfferingID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the keyField attribute's name and value are extracted by CSL and used as logging keys (e.g. in CLEver)
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». 
+Removing an element's keyField attribute will disable logging for that element.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProductOfferingPrice">
+		<xs:annotation>
+			<xs:documentation>Price of a product offering (list price. as opposed to the price the actual product is sold to the customer.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="cdm:MonetaryAmount"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProductOrder">
+		<xs:annotation>
+			<xs:documentation>The ProductOrder entity is used to model orders that request the addition, removal or update of products or product features for a customer. 
+In Ziggo, examples of use of this entity are: when retrieving product order info from eBS; when submitting product orders to Conceptwave.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="cdm:ProductOrderReference">
+				<xs:sequence>
+					<xs:element name="statusDateTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates when the status was changed to its current value.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="description" type="xs:string" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Free format description of this order.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="comments" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Remarks placed for this order.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="comment" type="xs:string" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="revision" type="xs:string" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates the version of this Product Order. Defaulted to 1.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="source" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The source element is used to indicate by whom and via what channel this order has been submitted.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence minOccurs="0">
+								<xs:element name="salesChannel" minOccurs="0">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="cdm:SalesChannelIdentifier">
+												<xs:sequence>
+													<xs:element name="name" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Sales channel name. E.g. "Order Capture Quotes" (Conceptwave sales channel)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="salesAgent" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="ID" minOccurs="0">
+												<xs:complexType>
+													<xs:simpleContent>
+														<xs:extension base="xs:string">
+															<xs:attribute name="keyField" use="required" fixed="cdm:salesAgentID">
+																<xs:annotation>
+																	<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+																</xs:annotation>
+															</xs:attribute>
+														</xs:extension>
+													</xs:simpleContent>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="retailer" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="ID" type="cdm:NonEmptyString" minOccurs="0"/>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="assignedPriority" type="cdm:Priority" minOccurs="0"/>
+					<xs:element name="customer" type="cdm:CustomerIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Refers to the customer who placed this order.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="parentOrder" type="cdm:ProductOrderIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>If this Product Order belongs to another Product Order, this field is used to identify the parent.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="orderLines" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Orderlines contain the Product Order Items.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="orderLine" type="cdm:ProductOrderLine" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="locations" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>List of location ID's and their roles. For example, location ID 2 is used as shipment location. The actual address of this location can be included in the root of a message. This up to the designer.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="location" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="cdm:AddressIdentifier">
+												<xs:sequence>
+													<xs:element name="role" type="xs:string" minOccurs="0"/>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="contactPersons" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>This is a list of Contact Person Identifiers with their role. A root element Contact Persons can be created in the root of the message if the actual contact information is required.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="contactPerson" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="cdm:ContactPersonIdentifier">
+												<xs:sequence>
+													<xs:element name="role" type="cdm:NonEmptyString" minOccurs="0"/>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="amended" type="xs:boolean" minOccurs="0"/>
+					<xs:element name="amendReason" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The reason the order was modified in flight or during execution.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="amendDescription" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Free text description of what was amended.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="cancelReason" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The reason the order was cancelled before it was completed.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="terminateReason" type="xs:string" minOccurs="0"/>
+					<xs:element name="suspendReason" type="xs:string" minOccurs="0"/>
+					<xs:element name="totalProductPrices" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains a list of all total product prices (as sold to the customer) This is a list because prices may have a different recurrence. For example the total initial costs differe from the total monthly costs.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="totalProductPrice" type="cdm:ProductPrice" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>Total price of Product Order (price sold to customer)</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="totalProductOfferPrices" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains a list of all total product prices (as advertized to the customer) This is a list because prices may have a different recurrence. For example the total initial costs differe from the total monthly costs.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="totalProductOfferPrice" type="cdm:ProductPrice" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>Total price of Product Order (list prices)</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="totalProductDiscounts" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains a list of all the total discounts summarized over the orderlines. There are different totals because of discouns may be one of or recurring.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="totalProductDiscount" type="cdm:Discount" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="promotionDateTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The promotionDateTime field of type dateTime, allows a dateTime to be added to the ProductOrder when a certain promotion (e.g. marketing campaign) was active. This allows the promotion (and any price benefits associated with it) to be taken into consideration when processing the order.
+Note that this is not necessarily the dateTime the promotion ended. It is simply a dateTime when the promotion is still active/valid. It can be seen as sort of ‘fake’ order date. E.g. If it is required that an order is placed before a certain dateTime to get a certain promotion and that dateTime has expired, then this field can be used to capture a dateTime that still allows the promotion to be used.
+This date will often be in the past.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="promotionCode" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A promotional code (most likely related to a marketing campaign for example) that will give some sort of discount/ freebie/ cashback etc etc on the order.
+See also promotionDateTime.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="characteristics" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="characteristic" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="name" type="cdm:NonEmptyString"/>
+											<xs:element name="value" type="xs:string" minOccurs="0"/>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProductOrderFilter">
+		<xs:annotation>
+			<xs:documentation>The ProductOrderFilter provides the means to search and filter ProductOrders.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="order" type="cdm:ProductOrderIdentifier" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Searches for ProductOrders with the specified ID. This will result in one ProductOrder at most.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="statuses" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>List of ProductOrder statuses to search/filter on</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="status" type="cdm:ProductOrderStatus" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>(See annotation for parent element statuses)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="timePeriods" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>List of ProductOrder time periods to search/filter on. The type indicates the -DateTime field that the time period realtes to.
+E.g. 'COMPLETED' means search/filter on completedDateTime, 'DUE' means search/filter on dueDateTime. Etc.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="timePeriod" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>(See annotation for parent element timePeriods)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="cdm:TimePeriod">
+										<xs:sequence>
+											<xs:element name="type" type="xs:string" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Type of the validity can be deduced from the prefix of the -DateTime elements of the ProductOrder object (e.g. createdDateTime, dueDateTime etc)
+Preferred validity types are therefore: CREATED, COMPLETED, DUE, WISHED etc (see ProductOrder object)</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProductOrderIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Unique Identifier for a Product Order. No other product order is allowed to have the same ID.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" type="xs:string" use="required" fixed="cdm:productOrderID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys.
+Example: «ID keyField="cdm:productOrderID"»12345678«/ID» is logged as: «name»cdm:productOrderID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="type" type="xs:string" minOccurs="0"/>
+			<xs:element name="externalID" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute ref="cdm:keyField"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProductOrderLine">
+		<xs:annotation>
+			<xs:documentation>The ProductOrderLine entity is for modeling individual order lines inside product orders, where for example a single order line may require the addition, removal or update of a product or product feature.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="cdm:ProductOrderLineReference">
+				<xs:sequence>
+					<xs:element name="statusDateTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates when the status of this orderline was updated to the current value.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="subStatus" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Free text status field. Can be used to indicate milestones.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="wishedDateTime" type="xs:dateTime" minOccurs="0"/>
+					<xs:element name="dueDateTime" type="xs:dateTime" minOccurs="0"/>
+					<xs:element name="completedDateTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates when the orderline was completed.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="product" type="cdm:Product" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The actual product with its attributes the customer wants to have/delete/update/etc.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="discounts" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Any discounts given for this product to the customer. Preferably discount identifiers are used, but it also allows amount and unit (fe: 10 percent, or 20 euro). Note that the model does not indicate about how multiple discounts should be interpreted. </xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="discount" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="cdm:Discount">
+												<xs:sequence>
+													<xs:element name="ID" type="xs:string" minOccurs="0"/>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="shipping" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains information about shipment of the product.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="method" type="xs:string" minOccurs="0"/>
+								<xs:element name="contactID" type="cdm:ContactPersonIdentifier" minOccurs="0"/>
+								<xs:element name="scheduledDateTime" type="xs:dateTime" minOccurs="0"/>
+								<xs:element name="address" type="cdm:AddressIdentifier" minOccurs="0"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="billing" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains information about billing of the product.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="customerAccountID" type="cdm:BillingAccountReference" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Also known as billingAccountID.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="address" type="cdm:AddressIdentifier" minOccurs="0"/>
+								<xs:element name="activationDateTime" type="xs:dateTime" minOccurs="0"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="reason" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Describes the reason why this modification to the product has been requested.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="relatedOrderLine" type="cdm:ProductOrderLineIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Describes to which other orderline (in this order!) this orderline is related.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="comments" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Free format remarks.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="comment" type="xs:string" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="appointments" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Appointments related to this order line.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="appointment" type="cdm:AppointmentIdentifier" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>Appointments related to this order line.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="subAction" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The subAction allows for detailing of the action element. 
+E.g. action may be "UPDATE" and subAction will detail exactly what sort of update. Vocabulary examples are: "PORTIN", "PORTOUT", "REGRADE".
+The primary source of subAction vocabulary (values) is order management master application ConceptWave.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProductOrderLineIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Orderline Identifier. Must be unique within this order.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProductOrderLineReference">
+		<xs:complexContent>
+			<xs:extension base="cdm:ProductOrderLineIdentifier">
+				<xs:sequence>
+					<xs:element name="action" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Describes the modifier to the given product. 
+Preferred values are: CREATE, UPDATE, DELETE, NO_CHANGE
+Note: CDM does not restrict values with an actual enumeration, but it is expected of all components that make use of CDM that only these values are used.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="quantity" type="xs:positiveInteger" minOccurs="0"/>
+					<xs:element name="status" type="cdm:ProductOrderLineStatus" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Status of this order line.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProductOrderReference">
+		<xs:complexContent>
+			<xs:extension base="cdm:ProductOrderIdentifier">
+				<xs:sequence>
+					<xs:element name="subType" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional subType to differentiate the myriad of orderTypes.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="createdDateTime" type="xs:dateTime" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The date this order was submitted.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="wishedDateTime" type="xs:dateTime" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates the date/time the customer wants/wanted to have the product delivered (fulfilled)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="dueDateTime" type="xs:dateTime" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The date/time the order is actually going to be delivered.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="completedDateTime" type="xs:dateTime" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates when the order was completed.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="status" type="cdm:ProductOrderStatus" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Current status of the order.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="subStatus" type="xs:string" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Free format sub status. Can be used for milestones.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="externalIDs" nillable="true" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Lists IDs that external (3rd) parties use to refer to this Product Order.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="externalID" type="xs:string" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProductPrice">
+		<xs:annotation>
+			<xs:documentation>Price of a product, as it was sold to the customer (as opposed to the list price)</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="cdm:Charge"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProductReference">
+		<xs:annotation>
+			<xs:documentation>The product reference is a utility used to refer to actual products. It is typically used when having lists of products which may need to refer to eachother. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="cdm:ProductIdentifier">
+				<xs:sequence>
+					<xs:element name="specification" type="cdm:ProductSpecificationIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A code identifying the ProductSpecification on which the referred Product is based. (The product code corresponds to the id of the product specification)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="name" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A word, term, or phrase by which the product is known and distinguished from other products. It is a human readable and understandable name for the product for which the uniqueness is approximately equal to the product code.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:minLength value="1"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="status" type="cdm:ProductStatus" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Current status of this product instance</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="subStatus" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The sub status field contains the non-canonical status values for the product, although every sub-status must map to exactly one status value by design.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="price" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Price of the product, as it was sold to the customer (as opposed to the list price)</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="cdm:ProductPrice">
+									<xs:sequence>
+										<xs:element name="description" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProductSpecificationID">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="keyField" type="xs:string" fixed="cdm:productSpecificationID">
+					<xs:annotation>
+						<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ProductSpecificationIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" type="cdm:ProductSpecificationID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The ID of the entity in the Ziggo application that masters (owns) the Product Specification. 
+This will typically be a Zumba application or a legacy or interim application that is temporarily being used as the master application.
+Note if an ID is not owned by the master application, use externalID instead.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="externalIDs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>One or more external IDs of the Service Specification can be represented here. An external ID is a unique identifier in an application that is not the owner of the entity (i.e. not the master).
+An external ID must be unique in the application and can consist of one or more fields (e.g. 2 fields together may comprise the unique external ID in an external application).
+the @keyField attribute must always be used to identify the source and name of the identifier (see the @keyField attribute annotation for details).</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="externalID" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>An external identifer in an application that is not the master (owner) of the Service Specification. 
+See also the annotation on the parent element externalIDs.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute ref="cdm:keyField"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="type" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Type of service specification. There are 4 main types of service specification recognised in the CDM vocabulary. RTV, DTV, </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResourceIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The ID of the entity in the Ziggo application that masters (owns) the Resource. This will typically be a Zumba application or a legacy or interim application that is temporarily being used as the master application.
+Note if an ID is not owned by the master application, use externalID instead together with the externalID/@keyField attribute to identify the name of the ID field in the slave system.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" use="required" fixed="cdm:resourceID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="type" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Resource type. Preferred values are those that describe generically what the resource is. E.g. SMARTCARD, MODEM, ROUTER, PHONE_NUMBER, etc</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="localReference" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A local reference to a resource when the ID of the resource is not known or available. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="externalIDs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>One or more external IDs of the Resource can be represented here. An external ID is a unique identifier in an application that is not the owner of the entity (i.e. not the master).
+An external ID must be unique in the application and can consist of one or more fields (e.g. 2 fields together may comprise the unique external ID in an external application).
+the @keyField attribute must always be used to identify the source and name of the identifier (see the @keyField attribute annotation for details).</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="externalID" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>An external identifer in an application that is not the master (owner) of the Resource. See also the annotation on the parent element externalIDs.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute ref="cdm:keyField"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResourceReference">
+		<xs:complexContent>
+			<xs:extension base="cdm:ResourceIdentifier">
+				<xs:sequence>
+					<xs:element name="name" type="xs:string" minOccurs="0"/>
+					<xs:element name="specification" type="cdm:ResourceSpecificationIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The specification ID of the resource being referenced.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="status" type="cdm:ResourceStatus" minOccurs="0"/>
+					<xs:element name="subStatus" type="xs:string" minOccurs="0"/>
+					<xs:element name="category" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ResourceSpecificationIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" use="required" fixed="cdm:resourceSpecificationID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys.
+Example: «ID keyField="cdm:resourceSpecificationID"»12345678«/ID» is logged as: «name»cdm:resourceSpecificationID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SalesChannelIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" fixed="cdm:salesChannelID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The ID of the entity in the Ziggo application that masters (owns) the Service. This will typically be a Zumba application or a legacy or interim application that is temporarily being used as the master application.
+Note if an ID is not owned by the master application, use externalID instead.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" use="required" fixed="cdm:serviceID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:serviceID"»12345678«/ID» is logged as: «name»cdm:serviceID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="type" type="cdm:ServiceType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indicates the type of the service being either a CUSTOMER_FACING_SERVICE or RESOURCE_FACING_SERVICE.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="localReference" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Used in message context to refer to a service while the official Service ID (MDM) is not available.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="externalIDs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>One or more external IDs of the Service can be represented here. An external ID is a unique identifier in an application that is not the owner of the entity (i.e. not the master).
+An external ID must be unique in the application and can consist of one or more fields (e.g. 2 fields together may comprise the unique external ID in an external application).
+the @keyField attribute must always be used to identify the source and name of the identifier (see the @keyField attribute annotation for details).</xs:documentation>
+					<xs:documentation>One or more external IDs of the Resource can be represented here. An external ID is a unique identifier in an application that is not the owner of the entity (i.e. not the master).
+An external ID must be unique in the application and can consist of one or more fields (e.g. 2 fields together may comprise the unique external ID in an external application).
+the @keyField attribute must always be used to identify the source and name of the identifier (see the @keyField attribute annotation for details).</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="externalID" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>An external identifer in an application that is not the master (owner) of the Service. See also the annotation on the parent element externalIDs.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute ref="cdm:keyField"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceReference">
+		<xs:complexContent>
+			<xs:extension base="cdm:ServiceIdentifier">
+				<xs:sequence>
+					<xs:element name="name" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The name given to this referref service instance.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="specification" type="cdm:ServiceSpecificationIdentifier" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Unique identifier of the specification that the refeered service instance is based on. The specificationID correspondes to the ServiceSpecification/ID.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="status" type="xs:string" minOccurs="0"/>
+					<xs:element name="subStatus" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The sub status field contains the non-canonical status values for the service, although every sub-status must map to exactly one status value by design.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ServiceSpecificationIdentifier">
+		<xs:sequence>
+			<xs:element name="ID" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="keyField" use="required" fixed="cdm:serviceSpecificationID">
+								<xs:annotation>
+									<xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="externalIDs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>One or more external IDs of the ServiceSpecification can be represented here. 
+An external ID is a unique identifier in a slave application (i.e. application that is not the owner/master of the entity.
+An external ID must be unique in the slave application and can consist of one or a combination of fields (see CDM guidelines).
+The @keyField attribute must always be used to identify the source and name of the external ID (see annotation of @keyField attribute).</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="externalID" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>An external identifer of the ServiceSpecification in a slave application (i.e. in an application that is not the owner/master of ServiceSpecification. See also the annotation on the parent element externalIDs.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute ref="cdm:keyField"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TimePeriod">
+		<xs:annotation>
+			<xs:documentation>The TimePeriod object is used to model a start date (and time) and an end date (and time). It is used wherever needed in many different contexts throughout the CDM.</xs:documentation>
+			<xs:documentation>The TimePeriod class denotes a period in time with a start and an end-date. Note that the end-date may expressed relatively to the start using the duration attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="startDateTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The (absolute) start of the time period.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="endDateTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The absolute end of the time period.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UsageRight">
+		<xs:annotation>
+			<xs:documentation>The UsageRight entity is used to model usage rights. 
+E.g. with regard to a Product: when a customer buys a product, it comes with a set of usage rights.
+</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="type" type="xs:string" minOccurs="0"/>
+			<xs:element name="description" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:attribute name="keyField">
+		<xs:annotation>
+			<xs:documentation>Attribute has 2 purposes. 
+- ESB will automatically log elements that have the keyField attribute. The value of keyfield can be used to search for all messages containing this field in TIBCO's CLEver logging application.
+- The attribute also clearly identifies the source of an external identifier or reference that is valid for a specific backend. 
+The restriction is: [a-z]{2,4}:[a-zA-Z]*
+Which means: 
+FIRST a 2, 3, or 4 letter lowercase abbreviation describing the system where the identifier or reference has meaning. E.g. msd, rbm, ebs, cw, hrhb. This abbreviation should follow the same rules as used to name Adapter-service names (see naming guidelines).
+THEN a colon ':' 
+THEN a text describing the identifier, which must follow standards for element names. I.e. lowerCamelCase</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[a-z]{2,4}:[a-zA-Z]*"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="modifier">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="ADD">
+					<xs:annotation>
+						<xs:documentation>Indicates that the entity's value(s) are to be added to the current value(s). 
+
+Example 1 (Simple Content): 
+This modifier is not used for simple content.
+
+Example 2 (Complex Content):
+This modifier is not used for complex conten
+t.
+Example 3 (List Content):
+«values modifier="ADD"»
+  «value»additional value one«/value»
+  «value»additional value two«/value»
+«/values» 
+will add the values 'additional value one' and 'additional value two' to the current list of values.
+NOTE: For List Content this is the default expected behaviour. So the modifier can be omitted altogether in this situation.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="REMOVE">
+					<xs:annotation>
+						<xs:documentation>Indicates that the entity's value(s) must be removed from the value(s).
+
+Example 1 (Simple Content): 
+This modifier is not used for simple content situations. Here the appropriate situation would be:
+«entity nil="true" /»
+
+Example 2 (Complex Content):
+«entity modifier="REMOVE"»
+  «ID»1234«/ID»
+«/values» 
+will remove the entity with ID=1234. Note that it makes no sense in specifying any nested elements for this entity.
+
+Example 3 (List Content):
+«values modifier="REMOVE"»
+  «value»old value one«/value»
+  «value»old value two«/value»
+«/values» 
+will remove values 'old value one' and 'old value two' from the list of existing values. If the current list contains more values these are then unaffected.
+Note: To remove all values without specifying them you could use «values modifier="REPLACE /», effectively replacing the current list with an empty one.
+</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="REPLACE">
+					<xs:annotation>
+						<xs:documentation>Indicates that the entity's value(s) are a replacement of the current value(s). 
+Example 1 (Simple Content): 
+For simple content the value is not used, instead the modifier is used on the complex content (see below)
+
+Example 2 (Complex Content):
+«entity modifier="REPLACE"»
+  «ID»1234«/ID»
+  «element1»new value one«/element1»
+  «element2»new value two«/element2»
+«/values» 
+will replace all the (mutable) elements of the entity with ID=1234. The expected behaviour is that any previously assigned elements of the entity are erased and (if provided) are overwritten by the new values. So none of the previous values are to be retained even if their elements have been ommitted.
+
+Example 3 (List Content):
+«values modifier="REPLACE"»
+  «value»First new value«/value»
+  «value»Second new value«/value»
+«/values» 
+will replace all current values with the values provided in the list.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="UPDATE">
+					<xs:annotation>
+						<xs:documentation>Indicates the element should be updated, retaining the values of the elements that have been omitted.
+Example 1 (Simple Content): 
+For simple content the value is not used, instead the modifier is used on the complex content the simple element is part of (if applicable)(see below)
+
+Example 2 (Complex Content):
+The UPDATE value is the default for complex content the following example...
+«entity modifier="UPDATE"»
+  «ID»1234«/ID»
+  «element1»new value one«/element1»
+  «element2»new value two«/element2»
+«/values» 
+
+...is identical to:
+«entity»
+  «ID»1234«/ID»
+  «element1»new value one«/element1»
+  «element2»new value two«/element2»
+«/values» 
+
+Both variants will update all the (mutable) elements of the entity having ID=1234 for which a value is provided. In the example above only element1 and element2 will be updated. Any other elements that have been omitted will not be touched.
+
+Example 3 (List Content):
+For list content where the content is a simple type this modifier value is not used, because the list items do not have an ID to idenify the current values with.
+For list content where the content is a complex type this modifier effectively passes the control to the modifier on each complex entry in the list. However, just as with Example-2 above, the UPDATE modifier is also implicit in this case, so can simply be omitted altogether. Note that this allows you to mix ADD, REMOVE and UPDATE modifiers for each complex entry in the list, so that some complex entries in the list could be added, some removed and some updated.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:element name="Request">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bi:RequestType">
+					<xs:sequence>
+						<xs:element name="body">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="customer" type="cdm:CustomerIdentifier"/>
+									<xs:element name="address" type="cdm:AddressIdentifier" minOccurs="0"/>
+									<xs:element name="productCharacteristics" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="productCharacteristic" type="cdm:ProductCharacteristicValue" maxOccurs="unbounded"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="orderFilter" type="cdm:ProductOrderFilter" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Response">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="bi:ResponseType">
+					<xs:sequence>
+						<xs:element name="body">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="customer" type="cdm:CustomerIdentifier" minOccurs="0"/>
+									<xs:element name="orders" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="order" type="cdm:ProductOrder" maxOccurs="unbounded"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

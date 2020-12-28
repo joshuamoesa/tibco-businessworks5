@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="urn:GET_DYNAMICSTRUCTURE">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/EDTAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/00XX_SOAP-UnsupportedService.process</pd:name>
+    <pd:description>Attempt to invoke CustomerIncidentReportServices with a Managed
+Object Class and Extension that don't map onto an existing service.
+</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>91</pd:startX>
+    <pd:startY>60</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>391</pd:endX>
+    <pd:endY>58</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>232</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <timeout>%%EDTAdapter/Test/SOAP/Timeout%%</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>http://%%EDTAdapter/Test/SOAP/EndPoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:GenericMessage>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="&quot;GUID-UpsertCustomerIncidentReport&quot;"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="&quot;Managed Object Class&quot;"/>
+                        </ns:managed_object_class>
+                        <ns:managed_object_class_extension>
+                            <xsl:value-of select="&quot;Unsupported&quot;"/>
+                        </ns:managed_object_class_extension>
+                        <ns:managed_object_class_version>
+                            <xsl:value-of select="&quot;Managed_object_Class_Version&quot;"/>
+                        </ns:managed_object_class_version>
+                        <ns:message_origination_it_domain>
+                            <xsl:value-of select="&quot;Message_Origination_It_Domain&quot;"/>
+                        </ns:message_origination_it_domain>
+                        <ns:message_instance>
+                            <xsl:value-of select="&quot;Message_Instance&quot;"/>
+                        </ns:message_instance>
+                        <ns:message_creation_time>
+                            <xsl:value-of select="&quot;2005-05-04T10:00:00&quot;"/>
+                        </ns:message_creation_time>
+                        <ns:message_destination_it_domain>
+                            <xsl:value-of select="&quot;Message_Destionation_It_Domain&quot;"/>
+                        </ns:message_destination_it_domain>
+                    </ns:Header>
+                    <ns:General>
+                        <ns:trouble_report_identifier>
+                            <xsl:value-of select="&quot;Trouble_Report_Identifier&quot;"/>
+                        </ns:trouble_report_identifier>
+                        <ns:alarm_report_identifier>
+                            <xsl:value-of select="&quot;alarm_ri&quot;"/>
+                        </ns:alarm_report_identifier>
+                        <ns:event_time>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:event_time>
+                        <ns:sla_clearing_time>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:sla_clearing_time>
+                    </ns:General>
+                    <ns:Managed_Object_Info>
+                        <ns:mo_managed_object_backup>
+                            <xsl:value-of select="&quot;mo_managed_object_backup&quot;"/>
+                        </ns:mo_managed_object_backup>
+                        <ns:mo_managed_object_class>
+                            <xsl:value-of select="&quot;mo_managed_object_class&quot;"/>
+                        </ns:mo_managed_object_class>
+                        <ns:mo_managed_object_graphical_representation>
+                            <xsl:value-of select="&quot;mo_managed_object_graphical_representation&quot;"/>
+                        </ns:mo_managed_object_graphical_representation>
+                        <ns:mo_managed_object_instance>
+                            <xsl:value-of select="&quot;mo_managed_object_instance&quot;"/>
+                        </ns:mo_managed_object_instance>
+                        <ns:mo_mol_city>
+                            <xsl:value-of select="&quot;mo_mol_city&quot;"/>
+                        </ns:mo_mol_city>
+                        <ns:mo_mol_country>
+                            <xsl:value-of select="&quot;mo_mol_country&quot;"/>
+                        </ns:mo_mol_country>
+                        <ns:mo_mol_house_number>
+                            <xsl:value-of select="&quot;mo_mol_house_number&quot;"/>
+                        </ns:mo_mol_house_number>
+                        <ns:mo_mol_house_number_extension>
+                            <xsl:value-of select="&quot;mo_mol_house_number_extension&quot;"/>
+                        </ns:mo_mol_house_number_extension>
+                        <ns:mo_mol_location_code>
+                            <xsl:value-of select="&quot;mo_mol_location_code&quot;"/>
+                        </ns:mo_mol_location_code>
+                        <ns:mo_mol_street>
+                            <xsl:value-of select="&quot;mo_mol_street&quot;"/>
+                        </ns:mo_mol_street>
+                        <ns:mo_mol_zip_code>
+                            <xsl:value-of select="&quot;mo_mol_zip_code&quot;"/>
+                        </ns:mo_mol_zip_code>
+                        <ns:mo_network_class>
+                            <xsl:value-of select="&quot;mo_network_class&quot;"/>
+                        </ns:mo_network_class>
+                        <ns:mo_network_instance>
+                            <xsl:value-of select="&quot;mo_network_instance&quot;"/>
+                        </ns:mo_network_instance>
+                        <ns:mo_ssl_city>
+                            <xsl:value-of select="&quot;mo_ssl_city&quot;"/>
+                        </ns:mo_ssl_city>
+                        <ns:mo_ssl_country>
+                            <xsl:value-of select="&quot;mo_ssl_country&quot;"/>
+                        </ns:mo_ssl_country>
+                        <ns:mo_ssl_house_number>
+                            <xsl:value-of select="&quot;mo_ssl_house_number&quot;"/>
+                        </ns:mo_ssl_house_number>
+                        <ns:mo_ssl_house_number_extension>
+                            <xsl:value-of select="&quot;mo_ssl_house_number_extension&quot;"/>
+                        </ns:mo_ssl_house_number_extension>
+                        <ns:mo_ssl_location_code>
+                            <xsl:value-of select="&quot;mo_ssl_location_code&quot;"/>
+                        </ns:mo_ssl_location_code>
+                        <ns:mo_ssl_street>
+                            <xsl:value-of select="&quot;mo_ssl_street&quot;"/>
+                        </ns:mo_ssl_street>
+                        <ns:mo_ssl_zip_code>
+                            <xsl:value-of select="&quot;mo_ssl_zip_code&quot;"/>
+                        </ns:mo_ssl_zip_code>
+                        <ns:mo_supported_service_backup>
+                            <xsl:value-of select="&quot;mo_supported_service_backup&quot;"/>
+                        </ns:mo_supported_service_backup>
+                        <ns:mo_supported_service_class>
+                            <xsl:value-of select="&quot;mo_supported_service_class&quot;"/>
+                        </ns:mo_supported_service_class>
+                        <ns:mo_supported_service_graphical_representation>
+                            <xsl:value-of select="&quot;mo_supported_service_graphical_representation&quot;"/>
+                        </ns:mo_supported_service_graphical_representation>
+                        <ns:mo_supported_service_instance>
+                            <xsl:value-of select="&quot;mo_supported_service_instance&quot;"/>
+                        </ns:mo_supported_service_instance>
+                    </ns:Managed_Object_Info>
+                    <ns:Attachments>
+                        <ns:attachment_1_attachmentName>
+                            <xsl:value-of select="&quot;naam1&quot;"/>
+                        </ns:attachment_1_attachmentName>
+                        <ns:attachment_1_attachmentData>
+                            <xsl:value-of select="tib:string-to-base64(&quot;test1&quot;)"/>
+                        </ns:attachment_1_attachmentData>
+                        <ns:attachment_1_attachmentOrigSize>
+                            <xsl:value-of select="&quot;1234&quot;"/>
+                        </ns:attachment_1_attachmentOrigSize>
+                        <ns:attachment_2_attachmentName>
+                            <xsl:value-of select="&quot;naam2&quot;"/>
+                        </ns:attachment_2_attachmentName>
+                        <ns:attachment_2_attachmentData>
+                            <xsl:value-of select="tib:string-to-base64(&quot;test1&quot;)"/>
+                        </ns:attachment_2_attachmentData>
+                        <ns:attachment_2_attachmentOrigSize>
+                            <xsl:value-of select="&quot;333&quot;"/>
+                        </ns:attachment_2_attachmentOrigSize>
+                        <ns:attachment_3_attachmentName>
+                            <xsl:value-of select="&quot;naam3&quot;"/>
+                        </ns:attachment_3_attachmentName>
+                        <ns:attachment_3_attachmentData>
+                            <xsl:value-of select="tib:string-to-base64(&quot;test1&quot;)"/>
+                        </ns:attachment_3_attachmentData>
+                        <ns:attachment_3_attachmentOrigSize>
+                            <xsl:value-of select="&quot;445555555&quot;"/>
+                        </ns:attachment_3_attachmentOrigSize>
+                    </ns:Attachments>
+                </pfx:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:ns="http://tempuri.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:GetLineMeasurementUpdateRequest" xmlns:pfx3="urn:Customer_Service_Incident_Confirmation" xmlns:ns1="http://xmlns.tibco.com/encodings/mime" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/WSDL/ASTRID/GenericMessageRequest.wsdl" xmlns:ns2="Customer_Service_Incident_Confirmation">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/EDT/GenericMessageRequest.wsdl"/>
+    <wsdl:import namespace="urn:Customer_Service_Incident_Confirmation" location="/WSDL/EDTAdapter/Customer_Service_Incident_Confirmation.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JMSPublishers/0206_ProcessCustomerIncidentReportResponse_SOAP.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>66</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <service>pfx3:Customer_Service_Incident_ConfirmationPortType</service>
+            <operation>Create</operation>
+            <attachmentStyle>none</attachmentStyle>
+            <wsdlNamespaceRoot>urn:Customer_Service_Incident_Confirmation/CreateImpl</wsdlNamespaceRoot>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>urn:Customer_Service_Incident_Confirmation/Create</soapAction>
+            <sharedChannel>/EDTAdapter/Shared Resources/HTTP Server Connection.sharedhttp</sharedChannel>
+            <portAddressPrefix/>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>376</pd:endX>
+    <pd:endY>70</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>229</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx3:CreateResponse>
+                    <pfx3:GUID>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx3:Create/ns:Header/ns:GUID"/>
+                    </pfx3:GUID>
+                    <pfx3:error>
+                        <xsl:value-of select="&quot;0&quot;"/>
+                    </pfx3:error>
+                    <pfx3:error_message>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx3:error_message>
+                    <pfx3:error_status>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx3:error_status>
+                </pfx3:CreateResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPSendFault">
+        <pd:type>com.tibco.plugin.soap.SOAPSendFaultActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendFaultUI</pd:resourceType>
+        <pd:description>leg de pijl van deSOAPEventSource om naar deze om een foutsituatie te testen</pd:description>
+        <pd:x>232</pd:x>
+        <pd:y>186</pd:y>
+        <config>
+            <faultMessage>&lt;Default&gt;</faultMessage>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <defaultFaultElement>
+                <faultcode>
+                    <xsl:value-of select="&quot;666&quot;"/>
+                </faultcode>
+                <faultstring>
+                    <xsl:value-of select="&quot;666&quot;"/>
+                </faultstring>
+            </defaultFaultElement>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendFault</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>SOAPSendFault</pd:to>
+        <pd:xpathDescription> </pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

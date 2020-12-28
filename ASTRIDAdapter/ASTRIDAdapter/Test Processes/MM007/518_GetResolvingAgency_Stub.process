@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798170185" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802623578" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086798170185" schemaLocation="/XSDSchemas/EnginAdapter/Request/GetResolvingAgency.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802623578" schemaLocation="/XSDSchemas/EnginAdapter/Response/GetResolvingAgency.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/518_GetResolvingAgency_Stub.process</pd:name>
+    <pd:startName>GetResolvingAgency Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetResolvingAgency Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>94</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <xmlEncoding>true</xmlEncoding>
+            <subject>%%Env%%.FIXED.Order.EnginAdapter.Request.GetResolvingAgency.1</subject>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx:GetResolvingAgency"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>292</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetResolvingAgency Subscriber</eventSource>
+            <xsdString ref="pfx2:GetResolvingAgency"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:ID"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <xsl:if test="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:FID">
+                            <ns:FID>
+                                <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:FID"/>
+                            </ns:FID>
+                        </xsl:if>
+                        <xsl:if test="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:MID">
+                            <ns:MID>
+                                <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:MID"/>
+                            </ns:MID>
+                        </xsl:if>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:PARADIGM"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:OBJECT"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:VERSION"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <ns:TRACKING>
+                            <ns:MESSAGE_ID>
+                                <xsl:value-of select="&quot;GRA-stub_msgID&quot;"/>
+                            </ns:MESSAGE_ID>
+                            <xsl:for-each select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:ITEM">
+                                <ns:ITEM>
+                                    <xsl:attribute name="ns:APPINFO">
+                                        <xsl:value-of select="@ns:APPINFO"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:EVENT">
+                                        <xsl:value-of select="@ns:EVENT"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:TIMESTAMP">
+                                        <xsl:value-of select="@ns:TIMESTAMP"/>
+                                    </xsl:attribute>
+                                </ns:ITEM>
+                            </xsl:for-each>
+                            <xsl:for-each select="$GetResolvingAgency-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:SEQUENCE_NO">
+                                <ns:SEQUENCE_NO>
+                                    <xsl:value-of select="."/>
+                                </ns:SEQUENCE_NO>
+                            </xsl:for-each>
+                        </ns:TRACKING>
+                        <ns:ATTRIBUTE>
+                            <xsl:attribute name="ns:NAME">
+                                <xsl:value-of select="&quot;atrib_name&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:VALUE">
+                                <xsl:value-of select="&quot;attrib_value&quot;"/>
+                            </xsl:attribute>
+                        </ns:ATTRIBUTE>
+                    </ns:CMH>
+                    <RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;No Problem&quot;"/>
+                        </xsl:attribute>
+                    </RESULT_STATUS>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Reply to Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetResolvingAgency Subscriber</pd:from>
+        <pd:to>Reply to Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

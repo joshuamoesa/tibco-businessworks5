@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns="http://www.tibco.com/CLEver/Channel" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://xmlns.tibco.com/body" xmlns:pfx3="http://www.tibco.com/CLEver/Notification" xmlns:pfx2="http://www.tibco.com/CLEver/Policy" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:CLEver_Hawk="java://com.tibco.CLEver.Hawk.CLEver_Hawk">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Notification" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Notification.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schemas/Exception.xsd"/>
+    <pd:name>Processes/Channels/Hawk/Notification.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:NotificationFull"/>
+                    <xsd:element ref="pfx:Exception"/>
+                    <xsd:element ref="pfx2:PolicyFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>129</pd:startX>
+    <pd:startY>67</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>499</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1284385395334</pd:targetNamespace>
+    <pd:activity name="Send Hawk Notification">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>268</pd:x>
+        <pd:y>77</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="param" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <param>
+                    <xsl:value-of select="CLEver_Hawk:SendNotification($Start/root/pfx3:NotificationFull/ns1:Parameters/ns1:Parameter[ns1:Name='Subject']/ns1:Value, $Start/root/pfx3:NotificationFull/pfx3:Message)"/>
+                </param>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Hawk Notification</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Hawk Notification</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

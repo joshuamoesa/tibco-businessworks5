@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Processes/DataServices/RuleGeneration/General/XsltGeneration/Sub/XPathTestString.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="MatchString" type="xsd:string"/>
+                    <xsd:element name="XPathVariable" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>62</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <Test>
+                <xsl:value-of select="$Generate-test/root/test"/>
+            </Test>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Test" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1023</pd:endX>
+    <pd:endY>73</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <SubSelection>
+            <xsd:element name="SubSelection" type="xsd:string"/>
+        </SubSelection>
+    </pd:processVariables>
+    <pd:activity name="Split on wildcards">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>119</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="MatchStrings" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="String" type="xsd:string"/>
+                                        <xsd:element name="Length" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="tib:tokenize-allow-empty($Start/Input/MatchString, '*')">
+                    <MatchStrings>
+                        <String>
+                            <xsl:value-of select="."/>
+                        </String>
+                        <Length>
+                            <xsl:value-of select="string-length(.)"/>
+                        </Length>
+                    </MatchStrings>
+                </xsl:for-each>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Start and EndmatchStatements">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>246</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="MatchStatements" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Statement" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="Start" type="xsd:int" minOccurs="0"/>
+                            <xsd:element name="End" type="xsd:int" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:choose>
+                    <xsl:when test="$Start/Input/MatchString='*'"/>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test="contains($Start/Input/MatchString, '*')=false()">
+                                <MatchStatements>
+                                    <Statement>
+                                        <xsl:value-of select="concat($Start/Input/XPathVariable,&quot;='&quot;,$Split-on-wildcards/root/MatchStrings[1]/String,&quot;'&quot;)"/>
+                                    </Statement>
+                                </MatchStatements>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:for-each select="$Split-on-wildcards/root/MatchStrings">
+                                    <xsl:if test="string-length(current()/String)>0">
+                                        <xsl:choose>
+                                            <xsl:when test="position()=1">
+                                                <MatchStatements>
+                                                    <Statement>
+                                                        <xsl:value-of select="concat(&quot;starts-with(&quot;,$Start/Input/XPathVariable,&quot;,'&quot;, current()/String,&quot;')&quot;)"/>
+                                                    </Statement>
+                                                </MatchStatements>
+                                            </xsl:when>
+                                            <xsl:when test="position()=count($Split-on-wildcards/root/MatchStrings) and position()!=1">
+                                                <MatchStatements>
+                                                    <Statement>
+                                                        <xsl:value-of select="concat(&quot;substring(&quot;,$Start/Input/XPathVariable,&quot;,string-length(&quot;,$Start/Input/XPathVariable,&quot;)-(&quot;,current()/Length,&quot;-1),&quot;,current()/Length,&quot;)='&quot;,current()/String,&quot;'&quot;)"/>
+                                                    </Statement>
+                                                </MatchStatements>
+                                            </xsl:when>
+                                        </xsl:choose>
+                                    </xsl:if>
+                                </xsl:for-each>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <Start>
+                    <xsl:value-of select="$Split-on-wildcards/root/MatchStrings[position()=1]/Length"/>
+                </Start>
+                <End>
+                    <xsl:value-of select="$Split-on-wildcards/root/MatchStrings[count($Split-on-wildcards/root/MatchStrings)]/Length"/>
+                </End>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate test">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>895</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="test" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="string-length(tib:trim(tib:concat-sequence($CombineMatches/root/MatchStatements/Statement)))>0">
+                    <test>
+                        <xsl:value-of select="concat('(',tib:concat-sequence-format($CombineMatches/root/MatchStatements/Statement, ' and ', true()),')')"/>
+                    </test>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>422</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>268</pd:width>
+        <pd:height>125</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Split-on-wildcards/root/MatchStrings[position()!=count($Split-on-wildcards/root/MatchStrings) and position()!=1 and string-length(String)&gt;0]</pd:over>
+            <pd:iterationElementSlot>MiddleMatch</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:outSlot>MiddleMatchOutput</pd:outSlot>
+            <pd:activityOutputName>InBetweenmatchStatements</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>InBetweenmatchStatements</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InBetweenmatchStatements</pd:from>
+            <pd:to>Assign</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="InBetweenmatchStatements">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>505</pd:x>
+            <pd:y>72</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="MatchStatements" minOccurs="0">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="Statement" type="xsd:string"/>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <MatchStatements>
+                        <Statement>
+                            <xsl:value-of select="concat(&quot;contains(&quot;,$SubSelection/SubSelection,&quot;,'&quot;,$MiddleMatch/MatchStrings/String,&quot;')&quot;)"/>
+                        </Statement>
+                    </MatchStatements>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>618</pd:x>
+            <pd:y>70</pd:y>
+            <config>
+                <variableName>SubSelection</variableName>
+            </config>
+            <pd:inputBindings>
+                <SubSelection>
+                    <xsl:value-of select="concat(&quot;substring-after(&quot;,$SubSelection/SubSelection,&quot;,'&quot;, $MiddleMatch/MatchStrings/String,&quot;')&quot;)"/>
+                </SubSelection>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="InitSubSelection">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>367</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <variableName>SubSelection</variableName>
+        </config>
+        <pd:inputBindings>
+            <SubSelection>
+                <xsl:value-of select="concat(&quot;substring(&quot;,$Start/Input/XPathVariable,&quot;,&quot;,$Start-and-EndmatchStatements/root/Start,&quot;+1,string-length(&quot;,$Start/Input/XPathVariable,&quot;)-(&quot;,$Start-and-EndmatchStatements/root/Start,&quot;+&quot;,$Start-and-EndmatchStatements/root/End,&quot;))&quot;)"/>
+            </SubSelection>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CombineMatches">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>776</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="MatchStatements" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Statement" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$MiddleMatchOutput/AccumulatedOutput/root">
+                    <xsl:copy-of select="MatchStatements"/>
+                </xsl:for-each>
+                <xsl:copy-of select="$Start-and-EndmatchStatements/root/MatchStatements"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Split on wildcards</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Split on wildcards</pd:from>
+        <pd:to>Start and EndmatchStatements</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Generate test</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start and EndmatchStatements</pd:from>
+        <pd:to>InitSubSelection</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>CombineMatches</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitSubSelection</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CombineMatches</pd:from>
+        <pd:to>Generate test</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/ProductGroup_Generic.xsd" xmlns:ns3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx2="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" xmlns:pfx3="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx5="http://kpn.com/eai/generic/order" xmlns:pfx6="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pfx7="http://kpn.com/eai/generic/order/weak/wsdl" xmlns:pfx8="http://kpn.com/eai/generic/order/weak/wsdl/UpdateWeakOrderStatusImpl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx9="http://xmlns.example.com/1222077266384" xmlns:pfx10="http://xmlns.kpn.com/eai/common/errors" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx11="http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl">
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/UpdateOrderStatus.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/ProductGroup_Generic.xsd" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Product/ProductGroup_Generic.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Response/ValidateMessageResponse.xsd"/>
+    <xsd:import namespace="http://schemas.xmlsoap.org/soap/envelope/" schemaLocation="/WSDL/GenericOrderGateway/SOAP1.1.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Request/ValidateMessageRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/generic/order" schemaLocation="/WSDL/GenericOrderGateway/WeakOrder.wsdl"/>
+    <wsdl:import namespace="http://kpn.com/eai/generic/order/weak/wsdl/UpdateWeakOrderStatusImpl" location="/WSDL/GenericOrderGateway/UpdateWeakOrderStatus.wsdl"/>
+    <wsdl:import namespace="http://xmlns.example.com/1222077266384" location="/WSDL/WeakClient/WEAKresponse.wsdl"/>
+    <wsdl:import namespace="http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl" location="/WSDL/GenericOrderGateway/WeakOrder.wsdl"/>
+    <pd:name>GenericOrderGateway/Processes/Inbound/Sub/UpdateWeakOrderStatus.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:UpdateOrderStatus"/>
+    <pd:startX>73</pd:startX>
+    <pd:startY>134</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>686</pd:endX>
+    <pd:endY>134</pd:endY>
+    <pd:errorSchemas>
+        <errorSchema ref="pfx10:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Generate Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>245</pd:x>
+        <pd:y>281</pd:y>
+        <config>
+            <faultName>errorSchema</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_SOAPResponse)">
+                            <pfx10:Error>
+                                <pfx10:MsgCode>
+                                    <xsl:value-of select="&quot;GOG-03002&quot;"/>
+                                </pfx10:MsgCode>
+                                <pfx10:Params>
+                                    <xsl:value-of select="concat('error while sending WeakOrder Soap response to ', $_globalVariables/ns4:GlobalVariables/GenericOrderGateway/SOAP/Inbound/EndpointURL,$Map-CDM-to-Weak/pfx5:WeakOrderStatus)"/>
+                                </pfx10:Params>
+                                <pfx10:MsgId>
+                                    <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                </pfx10:MsgId>
+                                <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                <pfx10:ActivityError>
+                                    <xsl:copy-of select="$_error_SOAPResponse/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_SOAPResponse/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_SOAPResponse/ActivityErrors/node()"/>
+                                </pfx10:ActivityError>
+                            </pfx10:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx10:Error>
+                                <pfx10:MsgCode>
+                                    <xsl:value-of select="&quot;GOG-03003&quot;"/>
+                                </pfx10:MsgCode>
+                                <pfx10:Params>
+                                    <xsl:value-of select="&quot;General un-attributable error&quot;"/>
+                                </pfx10:Params>
+                                <pfx10:MsgId>
+                                    <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                </pfx10:MsgId>
+                                <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                            </pfx10:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </pfx4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Weak Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>392</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GOG-04004&quot;"/>
+                </MsgCode>
+                <xsl:if test="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                    <MsgId>
+                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                    </MsgId>
+                </xsl:if>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($Map-CDM-to-Weak/pfx5:WeakOrderStatus,false(),true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Weak Response Ack">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>608</pd:x>
+        <pd:y>56</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GOG-04005&quot;"/>
+                </MsgCode>
+                <xsl:if test="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                    <MsgId>
+                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                    </MsgId>
+                </xsl:if>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($SOAPResponse/outputMessage, false(), true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map CDM to Weak">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>242</pd:x>
+        <pd:y>134</pd:y>
+        <config>
+            <element ref="pfx5:WeakOrderStatus"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT" type="ns3:Product_Type"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx5:WeakOrderStatus>
+                <xsl:if test="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE">
+                    <pfx5:customerOrderId>
+                        <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                    </pfx5:customerOrderId>
+                </xsl:if>
+                <pfx5:supplierOrderId>
+                    <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_ID"/>
+                </pfx5:supplierOrderId>
+                <xsl:if test="string-length($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/DELIVERY_STATUS_CODE)!=0&#xA;or&#xA;string-length($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/DELIVERY_STATUS_DESCRIPTION)!=0&#xA;or&#xA;string-length($Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/DELIVERY_STATUS_ADDITIONAL_INFORMATION)!=0">
+                    <pfx5:error>
+                        <pfx5:code>
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/DELIVERY_STATUS_CODE"/>
+                        </pfx5:code>
+                        <xsl:for-each select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS/DELIVERY_STATUS_ADDITIONAL_INFORMATION">
+                            <pfx5:detail>
+                                <xsl:value-of select="."/>
+                            </pfx5:detail>
+                        </xsl:for-each>
+                        <pfx5:description>
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/DELIVERY_STATUS_DESCRIPTION"/>
+                        </pfx5:description>
+                    </pfx5:error>
+                </xsl:if>
+                <pfx5:status>
+                    <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_HEADER/ORDER_STATUS[1]/STATUS_DESCRIPTION"/>
+                </pfx5:status>
+                <pfx5:OrderParameters>
+                    <xsl:for-each select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ORDER_PARAMETERS/*">
+                        <pfx5:Parameter>
+                            <pfx5:Name>
+                                <xsl:value-of select="local-name(.)"/>
+                            </pfx5:Name>
+                            <pfx5:Value>
+                                <xsl:value-of select="."/>
+                            </pfx5:Value>
+                        </pfx5:Parameter>
+                    </xsl:for-each>
+                </pfx5:OrderParameters>
+                <pfx5:OrderItem>
+                    <pfx5:OrderItemParameters>
+                        <xsl:for-each select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/CUSTOM_ITEM_PARAMETERS/*">
+                            <pfx5:Parameter>
+                                <pfx5:Name>
+                                    <xsl:value-of select="local-name(.)"/>
+                                </pfx5:Name>
+                                <pfx5:Value>
+                                    <xsl:value-of select="."/>
+                                </pfx5:Value>
+                            </pfx5:Parameter>
+                        </xsl:for-each>
+                    </pfx5:OrderItemParameters>
+                    <pfx5:Product>
+                        <pfx5:Group>
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                        </pfx5:Group>
+                        <pfx5:Name>
+                            <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/GENERIC_ORDER_PRODUCT/PRODUCT_NAME"/>
+                        </pfx5:Name>
+                        <pfx5:Version>
+                            <xsl:value-of select="'1.0'"/>
+                        </pfx5:Version>
+                        <pfx5:Action>
+                            <pfx5:Name>
+                                <xsl:value-of select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM[1]/ORDER_ITEM_HEADER/ORDER_ITEM_ACTION"/>
+                            </pfx5:Name>
+                            <pfx5:Parameters>
+                                <xsl:for-each select="$Start/pfx:UpdateOrderStatus/ns:BODY/ORDER/ORDER_ITEM/PRODUCT/GENERIC_ORDER_PRODUCT/ACTION_PARAMETERS/*">
+                                    <pfx5:Parameter>
+                                        <pfx5:Name>
+                                            <xsl:value-of select="local-name(.)"/>
+                                        </pfx5:Name>
+                                        <pfx5:Value>
+                                            <xsl:value-of select="."/>
+                                        </pfx5:Value>
+                                    </pfx5:Parameter>
+                                </xsl:for-each>
+                            </pfx5:Parameters>
+                        </pfx5:Action>
+                    </pfx5:Product>
+                </pfx5:OrderItem>
+            </pfx5:WeakOrderStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPResponse">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>463</pd:x>
+        <pd:y>134</pd:y>
+        <config>
+            <timeout>%%GenericOrderGateway/SOAP/Inbound/TimeOut%%</timeout>
+            <service>pfx11:UpdateWeakOrderStatus</service>
+            <servicePort>SOAPEventSource</servicePort>
+            <operation>UpdateWeakOrderStatus</operation>
+            <soapAction>%%GenericOrderGateway/SOAP/Inbound/SoapAction%%</soapAction>
+            <endpointURL>%%GenericOrderGateway/SOAP/Inbound/EndpointURL%%</endpointURL>
+            <requireBasicAuth>true</requireBasicAuth>
+            <basicHttpAuthIdentity>/GenericOrderGateway/Shared Resources/HTTP identity.id</basicHttpAuthIdentity>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$Map-CDM-to-Weak/pfx5:WeakOrderStatus"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map CDM to Weak</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>NO TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map CDM to Weak</pd:from>
+        <pd:to>SOAPResponse</pd:to>
+        <pd:xpathDescription>NO TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map CDM to Weak</pd:from>
+        <pd:to>Generate Exception</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPResponse</pd:from>
+        <pd:to>Generate Exception</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map CDM to Weak</pd:from>
+        <pd:to>Log Weak Response</pd:to>
+        <pd:xpathDescription>TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GOG-04004")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Weak Response</pd:from>
+        <pd:to>SOAPResponse</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPResponse</pd:from>
+        <pd:to>Log Weak Response Ack</pd:to>
+        <pd:xpathDescription>TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GOG-04005")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Weak Response Ack</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

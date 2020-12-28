@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" xmlns:pfx2="http://xmlns.kpn.com/EAI/fixed/0074_GetCustomerPaymentDetails/1.0/Response" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd" xmlns:ns1="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetails.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/PMAdapter/common/PMResponse.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/PMAdapter/common/InvoiceSummary.xsd" xmlns:pfx3="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0074_GetCustomerPaymentDetails/1.0/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0074_GetCustomerPaymentDetails_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd" schemaLocation="/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetails.xsd" schemaLocation="/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetails.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0074.GetCustomerPaymentDetails.1.OutputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:BodyContainer"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <pfx3:BodyContainer>
+            <xsl:copy-of select="$Map-Data/pfx2:BODY"/>
+        </pfx3:BodyContainer>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:BodyContainer"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>294</pd:x>
+        <pd:y>68</pd:y>
+        <config>
+            <element ref="pfx2:BODY"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx:BodyContainer/*" element="ns1:GetCustomerPaymentDetails"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx2:BODY>
+                <BANK_ACCOUNT_NUMBER>
+                    <xsl:value-of select="$Start/pfx:BodyContainer/ns1:GetCustomerPaymentDetails/ns1:BANK_ACCOUNT_NUMBER"/>
+                </BANK_ACCOUNT_NUMBER>
+                <PAYMENT_ARRANGEMENT_DATE>
+                    <xsl:value-of select="$Start/pfx:BodyContainer/ns1:GetCustomerPaymentDetails/ns1:PAYMENT_ARRANGEMENT_DATE"/>
+                </PAYMENT_ARRANGEMENT_DATE>
+                <PHONE_DISCONNECT_FLAG>
+                    <xsl:value-of select="$Start/pfx:BodyContainer/ns1:GetCustomerPaymentDetails/ns1:PHONE_DISCONNECT_FLAG"/>
+                </PHONE_DISCONNECT_FLAG>
+                <TOTAL_AMOUNT>
+                    <xsl:value-of select="$Start/pfx:BodyContainer/ns1:GetCustomerPaymentDetails/ns1:TOTAL_AMOUNT"/>
+                </TOTAL_AMOUNT>
+                <xsl:for-each select="$Start/pfx:BodyContainer/ns1:GetCustomerPaymentDetails/ns1:INVOICESUMMARY">
+                    <INVOICESUMMARY>
+                        <xsl:if test="ns4:INVOICE_DATE">
+                            <INVOICE_DATE>
+                                <xsl:value-of select="ns4:INVOICE_DATE"/>
+                            </INVOICE_DATE>
+                        </xsl:if>
+                        <xsl:if test="ns4:INVOICE_DUE_DATE">
+                            <INVOICE_DUE_DATE>
+                                <xsl:value-of select="ns4:INVOICE_DUE_DATE"/>
+                            </INVOICE_DUE_DATE>
+                        </xsl:if>
+                        <INVOICE_TEXT_LINE>
+                            <xsl:value-of select="ns4:INVOICE_TEXT_LINE"/>
+                        </INVOICE_TEXT_LINE>
+                        <INVOICE_AMOUNT>
+                            <xsl:value-of select="ns4:INVOICE_AMOUNT"/>
+                        </INVOICE_AMOUNT>
+                        <INVOICE_BALANCE>
+                            <xsl:value-of select="ns4:INVOICE_BALANCE"/>
+                        </INVOICE_BALANCE>
+                        <xsl:if test="ns4:INVOICE_PAYMENT_DATE">
+                            <INVOICE_PAYMENT_DATE>
+                                <xsl:value-of select="ns4:INVOICE_PAYMENT_DATE"/>
+                            </INVOICE_PAYMENT_DATE>
+                        </xsl:if>
+                        <xsl:if test="ns4:INVOICE_PAYMENT_REVERSAL_DATE">
+                            <INVOICE_PAYMENT_REVERSAL_DATE>
+                                <xsl:value-of select="ns4:INVOICE_PAYMENT_REVERSAL_DATE"/>
+                            </INVOICE_PAYMENT_REVERSAL_DATE>
+                        </xsl:if>
+                        <xsl:if test="ns4:INVOICE_FIRST_REMINDER_DATE">
+                            <INVOICE_FIRST_REMINDER_DATE>
+                                <xsl:value-of select="ns4:INVOICE_FIRST_REMINDER_DATE"/>
+                            </INVOICE_FIRST_REMINDER_DATE>
+                        </xsl:if>
+                        <xsl:if test="ns4:INVOICE_SECOND_REMINDER_DATE">
+                            <INVOICE_SECOND_REMINDER_DATE>
+                                <xsl:value-of select="ns4:INVOICE_SECOND_REMINDER_DATE"/>
+                            </INVOICE_SECOND_REMINDER_DATE>
+                        </xsl:if>
+                    </INVOICESUMMARY>
+                </xsl:for-each>
+            </pfx2:BODY>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

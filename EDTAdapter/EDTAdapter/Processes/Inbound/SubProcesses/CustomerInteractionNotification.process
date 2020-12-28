@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:eai="java://com.kpn.eai.tools.Tools" xmlns:ns41="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:eai1="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1178705057468" xmlns:pfx5="http://xmlns.kpn.com/fixed/NIMAllIPAdapter/publish/NotifyNetworkResourceOrderStatus.xsd" xmlns:ns7="http://xmlns.kpn.com/fixed/WBAAdapter/Publish/NotifyNetworkResourceOrderStatus.xsd" xmlns:ns8="http://xmlns.kpn.com/EAI/fixed/0318_NotifyNetworkResourceOrderStatus/1.0/Request" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns9="http://xmlns.kpn.com/EAI/fixed/0318_NotifyNetworkResourceOrderStatus/1.0/Publish" xmlns:pfx6="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" xmlns:ns10="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Request/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Response/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/NIMAllIPAdapter/publish/NotifyNetworkResourceOrderStatus.xsd" schemaLocation="/XSDSchemas/NIMAllIPAdapter/Publish/NotifyNetworkResourceOrderStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/WBAAdapter/Publish/NotifyNetworkResourceOrderStatus.xsd" schemaLocation="/XSDSchemas/WBAAdapter/Publish/NotifyNetworkResourceOrderStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerInteractionNotification.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>EDTAdapter/Processes/Inbound/SubProcesses/CustomerInteractionNotification.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                    <xsd:element name="JMS" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Selector" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Expiration" type="xsd:long" minOccurs="0"/>
+                                <xsd:element name="Priority" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="CorrelationId" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupSeq" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="Trace" minOccurs="0">
+                                    <xsd:complexType>
+                                        <xsd:choice>
+                                            <xsd:element name="header" type="xsd:anyType"/>
+                                            <xsd:element name="full" type="xsd:anyType"/>
+                                        </xsd:choice>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>35</pd:startX>
+    <pd:startY>121</pd:startY>
+    <pd:returnBindings>
+        <ServiceOut>
+            <Body>
+                <ns5:TestRequestService>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="&quot;TestRequestService&quot;"/>
+                        </ns1:NAME>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="&quot;Dummy&quot;"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="&quot;TestComponent2&quot;"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="$Parse-XML/pfx3:TestRequestService/ns1:CMH/ns1:TO/@ns1:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                        <ns1:TRACKING>
+                            <ns1:MESSAGE_ID>
+                                <xsl:value-of select="$Parse-XML/pfx3:TestRequestService/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                            </ns1:MESSAGE_ID>
+                        </ns1:TRACKING>
+                    </ns1:CMH>
+                    <ns5:RESULT_STATUS>
+                        <xsl:attribute name="ns6:STATUS">
+                            <xsl:value-of select="0"/>
+                        </xsl:attribute>
+                    </ns5:RESULT_STATUS>
+                    <ns5:ORDER_HEADER_OUT>
+                        <ns5:DOC_TYPE>
+                            <xsl:value-of select="&quot;a&quot;"/>
+                        </ns5:DOC_TYPE>
+                        <ns5:SALES_ORG>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns5:SALES_ORG>
+                        <ns5:DISTR_CHAIN>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns5:DISTR_CHAIN>
+                        <ns5:DIVISION>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns5:DIVISION>
+                        <ns5:REQ_DATE_H>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns5:REQ_DATE_H>
+                    </ns5:ORDER_HEADER_OUT>
+                    <ns5:ELEMENT2>
+                        <xsl:value-of select="&quot;a&quot;"/>
+                    </ns5:ELEMENT2>
+                    <ns5:ELEMENT3>
+                        <xsl:value-of select="&quot;b&quot;"/>
+                    </ns5:ELEMENT3>
+                </ns5:TestRequestService>
+            </Body>
+        </ServiceOut>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>653</pd:endX>
+    <pd:endY>115</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse-XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>153</pd:x>
+        <pd:y>120</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx6:CustomerInteractionNotification"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>212</pd:x>
+        <pd:y>271</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <pfx2:Error>
+                        <pfx2:MsgCode>
+                            <xsl:value-of select="&quot;EAI-03010&quot;"/>
+                        </pfx2:MsgCode>
+                        <pfx2:ErrorReport>
+                            <xsl:copy-of select="$_error/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/@*"/>
+                            <xsl:copy-of select="$_error/node()"/>
+                        </pfx2:ErrorReport>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error_Parse-XML/ActivityErrors)">
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/node()"/>
+                                </pfx2:ActivityError>
+                            </xsl:when>
+                            <xsl:when test="exists($_error_MapMessage/pfx2:Error/pfx2:ActivityError)">
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_MapMessage/pfx2:Error/pfx2:ActivityError/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_MapMessage/pfx2:Error/pfx2:ActivityError/@*"/>
+                                    <xsl:copy-of select="$_error_MapMessage/pfx2:Error/pfx2:ActivityError/node()"/>
+                                </pfx2:ActivityError>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/@*"/>
+                                    <xsl:copy-of select="$_error/node()"/>
+                                </pfx2:ActivityError>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </pfx2:Error>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>237</pd:x>
+        <pd:y>40</pd:y>
+        <pd:width>312</pd:width>
+        <pd:height>141</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SelectProcess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapMessage</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SelectProcess</pd:from>
+            <pd:to>MapMessage</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="MapMessage">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>450</pd:x>
+            <pd:y>119</pd:y>
+            <config>
+                <processName>/EDTAdapter/Processes/Inbound/SubProcesses/Dummy.process</processName>
+                <processNameXPath>concat("EDTAdapter/Processes/Inbound/SubProcesses/",$SelectProcess/SELECTOR,".process")</processNameXPath>
+            </config>
+            <pd:inputBindings>
+                <pfx6:CustomerInteractionNotification>
+                    <xsl:copy-of select="$Parse-XML/pfx6:CustomerInteractionNotification/ns1:CMH"/>
+                    <xsl:copy-of select="$Parse-XML/pfx6:CustomerInteractionNotification/ns10:BODY"/>
+                </pfx6:CustomerInteractionNotification>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SelectProcess">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>336</pd:x>
+            <pd:y>119</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="SELECTOR" type="xsd:string"/>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <xsl:choose>
+                    <xsl:when test="($Parse-XML/pfx6:CustomerInteractionNotification/ns10:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE&#xA;=$_globalVariables/ns:GlobalVariables/EDTAdapter/CustomerInteractionNotifiaction/IncRepoReq) or&#xA;($Parse-XML/pfx6:CustomerInteractionNotification/ns10:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE&#xA;=$_globalVariables/ns:GlobalVariables/EDTAdapter/CustomerInteractionNotifiaction/ChangeReq) or&#xA;($Parse-XML/pfx6:CustomerInteractionNotification/ns10:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE&#xA;=$_globalVariables/ns:GlobalVariables/EDTAdapter/CustomerInteractionNotifiaction/ReqInfo) or&#xA;($Parse-XML/pfx6:CustomerInteractionNotification/ns10:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE&#xA;=$_globalVariables/ns:GlobalVariables/EDTAdapter/CustomerInteractionNotifiaction/ReqQuot)">
+                        <SELECTOR>
+                            <xsl:value-of select="&quot;CustomerServiceRequest&quot;"/>
+                        </SELECTOR>
+                    </xsl:when>
+                    <xsl:when test="$Parse-XML/pfx6:CustomerInteractionNotification/ns10:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE&#xA;=$_globalVariables/ns:GlobalVariables/EDTAdapter/CustomerInteractionNotifiaction/StatusConf">
+                        <SELECTOR>
+                            <xsl:value-of select="&quot;CustomerServiceReportStateAndStatusUpdateAcknowledgement&quot;"/>
+                        </SELECTOR>
+                    </xsl:when>
+                    <xsl:when test="$Parse-XML/pfx6:CustomerInteractionNotification/ns10:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE&#xA;=$_globalVariables/ns:GlobalVariables/EDTAdapter/CustomerInteractionNotifiaction/InterUpdate">
+                        <SELECTOR>
+                            <xsl:value-of select="&quot;CustomerServiceRequestUpdateNotification&quot;"/>
+                        </SELECTOR>
+                    </xsl:when>
+                    <xsl:when test="$Parse-XML/pfx6:CustomerInteractionNotification/ns10:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE&#xA;=$_globalVariables/ns:GlobalVariables/EDTAdapter/CustomerInteractionNotifiaction/Confirmation">
+                        <SELECTOR>
+                            <xsl:value-of select="&quot;ProactiveCustomerServiceRequestConfirmation&quot;"/>
+                        </SELECTOR>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <SELECTOR>
+                            <xsl:value-of select="&quot;Unknown&quot;"/>
+                        </SELECTOR>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse-XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse-XML</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse-XML</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

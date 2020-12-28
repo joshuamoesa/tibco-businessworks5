@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx2="urn:GET_DYNAMICSTRUCTURE" xmlns:pfx3="urn:Customer_Service_Incident_Report_4" xmlns:pfx4="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/EDTAdapter/GenericMessageRequest.wsdl"/>
+    <wsdl:import namespace="urn:Customer_Service_Incident_Report_4" location="/WSDL/EDTAdapter/Customer_Service_Incident_Report_4.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JMSSubscribers/0206_ProcessCustomerIncidentReportRequest_SOAP_OMS.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>91</pd:startX>
+    <pd:startY>60</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>391</pd:endX>
+    <pd:endY>61</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>229</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <timeout>%%EDTAdapter/Test/SOAP/Timeout%%</timeout>
+            <service>pfx3:Customer_Service_Incident_Report_4Service</service>
+            <servicePort>Customer_Service_Incident_Report_4Soap</servicePort>
+            <operation>Create</operation>
+            <soapAction>urn:Customer_Service_Incident_Report_4/Create</soapAction>
+            <endpointURL>%%EDTAdapter/Test/SOAP/EndPointPrefix%%Start_PublishProcessCustomerIncidentReportRequest</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx3:Create>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="&quot;0206_ProcessCustomerIncidentReport&quot;"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="&quot;Process Customer Incident Report MITS&quot;"/>
+                        </ns:managed_object_class>
+                        <ns:managed_object_class_extension>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </ns:managed_object_class_extension>
+                        <ns:managed_object_class_version>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </ns:managed_object_class_version>
+                        <ns:message_origination_it_domain>
+                            <xsl:value-of select="&quot;EDT&quot;"/>
+                        </ns:message_origination_it_domain>
+                        <ns:message_destination_it_domain>
+                            <xsl:value-of select="&quot;OMS&quot;"/>
+                        </ns:message_destination_it_domain>
+                        <ns:message_instance>
+                            <xsl:value-of select="&quot;Message_Instance&quot;"/>
+                        </ns:message_instance>
+                        <ns:message_creation_time xsi:nil="true"/>
+                    </ns:Header>
+                    <ns:General>
+                        <ns:customer_service_incident_report_identifier>
+                            <xsl:value-of select="&quot;customer_service_incident_report_identifier&quot;"/>
+                        </ns:customer_service_incident_report_identifier>
+                        <ns:customer_service_incident_report_initiation>
+                            <xsl:value-of select="&quot;customer_service_incident_report_initiation&quot;"/>
+                        </ns:customer_service_incident_report_initiation>
+                        <ns:customer_service_incident_reference_number>
+                            <xsl:value-of select="&quot;customer_service_incident_reference_number&quot;"/>
+                        </ns:customer_service_incident_reference_number>
+                        <ns:trouble_report_identifier>
+                            <xsl:value-of select="&quot;Trouble_Report_Identifier&quot;"/>
+                        </ns:trouble_report_identifier>
+                        <ns:perceived_trouble_severity>
+                            <xsl:value-of select="&quot;perceived_trouble_severity&quot;"/>
+                        </ns:perceived_trouble_severity>
+                        <ns:analysis_information>
+                            <xsl:value-of select="&quot;analysis_information&quot;"/>
+                        </ns:analysis_information>
+                        <ns:sla_clearing_time xsi:nil="true"/>
+                        <ns:incident_found>
+                            <xsl:value-of select="&quot;incident_found&quot;"/>
+                        </ns:incident_found>
+                        <ns:incident_report_state>
+                            <xsl:value-of select="&quot;incident_report_state&quot;"/>
+                        </ns:incident_report_state>
+                        <ns:trouble_type>
+                            <xsl:value-of select="&quot;trouble_type&quot;"/>
+                        </ns:trouble_type>
+                        <ns:trouble_description_short>
+                            <xsl:value-of select="&quot;trouble_description_short&quot;"/>
+                        </ns:trouble_description_short>
+                        <ns:trouble_description_long>
+                            <xsl:value-of select="&quot;trouble_description_long&quot;"/>
+                        </ns:trouble_description_long>
+                        <ns:trouble_detection_time>
+                            <xsl:value-of select="&quot;2006-06-06T06:06:06&quot;"/>
+                        </ns:trouble_detection_time>
+                        <ns:customer_organisation>
+                            <xsl:value-of select="&quot;customer_organisation&quot;"/>
+                        </ns:customer_organisation>
+                        <ns:manager_contact_person>
+                            <xsl:value-of select="&quot;manager_contact_person&quot;"/>
+                        </ns:manager_contact_person>
+                        <ns:co_identification>
+                            <xsl:value-of select="&quot;co_identification&quot;"/>
+                        </ns:co_identification>
+                        <ns:co_city>
+                            <xsl:value-of select="&quot;co_city&quot;"/>
+                        </ns:co_city>
+                        <ns:co_contact_person>
+                            <xsl:value-of select="&quot;co_contact_person&quot;"/>
+                        </ns:co_contact_person>
+                        <ns:co_contact_person_electronic_mail_address>
+                            <xsl:value-of select="&quot;co_contact_person_electronic_mail_address&quot;"/>
+                        </ns:co_contact_person_electronic_mail_address>
+                        <ns:co_contact_person_fax_number>
+                            <xsl:value-of select="&quot;co_contact_person_fax_number&quot;"/>
+                        </ns:co_contact_person_fax_number>
+                        <ns:co_contact_person_telephone_number>
+                            <xsl:value-of select="&quot;co_contact_person_telephone_number&quot;"/>
+                        </ns:co_contact_person_telephone_number>
+                        <ns:co_contact_person_contact_methode>
+                            <xsl:value-of select="&quot;co_contact_person_contact_methode&quot;"/>
+                        </ns:co_contact_person_contact_methode>
+                        <ns:co_country>
+                            <xsl:value-of select="&quot;co_country&quot;"/>
+                        </ns:co_country>
+                        <ns:co_house_number>
+                            <xsl:value-of select="&quot;co_country&quot;"/>
+                        </ns:co_house_number>
+                        <ns:co_house_number_extension>
+                            <xsl:value-of select="&quot;co_house_number_extension&quot;"/>
+                        </ns:co_house_number_extension>
+                        <ns:co_telephone_number>
+                            <xsl:value-of select="&quot;co_telephone_number&quot;"/>
+                        </ns:co_telephone_number>
+                        <ns:co_incident_reporter>
+                            <xsl:value-of select="&quot;co_incident_reporter&quot;"/>
+                        </ns:co_incident_reporter>
+                        <ns:co_incident_reporter_electronic_mail_address>
+                            <xsl:value-of select="&quot;co_incident_reporter_electronic_mail_address&quot;"/>
+                        </ns:co_incident_reporter_electronic_mail_address>
+                        <ns:co_incident_reporter_fax_number>
+                            <xsl:value-of select="&quot;co_incident_reporter_fax_number&quot;"/>
+                        </ns:co_incident_reporter_fax_number>
+                        <ns:co_incident_reporter_telephone_number>
+                            <xsl:value-of select="&quot;co_incident_reporter_telephone_number&quot;"/>
+                        </ns:co_incident_reporter_telephone_number>
+                        <ns:co_incident_reporter_contact_methode>
+                            <xsl:value-of select="&quot;co_incident_reporter_contact_methode&quot;"/>
+                        </ns:co_incident_reporter_contact_methode>
+                        <ns:co_street>
+                            <xsl:value-of select="&quot;co_street&quot;"/>
+                        </ns:co_street>
+                        <ns:co_zip_code>
+                            <xsl:value-of select="&quot;co_zip_code&quot;"/>
+                        </ns:co_zip_code>
+                        <ns:managed_object_instance>
+                            <xsl:value-of select="&quot;managed_object_instance&quot;"/>
+                        </ns:managed_object_instance>
+                        <ns:mo_supported_service_class>
+                            <xsl:value-of select="&quot;mo_supported_service_class&quot;"/>
+                        </ns:mo_supported_service_class>
+                        <ns:mo_supported_service_graphical_representation>
+                            <xsl:value-of select="&quot;mo_supported_service_graphical_representation&quot;"/>
+                        </ns:mo_supported_service_graphical_representation>
+                        <ns:mo_supported_service_instance>
+                            <xsl:value-of select="&quot;mo_supported_service_instance&quot;"/>
+                        </ns:mo_supported_service_instance>
+                        <ns:moit_managed_object_class>
+                            <xsl:value-of select="&quot;moit_managed_object_class&quot;"/>
+                        </ns:moit_managed_object_class>
+                        <ns:moit_managed_object_instance>
+                            <xsl:value-of select="&quot;moit_managed_object_instance&quot;"/>
+                        </ns:moit_managed_object_instance>
+                        <ns:moit_network_class>
+                            <xsl:value-of select="&quot;moit_network_class&quot;"/>
+                        </ns:moit_network_class>
+                        <ns:moit_network_instance>
+                            <xsl:value-of select="&quot;moit_network_instance&quot;"/>
+                        </ns:moit_network_instance>
+                        <ns:attachment_1_attachmentName>
+                            <xsl:value-of select="&quot;attachment_1_attachmentName&quot;"/>
+                        </ns:attachment_1_attachmentName>
+                        <ns:attachment_1_attachmentData>
+                            <xsl:value-of select="&quot;00h1&quot;"/>
+                        </ns:attachment_1_attachmentData>
+                        <ns:attachment_1_attachmentOrigSize>
+                            <xsl:value-of select="1"/>
+                        </ns:attachment_1_attachmentOrigSize>
+                        <ns:attachment_2_attachmentName>
+                            <xsl:value-of select="&quot;attachment_2_attachmentName&quot;"/>
+                        </ns:attachment_2_attachmentName>
+                        <ns:attachment_2_attachmentData>
+                            <xsl:value-of select="&quot;00g2&quot;"/>
+                        </ns:attachment_2_attachmentData>
+                        <ns:attachment_2_attachmentOrigSize>
+                            <xsl:value-of select="2"/>
+                        </ns:attachment_2_attachmentOrigSize>
+                        <ns:attachment_3_attachmentName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns:attachment_3_attachmentName>
+                        <ns:attachment_3_attachmentData>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns:attachment_3_attachmentData>
+                        <ns:attachment_3_attachmentOrigSize>
+                            <xsl:value-of select="0"/>
+                        </ns:attachment_3_attachmentOrigSize>
+                        <ns:manager_contact_person_electronic_mail_address>
+                            <xsl:value-of select="&quot;manager_contact_person_electronic_mail_address&quot;"/>
+                        </ns:manager_contact_person_electronic_mail_address>
+                        <ns:manager_contact_person_telephone_number>
+                            <xsl:value-of select="&quot;manager_contact_person_telephone_number&quot;"/>
+                        </ns:manager_contact_person_telephone_number>
+                        <ns:business_to_business_organization>
+                            <xsl:value-of select="&quot;business_to_business_organization&quot;"/>
+                        </ns:business_to_business_organization>
+                        <ns:manager_organisation>
+                            <xsl:value-of select="&quot;manager_organisation&quot;"/>
+                        </ns:manager_organisation>
+                        <ns:event_time>
+                            <xsl:value-of select="&quot;2006-06-06T06:06:06&quot;"/>
+                        </ns:event_time>
+                        <ns:manager_organisation_electronic_mail_address>
+                            <xsl:value-of select="&quot;manager_organisation_electronic_mail_address&quot;"/>
+                        </ns:manager_organisation_electronic_mail_address>
+                        <ns:manager_organisation_telephone_number>
+                            <xsl:value-of select="&quot;manager_organisation_telephone_number&quot;"/>
+                        </ns:manager_organisation_telephone_number>
+                        <ns:customer_reference_number>
+                            <xsl:value-of select="&quot;customer_reference_number&quot;"/>
+                        </ns:customer_reference_number>
+                    </ns:General>
+                    <ns:attributes>
+                        <ns:attribute>
+                            <ns:order>
+                                <xsl:value-of select="&quot;order1&quot;"/>
+                            </ns:order>
+                            <ns:label>
+                                <xsl:value-of select="&quot;label1&quot;"/>
+                            </ns:label>
+                            <ns:type>
+                                <xsl:value-of select="&quot;type1&quot;"/>
+                            </ns:type>
+                            <ns:value>
+                                <xsl:value-of select="&quot;value1&quot;"/>
+                            </ns:value>
+                        </ns:attribute>
+                        <ns:attribute>
+                            <ns:order>
+                                <xsl:value-of select="&quot;order2&quot;"/>
+                            </ns:order>
+                            <ns:label>
+                                <xsl:value-of select="&quot;label2&quot;"/>
+                            </ns:label>
+                            <ns:type>
+                                <xsl:value-of select="&quot;type2&quot;"/>
+                            </ns:type>
+                            <ns:value>
+                                <xsl:value-of select="&quot;value2&quot;"/>
+                            </ns:value>
+                        </ns:attribute>
+                    </ns:attributes>
+                    <ns:MOR0>
+                        <ns:MOR0>
+                            <ns:order>
+                                <xsl:value-of select="&quot;order1&quot;"/>
+                            </ns:order>
+                            <ns:in_trouble>
+                                <xsl:value-of select="&quot;in_trouble1&quot;"/>
+                            </ns:in_trouble>
+                            <ns:mo_managed_object_class>
+                                <xsl:value-of select="&quot;mo_managed_object_class1&quot;"/>
+                            </ns:mo_managed_object_class>
+                            <ns:mo_managed_object_instance>
+                                <xsl:value-of select="&quot;mo_managed_object_instance1&quot;"/>
+                            </ns:mo_managed_object_instance>
+                            <ns:mo_mol_city>
+                                <xsl:value-of select="&quot;mo_managed_object_instance1&quot;"/>
+                            </ns:mo_mol_city>
+                            <ns:mo_mol_country>
+                                <xsl:value-of select="&quot;mo_mol_country1&quot;"/>
+                            </ns:mo_mol_country>
+                            <ns:mo_mol_house_number>
+                                <xsl:value-of select="&quot;mo_mol_house_number1&quot;"/>
+                            </ns:mo_mol_house_number>
+                            <ns:mo_mol_house_number_extension>
+                                <xsl:value-of select="&quot;mo_mol_house_number_extension1&quot;"/>
+                            </ns:mo_mol_house_number_extension>
+                            <ns:mo_mol_location_code>
+                                <xsl:value-of select="&quot;mo_mol_location_code1&quot;"/>
+                            </ns:mo_mol_location_code>
+                            <ns:mo_mol_street>
+                                <xsl:value-of select="&quot;mo_mol_street1&quot;"/>
+                            </ns:mo_mol_street>
+                            <ns:mo_mol_zip_code>
+                                <xsl:value-of select="&quot;mo_mol_zip_code1&quot;"/>
+                            </ns:mo_mol_zip_code>
+                            <ns:mo_affected_type>
+                                <xsl:value-of select="&quot;mo_affected_type1&quot;"/>
+                            </ns:mo_affected_type>
+                            <ns:MOR1>
+                                <ns:MOR1>
+                                    <ns:order>
+                                        <xsl:value-of select="&quot;order1a&quot;"/>
+                                    </ns:order>
+                                    <ns:label>
+                                        <xsl:value-of select="&quot;label1a&quot;"/>
+                                    </ns:label>
+                                    <ns:type>
+                                        <xsl:value-of select="&quot;type1a&quot;"/>
+                                    </ns:type>
+                                    <ns:value>
+                                        <xsl:value-of select="&quot;value1a&quot;"/>
+                                    </ns:value>
+                                </ns:MOR1>
+                                <ns:MOR1>
+                                    <ns:order>
+                                        <xsl:value-of select="&quot;order1b&quot;"/>
+                                    </ns:order>
+                                    <ns:label>
+                                        <xsl:value-of select="&quot;label1b&quot;"/>
+                                    </ns:label>
+                                    <ns:type>
+                                        <xsl:value-of select="&quot;type1b&quot;"/>
+                                    </ns:type>
+                                    <ns:value>
+                                        <xsl:value-of select="&quot;value1b&quot;"/>
+                                    </ns:value>
+                                </ns:MOR1>
+                            </ns:MOR1>
+                        </ns:MOR0>
+                        <ns:MOR0>
+                            <ns:order>
+                                <xsl:value-of select="&quot;order2&quot;"/>
+                            </ns:order>
+                            <ns:in_trouble>
+                                <xsl:value-of select="&quot;in_trouble2&quot;"/>
+                            </ns:in_trouble>
+                            <ns:mo_managed_object_class>
+                                <xsl:value-of select="&quot;mo_managed_object_class2&quot;"/>
+                            </ns:mo_managed_object_class>
+                            <ns:mo_managed_object_instance>
+                                <xsl:value-of select="&quot;mo_managed_object_instance2&quot;"/>
+                            </ns:mo_managed_object_instance>
+                            <ns:mo_mol_city>
+                                <xsl:value-of select="&quot;mo_managed_object_instance2&quot;"/>
+                            </ns:mo_mol_city>
+                            <ns:mo_mol_country>
+                                <xsl:value-of select="&quot;mo_mol_country2&quot;"/>
+                            </ns:mo_mol_country>
+                            <ns:mo_mol_house_number>
+                                <xsl:value-of select="&quot;mo_mol_house_number2&quot;"/>
+                            </ns:mo_mol_house_number>
+                            <ns:mo_mol_house_number_extension>
+                                <xsl:value-of select="&quot;mo_mol_house_number_extension2&quot;"/>
+                            </ns:mo_mol_house_number_extension>
+                            <ns:mo_mol_location_code>
+                                <xsl:value-of select="&quot;mo_mol_location_code2&quot;"/>
+                            </ns:mo_mol_location_code>
+                            <ns:mo_mol_street>
+                                <xsl:value-of select="&quot;mo_mol_street2&quot;"/>
+                            </ns:mo_mol_street>
+                            <ns:mo_mol_zip_code>
+                                <xsl:value-of select="&quot;mo_mol_zip_code2&quot;"/>
+                            </ns:mo_mol_zip_code>
+                            <ns:mo_affected_type>
+                                <xsl:value-of select="&quot;mo_affected_type2&quot;"/>
+                            </ns:mo_affected_type>
+                            <ns:MOR1>
+                                <ns:MOR1>
+                                    <ns:order>
+                                        <xsl:value-of select="&quot;order2a&quot;"/>
+                                    </ns:order>
+                                    <ns:label>
+                                        <xsl:value-of select="&quot;label2a&quot;"/>
+                                    </ns:label>
+                                    <ns:type>
+                                        <xsl:value-of select="&quot;type2a&quot;"/>
+                                    </ns:type>
+                                    <ns:value>
+                                        <xsl:value-of select="&quot;value2a&quot;"/>
+                                    </ns:value>
+                                </ns:MOR1>
+                                <ns:MOR1>
+                                    <ns:order>
+                                        <xsl:value-of select="&quot;order2b&quot;"/>
+                                    </ns:order>
+                                    <ns:label>
+                                        <xsl:value-of select="&quot;label2b&quot;"/>
+                                    </ns:label>
+                                    <ns:type>
+                                        <xsl:value-of select="&quot;type2b&quot;"/>
+                                    </ns:type>
+                                    <ns:value>
+                                        <xsl:value-of select="&quot;value2b&quot;"/>
+                                    </ns:value>
+                                </ns:MOR1>
+                            </ns:MOR1>
+                        </ns:MOR0>
+                    </ns:MOR0>
+                </pfx3:Create>
+                <headers>
+                    <Header.parameters/>
+                </headers>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

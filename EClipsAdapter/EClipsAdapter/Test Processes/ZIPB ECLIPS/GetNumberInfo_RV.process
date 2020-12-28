@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/NumbesAdapter/Request/GetNumberInfoV2" xmlns:pfx2="http://xmlns.kpn.com/fixed/NumbesAdapter/Response/GetNumberInfoV2" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/NumbesAdapter/Request/GetNumberInfoV2" schemaLocation="/XSDSchemas/NumbesAdapter/Request/GetNumberInfoV2.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/NumbesAdapter/Response/GetNumberInfoV2" schemaLocation="/XSDSchemas/NumbesAdapter/Response/GetNumberInfoV2.xsd"/>
+    <pd:name>EClipsAdapter/Test Processes/ZIPB ECLIPS/GetNumberInfo_RV.process</pd:name>
+    <pd:startName>Rendezvous Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Rendezvous Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>87</pd:x>
+        <pd:y>112</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsRawRVObjectForOutput>false</wantsRawRVObjectForOutput>
+            <subject>%%Env%%.FIXED.Operations.NumbesAdapter.GetNumberInfo.2</subject>
+            <sharedChannel>/Common/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx:GetNumberInfoRequest"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>403</pd:endX>
+    <pd:endY>105</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>248</pd:x>
+        <pd:y>116</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>Rendezvous Subscriber</eventSource>
+            <xsdString ref="pfx2:GetNumberInfoResponse"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:ID"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="&quot;GetNumberInfo v2&quot;"/>
+                        </ns:NAME>
+                        <xsl:if test="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:FID">
+                            <ns:FID>
+                                <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:FID"/>
+                            </ns:FID>
+                        </xsl:if>
+                        <ns:MID>
+                            <xsl:value-of select="&quot;962.30&quot;"/>
+                        </ns:MID>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="&quot;Response&quot;"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="&quot;PhoneNumber&quot;"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="&quot;2.0&quot;"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_VERSION">
+                                <xsl:attribute name="ns:COMPONENT_VERSION">
+                                    <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_VERSION"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <ns:TRACKING>
+                            <ns:MESSAGE_ID>
+                                <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                            </ns:MESSAGE_ID>
+                            <xsl:if test="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:EXTERNAL_REF">
+                                <ns:EXTERNAL_REF>
+                                    <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:EXTERNAL_REF"/>
+                                </ns:EXTERNAL_REF>
+                            </xsl:if>
+                            <xsl:for-each select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:ITEM">
+                                <ns:ITEM>
+                                    <xsl:attribute name="ns:APPINFO">
+                                        <xsl:value-of select="@ns:APPINFO"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:EVENT">
+                                        <xsl:value-of select="@ns:EVENT"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:TIMESTAMP">
+                                        <xsl:value-of select="@ns:TIMESTAMP"/>
+                                    </xsl:attribute>
+                                </ns:ITEM>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:SEQUENCE_NO">
+                                <ns:SEQUENCE_NO>
+                                    <xsl:value-of select="."/>
+                                </ns:SEQUENCE_NO>
+                            </xsl:for-each>
+                        </ns:TRACKING>
+                        <xsl:copy-of select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH/ns:ATTRIBUTE"/>
+                    </ns:CMH>
+                    <pfx2:RESULTSTATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="0"/>
+                        </xsl:attribute>
+                    </pfx2:RESULTSTATUS>
+                    <pfx2:PHONE_NUMBER>
+                        <pfx2:AREA_CODE>
+                            <xsl:value-of select="&quot;V&quot;"/>
+                        </pfx2:AREA_CODE>
+                        <pfx2:BHS_FLAGS>
+                            <xsl:value-of select="&quot;TYH&quot;"/>
+                        </pfx2:BHS_FLAGS>
+                        <pfx2:IS_CVI>
+                            <xsl:value-of select="false()"/>
+                        </pfx2:IS_CVI>
+                        <pfx2:LRI>
+                            <xsl:value-of select="&quot;HGF&quot;"/>
+                        </pfx2:LRI>
+                        <pfx2:NUMBER_CATEGORY>
+                            <xsl:value-of select="&quot;JHG&quot;"/>
+                        </pfx2:NUMBER_CATEGORY>
+                        <pfx2:PREVIOUS_NETWORK_OPERATOR_ID>
+                            <xsl:value-of select="&quot;KLJ&quot;"/>
+                        </pfx2:PREVIOUS_NETWORK_OPERATOR_ID>
+                        <pfx2:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;TER&quot;"/>
+                        </pfx2:SERVICE_TYPE>
+                        <pfx2:PHONE_NUMBER>
+                            <xsl:value-of select="&quot;030-987654&quot;"/>
+                        </pfx2:PHONE_NUMBER>
+                        <pfx2:STATUS_DESCRIPTION>
+                            <xsl:value-of select="&quot;Status Desc&quot;"/>
+                        </pfx2:STATUS_DESCRIPTION>
+                        <pfx2:STATUS_EXCHANGE_NR_SERIE>
+                            <xsl:value-of select="&quot;123&quot;"/>
+                        </pfx2:STATUS_EXCHANGE_NR_SERIE>
+                        <pfx2:STATUS_NUMBER>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </pfx2:STATUS_NUMBER>
+                        <pfx2:CALL_NUMBER>
+                            <xsl:value-of select="&quot;123456&quot;"/>
+                        </pfx2:CALL_NUMBER>
+                        <pfx2:TYPE_OF_NUMBER>
+                            <xsl:value-of select="&quot;V&quot;"/>
+                        </pfx2:TYPE_OF_NUMBER>
+                        <pfx2:SNR1>
+                            <xsl:value-of select="&quot;DF&quot;"/>
+                        </pfx2:SNR1>
+                        <pfx2:ORIGINAL>
+                            <pfx2:CENTRAL_AREA_CODE>
+                                <xsl:value-of select="&quot;HGDN123&quot;"/>
+                            </pfx2:CENTRAL_AREA_CODE>
+                            <pfx2:HOST>
+                                <xsl:value-of select="&quot;LOCAL&quot;"/>
+                            </pfx2:HOST>
+                            <pfx2:NETWORK_OPERATOR_ID>
+                                <xsl:value-of select="&quot;76&quot;"/>
+                            </pfx2:NETWORK_OPERATOR_ID>
+                            <pfx2:SPC_ID_HOST>
+                                <xsl:value-of select="&quot;HMVG&quot;"/>
+                            </pfx2:SPC_ID_HOST>
+                            <pfx2:TELECOM_REGION_CODE>
+                                <xsl:value-of select="&quot;TF&quot;"/>
+                            </pfx2:TELECOM_REGION_CODE>
+                        </pfx2:ORIGINAL>
+                        <pfx2:CURRENT>
+                            <pfx2:CENTRAL_AREA_CODE>
+                                <xsl:value-of select="&quot;ABCD1234&quot;"/>
+                            </pfx2:CENTRAL_AREA_CODE>
+                            <pfx2:HOST>
+                                <xsl:value-of select="&quot;LOCAL&quot;"/>
+                            </pfx2:HOST>
+                            <pfx2:NETWORK_OPERATOR_ID>
+                                <xsl:value-of select="&quot;7645&quot;"/>
+                            </pfx2:NETWORK_OPERATOR_ID>
+                            <pfx2:SPC_ID_HOST>
+                                <xsl:value-of select="&quot;UYT&quot;"/>
+                            </pfx2:SPC_ID_HOST>
+                            <pfx2:TELECOM_DISTRICT_CODE>
+                                <xsl:value-of select="&quot;7653&quot;"/>
+                            </pfx2:TELECOM_DISTRICT_CODE>
+                            <pfx2:TELECOM_REGION_CODE>
+                                <xsl:value-of select="&quot;9874&quot;"/>
+                            </pfx2:TELECOM_REGION_CODE>
+                        </pfx2:CURRENT>
+                        <pfx2:ACTION_TYPE>
+                            <pfx2:TIME_AND_DATE>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx2:TIME_AND_DATE>
+                            <pfx2:ACTION_TYPE>
+                                <xsl:value-of select="&quot;A&quot;"/>
+                            </pfx2:ACTION_TYPE>
+                        </pfx2:ACTION_TYPE>
+                    </pfx2:PHONE_NUMBER>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Rendezvous Subscriber</pd:from>
+        <pd:to>Reply to Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

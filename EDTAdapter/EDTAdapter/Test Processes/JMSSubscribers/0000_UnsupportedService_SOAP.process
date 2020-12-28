@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GET_DYNAMICSTRUCTURE" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:GenericMessageRequest" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/WSDL/EDTAdapter/validationError.wsdl" xmlns:ns="http://tempuri.org">
+    <wsdl:import namespace="urn:GET_DYNAMICSTRUCTURE" location="/WSDL/EDTAdapter/getdynamicstructure.wsdl"/>
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/EDTAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JMSSubscribers/0000_UnsupportedService_SOAP.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>47</pd:startX>
+    <pd:startY>83</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>311</pd:endX>
+    <pd:endY>85</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>87</pd:y>
+        <config>
+            <timeout>%%EDTAdapter/Test/SOAP/Timeout%%</timeout>
+            <service>pfx2:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>http://%%EDTAdapter/Test/SOAP/EndPoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx2:GenericMessage>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="&quot;12345&quot;"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="&quot;RequestType&quot;"/>
+                        </ns:managed_object_class>
+                    </ns:Header>
+                </pfx2:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

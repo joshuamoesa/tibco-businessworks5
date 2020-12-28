@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema xmlns:co="http://java.sun.com/products/oss/xml/Common"
+	 xmlns:sa="http://java.sun.com/products/oss/xml/ServiceActivation"
+	 xmlns="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://java.sun.com/products/oss/xml/ServiceActivation"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<import namespace="http://java.sun.com/products/oss/xml/Common" schemaLocation="XmlCommonSchema.xsd"/>
+	<include schemaLocation="XmlServiceActivationSchema.xsd"/>
+	<element name="getServiceByKeyRequest">
+		<annotation>
+			<documentation>Return service from the service inventory</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="serviceKey" type="sa:ServiceKey"/>
+				<element name="attributeName" type="co:ArrayOfString" nillable="true" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="getServiceByKeyResponse">
+		<annotation>
+			<documentation> The value for the service is returned</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="serviceValue" type="sa:ServiceValue"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="getServiceByKeyException">
+		<annotation>
+			<documentation>exception returned if service could not be retrieved from inventory</documentation>
+		</annotation>
+		<complexType>
+			<choice>
+				<element name="illegalArgumentException" type="co:IllegalArgumentException"/>
+				<element name="objectNotFoundException" type="co:ObjectNotFoundException"/>
+				<element name="remoteException" type="co:RemoteException"/>
+			</choice>
+		</complexType>
+	</element>
+	<element name="getServiceQueryTypesRequest">
+		<annotation>
+			<documentation>The GetQueryTypesRequest will return a
+		string  list of available query types. Each one of the Query
+		Types can then be passed to the newQueryValue(factory) to
+		create a corresponding QueryValue instance.</documentation>
+		</annotation>
+		<complexType/>
+	</element>
+	<element name="getServiceQueryTypesResponse">
+		<annotation>
+			<documentation>The GetServiceQueryTypesResponse will contain the
+		list of available Query Types. Fully qualified names, based on the
+		 XML Schema namespace should be returned.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="queryType" type="co:ArrayOfString"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="getServiceQueryTypesException">
+		<annotation>
+			<documentation>The GetServiceQueryTypesException is returned if
+		an exception occurred.</documentation>
+		</annotation>
+		<complexType>
+			<choice>
+				<element name="remoteException" type="co:RemoteException"/>
+			</choice>
+		</complexType>
+	</element>
+
+	<!--==========OrderEventPropertyDescriptor==========-->
+	<complexType name="OrderEventPropertyDescriptor">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="co:EventPropertyDescriptor">
+				<sequence>
+					<element name="propertyNames" type="co:ArrayOfString"/>
+					<element name="propertyTypes" type="co:ArrayOfString"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ExtendedQueryValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="co:QueryValue">
+				<sequence>
+					<element name="sortBy" type="string" minOccurs="0"/>
+					<element name="sortAsc" type="string" minOccurs="0"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ExtendedQueryAllOrdersValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:ExtendedQueryValue"/>
+		</complexContent>
+	</complexType>
+	<complexType name="OrderQueryValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:ExtendedQueryValue"/>
+		</complexContent>
+	</complexType>
+	<complexType name="QueryOrdersFilterValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:OrderQueryValue">
+				<sequence>
+					<element name="orderId" type="string" minOccurs="0"/>
+					<element name="orderType" type="string" minOccurs="0"/>
+					<element name="orderState" type="string" minOccurs="0"/>
+					<element name="orderPriority" type="string" minOccurs="0"/>
+					<element name="orderClientId" type="string" minOccurs="0"/>
+					<element name="orderDescription" type="string" minOccurs="0"/>
+					<element name="orderPurchaseOrder" type="string" minOccurs="0"/>
+					<element name="orderDateFrom" type="string" minOccurs="0"/>
+					<element name="orderDateTo" type="string" minOccurs="0"/>
+					<element name="orderScheduledStartDateFrom" type="string" minOccurs="0"/>
+					<element name="orderScheduledStartDateTo" type="string" minOccurs="0"/>
+					<element name="orderActualStartDateFrom" type="string" minOccurs="0"/>
+					<element name="orderActualStartDateTo" type="string" minOccurs="0"/>
+					<element name="orderActualCompletionDateFrom" type="string" minOccurs="0"/>
+					<element name="orderActualCompletionDateTo" type="string" minOccurs="0"/>
+					<element name="serviceFailedOnly" type="string" minOccurs="0"/>
+					<element name="serviceSDCName" type="string" minOccurs="0"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ServiceQueryValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:ExtendedQueryValue"/>
+		</complexContent>
+	</complexType>
+	<complexType name="QueryServicesFilterValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:ServiceQueryValue">
+				<sequence>
+					<element name="state" type="string" minOccurs="0"/>
+					<element name="subscriberId" type="string" minOccurs="0"/>
+					<element name="serviceSDCName" type="string" minOccurs="0"/>
+					<element name="type" type="string" minOccurs="0"/>
+					<element name="id" type="string" minOccurs="0"/>
+					<element name="attribute1" type="string" minOccurs="0"/>
+					<element name="attribute2" type="string" minOccurs="0"/>
+					<element name="attribute3" type="string" minOccurs="0"/>
+					<element name="attribute4" type="string" minOccurs="0"/>
+					<element name="attribute5" type="string" minOccurs="0"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<element name="getOrderByKeyAllAttrRequest">
+		<annotation>
+			<documentation>Returns values for the order identified by
+the (unique) key. The value object returned will always have a
+type that is derived from OrderValue(polymorphism). All attributes are returned. </documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="orderKey" type="sa:OrderKey"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="getOrderByKeyAllAttrResponse">
+		<annotation>
+			<documentation> The value for the order is
+returned.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="orderValue" type="sa:OrderValue"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="getOrderByKeyAllAttrException">
+		<annotation>
+			<documentation>The following exceptions are returned if an
+error occurs.</documentation>
+		</annotation>
+		<complexType>
+			<choice>
+				<element name="illegalArgumentException" type="co:IllegalArgumentException"/>
+				<element name="objectNotFoundException" type="co:ObjectNotFoundException"/>
+				<element name="remoteException" type="co:RemoteException"/>
+			</choice>
+		</complexType>
+	</element>
+	<element name="makeQueryValueRequest">
+		<annotation>
+			<documentation>This request will return a new Order Query
+Value for usage in a client. This is added for completeness. It was actually left out of the spec
+because an XML client does not need to ask the server for an instance - it can build one based on 
+the schema. But everything else can be instantiated by the server so we'll add this. Also, default
+values can only be currently made by having the server instantiate the xml</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="queryType" type="string"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="makeQueryValueResponse">
+		<annotation>
+			<documentation>This returns the empty
+QueryValue</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="queryValue" type="co:QueryValue"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="makeQueryValueException">
+		<annotation>
+			<documentation>This is returned if an exception
+occurs.</documentation>
+		</annotation>
+		<complexType>
+			<choice>
+				<element name="illegalArgumentException" type="co:IllegalArgumentException"/>
+				<element name="remoteException" type="co:RemoteException"/>
+			</choice>
+		</complexType>
+	</element>
+
+	<!--================Querying for services==================-->
+	<element name="queryServicesRequest">
+		<annotation>
+			<documentation>The following request runs a (complex)
+query and returns the matching services. The howMany (from
+IteratorRequest) element is used to restrict the returning
+result set. If the result set exceeds the "howMany" value
+than consequent response messages are
+returned.</documentation>
+		</annotation>
+		<complexType>
+			<complexContent>
+				<extension base="co:IteratorRequest">
+					<sequence>
+						<element name="queryValue" type="co:QueryValue"/>
+						<element name="attributeNames" type="co:ArrayOfString" nillable="true" minOccurs="0"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="queryServicesResponse">
+		<annotation>
+			<documentation>The result set is a list (the amount in the
+list is determined by the howMany element from the
+QueryServicesRequest) of ServiceValues. The EndOfReply (from
+IteratorResponse) indicates whether there are any more result
+sets being returned. The Sequence number (from
+IteratorResponse) indicates the result set service i.e. since
+there can be a number of response messages generated and there
+is no mechanism to insure the responses are sent sequentially,
+there needs to be a method of serviceing the response messages
+that are returned.</documentation>
+		</annotation>
+		<complexType>
+			<complexContent>
+				<extension base="co:IteratorResponse">
+					<sequence>
+						<element name="serviceValue" type="sa:ArrayOfServiceValue" nillable="true" minOccurs="0"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="queryServicesException">
+		<annotation>
+			<documentation>The following exceptions are returned if an
+error occurs.</documentation>
+		</annotation>
+		<complexType>
+			<choice>
+				<element name="illegalArgumentException" type="co:IllegalArgumentException"/>
+				<element name="remoteException" type="co:RemoteException"/>
+			</choice>
+		</complexType>
+	</element>
+	<complexType name="ExtendedOrderValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:OrderValue">
+				<sequence>
+					<element name="actualStartDate" type="dateTime"  minOccurs="0"/>
+					<element name="scheduledStartDate" type="dateTime"  minOccurs="0"/>
+					<element name="testMode" type="boolean" minOccurs="0"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ExtendedCreateOrderValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:ExtendedOrderValue"/>
+		</complexContent>
+	</complexType>
+	<complexType name="ExtendedModifyOrderValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:ExtendedOrderValue"/>
+		</complexContent>
+	</complexType>
+	<complexType name="ExtendedCancelOrderValue">
+		<annotation>
+			<documentation/>
+		</annotation>
+		<complexContent>
+			<extension base="sa:ExtendedOrderValue"/>
+		</complexContent>
+	</complexType>
+</schema>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx5="http://xmlns.kpn.com/fixed/EpiphanyINAAdapter/Request/GetInboundOffers.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/EpiphanyINAAdapter/Response/GetInboundOffers.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Response/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Notify/TestNotificationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EpiphanyINAAdapter/Response/GetInboundOffers.xsd" schemaLocation="/XSDSchemas/EpiphanyINAAdapter/Response/GetInboundOffers.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EpiphanyINAAdapter/Request/GetInboundOffers.xsd" schemaLocation="/XSDSchemas/EpiphanyINAAdapter/Request/GetInboundOffers.xsd"/>
+    <pd:name>IKKAdapter/Test Processes/Unit Test/Stubs/server stub GetInboundOffers.process</pd:name>
+    <pd:startName>Receive RV Request</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive RV Request">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>74</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsRawRVObjectForOutput>false</wantsRawRVObjectForOutput>
+            <subject>%%Env%%.FIXED.Order.EpiphanyINAAdapter.Request.GetInboundOffers.1</subject>
+            <sharedChannel>/Common/Shared Resources/RVCMQ Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx5:GetInboundOffers"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>334</pd:endX>
+    <pd:endY>82</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>211</pd:x>
+        <pd:y>91</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>Receive RV Request</eventSource>
+            <xsdString ref="pfx6:GetInboundOffers"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="$Receive-RV-Request/ActivityOutput/body/ns1:CMH/ns1:ID"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="&quot;GetInboundOffers&quot;"/>
+                        </ns1:NAME>
+                        <ns1:FID>
+                            <xsl:value-of select="$Receive-RV-Request/ActivityOutput/body/ns1:CMH/ns1:FID"/>
+                        </ns1:FID>
+                        <ns1:MID>
+                            <xsl:value-of select="&quot;468.30&quot;"/>
+                        </ns1:MID>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="&quot;InboundOffers&quot;"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/IKKAdapter/InAAdapter/ComponentVersion"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="&quot;InAAdapter&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="&quot;IKKAdapter&quot;"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                    </ns1:CMH>
+                    <pfx6:RESULT_STATUS>
+                        <xsl:attribute name="ns5:STATUS">
+                            <xsl:value-of select="0"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns5:ERROR_DESCRIPTION">
+                            <xsl:value-of select="&quot;Error_Description&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns5:MSG_CODE">
+                            <xsl:value-of select="&quot;MSG_CODE&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns5:ERROR_CODE">
+                            <xsl:value-of select="&quot;ERROR_CODE&quot;"/>
+                        </xsl:attribute>
+                    </pfx6:RESULT_STATUS>
+                    <pfx6:OFFER>
+                        <pfx6:MARKETING_CAMPAIGN>
+                            <pfx6:ID>
+                                <xsl:value-of select="&quot;Marketing ID&quot;"/>
+                            </pfx6:ID>
+                        </pfx6:MARKETING_CAMPAIGN>
+                        <pfx6:PRODUCT_OFFERING>
+                            <pfx6:IMAGE_LOCATION>
+                                <xsl:value-of select="&quot;IMAGE_LOCATION&quot;"/>
+                            </pfx6:IMAGE_LOCATION>
+                            <pfx6:LAST_MODIFIED_DATE>
+                                <xsl:value-of select="&quot;LAST_MODIFIED_DATE&quot;"/>
+                            </pfx6:LAST_MODIFIED_DATE>
+                            <pfx6:PROMO_ITEM>
+                                <xsl:value-of select="&quot;PROMEO_ID&quot;"/>
+                            </pfx6:PROMO_ITEM>
+                            <pfx6:TYPE>
+                                <xsl:value-of select="&quot;TYPE&quot;"/>
+                            </pfx6:TYPE>
+                            <pfx6:TITLE>
+                                <xsl:value-of select="&quot;TITLE&quot;"/>
+                            </pfx6:TITLE>
+                            <pfx6:NAME>
+                                <xsl:value-of select="&quot;NAME&quot;"/>
+                            </pfx6:NAME>
+                            <pfx6:ID>
+                                <xsl:value-of select="&quot;ID&quot;"/>
+                            </pfx6:ID>
+                            <pfx6:SCORE>
+                                <xsl:value-of select="&quot;SCORE&quot;"/>
+                            </pfx6:SCORE>
+                            <pfx6:STATUS>
+                                <xsl:value-of select="&quot;STATUS&quot;"/>
+                            </pfx6:STATUS>
+                            <pfx6:BONUS>
+                                <pfx6:UNITS>
+                                    <xsl:value-of select="&quot;Points&quot;"/>
+                                </pfx6:UNITS>
+                                <pfx6:AMOUNT>
+                                    <xsl:value-of select="12"/>
+                                </pfx6:AMOUNT>
+                            </pfx6:BONUS>
+                            <pfx6:SALES_TEXT>
+                                <pfx6:NAME>
+                                    <xsl:value-of select="&quot;SalesText 1&quot;"/>
+                                </pfx6:NAME>
+                                <pfx6:VALUE>
+                                    <xsl:value-of select="&quot;Value 1&quot;"/>
+                                </pfx6:VALUE>
+                            </pfx6:SALES_TEXT>
+                            <pfx6:SALES_TEXT>
+                                <pfx6:NAME>
+                                    <xsl:value-of select="&quot;SalesText 2&quot;"/>
+                                </pfx6:NAME>
+                                <pfx6:VALUE>
+                                    <xsl:value-of select="&quot;Value 2&quot;"/>
+                                </pfx6:VALUE>
+                            </pfx6:SALES_TEXT>
+                        </pfx6:PRODUCT_OFFERING>
+                        <pfx6:RUNTIME_PARAMETER>
+                            <pfx6:SERVER_ID>
+                                <xsl:value-of select="&quot;ServerID&quot;"/>
+                            </pfx6:SERVER_ID>
+                        </pfx6:RUNTIME_PARAMETER>
+                    </pfx6:OFFER>
+                    <pfx6:RUNTIME_PARAMETER>
+                        <pfx6:NUMBER_OF_OFFERS>
+                            <xsl:value-of select="99"/>
+                        </pfx6:NUMBER_OF_OFFERS>
+                    </pfx6:RUNTIME_PARAMETER>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Reply to Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive RV Request</pd:from>
+        <pd:to>Reply to Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

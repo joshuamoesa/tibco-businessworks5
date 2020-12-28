@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/UCMAdapter/Request/AddAccountReference.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/CRMServices/Response/GetAccountHierarchy.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/UCMAdapter/Response/AddAccountReference.xsd" xmlns:pfx4="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0422_AddAccountReference/1.0/Response" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx5="http://xmlns.kpn.com/fixed/UCMAdapter/Request/GetAccountHierarchy.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/UCMAdapter/Response/GetAccountHierarchy.xsd" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx7="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Request/AddAccountReference.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Request/AddAccountReference.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Request/GetAccountHierarchy.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Request/GetAccountHierarchy.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Response/GetAccountHierarchy.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Response/GetAccountHierarchy.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/Sub_GetAccountHierarchy.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx5:GetAccountHierarchyRequest"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Parse-XML/pfx6:GetAccountHierarchyResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx6:GetAccountHierarchyResponse"/>
+    <pd:endX>514</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas>
+        <Schema0 ref="pfx4:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>264</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Requester.process</processName>
+        </config>
+        <pd:inputBindings>
+            <RequesterIn>
+                <Destination>
+                    <xsl:value-of select="$Start/pfx5:GetAccountHierarchyRequest/ns1:CMH/ns1:TO/@ns1:DESTINATION"/>
+                </Destination>
+                <Timeout>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/CRMServices/RV/Timeout"/>
+                </Timeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx5:GetAccountHierarchyRequest"/>
+                </Body>
+            </RequesterIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>385</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx6:GetAccountHierarchyResponse"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Call-Process/RequesterOut/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>274</pd:x>
+        <pd:y>244</pd:y>
+        <config>
+            <faultName>Schema0</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="$_error_Call-Process">
+                            <pfx4:Errors>
+                                <xsl:copy-of select="$_error_Call-Process/pfx4:Error"/>
+                            </pfx4:Errors>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx4:Errors>
+                                <pfx4:Error>
+                                    <pfx4:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                    </pfx4:MsgCode>
+                                    <pfx4:Params>
+                                        <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                                    </pfx4:Params>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                                </pfx4:Error>
+                            </pfx4:Errors>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

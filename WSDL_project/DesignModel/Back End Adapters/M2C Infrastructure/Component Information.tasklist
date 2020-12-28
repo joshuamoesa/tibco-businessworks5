@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Repository:repository xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002">
+    <tasklist>
+        <designer>
+            <lockedProperties>
+                <locked>
+                    <properties>actualStartDate,plannedCompletionDate,actualWorkTimeHours,actualCompletionDate,plannedStartDate,progress,completed,plannedWorkTimeHours</properties>
+                </locked>
+            </lockedProperties>
+            <resourceDescriptions>
+                <node>
+                    <description>Type	Value
+Version	2.0.0
+Last Update	21-06-2007</description>
+                </node>
+            </resourceDescriptions>
+            <fixedChildren/>
+        </designer>
+        <subject>Component Information</subject>
+        <description>Type	Value
+Version	2.0.0
+Last Update	21-06-2007</description>
+        <tasklist>
+            <subject>Introduction</subject>
+            <task>
+                <progress>0</progress>
+                <milestone>true</milestone>
+                <name>Task</name>
+                <subject>Overview</subject>
+                <description>The Exception Handling Framework needs to be flexible enough to allow different modes of operation. 
+One would be the mode where the Business Process needs to log an exception and immediately 
+continue versus another where the process stops until the exception has been dealt with. 
+It is also desirable that the framework is able to continue to function in circumstances 
+where the Exception Handler desktop is temporarily unavailable. This should not lead to message 
+loss or 'lost' processes. This architecture is illustrated below.&lt;p&gt;
+
+Because two types of errors are distinguished there are two equivalent services that deal 
+with the two errors. In the case of an exception the HandleException service should be invoked. 
+In the case of a Notification the HandleNotification should be invoked. </description>
+                <associatedResource isRef="true">/DesignModel/Back End Adapters/M2C Infrastructure/EH Architecture.jpg</associatedResource>
+            </task>
+            <task>
+                <progress>0</progress>
+                <milestone>true</milestone>
+                <name>Task (1)</name>
+                <subject>Error Trapping</subject>
+                <description>Errors will be recognised by the individual Process Services.
+The Process Service is responsible for sending the error to the Exception Handler. 
+To do so it determines which type of error occurred. Two types of errors should be distinguished:
+&lt;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Exception; errors of this type will block the future execution of the Process Service. 
+The Process Service will remain in a error state until the Exception Handler solves the exception.
+&lt;li&gt;Notification; errors of this type are not blocking the execution of the Process Service. 
+It is 'just' a notification to the operator that a particular error was encountered. 
+The Process Service itself contains logic how to continue its path. 
+Any action from the operator is not required but the error is now registered. 
+&lt;/ul&gt;
+In both cases the Exception Handler is invoked by the Process Service. 
+The Exception Handler will pick up the exception from the RV bus and store the exception in the database. 
+Once the exception is stored in the database we consider this as a task. 
+A new task will be addressed to an operator. 
+&lt;p&gt;
+Exceptions send to the Exception Handler can be automatically completed. 
+In terms of tasks the Exception Handler service will either create an automated- or manual task. 
+The database will store both automatic and manual tasks.</description>
+            </task>
+            <task>
+                <progress>0</progress>
+                <milestone>true</milestone>
+                <name>Task (2)</name>
+                <subject>Functional Description</subject>
+                <description>&lt;ol&gt;
+&lt;li&gt;The main Process Service encounters an error condition. 
+A sub process (HandleException or HandleNotification) is called that 
+packages up the relevant information and sends it as a message to the 
+Exception Handler. The Business Process can optionally wait for a reply 
+which will mean the process instance is paged out allowing other 
+processes to continue in the same BusinessWorks engine.
+&lt;li&gt;The exception handler receives the exception message and unpacks the data. 
+Based on the data the exception handler determines which role should be assigned 
+to this exception and if any auto complete action can be executed. It then 
+stores the exception into the database with the retrieved role name (or any 
+default role if no role could be determined) and the optional auto complete action.
+&lt;li&gt;Using the exception handler desktop interface an administrator acquires 
+and works on the exception then completes it. 
+This returns control to the exception handler process. 
+&lt;li&gt;In case of an Exception and not a Notification. The return message is 
+sent back to the Process Service using a unique key ensuring that the 
+correct instance of the Business Process receives the message. The Process 
+Service unpacks the return message and proceeds in the relevant manner.
+&lt;/ol&gt;</description>
+            </task>
+            <task>
+                <progress>0</progress>
+                <milestone>true</milestone>
+                <name>Task (3)</name>
+                <subject>Process Data Requirements</subject>
+                <description>The data passed from the normal Process Service to the exception handler should include:
+&lt;ul&gt;
+&lt;li&gt;Timestamp of exception
+&lt;li&gt;Unique Identifier of request
+&lt;li&gt;Service group identifier (e.g. Hi-Site, I-mode etc)
+&lt;li&gt;Operation designator (BT)
+&lt;li&gt;Service Step (for example LT)
+&lt;li&gt;Exception description message
+&lt;li&gt;Exception Detail
+&lt;li&gt;Process Identifier for cross reference with process views in TIBCO Administrator
+&lt;li&gt;Process data describing the current state of the process instance
+&lt;li&gt;Exception Type - Business/Technical
+&lt;li&gt;Reply Subject
+&lt;li&gt;Recovery Options
+&lt;li&gt;Priority
+&lt;li&gt;MSISDN
+&lt;/ul&gt;</description>
+            </task>
+            <task>
+                <progress>0</progress>
+                <milestone>true</milestone>
+                <name>Task (4)</name>
+                <subject>Error Recovery</subject>
+                <description>In recovering from an error an operator would first acquire a task/exception 
+through the Exception Handler Desktop to signify that it is being worked on 
+and prevent other users also trying to do the same. Competing the task indicates 
+that the exception has been resolved and that the running Process Service 
+can continue with automatic processing. 
+&lt;p&gt;
+Variables associated with the task will be returned to the Process Service 
+from the Exception Handler to indicate how the Process Service should deal 
+with the exception. One required indicator would be a 
+RECOVERY ACTION (ABANDON, RETRY, CONTINUE or RESTART) indicator that needs 
+to be processed by the Process Service and the appropriate action taken.
+&lt;p&gt;
+Recovery action could be defined as the actions send back to the process 
+service, which defines how the process service should continue his error state. 
+Depending on the recovery action the result will be:
+&lt;ul&gt;
+&lt;li&gt;ABANDON - end the process;
+&lt;li&gt;CONTINUE - continue the process for the next task;
+&lt;li&gt;RETRY - attempt to repeat the task that generated the exception;
+&lt;li&gt;RESTART - restart the service which throws the exception to the ExceptionHandler.
+&lt;/ul&gt;
+Which recovery actions are valid are specified by the process service 
+which threw the exception. This is decided during functional specification stage. 
+&lt;p&gt;
+Before the operator selects a recovery action it should first solve the reason 
+of the exception or accept that this is done separately during the continuous execution of the service. </description>
+            </task>
+        </tasklist>
+        <owner>Status: CA</owner>
+        <task>
+            <progress>0</progress>
+            <milestone>true</milestone>
+            <name>Task</name>
+            <subject>Change History</subject>
+            <description>VERSION	DATE	DESCRIPTION	AUTHOR
+0.0.1	24-06-2004	Initial Draft	Ian Kershaw
+0.0.2	25-06-2004	Amended with comments from Hans Martens	Ian Kershaw
+0.0.3	28-09-2005	Updated document based on implementation findings and redesign from Tibco BusinessWorks Workflow to Oracle Application as the 'backend server'.	Michiel van Dijk
+0.0.4	07-10-2005	Updated after walkthrough with Rick Lakerveld.	Michiel van Dijk
+0.0.5	13-10-2005	Updated after feedback from Marco van der Kolk (TAB)	Michiel van Dijk
+0.0.6	19-10-2005	Updated figure 2 and 3, because of small detail.
+		Two requirements are added after feedback from Nico de Hoog (KPN TRCM):
+		Multiple Exception Handlers should run on the same system;
+		Different versions of the Exception Handlers should run on the same system;
+		It is required that each test environment has its own dedicated Exception Handler	Michiel van Dijk
+0.0.7	16-11-2005	Small textual updates during Technical Design and implementation	Michiel van Dijk
+0.0.8	16-12-2005	Updated based on feedback from Chris Konert and Jan Wildschut both from AO M2C Test. Feedback is based on the beta release of the ExceptionHandler.	Michiel van Dijk
+0.1.0	16-12-2005	Project Approved (PaHi)	Yvan de Winne
+0.1.1	05-01-2006	Updated with CA review comments from Remco Schellekens and small corrections.
+		Paragraph 4.3 point 4 and 5;
+		Paragraph 5.2.2, the RECOVERY_OPTION "ACK" is explained;
+		Paragraph 5.3.2 step "Publish Reply Message to MessageMonitor" added;
+		Appendix A is deleted because RFC 100 is initialized and therefore the possibilities are already described in the Impact Analyse.	Michiel van Dijk
+0.2.0	13-01-2006	Project Approved	PeAu
+1.0.0	18-01-2006	Client Approved	PaHi</description>
+        </task>
+        <task>
+            <progress>0</progress>
+            <milestone>true</milestone>
+            <name>Task (2)</name>
+            <subject>Related Documents</subject>
+            <description>Ref.	Document
+[1]	WP-11 EAI Architecture Definition v0.8
+[2]	WP-14 Mobi2Connect Software Requirements v0.2
+[3]	Service interaction &amp; exception handling clarification
+[4]	M2C_0144_FD_ExceptionHandling_v1.0.0</description>
+        </task>
+        <task>
+            <progress>0</progress>
+            <milestone>true</milestone>
+            <name>Task (3)</name>
+            <subject>Component Service List</subject>
+            <description>Service Name    	Version	Status	Last updated
+HandleException	?	CA	18-01-2006
+HandleNotification	?	CA	18-01-2006</description>
+        </task>
+    </tasklist>
+</Repository:repository>

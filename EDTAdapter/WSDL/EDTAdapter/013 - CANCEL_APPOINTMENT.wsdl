@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:CANCEL_APPOINTMENT" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:CANCEL_APPOINTMENT">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:CANCEL_APPOINTMENT">
+            <xsd:element name="CancelAppointment" type="s:KSD_CancelAppointment"/>
+            <xsd:complexType name="KSD_CancelAppointment">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="researchDepartmentCode" type="xsd:string"/>
+                    <xsd:element name="researchEmployeeCode" type="xsd:string"/><!-- EAI00001243 form date to string -->
+                    <xsd:element name="appointmentDate" type="xsd:string"/><!-- EAI00001243 form time to string -->
+                    <xsd:element name="visitWindowStartTime" type="xsd:string"/><!-- EAI00001243 form time to string -->
+                    <xsd:element name="visitWindowEndTime" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="CancelAppointmentResponse" type="s:KSD_Appointment"/>
+            <xsd:complexType name="KSD_Appointment">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="status" type="xsd:integer"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="CancelAppointmentRequestMsg">
+        <part name="parameters" element="s:CancelAppointment"/>
+    </message>
+    <message name="CancelAppointmentResponseMsg">
+        <part name="parameters" element="s:CancelAppointmentResponse"/>
+    </message>
+    <portType name="CANCEL_APPOINTMENTPortType">
+        <operation name="CancelAppointment">
+            <input message="s:CancelAppointmentRequestMsg"/>
+            <output message="s:CancelAppointmentResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="CANCEL_APPOINTMENTSoapBinding" type="s:CANCEL_APPOINTMENTPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="CancelAppointment">
+            <soap:operation soapAction="urn:CANCEL_APPOINTMENT/CancelAppointment" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="CANCEL_APPOINTMENT_SERVICE">
+        <port name="CANCEL_APPOINTMENTSoap" binding="s:CANCEL_APPOINTMENTSoapBinding">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/CancelAppointment"/>
+        </port>
+    </service>
+</definitions>

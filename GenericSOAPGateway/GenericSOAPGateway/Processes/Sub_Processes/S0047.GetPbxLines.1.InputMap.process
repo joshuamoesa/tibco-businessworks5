@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0001_FindCustomer/2.2/Request" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1113220090281" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0047_GetPbxLines/1.0/Request" xmlns:ns7="http://xmlns.kpn.com/fixed/common/PhoneNumber.xsd" xmlns:pfx5="http://xmlns.example.com/unique/default/namespace/1113219960156" xmlns:pfx6="http://xmlns.example.com/unique/default/namespace/1113219709984" xmlns:pfx7="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:pfx8="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1113220090281" schemaLocation="/XSDSchemas/KanvasContractAdapter/Request/GetPbxLines.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0047_GetPbxLines/1.0/Request" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0047_GetPbxLines_1.0_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0047.GetPbxLines.1.InputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx7:Input"/>
+    <pd:startX>157</pd:startX>
+    <pd:startY>164</pd:startY>
+    <pd:returnBindings>
+        <pfx8:Output>
+            <pfx8:Destination>
+                <xsl:value-of select="$Map-Data/pfx4:GetPbxLines/ns2:CMH/ns2:TO/@ns2:DESTINATION"/>
+            </pfx8:Destination>
+            <pfx8:BodyContainer>
+                <xsl:copy-of select="$Map-Data/pfx4:GetPbxLines"/>
+            </pfx8:BodyContainer>
+        </pfx8:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx8:Output"/>
+    <pd:endX>517</pd:endX>
+    <pd:endY>168</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>322</pd:x>
+        <pd:y>168</pd:y>
+        <config>
+            <element ref="pfx4:GetPbxLines"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx7:Input/pfx7:BodyContainer/*" element="ns6:BODY"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx4:GetPbxLines>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="&quot;662&quot;"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="&quot;GetPbxLines&quot;"/>
+                    </ns2:NAME>
+                    <ns2:FID>
+                        <xsl:value-of select="concat($Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/PHONE_NUMBER/AREA_CODE,&quot;|&quot;, $Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/PHONE_NUMBER/CALL_NUMBER)"/>
+                    </ns2:FID>
+                    <ns2:MID>
+                        <xsl:value-of select="&quot;662.10&quot;"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="&quot;CO_GetPbxLines&quot;"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.Operations.KanvasRouter.Request.GetPbxLines.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:TrackingId"/>
+                        </ns2:MESSAGE_ID>
+                    </ns2:TRACKING>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;originatingApplicationID&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:ApplicationId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;districtCode&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/Kanvas/districtCode"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;endUserName&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:UserId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                </ns2:CMH>
+                <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/CURRENT_FUTURE_FLAG">
+                    <pfx4:CURRENT_OR_FUTURE_FLAG>
+                        <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/CURRENT_FUTURE_FLAG"/>
+                    </pfx4:CURRENT_OR_FUTURE_FLAG>
+                </xsl:if>
+                <pfx4:PHONE_NUMBER>
+                    <ns7:AREA_CODE>
+                        <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/PHONE_NUMBER/AREA_CODE"/>
+                    </ns7:AREA_CODE>
+                    <ns7:CALL_NUMBER>
+                        <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/PHONE_NUMBER/CALL_NUMBER"/>
+                    </ns7:CALL_NUMBER>
+                </pfx4:PHONE_NUMBER>
+                <pfx4:PBX>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/PBX/GROUP_NUMBER_OFFSET">
+                        <pfx5:GROUP_NUMBER_OFFSET>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/PBX/GROUP_NUMBER_OFFSET"/>
+                        </pfx5:GROUP_NUMBER_OFFSET>
+                    </xsl:if>
+                </pfx4:PBX>
+                <pfx4:LINE>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/LINE/NUMBER_OFFSET">
+                        <pfx6:NUMBER_OFFSET>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns6:BODY/LINE/NUMBER_OFFSET"/>
+                        </pfx6:NUMBER_OFFSET>
+                    </xsl:if>
+                </pfx4:LINE>
+            </pfx4:GetPbxLines>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Load Build xsd into the Mapper</pd:description>
+        <pd:x>315</pd:x>
+        <pd:y>103</pd:y>
+        <pd:width>128</pd:width>
+        <pd:height>38</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

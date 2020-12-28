@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/CRMServices/Publish/UpsertAccountWithReferencing.xsd" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0420_UpsertAccountWithReferencing/1.0/Publish" xmlns:ns1X="http://xmlns.kpn.com/common/cdm/Base.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/CRMServices/Publish/UpsertAccountWithReferencing.xsd" schemaLocation="/XSDSchemas/CRMServices/Publish/UpsertAccountWithReferencing.xsd"/>
+    <pd:name>CRMServices/Test Processes/UpsertAccountwithReferences/Driver_FullyFilled Empty Body.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Render XML">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>362</pd:x>
+        <pd:y>361</pd:y>
+        <config>
+            <renderAsText>text</renderAsText>
+            <validateInput>true</validateInput>
+            <term ref="pfx:UpsertAccountWithReferencingPublish"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:UpsertAccountWithReferencingPublish>
+                <ns1X:CMH>
+                    <ns1X:ID>ID</ns1X:ID>
+                    <ns1X:NAME>NAME</ns1X:NAME>
+                    <ns1X:FID>FID</ns1X:FID>
+                    <ns1X:MID>MID</ns1X:MID>
+                    <ns1X:PARADIGM>PARADIGM</ns1X:PARADIGM>
+                    <ns1X:OBJECT>OBJECT</ns1X:OBJECT>
+                    <ns1X:VERSION>VERSION</ns1X:VERSION>
+                    <ns1X:FROM ns1X:COMPONENT_ID="COMPONENT_ID" ns1X:COMPONENT_VERSION="COMPONENT_VERSION" ns1X:END_USER_INFO="END_USER_INFO" ns1X:SOURCE_ADDRESS="SOURCE_ADDRESS"/>
+                    <ns1X:TO ns1X:DESTINATION="DESTINATION"/>
+                    <ns1X:TRACKING>
+                        <ns1X:MESSAGE_ID>MESSAGE_ID</ns1X:MESSAGE_ID>
+                        <ns1X:EXTERNAL_REF>EXTERNAL_REF</ns1X:EXTERNAL_REF>
+                        <ns1X:ITEM ns1X:APPINFO="APPINFO" ns1X:EVENT="EVENT" ns1X:TIMESTAMP="-5746863345386460972"/>
+                        <ns1X:SEQUENCE_NO>SEQUENCE_NO</ns1X:SEQUENCE_NO>
+                    </ns1X:TRACKING>
+                    <ns1X:ATTRIBUTE ns1X:NAME="NAME" ns1X:VALUE="VALUE"/>
+                </ns1X:CMH>
+                <ns2:BODY>
+                    <ns2:RecursiveProcessing>
+                        <xsl:value-of select="false()"/>
+                    </ns2:RecursiveProcessing>
+                </ns2:BODY>
+            </pfx:UpsertAccountWithReferencingPublish>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>479</pd:x>
+        <pd:y>298</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.Operations.%%CRMServices/ComponentId%%.Subscribe.UpsertAccountWithReferences.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:value-of select="$Render-XML/xmlString"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Render XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render XML</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

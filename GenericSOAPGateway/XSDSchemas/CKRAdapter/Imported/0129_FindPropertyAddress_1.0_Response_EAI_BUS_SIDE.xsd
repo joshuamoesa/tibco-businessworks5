@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2007 (http://www.altova.com) by A124027 (EMBRACE) -->
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0129_FindPropertyAddress/1.0/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0129_FindPropertyAddress/1.0/Response" elementFormDefault="qualified">
+	<xs:simpleType name="cityName_type">
+		<xs:restriction base="xs:string">
+			<xs:annotation>
+				<xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+			</xs:annotation>
+			<xs:maxLength value="24"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="cityCode_type">
+		<xs:restriction base="xs:string">
+			<xs:annotation>
+				<xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+			</xs:annotation>
+			<xs:maxLength value="06"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="streetName_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="24"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="houseNumber_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dutchPostcodeNumbers_type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dutchPostcodeLetters_type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="telecomRegionCode_type">
+		<xs:restriction base="xs:string">
+			<xs:annotation>
+				<xs:documentation>DEFINITIONS:
+KPN has divided the Netherlands into telecom regions which are (also) defined in the CKR code table this division is depricated, but still widely used within KPN.
+
+TYPE:
+String (2) enumerated, numerics
+
+VALUES:
+See attached file, under 'Oude Telecomregio's'.
+
+NOTES:
+- This attributes uses the numeric code for each region, there is another field that uses the abbreveated text version of the region (telecomRegionCodeName).
+- KPN no longer actively uses the regions and has switched to rayons instead. Many systems still depend on the attribute.</xs:documentation>
+				<xs:documentation>Default value is:''</xs:documentation>
+				<xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+			</xs:annotation>
+			<xs:maxLength value="02"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>This is the BODY object for KPN EAI service number 0129 - FindPropertyAddress version 1.0 Response message.</xs:documentation>
+			<xs:documentation>Automatically generated schema for service:'FindPropertyAddress', version:'1.0'</xs:documentation>
+			<xs:documentation>Generated on 2007-04-12 16:25:28Z</xs:documentation>
+			<xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+			<xs:documentation>Service ID is:'0129'</xs:documentation>
+			<xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+			<xs:documentation>KPN EAI message body class.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:annotation>
+					<xs:documentation>Artificial sequence to separate.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="PROPERTY_ADDRESS" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="FROM" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="HOUSE_NUMBER" type="tns:houseNumber_type" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="UNTIL" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="HOUSE_NUMBER" type="tns:houseNumber_type" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CITY_NAME" type="tns:cityName_type" minOccurs="0"/>
+							<xs:element name="CITY_CODE" type="tns:cityCode_type" minOccurs="0"/>
+							<xs:element name="STREET_NAME" type="tns:streetName_type" minOccurs="0"/>
+							<xs:element name="HOUSE_NUMBER" type="tns:houseNumber_type" minOccurs="0"/>
+							<xs:element name="DUTCH_POSTCODE_NUMBERS" type="tns:dutchPostcodeNumbers_type" minOccurs="0"/>
+							<xs:element name="DUTCH_POSTCODE_LETTERS" type="tns:dutchPostcodeLetters_type" minOccurs="0"/>
+							<xs:element name="TELECOM_REGION_CODE" type="tns:telecomRegionCode_type" minOccurs="0"/>
+							<xs:element name="IS_ODD" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="NUMBER_OF_RECORDS" type="xs:integer" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

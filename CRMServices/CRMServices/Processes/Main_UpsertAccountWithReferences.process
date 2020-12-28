@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx4="http://xmlns.kpn.com/fixed/CRMServices/Publish/UpsertAccountWithReferencing.xsd" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0420_UpsertAccountWithReferencing/1.0/Publish" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent1/Publish/TestPublicationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Publish/UpsertAccountWithReferencing.xsd" schemaLocation="/XSDSchemas/CRMServices/Publish/UpsertAccountWithReferencing.xsd"/>
+    <pd:name>CRMServices/Processes/Main_UpsertAccountWithReferences.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>65</pd:startX>
+    <pd:startY>95</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>489</pd:endX>
+    <pd:endY>99</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse Publication">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx4:UpsertAccountWithReferencingPublish"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>268</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <xsl:variable name="varMsgCode" select="if (exists($_error_Specific-implementation))&#xA;then $_error_Specific-implementation/pfx2:Errors/pfx2:Error[1]/pfx2:MsgCode&#xA;else &quot;CRMS-03011&quot;"/>
+            <ns4:ActivityInput>
+                <message>
+                    <xsl:value-of select="eai:getMessageText($varMsgCode)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$varMsgCode"/>
+                </messageCode>
+                <data>
+                    <pfx2:Errors>
+                        <pfx2:Error>
+                            <pfx2:MsgCode>
+                                <xsl:value-of select="$varMsgCode"/>
+                            </pfx2:MsgCode>
+                            <ns3:ErrorReport>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                            </ns3:ErrorReport>
+                            <xsl:if test="$_error_Parse-Publication/ActivityErrors">
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/node()"/>
+                                </pfx2:ActivityError>
+                            </xsl:if>
+                        </pfx2:Error>
+                    </pfx2:Errors>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Specific implementation">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>355</pd:x>
+        <pd:y>108</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/Sub_UpserAccountWithReferencing.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Parse-Publication/pfx4:UpsertAccountWithReferencingPublish"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Specific implementation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Specific implementation</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Specific implementation</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

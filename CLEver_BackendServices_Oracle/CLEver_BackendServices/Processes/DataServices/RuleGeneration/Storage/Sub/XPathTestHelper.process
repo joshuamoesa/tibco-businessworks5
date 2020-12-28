@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/BusinessDomain" xmlns:ns5="http://www.tibco.com/CLEver/Policy" xmlns:ns6="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://www.tibco.com/CLEver/Rule" xmlns:ns7="http://www.tibco.com/CLEver/ExceptionCode" xmlns:ns8="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns1="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:ns4="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns3="http://www.tibco.com/CLEver/ExceptionType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/CLEver/HistoryRetain">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Rule" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Rule.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/HistoryRetain" schemaLocation="/Shared Resources/Schema Definitions/CLEver/HistoryRetain.xsd"/>
+    <pd:name>Processes/DataServices/RuleGeneration/Storage/Sub/XPathTestHelper.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:HistoryRetainFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>150</pd:startX>
+    <pd:startY>63</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <TestException>
+                <xsl:value-of select="$GenerateXpathException/Output/Test"/>
+            </TestException>
+            <TestLog>
+                <xsl:value-of select="$GenerateXpathLog/Output/Test"/>
+            </TestLog>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="TestException" type="xsd:string"/>
+                    <xsd:element name="TestLog" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>654</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="GenerateXpathException">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>382</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/XPathTest.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx2:HistoryRetainFull/pfx2:BusinessDomain"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/BusinessDomain/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx2:HistoryRetainFull/pfx2:TechnicalDomain"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/TechnicalDomain/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx2:HistoryRetainFull/pfx2:Component"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/Component/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx2:HistoryRetainFull/pfx2:Service"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/Service/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GenerateXpathLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>383</pd:x>
+        <pd:y>99</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/XPathTest.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx2:HistoryRetainFull/pfx2:BusinessDomain"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Log/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/BusinessDomain/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx2:HistoryRetainFull/pfx2:TechnicalDomain"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Log/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/TechnicalDomain/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx2:HistoryRetainFull/pfx2:Component"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Log/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/Component/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx2:HistoryRetainFull/pfx2:Service"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Log/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/Service/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GenerateXpathException</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GenerateXpathException</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GenerateXpathLog</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GenerateXpathLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

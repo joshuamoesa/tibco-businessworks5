@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://schemas.tibco.com/bw/plugins/soap/5.0/SoapPluginExceptions" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pfx2="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <pd:name>SiebelZMAdapter/Processes/GetWSDL.process</pd:name>
+    <pd:description>Note: GetWSDL serves service discovery requests and service requests 
+for services that are not available due to internal server errors.</pd:description>
+    <pd:startName>HTTP Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="HTTP Receiver">
+        <pd:type>com.tibco.plugin.http.HTTPEventSource</pd:type>
+        <pd:resourceType>httppalette.httpEventSource</pd:resourceType>
+        <pd:x>64</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <sharedChannel>/SiebelZMAdapter/Shared Resources/HTTP Connection.sharedhttp</sharedChannel>
+            <parsePostData>false</parsePostData>
+            <customField/>
+            <useHTTPAuthentication>false</useHTTPAuthentication>
+            <exposeSecurityContext>false</exposeSecurityContext>
+            <outputMode>String</outputMode>
+            <defaultEncoding>ISO8859_1</defaultEncoding>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Connection" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>517</pd:endX>
+    <pd:endY>225</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ErrorStatus>
+            <xsd:element name="ResultStatus" type="ns3:ResultStatus"/>
+        </ErrorStatus>
+    </pd:processVariables>
+    <pd:activity name="LogError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>241</pd:x>
+        <pd:y>180</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <ns4:Errors>
+                    <ns4:Error>
+                        <ns4:MsgCode>
+                            <xsl:value-of select="&quot;EAI-03000&quot;"/>
+                        </ns4:MsgCode>
+                        <ns4:Params>
+                            <xsl:value-of select="if ($_error/ns2:ErrorReport/Msg = &quot;SOAPPLUGIN-100028&quot;) then&#xA;   concat(&quot;Data not found for resource [&quot;, $HTTP-Receiver/ProcessStarterOutput/RequestURI,&quot;] using filter [&quot;, $HTTP-Receiver/ProcessStarterOutput/QueryString, &quot;]&quot;)&#xA;else&#xA;  concat(&quot;No properly formatted Error-Description string available for [&quot;, $_error/ns2:ErrorReport/MsgCode, &quot;]&quot;)"/>
+                        </ns4:Params>
+                        <ns4:MsgId>
+                            <xsl:value-of select="eai:createGUID()"/>
+                        </ns4:MsgId>
+                        <xsl:copy-of select="$_error/ns2:ErrorReport"/>
+                    </ns4:Error>
+                </ns4:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Query or Invocation?">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>116</pd:x>
+        <pd:y>119</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="RetrieveResources">
+        <pd:type>com.tibco.plugin.soap.urlaccess.RetrieveResource</pd:type>
+        <pd:resourceType>ae.activities.RetrieveResource</pd:resourceType>
+        <pd:description/>
+        <pd:x>195</pd:x>
+        <pd:y>36</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <inputClass>
+                <resourcePath>
+                    <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/Command"/>
+                </resourcePath>
+                <xsl:if test="$HTTP-Receiver/ProcessStarterOutput/QueryString">
+                    <filter>
+                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/QueryString"/>
+                    </filter>
+                </xsl:if>
+            </inputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="HTTP Response">
+        <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+        <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+        <pd:description>HTTP Status 200 OK; All went well and the requested resources could be retrieved.</pd:description>
+        <pd:x>338</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <closeConnection>true</closeConnection>
+            <eventSource>HTTP Receiver</eventSource>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="StatusLine" type="xsd:string"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings>
+            <ResponseActivityInput>
+                <asciiContent>
+                    <xsl:value-of select="$RetrieveResources/outputClass/resourceData"/>
+                </asciiContent>
+                <Headers>
+                    <StatusLine>
+                        <xsl:value-of select="concat($HTTP-Receiver/ProcessStarterOutput/HTTPVersion, &quot; 200 OK&quot; )"/>
+                    </StatusLine>
+                    <Content-Type>
+                        <xsl:value-of select="&quot;text/xml&quot;"/>
+                    </Content-Type>
+                </Headers>
+            </ResponseActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="HTTP-400 Response">
+        <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+        <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+        <pd:description>HTTP Status 400 Bad Request; the request could not be handled properly.</pd:description>
+        <pd:x>65</pd:x>
+        <pd:y>225</pd:y>
+        <config>
+            <closeConnection>true</closeConnection>
+            <eventSource>HTTP Receiver</eventSource>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings>
+            <ResponseActivityInput>
+                <asciiContent>
+                    <xsl:value-of select="concat(&#xA;  &quot;&lt;html>&quot;&#xA;, &quot;&lt;head>&quot;&#xA;, &quot;&lt;title>&quot;&#xA;, $_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentId&#xA;, &quot;/&quot;&#xA;, $_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentVersion&#xA;,&quot; - Error report&quot;&#xA;, &quot;&lt;/title>&quot;&#xA;, &quot;&lt;STYLE>&lt;!--H1{font-family : sans-serif,Arial,Tahoma;color : white;background-color : #0086b2;} H3{font-family : sans-serif,Arial,Tahoma;color : white;background-color : #0086b2;} BODY{font-family : sans-serif,Arial,Tahoma;color : black;background-color : white;} B{color : white;background-color : #0086b2;} HR{color : #0086b2;} -->&lt;/STYLE>&quot;&#xA;, &quot;&lt;/head>&quot;&#xA;, &quot;&lt;body>&quot;&#xA;, &quot;&lt;h1>HTTP Status 400 - BAd Request&lt;/h1>&quot;&#xA;, &quot;&lt;HR size='1' noshade>&quot;&#xA;, &quot;&lt;p>&lt;b>type&lt;/b> Status report&lt;/p>&quot;&#xA;, &quot;&lt;p>&lt;b>message&lt;/b> &lt;u>Bad Request&lt;/u>&lt;/p>&quot;&#xA;, &quot;&lt;p>&lt;b>description&lt;/b> The request immediately caused an error while processing.&lt;/p>&quot;&#xA;, &quot;&lt;p>&lt;b>details&lt;/b> The reported error is:&quot;&#xA;, &quot;&lt;li>msg:&quot;, $_error/ns2:ErrorReport/Msg, &quot;&lt;/li>&quot;&#xA;, &quot;&lt;li>msgCode: &quot;, $_error/ns2:ErrorReport/MsgCode, &quot;&lt;/li>&quot;&#xA;, &quot;&lt;/p>&quot;&#xA;, &quot;&lt;HR size='1' noshade>&quot;&#xA;, &quot;&lt;h3>&quot;&#xA;, $_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentId&#xA;, &quot;/&quot;&#xA;, $_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentVersion&#xA;, &quot;&lt;/h3>&quot;&#xA;, &quot;&lt;/body>&quot;&#xA;, &quot;&lt;/html>&quot;&#xA;)"/>
+                </asciiContent>
+                <Headers>
+                    <StatusLine>
+                        <xsl:value-of select="concat(&quot;400 Bad Request &quot;, &quot;HTTP/1.1&quot; )"/>
+                    </StatusLine>
+                    <Content-Type>
+                        <xsl:value-of select="&quot;text/html&quot;"/>
+                    </Content-Type>
+                </Headers>
+            </ResponseActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="HTTP-404 Response">
+        <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+        <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+        <pd:description>HTTP Status 404 Not Found; the requested resource was not found.</pd:description>
+        <pd:x>342</pd:x>
+        <pd:y>111</pd:y>
+        <config>
+            <closeConnection>true</closeConnection>
+            <eventSource>HTTP Receiver</eventSource>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings>
+            <ResponseActivityInput>
+                <asciiContent>
+                    <xsl:value-of select="concat(&#xA;  &quot;&lt;html>&quot;&#xA;, &quot;&lt;head>&quot;&#xA;, &quot;&lt;title>&quot;&#xA;, $_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentId&#xA;, &quot;/&quot;&#xA;, $_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentVersion&#xA;, &quot; - Error report&quot;&#xA;, &quot;&lt;/title>&quot;&#xA;, &quot;&lt;STYLE>&lt;!--H1{font-family : sans-serif,Arial,Tahoma;color : white;background-color : #0086b2;} H3{font-family : sans-serif,Arial,Tahoma;color : white;background-color : #0086b2;} BODY{font-family : sans-serif,Arial,Tahoma;color : black;background-color : white;} B{color : white;background-color : #0086b2;} HR{color : #0086b2;} -->&lt;/STYLE>&quot;&#xA;, &quot;&lt;/head>&quot;&#xA;, &quot;&lt;body>&quot;&#xA;, &quot;&lt;h1>HTTP Status 404 - Not Found&lt;/h1>&quot;&#xA;, &quot;&lt;HR size='1' noshade>&quot;&#xA;, &quot;&lt;p>&lt;b>type&lt;/b> Status report&lt;/p>&quot;&#xA;, &quot;&lt;p>&lt;b>message&lt;/b> &lt;u>Not Found&lt;/u>&lt;/p>&quot;&#xA;, &quot;&lt;p>&lt;b>description&lt;/b> The requested resource &lt;u>&quot;&#xA;, $HTTP-Receiver/ProcessStarterOutput/RequestURI&#xA;, &quot;&lt;/u> is not available.&lt;/p>&quot;&#xA;, &quot;&lt;p>&lt;b>details&lt;/b> The reported error is:&quot;&#xA;, &quot;&lt;li>msg: &quot;, $_error/ns2:ErrorReport/Msg,&quot;&lt;/li>&quot;&#xA;, &quot;&lt;li>msgCode: &quot;, $_error/ns2:ErrorReport/MsgCode,&quot;&lt;/li>&quot;&#xA;, &quot;&lt;/p>&quot;&#xA;, &quot;&lt;HR size='1' noshade>&quot;&#xA;, &quot;&lt;h3>&quot;&#xA;, $_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentId&#xA;, &quot;/&quot;&#xA;, $_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentVersion&#xA;, &quot;&lt;/h3>&quot;&#xA;, &quot;&lt;/body>&quot;&#xA;, &quot;&lt;/html>&quot;&#xA;)"/>
+                </asciiContent>
+                <Headers>
+                    <StatusLine>
+                        <xsl:value-of select="concat($HTTP-Receiver/ProcessStarterOutput/HTTPVersion, &quot;404 Not Found &quot;)"/>
+                    </StatusLine>
+                    <Content-Type>
+                        <xsl:value-of select="&quot;text/html&quot;"/>
+                    </Content-Type>
+                </Headers>
+            </ResponseActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="HTTP-500 Response">
+        <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+        <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+        <pd:description>HTTP Status 500 Internal Server Error; the request has been determined to 
+be a service invocation attempt, i.e. the resource has been recognized, 
+but was available due to some internal server error.  
+In this case a SOAP Fault must be returned with in a HTTP 500 message.</pd:description>
+        <pd:x>342</pd:x>
+        <pd:y>181</pd:y>
+        <config>
+            <closeConnection>true</closeConnection>
+            <eventSource>HTTP Receiver</eventSource>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings>
+            <ResponseActivityInput>
+                <asciiContent>
+                    <xsl:value-of select="concat(&#xA;  &quot;&lt;?xml version='1.0' encoding='UTF-8'?>&quot;&#xA;, &quot;&lt;SOAP-ENV:Envelope xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/'>&quot;&#xA;, &quot;&lt;SOAP-ENV:Body>&lt;SOAP-ENV:Fault>&quot;&#xA;, &quot;&lt;faultcode>&quot;,&#xA;    $_error/ns2:ErrorReport/Msg, &quot;&lt;/faultcode>&quot;&#xA;, &quot;&lt;faultstring>&quot;,&#xA;    if ($_error/ns2:ErrorReport/Msg = &quot;SOAPPLUGIN-100028&quot;) then&#xA;        concat(&quot;Data not found for resource [&quot;, $HTTP-Receiver/ProcessStarterOutput/RequestURI,&quot;] using filter [&quot;, $HTTP-Receiver/ProcessStarterOutput/QueryString, &quot;]&quot;)&#xA;    else&#xA;        concat(&quot;No properly formatted Error-Description string available for [&quot;, $_error/ns2:ErrorReport/MsgCode, &quot;]&quot;),&#xA;    &quot;&lt;/faultstring>&quot;&#xA;, &quot;&lt;faultactor>&quot;,&#xA;    $_processContext/ns2:ProcessContext/EngineName&#xA;, &quot;&lt;/faultactor>&quot;&#xA;, &quot;&lt;details>Stacktrace:&quot;,&#xA;    $_error/ns2:ErrorReport/StackTrace&#xA;, &quot;&lt;/details>&quot;&#xA;, &quot;&lt;/SOAP-ENV:Fault>&quot;&#xA;, &quot;&lt;/SOAP-ENV:Body>&quot;&#xA;, &quot;&lt;/SOAP-ENV:Envelope>&quot;&#xA;)"/>
+                </asciiContent>
+                <Headers>
+                    <StatusLine>
+                        <xsl:value-of select="concat($HTTP-Receiver/ProcessStarterOutput/HTTPVersion, &quot;500 Internal Server Error &quot;)"/>
+                    </StatusLine>
+                    <Content-Type>
+                        <xsl:value-of select="concat(&quot;text/xml; charset=&quot;, '&quot;', &quot;utf-8&quot;, '&quot;')"/>
+                    </Content-Type>
+                </Headers>
+            </ResponseActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>HTTP Receiver</pd:from>
+        <pd:to>RetrieveResources</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RetrieveResources</pd:from>
+        <pd:to>HTTP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>HTTP Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>HTTP-404 Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>HTTP-500 Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RetrieveResources</pd:from>
+        <pd:to>Query or Invocation?</pd:to>
+        <pd:xpathDescription> </pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:description>In case the Querystring is not empty, i.e. the filter is possibly one of wsil, 
+wsdl or xsd, or the error msgCode is not equal to SOAPPLUGIN-100028 
+then the request is interpreted as belonging to a service discovery action 
+and a HTTP 404 is returned.</pd:description>
+        <pd:from>Query or Invocation?</pd:from>
+        <pd:to>HTTP-404 Response</pd:to>
+        <pd:xpathDescription>Query</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>($HTTP-Receiver/ProcessStarterOutput/QueryString !="") 
+or ($_error/ns2:ErrorReport/Msg !="SOAPPLUGIN-100028")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:description>In case the Querystring is  empty, i.e. the filter is definitely not one of wsil, wsdl or xsd, 
+the request is interpreted as being a service invocation and a HTTP 500 containing a SOAP Fault is returned.</pd:description>
+        <pd:from>Query or Invocation?</pd:from>
+        <pd:to>LogError</pd:to>
+        <pd:xpathDescription>Invocation</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>HTTP-400 Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:description>Something went wrong while receiving the HTTP request.</pd:description>
+        <pd:from>HTTP Receiver</pd:from>
+        <pd:to>HTTP-400 Response</pd:to>
+        <pd:xpathDescription> </pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>HTTP-500 Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

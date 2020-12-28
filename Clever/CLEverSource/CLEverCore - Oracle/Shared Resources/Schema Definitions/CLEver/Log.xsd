@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/CLEver/Log"
+	 xmlns:ns0="http://www.tibco.com/CLEver/ExtraTypes"
+	 targetNamespace="http://www.tibco.com/CLEver/Log"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="ExtraTypes.xsd"/>
+	<xs:element name="Log" type="Log"/>
+	<xs:complexType name="Log">
+		<xs:sequence>
+			<xs:element name="ID" type="xs:string" minOccurs="0"/>
+			<xs:element ref="ns0:ProcessContext"/>
+			<xs:element ref="LogDetail"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Status">
+		<xs:simpleContent>
+			<xs:extension base="xs:string"/>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:element name="Status" type="Status"/>
+	<xs:complexType name="LogMessage">
+		<xs:simpleContent>
+			<xs:extension base="xs:string"/>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:element name="LogMessage" type="LogMessage"/>
+	<xs:complexType name="LogDetail">
+		<xs:sequence>
+			<xs:element ref="LogMessage"/>
+			<xs:element ref="Role"/>
+			<xs:element ref="Attachments" minOccurs="0"/>
+			<xs:element ref="Status"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="LogDetail" type="LogDetail"/>
+	<xs:simpleType name="Severity">
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+			<xs:enumeration value="6"/>
+			<xs:enumeration value="7"/>
+			<xs:enumeration value="8"/>
+			<xs:enumeration value="9"/>
+			<xs:enumeration value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="Logs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Log" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Role" type="xs:string"/>
+	<xs:element name="Attachments">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Attachment" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Attachment">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Name" type="xs:string"/>
+				<xs:element name="Type" type="xs:string"/>
+				<xs:element name="Content" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

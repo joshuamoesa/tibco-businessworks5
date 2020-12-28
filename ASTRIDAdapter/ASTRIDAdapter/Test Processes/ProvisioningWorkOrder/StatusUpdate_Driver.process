@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/ProvisioningWorkOrder/StatusUpdate_Driver.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>292</pd:x>
+        <pd:y>68</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>%%ASTRIDAdapter/Test/Endpoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <headers>
+                    <Header.parameters>
+                        <xsl:attribute name="mustUnderstand">
+                            <xsl:value-of select="false()"/>
+                        </xsl:attribute>
+                    </Header.parameters>
+                </headers>
+                <pfx:GenericMessage>
+                    <ns:Header/>
+                    <ns:General>
+                        <ns:alarm_report_identifier>
+                            <xsl:value-of select="'alarm_report_Identifier'"/>
+                        </ns:alarm_report_identifier>
+                        <ns:Non_Generic_Field_List>
+                            <ns:Non_Generic_Field>
+                                <ns:non_Generic_Field_name>
+                                    <xsl:value-of select="&quot;ServiceProviderID&quot;"/>
+                                </ns:non_Generic_Field_name>
+                                <ns:non_Generic_Field_value>
+                                    <xsl:value-of select="&quot;ServiceProviderID&quot;"/>
+                                </ns:non_Generic_Field_value>
+                            </ns:Non_Generic_Field>
+                        </ns:Non_Generic_Field_List>
+                        <ns:probable_cause>
+                            <xsl:value-of select="'probable_cause'"/>
+                        </ns:probable_cause>
+                        <ns:sla_clearing_time>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:sla_clearing_time>
+                        <ns:incident_report_state>
+                            <xsl:value-of select="'incident_report_state'"/>
+                        </ns:incident_report_state>
+                        <ns:trouble_description_short>
+                            <xsl:value-of select="'trouble_description_short'"/>
+                        </ns:trouble_description_short>
+                        <ns:trouble_description_long>
+                            <xsl:value-of select="'trouble_description_long'"/>
+                        </ns:trouble_description_long>
+                    </ns:General>
+                    <ns:Customer_info>
+                        <ns:co_city>
+                            <xsl:value-of select="'City'"/>
+                        </ns:co_city>
+                        <ns:co_contact_person>
+                            <xsl:value-of select="'ContactPreson'"/>
+                        </ns:co_contact_person>
+                        <ns:co_contact_person_electronic_mail_address>
+                            <xsl:value-of select="'Email@add.com'"/>
+                        </ns:co_contact_person_electronic_mail_address>
+                        <ns:co_contact_person_fax_number>
+                            <xsl:value-of select="'0123456789'"/>
+                        </ns:co_contact_person_fax_number>
+                        <ns:co_contact_person_telephone_number>
+                            <xsl:value-of select="'0983337796'"/>
+                        </ns:co_contact_person_telephone_number>
+                        <ns:co_contact_person_mobile_telephone_number>
+                            <xsl:value-of select="'0999991234'"/>
+                        </ns:co_contact_person_mobile_telephone_number>
+                        <ns:co_house_number>
+                            <xsl:value-of select="'12345'"/>
+                        </ns:co_house_number>
+                        <ns:co_house_number_extension>
+                            <xsl:value-of select="'1234'"/>
+                        </ns:co_house_number_extension>
+                        <ns:co_street>
+                            <xsl:value-of select="'Street'"/>
+                        </ns:co_street>
+                        <ns:co_zip_code>
+                            <xsl:value-of select="'1234AB'"/>
+                        </ns:co_zip_code>
+                    </ns:Customer_info>
+                    <ns:Managed_Object_Info>
+                        <ns:MOR0>
+                            <ns:MOR0>
+                                <ns:mo_supported_service_attribute_name_1>
+                                    <xsl:value-of select="'ATT1'"/>
+                                </ns:mo_supported_service_attribute_name_1>
+                                <ns:mo_supported_service_attribute_value_1>
+                                    <xsl:value-of select="'ATT1Val'"/>
+                                </ns:mo_supported_service_attribute_value_1>
+                                <ns:MOR1>
+                                    <ns:MOR1>
+                                        <ns:mo_supported_service_attribute_name_2>
+                                            <xsl:value-of select="'Att2'"/>
+                                        </ns:mo_supported_service_attribute_name_2>
+                                        <ns:mo_supported_service_attribute_value_2>
+                                            <xsl:value-of select="'Att2Val'"/>
+                                        </ns:mo_supported_service_attribute_value_2>
+                                    </ns:MOR1>
+                                </ns:MOR1>
+                            </ns:MOR0>
+                        </ns:MOR0>
+                    </ns:Managed_Object_Info>
+                </pfx:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

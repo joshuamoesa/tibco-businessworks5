@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/CRMServices/Request/GetAccountData.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/CRMServices/Response/GetAccountData.xsd" xmlns:ns="http://xmlns.kpn.com/fixed/CRMServices/Publish/UpsertAccountWithReferencing.xsd" xmlns:ns1="http://xmlns.kpn.com/EAI/fixed/0419_GetAccountHierarchy/1.0/Response" xmlns:ns2="http://xmlns.kpn.com/fixed/UCMAdapter/Response/GetAccountHierarchy.xsd" xmlns:ns3="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0420_UpsertAccountWithReferencing/1.0/Publish" xmlns:ns5="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:pfx3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx4="http://xmlns.kpn.com/eai/common/errors" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:ns7="http://www.tibco.com/pe/DeployedVarsType" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns8="http://xmlns.kpn.com/EAI/fixed/0418_GetAccountData/1.0/Request" xmlns:ns9="http://xmlns.kpn.com/fixed/UCMAdapter/Request/GetAccountHierarchy.xsd" xmlns:ns10="http://xmlns.kpn.com/EAI/fixed/0419_GetAccountHierarchy/1.0/Request" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Response/GetAccountData.xsd" schemaLocation="/XSDSchemas/CRMServices/Response/GetAccountData.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Publish/UpsertAccountWithReferencing.xsd" schemaLocation="/XSDSchemas/CRMServices/Publish/UpsertAccountWithReferencing.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Request/GetAccountData.xsd" schemaLocation="/XSDSchemas/CRMServices/Request/GetAccountData.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/Sub_GetAccountdata.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:GetAccountDataRequest"/>
+                    <xsd:element name="ReplyDestination" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>28</pd:startX>
+    <pd:startY>152</pd:startY>
+    <pd:returnBindings>
+        <pfx2:GetAccountDataResponse>
+            <ns3:CMH>
+                <ns3:ID>
+                    <xsl:value-of select="&quot;1054&quot;"/>
+                </ns3:ID>
+                <ns3:NAME>
+                    <xsl:value-of select="&quot;GetAccountData&quot;"/>
+                </ns3:NAME>
+                <xsl:if test="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:FID">
+                    <ns3:FID>
+                        <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:FID"/>
+                    </ns3:FID>
+                </xsl:if>
+                <ns3:MID>
+                    <xsl:value-of select="&quot;1054.20&quot;"/>
+                </ns3:MID>
+                <ns3:PARADIGM>
+                    <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                </ns3:PARADIGM>
+                <ns3:OBJECT>
+                    <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:OBJECT"/>
+                </ns3:OBJECT>
+                <ns3:VERSION>
+                    <xsl:value-of select="&quot;1.0&quot;"/>
+                </ns3:VERSION>
+                <xsl:copy-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:FROM"/>
+                <ns3:TO>
+                    <xsl:attribute name="ns3:DESTINATION">
+                        <xsl:value-of select="$Start/Input/ReplyDestination"/>
+                    </xsl:attribute>
+                </ns3:TO>
+                <ns3:TRACKING>
+                    <ns3:MESSAGE_ID>
+                        <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:MESSAGE_ID"/>
+                    </ns3:MESSAGE_ID>
+                    <xsl:if test="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:EXTERNAL_REF">
+                        <ns3:EXTERNAL_REF>
+                            <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:EXTERNAL_REF"/>
+                        </ns3:EXTERNAL_REF>
+                    </xsl:if>
+                    <xsl:copy-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:ITEM"/>
+                    <ns3:ITEM>
+                        <xsl:attribute name="ns3:APPINFO">
+                            <xsl:value-of select="concat($_globalVariables/ns7:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentId)"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns3:EVENT">
+                            <xsl:value-of select="&quot;GetAccountDataResponse&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns3:TIMESTAMP">
+                            <xsl:value-of select="tib:timestamp()"/>
+                        </xsl:attribute>
+                    </ns3:ITEM>
+                    <xsl:for-each select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:SEQUENCE_NO">
+                        <ns3:SEQUENCE_NO>
+                            <xsl:value-of select="."/>
+                        </ns3:SEQUENCE_NO>
+                    </xsl:for-each>
+                </ns3:TRACKING>
+            </ns3:CMH>
+            <pfx2:STATUS_RESULT>
+                <xsl:attribute name="ns5:STATUS">
+                    <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:STATUS"/>
+                </xsl:attribute>
+                <xsl:if test="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:MSG_CODE">
+                    <xsl:attribute name="ns5:MSG_CODE">
+                        <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:MSG_CODE"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:ERROR_CODE">
+                    <xsl:attribute name="ns5:ERROR_CODE">
+                        <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:ERROR_CODE"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:ERROR_DESCRIPTION">
+                    <xsl:attribute name="ns5:ERROR_DESCRIPTION">
+                        <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:ERROR_DESCRIPTION"/>
+                    </xsl:attribute>
+                </xsl:if>
+            </pfx2:STATUS_RESULT>
+        </pfx2:GetAccountDataResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:GetAccountDataResponse"/>
+    <pd:endX>717</pd:endX>
+    <pd:endY>150</pd:endY>
+    <pd:errorSchemas>
+        <Schema1>
+            <xsd:element name="ResultStatus" type="ns5:ResultStatus"/>
+        </Schema1>
+        <Schema0 ref="pfx4:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="CallInterFace 1054-GetAccountHierarchy">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>171</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/Sub_GetAccountHierarchy.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns9:GetAccountHierarchyRequest>
+                <ns3:CMH>
+                    <ns3:ID>
+                        <xsl:value-of select="&quot;1054&quot;"/>
+                    </ns3:ID>
+                    <ns3:NAME>
+                        <xsl:value-of select="&quot;GetAccountHierarchy&quot;"/>
+                    </ns3:NAME>
+                    <ns3:MID>
+                        <xsl:value-of select="&quot;1054.20&quot;"/>
+                    </ns3:MID>
+                    <ns3:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns3:PARADIGM>
+                    <ns3:OBJECT>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:OBJECT>
+                    <ns3:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns3:VERSION>
+                    <ns3:FROM>
+                        <xsl:attribute name="ns3:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns3:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns3:FROM>
+                    <ns3:TO>
+                        <xsl:attribute name="ns3:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns7:GlobalVariables/Env,&quot;.FIXED.CRM.&quot;,$_globalVariables/ns7:GlobalVariables/CRMServices/UCMAdapter/ComponentID,&quot;.Request.GetAccountHierarchy.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns3:TO>
+                    <ns3:TRACKING>
+                        <ns3:MESSAGE_ID>
+                            <xsl:value-of select="$Start/Input/pfx:GetAccountDataRequest/ns3:CMH/ns3:TRACKING/ns3:MESSAGE_ID"/>
+                        </ns3:MESSAGE_ID>
+                        <ns3:EXTERNAL_REF>
+                            <xsl:value-of select="$Start/Input/pfx:GetAccountDataRequest/ns3:CMH/ns3:TRACKING/ns3:EXTERNAL_REF"/>
+                        </ns3:EXTERNAL_REF>
+                        <xsl:copy-of select="$Start/Input/pfx:GetAccountDataRequest/ns3:CMH/ns3:TRACKING/ns3:ITEM"/>
+                        <ns3:ITEM>
+                            <xsl:attribute name="ns3:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns7:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentId)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns3:EVENT">
+                                <xsl:value-of select="&quot;GetAccountDataRequest&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns3:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns3:ITEM>
+                    </ns3:TRACKING>
+                    <xsl:copy-of select="$Start/Input/pfx:GetAccountDataRequest/ns3:CMH/ns3:ATTRIBUTE"/>
+                </ns3:CMH>
+                <ns10:BODY>
+                    <SIEBEL_ACCOUNT_ID>
+                        <xsl:value-of select="$Start/Input/pfx:GetAccountDataRequest/ns8:BODY/SIEBEL_ACCOUNT_ID"/>
+                    </SIEBEL_ACCOUNT_ID>
+                </ns10:BODY>
+            </ns9:GetAccountHierarchyRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="PublisshToUpsertAccountWithReferencing">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>562</pd:x>
+        <pd:y>149</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Publisher.process</processName>
+        </config>
+        <pd:inputBindings>
+            <PublisherIn>
+                <Destination>
+                    <xsl:value-of select="concat($_globalVariables/ns7:GlobalVariables/Env,&quot;.FIXED.Operations.&quot;,$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentId,&quot;.Publish.UpsertAccountWithReferences.1&quot;)"/>
+                </Destination>
+                <MessageId>
+                    <xsl:value-of select="$Start/Input/pfx:GetAccountDataRequest/ns3:CMH/ns3:TRACKING/ns3:MESSAGE_ID"/>
+                </MessageId>
+                <Body>
+                    <ns:UpsertAccountWithReferencingPublish>
+                        <ns3:CMH>
+                            <ns3:ID>
+                                <xsl:value-of select="&quot;1054&quot;"/>
+                            </ns3:ID>
+                            <ns3:NAME>
+                                <xsl:value-of select="&quot;UpsertAccountWithReferences&quot;"/>
+                            </ns3:NAME>
+                            <ns3:MID>
+                                <xsl:value-of select="&quot;1054.10&quot;"/>
+                            </ns3:MID>
+                            <ns3:PARADIGM>
+                                <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                            </ns3:PARADIGM>
+                            <ns3:OBJECT>
+                                <xsl:value-of select="&quot;SIEBEL_ACCOUNT_HIERARCHY&quot;"/>
+                            </ns3:OBJECT>
+                            <ns3:VERSION>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns3:VERSION>
+                            <ns3:FROM>
+                                <xsl:attribute name="ns3:COMPONENT_ID">
+                                    <xsl:value-of select="$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentId"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns3:COMPONENT_VERSION">
+                                    <xsl:value-of select="$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentVersion"/>
+                                </xsl:attribute>
+                            </ns3:FROM>
+                            <ns3:TO>
+                                <xsl:attribute name="ns3:DESTINATION">
+                                    <xsl:value-of select="concat($_globalVariables/ns7:GlobalVariables/Env,&quot;.FIXED.Operations.&quot;,$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentId,&quot;.Publish.UpsertAccountWithReferences.1&quot;)"/>
+                                </xsl:attribute>
+                            </ns3:TO>
+                            <ns3:TRACKING>
+                                <ns3:MESSAGE_ID>
+                                    <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:MESSAGE_ID"/>
+                                </ns3:MESSAGE_ID>
+                                <xsl:if test="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:EXTERNAL_REF">
+                                    <ns3:EXTERNAL_REF>
+                                        <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:EXTERNAL_REF"/>
+                                    </ns3:EXTERNAL_REF>
+                                </xsl:if>
+                                <xsl:copy-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns3:CMH/ns3:TRACKING/ns3:ITEM"/>
+                                <ns3:ITEM>
+                                    <xsl:attribute name="ns3:APPINFO">
+                                        <xsl:value-of select="concat($_globalVariables/ns7:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns7:GlobalVariables/CRMServices/ComponentId)"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns3:EVENT">
+                                        <xsl:value-of select="&quot;UpsertAccountWithReferencing&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns3:TIMESTAMP">
+                                        <xsl:value-of select="tib:timestamp()"/>
+                                    </xsl:attribute>
+                                </ns3:ITEM>
+                            </ns3:TRACKING>
+                        </ns3:CMH>
+                        <ns4:BODY>
+                            <ns4:RecursiveProcessing>
+                                <xsl:value-of select="true()"/>
+                            </ns4:RecursiveProcessing>
+                            <xsl:for-each select="$SumAccount/AccumulatedOutput/SiebelAccount">
+                                <ns4:SiebelAccount>
+                                    <xsl:copy-of select="./ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="./@*"/>
+                                    <xsl:copy-of select="./node()"/>
+                                </ns4:SiebelAccount>
+                            </xsl:for-each>
+                        </ns4:BODY>
+                    </ns:UpsertAccountWithReferencingPublish>
+                </Body>
+            </PublisherIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>750</pd:x>
+        <pd:y>311</pd:y>
+        <config>
+            <faultName>Schema0</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="$_error_CallInterFace-1054-GetAccountHierarchy">
+                            <xsl:copy-of select="$_error_CallInterFace-1054-GetAccountHierarchy/pfx4:Errors"/>
+                        </xsl:when>
+                        <xsl:when test="$_error_PublisshToUpsertAccountWithReferencing">
+                            <pfx4:Errors>
+                                <xsl:copy-of select="$_error_PublisshToUpsertAccountWithReferencing/pfx4:Error"/>
+                            </pfx4:Errors>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx4:Errors>
+                                <pfx4:Error>
+                                    <pfx4:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                    </pfx4:MsgCode>
+                                    <pfx4:Params>
+                                        <xsl:value-of select="$_error/ns6:ErrorReport/Msg"/>
+                                    </pfx4:Params>
+                                    <xsl:copy-of select="$_error/ns6:ErrorReport"/>
+                                </pfx4:Error>
+                            </pfx4:Errors>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>286</pd:x>
+        <pd:y>73</pd:y>
+        <pd:width>212</pd:width>
+        <pd:height>140</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns1:BODY/ns1:SiebelAccount</pd:over>
+            <pd:iterationElementSlot>Account</pd:iterationElementSlot>
+            <pd:indexSlot>idx</pd:indexSlot>
+            <pd:outSlot>SumAccount</pd:outSlot>
+            <pd:activityOutputName>MapRecursiveSiebelAccount</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>MapRecursiveSiebelAccount</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapRecursiveSiebelAccount</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="MapRecursiveSiebelAccount">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>387</pd:x>
+            <pd:y>150</pd:y>
+            <config>
+                <processName>/CRMServices/Processes/SubProcesses/RecursiveMappers/SiebelAccountMapper.1.process</processName>
+            </config>
+            <pd:inputBindings>
+                <SiebelAccount>
+                    <xsl:copy-of select="$Account/ns1:SiebelAccount/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Account/ns1:SiebelAccount/@*"/>
+                    <xsl:copy-of select="$Account/ns1:SiebelAccount/node()"/>
+                </SiebelAccount>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Generate-Error-1">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>753</pd:x>
+        <pd:y>403</pd:y>
+        <config>
+            <faultName>Schema1</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <xsl:if test="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:ERROR_DESCRIPTION">
+                    <message>
+                        <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:ERROR_DESCRIPTION"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:ERROR_CODE">
+                    <messageCode>
+                        <xsl:value-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:ERROR_CODE"/>
+                    </messageCode>
+                </xsl:if>
+                <data>
+                    <ResultStatus>
+                        <xsl:copy-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@*"/>
+                        <xsl:copy-of select="$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/node()"/>
+                    </ResultStatus>
+                </data>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallInterFace 1054-GetAccountHierarchy</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PublisshToUpsertAccountWithReferencing</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInterFace 1054-GetAccountHierarchy</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PublisshToUpsertAccountWithReferencing</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInterFace 1054-GetAccountHierarchy</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>PublisshToUpsertAccountWithReferencing</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInterFace 1054-GetAccountHierarchy</pd:from>
+        <pd:to>Generate-Error-1</pd:to>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallInterFace-1054-GetAccountHierarchy/ns2:GetAccountHierarchyResponse/ns2:STATUS_RESULT/@ns5:STATUS!=0</pd:xpath>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Handle All Technical errors</pd:description>
+        <pd:x>759</pd:x>
+        <pd:y>352</pd:y>
+        <pd:width>157</pd:width>
+        <pd:height>31</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (1)</pd:name>
+        <pd:description>Handle Functional error fom UCMAdapter.
+Don not process further if functional error is present in response.</pd:description>
+        <pd:x>789</pd:x>
+        <pd:y>466</pd:y>
+        <pd:width>264</pd:width>
+        <pd:height>76</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

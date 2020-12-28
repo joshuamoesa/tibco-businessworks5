@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2006 U (http://www.altova.com) by test (JK) -->
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_FORMULA" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_FORMULA">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_FORMULA">
+			<xsd:element name="GetFormulaRequest" type="s:KSD_GetFormula"/>
+			<xsd:complexType name="KSD_GetFormula">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="troubleReportDetectionDateTime" nillable="true" type="xsd:dateTime"/>
+					<xsd:element name="productTypeCode" nillable="true" type="xsd:integer"/>
+					<xsd:element name="serviceHoursCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="serviceResponseWindow" nillable="true" type="xsd:integer"/>
+					<xsd:element name="troubleUrgencyId" nillable="true" type="xsd:string"/>
+					<xsd:element name="troubleUrgencyFlag" nillable="true" type="xsd:string"/>
+					<xsd:element name="externalCustomerOrderType" nillable="true" type="xsd:string"/>
+					<xsd:element name="repeatedTroubleFlag" nillable="true" type="xsd:string"/>
+					<xsd:element name="expectedResolutionDateTime" nillable="true" type="xsd:dateTime"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetFormulaResponse" type="s:KSD_Formula"/>
+			<xsd:complexType name="KSD_Formula">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="deadlineDateTime" nillable="true" type="xsd:dateTime"/>
+					<xsd:element name="formulaId" nillable="true" type="xsd:string"/>
+					<xsd:element name="TroubleReports" nillable="true" type="s:TroubleReport"/>
+					<xsd:element name="ERROR_CODE" nillable="true" type="xsd:string"/>
+					<xsd:element name="ERROR_DESCRIPTION" nillable="true" type="xsd:string"/>
+					<xsd:element name="STATUS_CODE" nillable="true" type="xsd:integer"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TroubleReport">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="TroubleReport" type="s:TroubleReportType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TroubleReportType">
+				<xsd:sequence>
+					<xsd:element name="formulaCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="formulaDescription" nillable="true" type="xsd:string"/>
+					<xsd:element name="formulaLevel" nillable="true" type="xsd:integer"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="GetFormulaRequestMsg">
+		<part name="parameters" element="s:GetFormulaRequest"/>
+	</message>
+	<message name="GetFormulaResponseMsg">
+		<part name="parameters" element="s:GetFormulaResponse"/>
+	</message>
+	<portType name="GET_FORMULAPortType">
+		<operation name="GetFormulaRequest">
+			<input message="s:GetFormulaRequestMsg"/>
+			<output message="s:GetFormulaResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="GET_FORMULASoapBinding" type="s:GET_FORMULAPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="GetFormulaRequest">
+			<soap:operation soapAction="urn:GET_FORMULA/GetFormula" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="GET_FORMULA_SERVICE">
+		<wsdl:documentation>versie 2.0</wsdl:documentation>
+		<port name="GET_FORMULASoap" binding="s:GET_FORMULASoapBinding">
+			<soap:address location="http://localhost:9190/ExpertDeskAdapter"/>
+		</port>
+	</service>
+</wsdl:definitions>

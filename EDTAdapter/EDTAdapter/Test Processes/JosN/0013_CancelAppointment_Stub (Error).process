@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1094720319421" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1094720530645" xmlns:ns="http://xmlns.example.com/unique/default/namespace/1094721551963" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://xmlns.example.com/unique/default/namespace/1086797912985" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1086802235440">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1094720319421" schemaLocation="/XSDSchemas/EnginAdapter/Request/ScheduleNotesRefresh.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1094720530645" schemaLocation="/XSDSchemas/EnginAdapter/Response/ScheduleNotesRefresh.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086797912985" schemaLocation="/XSDSchemas/EnginAdapter/Request/CancelAppointment.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802235440" schemaLocation="/XSDSchemas/EnginAdapter/Response/CancelAppointment.xsd"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/0013_CancelAppointment_Stub (Error).process</pd:name>
+    <pd:description/>
+    <pd:startName>CancelAppointment Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="CancelAppointment Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>89</pd:x>
+        <pd:y>58</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Order.EnginAdapter.Request.CancelAppointment.1</subject>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/EDTAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx3:CancelAppointment"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>480</pd:endX>
+    <pd:endY>51</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to CancelAppointment Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>CancelAppointment Subscriber</eventSource>
+            <xsdString ref="pfx4:CancelAppointment"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:ID"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:NAME"/>
+                        </ns1:NAME>
+                        <xsl:if test="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:FID">
+                            <ns1:FID>
+                                <xsl:value-of select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:FID"/>
+                            </ns1:FID>
+                        </xsl:if>
+                        <xsl:if test="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:MID">
+                            <ns1:MID>
+                                <xsl:value-of select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:MID"/>
+                            </ns1:MID>
+                        </xsl:if>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;REPLY&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:OBJECT"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="&quot;97&quot;"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="&quot;CancelApp_Stub&quot;"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:TO/@ns1:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                        <ns1:TRACKING>
+                            <ns1:MESSAGE_ID>
+                                <xsl:value-of select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                            </ns1:MESSAGE_ID>
+                            <xsl:for-each select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:TRACKING/ns1:ITEM">
+                                <ns1:ITEM>
+                                    <xsl:attribute name="ns1:APPINFO">
+                                        <xsl:value-of select="@ns1:APPINFO"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns1:EVENT">
+                                        <xsl:value-of select="@ns1:EVENT"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns1:TIMESTAMP">
+                                        <xsl:value-of select="@ns1:TIMESTAMP"/>
+                                    </xsl:attribute>
+                                </ns1:ITEM>
+                            </xsl:for-each>
+                            <xsl:for-each select="$CancelAppointment-Subscriber/ActivityOutput/body/ns1:CMH/ns1:TRACKING/ns1:SEQUENCE_NO">
+                                <ns1:SEQUENCE_NO>
+                                    <xsl:value-of select="."/>
+                                </ns1:SEQUENCE_NO>
+                            </xsl:for-each>
+                        </ns1:TRACKING>
+                        <ns1:ATTRIBUTE>
+                            <xsl:attribute name="ns1:NAME">
+                                <xsl:value-of select="&quot;attribute_name&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:VALUE">
+                                <xsl:value-of select="&quot;atribute_value&quot;"/>
+                            </xsl:attribute>
+                        </ns1:ATTRIBUTE>
+                    </ns1:CMH>
+                    <RESULT_STATUS>
+                        <xsl:attribute name="ns2:STATUS">
+                            <xsl:value-of select="&quot;2&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:MSG_CODE">
+                            <xsl:value-of select="&quot;msg_code&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:ERROR_CODE">
+                            <xsl:value-of select="&quot;error_code&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:ERROR_DESCRIPTION">
+                            <xsl:value-of select="&quot;error_description&quot;"/>
+                        </xsl:attribute>
+                    </RESULT_STATUS>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>CancelAppointment Subscriber</pd:from>
+        <pd:to>Reply to CancelAppointment Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to CancelAppointment Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

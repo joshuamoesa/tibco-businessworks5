@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd" xmlns:pfx3="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3="http://java.sun.com/products/oss/xml/Common" xmlns:ns4="http://java.sun.com/products/oss/xml/ServiceActivation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx4="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="http://xmlns.kpn.com/fixed/xAuthorityAdapter/NotifyMultiMediaRegistrationStatus.xsd" xmlns:pfx6="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" xmlns:pfx7="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:ns6="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns7="http://xmlns.kpn.com/EAI/fixed/xAuthorityAdapter/Product_Enterprise.xsd" xmlns:ns8="http://xmlns.kpn.com/imported/ordermessage_Site_Enterprise.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/xAuthorityAdapter/NotifyMultiMediaRegistrationStatus.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/NotifyMultiMediaRegistrationStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/xAuthorityAdapter/Product_Enterprise.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Product_Enterprise.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Publish/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Subscribe/UpdateOrderStatus.xsd"/>
+    <xsd:import namespace="http://java.sun.com/products/oss/xml/ServiceActivation" schemaLocation="/XSDSchemas/xAuthority/XmlServiceActivationSchema.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Inbound/Main_0330-ModifyMultiMediaSubscriptionRegistration.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx6:SubmitOrder"/>
+    <pd:startX>45</pd:startX>
+    <pd:startY>146</pd:startY>
+    <pd:returnBindings>
+        <output>
+            <OrderValue>
+                <xsl:copy-of select="$Get-Order/output/orderValue/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$Get-Order/output/orderValue/@*"/>
+                <xsl:copy-of select="$Get-Order/output/orderValue/node()"/>
+            </OrderValue>
+        </output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="OrderValue" type="ns4:OrderValue"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>682</pd:endX>
+    <pd:endY>154</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx3:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Create Order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>250</pd:x>
+        <pd:y>148</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Subprocesses/OSS_Framework_Messages/CreateOrder_MMMSR.process</processName>
+        </config>
+        <pd:inputBindings>
+            <CreateOrderInput>
+                <xsl:copy-of select="$Start/pfx6:SubmitOrder"/>
+                <xsl:copy-of select="$Query-Order/ns4:queryServicesResponse"/>
+            </CreateOrderInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Start Order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>342</pd:x>
+        <pd:y>150</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Subprocesses/OSS_Framework_Messages/StartOrder.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <type>
+                    <xsl:value-of select="$Create-Order/output/type"/>
+                </type>
+                <primaryKey>
+                    <xsl:value-of select="$Create-Order/output/primaryKey"/>
+                </primaryKey>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Query Order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>148</pd:x>
+        <pd:y>146</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Subprocesses/OSS_Framework_Messages/queryServices.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <subscriberId>
+                    <xsl:value-of select="$Start/pfx6:SubmitOrder/ns6:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/ENTERPRISE_PRODUCT/ENTERPRISE_ACCOUNT/ID"/>
+                </subscriberId>
+                <xsl:if test="exists($Start/pfx6:SubmitOrder/ns6:BODY/ORDER/ORDER_ITEM/PRODUCT/ENTERPRISE_PRODUCT/RUNTIME_PARAMETERS/NAME_VALUE_PAIR[NAME=&quot;attribute1&quot;]/VALUE[1])">
+                    <attribute1>
+                        <xsl:value-of select="$Start/pfx6:SubmitOrder/ns6:BODY/ORDER/ORDER_ITEM/PRODUCT/ENTERPRISE_PRODUCT/RUNTIME_PARAMETERS/NAME_VALUE_PAIR[NAME=&quot;attribute1&quot;]/VALUE[1]"/>
+                    </attribute1>
+                </xsl:if>
+                <xsl:if test="exists($Start/pfx6:SubmitOrder/ns6:BODY/ORDER/ORDER_ITEM/PRODUCT/ENTERPRISE_PRODUCT/RUNTIME_PARAMETERS/NAME_VALUE_PAIR[NAME=&quot;attribute2&quot;]/VALUE[1])">
+                    <attribute2>
+                        <xsl:value-of select="$Start/pfx6:SubmitOrder/ns6:BODY/ORDER/ORDER_ITEM/PRODUCT/ENTERPRISE_PRODUCT/RUNTIME_PARAMETERS/NAME_VALUE_PAIR[NAME=&quot;attribute2&quot;]/VALUE[1]"/>
+                    </attribute2>
+                </xsl:if>
+                <OrderType>
+                    <xsl:value-of select="&quot;Enterprise&quot;"/>
+                </OrderType>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Get Order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>566</pd:x>
+        <pd:y>153</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Subprocesses/OSS_Framework_Messages/GetOrder.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <type>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$Create-Order/output/type"/>
+                </type>
+                <primaryKey>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$Create-Order/output/primaryKey"/>
+                </primaryKey>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Wait for orderStateChangeEvent">
+        <pd:type>com.tibco.plugin.waitnotify.WaitActivity</pd:type>
+        <pd:resourceType>ae.activities.waitActivity</pd:resourceType>
+        <pd:x>448</pd:x>
+        <pd:y>160</pd:y>
+        <config>
+            <sharedConfig>/xAuthorityAdapter/Shared Resources/Inbound/Events.sharednotify</sharedConfig>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <key>
+                    <xsl:value-of select="$Create-Order/output/primaryKey"/>
+                </key>
+                <timeout>
+                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/xAuthorityAdapter/OSSJMessages/timeout"/>
+                </timeout>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>438</pd:x>
+        <pd:y>319</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Query-Order)">
+                            <xsl:copy-of select="$_error_Query-Order/pfx3:Error"/>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Create-Order)">
+                            <xsl:copy-of select="$_error_Create-Order/pfx3:Error"/>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Start-Order)">
+                            <xsl:copy-of select="$_error_Start-Order/pfx3:Error"/>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Wait-for-orderStateChangeEvent)">
+                            <pfx3:Error>
+                                <pfx3:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03015&quot;"/>
+                                </pfx3:MsgCode>
+                                <pfx3:Params>
+                                    <xsl:value-of select="&quot;orderStateChangeEvent&quot;"/>
+                                </pfx3:Params>
+                                <xsl:copy-of select="$_error/ns1:ErrorReport"/>
+                            </pfx3:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Get-Order)">
+                            <xsl:copy-of select="$_error_Get-Order/pfx3:Error"/>
+                        </xsl:when>
+                        <xsl:when test="$Query-Order/ns4:queryServicesResponse/ns3:endOfReply=&quot;true&quot;">
+                            <pfx3:Error>
+                                <pfx3:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03020&quot;"/>
+                                </pfx3:MsgCode>
+                                <pfx3:Params>
+                                    <xsl:value-of select="tib:render-xml($Start/pfx6:SubmitOrder)"/>
+                                </pfx3:Params>
+                                <pfx3:ApplicationError>
+                                    <xsl:value-of select="concat(substring-before(eai:getMessageText(&quot;XAuth-03020&quot;),&quot;%1&quot;),tib:render-xml($Start/pfx6:SubmitOrder))"/>
+                                </pfx3:ApplicationError>
+                            </pfx3:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx3:Error>
+                                <xsl:copy-of select="$_error/ns1:ErrorReport"/>
+                            </pfx3:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>150</pd:x>
+        <pd:y>311</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Query Order</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create Order</pd:from>
+        <pd:to>Start Order</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start Order</pd:from>
+        <pd:to>Wait for orderStateChangeEvent</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Query Order</pd:from>
+        <pd:to>Create Order</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for orderStateChangeEvent</pd:from>
+        <pd:to>Get Order</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Order</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create Order</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start Order</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Order</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for orderStateChangeEvent</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Query Order</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Query Order</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:xpathDescription>QUERY WITH NO RESULTS</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Query-Order/ns4:queryServicesResponse/ns3:endOfReply="true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

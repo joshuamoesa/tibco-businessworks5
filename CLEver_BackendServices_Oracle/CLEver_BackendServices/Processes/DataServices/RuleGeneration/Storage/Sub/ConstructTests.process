@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/BusinessDomain" xmlns:ns9="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns5="http://www.tibco.com/CLEver/Policy" xmlns:ns6="http://www.tibco.com/CLEver/Notification" xmlns:ns7="http://www.tibco.com/CLEver/Resolution" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns8="http://www.tibco.com/CLEver/Schedule" xmlns:ExceptionRuleXslt="java://XSLTTransform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns1="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:ns4="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns3="http://www.tibco.com/CLEver/ExceptionType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/CLEver/HistoryRetain" xmlns:pfx2="http://www.tibco.com/CLEver/Rule">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Rule" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Rule.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/HistoryRetain" schemaLocation="/Shared Resources/Schema Definitions/CLEver/HistoryRetain.xsd"/>
+    <pd:name>Processes/DataServices/RuleGeneration/Storage/Sub/ConstructTests.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:HistoryRetainsFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>88</pd:startY>
+    <pd:returnBindings>
+        <output>
+            <xsl:for-each select="$StoreXpath/AccumulatedOutput/group">
+                <HistoryRetainXpath>
+                    <xsl:copy-of select="HistoryRetainXpath/pfx3:HistoryRetainFull"/>
+                    <TestException>
+                        <xsl:value-of select="HistoryRetainXpath/TestException"/>
+                    </TestException>
+                    <TestLog>
+                        <xsl:value-of select="HistoryRetainXpath/TestLog"/>
+                    </TestLog>
+                </HistoryRetainXpath>
+            </xsl:for-each>
+        </output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="HistoryRetainXpath" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="pfx3:HistoryRetainFull"/>
+                                <xsd:element name="TestException" type="xsd:string"/>
+                                <xsd:element name="TestLog" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>459</pd:endX>
+    <pd:endY>87</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ChildXSLT>
+            <xsd:element name="XSLTElement" type="xsd:string"/>
+        </ChildXSLT>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1296759629958</pd:targetNamespace>
+    <pd:group name="Rule Tests">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>110</pd:x>
+        <pd:y>18</pd:y>
+        <pd:width>268</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/Input/pfx3:HistoryRetainsFull/pfx3:HistoryRetainFull</pd:over>
+            <pd:iterationElementSlot>Store</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:outSlot>StoreXpath</pd:outSlot>
+            <pd:activityOutputName>Map Data</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GenerateStoreXpathTest</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GenerateStoreXpathTest</pd:from>
+            <pd:to>Map Data</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GenerateStoreXpathTest">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>195</pd:x>
+            <pd:y>88</pd:y>
+            <config>
+                <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/XPathTestHelper.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <xsl:copy-of select="$Store/pfx3:HistoryRetainFull"/>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map Data">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>289</pd:x>
+            <pd:y>90</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="group">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="HistoryRetainXpath">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element ref="pfx3:HistoryRetainFull"/>
+                                            <xsd:element name="TestException" type="xsd:string"/>
+                                            <xsd:element name="TestLog" type="xsd:string"/>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <group>
+                    <HistoryRetainXpath>
+                        <xsl:copy-of select="$Store/pfx3:HistoryRetainFull"/>
+                        <TestException>
+                            <xsl:value-of select="$GenerateStoreXpathTest/Output/TestException"/>
+                        </TestException>
+                        <TestLog>
+                            <xsl:value-of select="$GenerateStoreXpathTest/Output/TestLog"/>
+                        </TestLog>
+                    </HistoryRetainXpath>
+                </group>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Rule Tests</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rule Tests</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

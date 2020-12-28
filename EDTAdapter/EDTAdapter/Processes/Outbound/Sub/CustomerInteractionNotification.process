@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerInteractionNotification.xsd"/>
+    <pd:name>EDTAdapter/Processes/Outbound/Sub/CustomerInteractionNotification.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ServiceName" type="xsd:string"/>
+                    <xsd:element name="msgid" type="xsd:string" minOccurs="0"/>
+                    <xsd:element ref="pfx:CustomerInteractionNotification"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>120</pd:startX>
+    <pd:startY>126</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>527</pd:endX>
+    <pd:endY>126</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="JMS Publish">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:description>Publises message on JMS to EDT Adapter for the service
+CustomerInteractionNotification</pd:description>
+        <pd:x>326</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Publisher.process</processName>
+        </config>
+        <pd:inputBindings>
+            <PublisherIn>
+                <Destination>
+                    <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/Env, &quot;.FIXED.Operations.EDTAdapter.Publish.CustomerInteractionNotification.1&quot;)"/>
+                </Destination>
+                <Body>
+                    <xsl:copy-of select="$Start/ServiceIn/pfx:CustomerInteractionNotification"/>
+                </Body>
+            </PublisherIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>324</pd:x>
+        <pd:y>288</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_JMS-Publish/pfx2:Error)">
+                        <xsl:if test="$_error_JMS-Publish/pfx2:Error/pfx2:Message">
+                            <message>
+                                <xsl:value-of select="$_error_JMS-Publish/pfx2:Error/pfx2:Message"/>
+                            </message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <message>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </message>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_JMS-Publish/pfx2:Error)">
+                        <messageCode>
+                            <xsl:value-of select="&quot;EDT-03005&quot;"/>
+                        </messageCode>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <messageCode>
+                            <xsl:value-of select="&quot;EDT-03004&quot;"/>
+                        </messageCode>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_JMS-Publish/pfx2:Error)">
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03005&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_JMS-Publish/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_JMS-Publish/@*"/>
+                                    <xsl:copy-of select="$_error_JMS-Publish/node()"/>
+                                </pfx2:ActivityError>
+                            </pfx2:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;B2BCS-03003&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                            </pfx2:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JMS Publish</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Publish</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Publish</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

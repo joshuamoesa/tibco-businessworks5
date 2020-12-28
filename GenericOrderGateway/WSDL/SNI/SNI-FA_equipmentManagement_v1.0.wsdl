@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated on 2008/10/28 15:15:08 with EAIPlugin 1.2.0 -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:grp="http://kpn.com/products/SNI-FA" xmlns:ord="http://kpn.com/eai/generic/order/1.0" xmlns:prd="http://kpn.com/products/SNI-FA/equipmentManagement/data/v1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://kpn.com/products/SNI-FA/equipmentManagement/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/products/SNI-FA/equipmentManagement/v1">
+<wsdl:documentation>
+    equipmentManagement functional product.
+
+    Version History:
+    * 1.0 - Initial version
+</wsdl:documentation>
+<wsdl:types>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/eai/generic/order/1.0" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:simpleType name="OrderStatusEnumeration">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="INITIAL"/>
+      <xsd:enumeration value="ACCEPTED"/>
+      <xsd:enumeration value="REJECTED"/>
+      <xsd:enumeration value="ERROR"/>
+      <xsd:enumeration value="COMPLETED"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:complexType name="Error">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="detail" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Order">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="orderDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="OrderStatus">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="supplierOrderId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="error" type="ord:Error"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/SNI-FA" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_activation  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_activation">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Active"/>
+      <xsd:enumeration value="Inactive"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_callBarringServiceNumbers  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_callBarringServiceNumbers">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="0906"/>
+      <xsd:enumeration value="0906-0909"/>
+      <xsd:enumeration value="0900-0906-0909"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_carrierType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_carrierType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="FTTC"/>
+      <xsd:enumeration value="FTTH"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_keyType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_keyType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="source"/>
+      <xsd:enumeration value="target"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_orderScenario  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_orderScenario">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="New"/>
+      <xsd:enumeration value="Migrate"/>
+      <xsd:enumeration value="Move"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_qualityOfService  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_qualityOfService">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Best Effort"/>
+      <xsd:enumeration value="Premium"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_yesNo  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_yesNo">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Y"/>
+      <xsd:enumeration value="N"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_telephoneNumber  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_telephoneNumber">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_zipcode  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_zipcode">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrder  <<order>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrder">
+    <xsd:sequence>
+      <xsd:element name="type" type="xsd:string"/>
+      <xsd:element name="keyType" type="grp:E_keyType"/>
+      <xsd:element name="requesterId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderItem  <<orderItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderItem">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="serviceInstanceId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderStatus  <<orderStatus>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderStatus">
+    <xsd:sequence>
+      <xsd:element name="keyType" type="grp:E_keyType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderStatusItem  <<orderStatusItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderStatusItem">
+    <xsd:sequence>
+      <xsd:element name="serviceInstanceId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/SNI-FA/equipmentManagement/data/v1.0" version="1.0">
+  <xsd:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+  <xsd:import namespace="http://kpn.com/products/SNI-FA"/>
+  <!-- ================================================== -->
+  <!-- =====  Element Declarations  -->
+  <!-- ================================================== -->
+  <xsd:element name="equipmentManagementcancelRequest" type="prd:equipmentManagementcancelRequest"/>
+  <xsd:element name="equipmentManagementcancelResponse" type="prd:equipmentManagementcancelResponse"/>
+  <xsd:element name="equipmentManagementcreateRequest" type="prd:equipmentManagementcreateRequest"/>
+  <xsd:element name="equipmentManagementcreateResponse" type="prd:equipmentManagementcreateResponse"/>
+  <xsd:element name="equipmentManagementdeleteRequest" type="prd:equipmentManagementdeleteRequest"/>
+  <xsd:element name="equipmentManagementdeleteResponse" type="prd:equipmentManagementdeleteResponse"/>
+  <xsd:element name="equipmentManagementupdateRequest" type="prd:equipmentManagementupdateRequest"/>
+  <xsd:element name="equipmentManagementupdateResponse" type="prd:equipmentManagementupdateResponse"/>
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementStatusEnum  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="equipmentManagementStatusEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Rejected"/>
+      <xsd:enumeration value="Failed"/>
+      <xsd:enumeration value="Completed"/>
+      <xsd:enumeration value="Planned"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  cancelRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="cancelRequest">
+    <xsd:sequence>
+      <xsd:element name="refOrderId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  cancelResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="cancelResponse">
+    <xsd:sequence>
+      <xsd:element name="refOrderId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createRequest">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdEquipmentManagement" type="xsd:string"/>
+      <xsd:element name="fpIdAccess" type="xsd:string"/>
+      <xsd:element name="fpIdSpTemplate" type="xsd:string"/>
+      <xsd:element name="deviceType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="wishDate" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdEquipmentManagement" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdEquipmentManagement" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdEquipmentManagement" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementcancelRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementcancelRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:equipmentManagementcancelRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementcancelRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementcancelRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:cancelRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementcancelResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementcancelResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:equipmentManagementStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:equipmentManagementcancelResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementcancelResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementcancelResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:cancelResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementcreateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementcreateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:equipmentManagementcreateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementcreateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementcreateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:createRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementcreateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementcreateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:equipmentManagementStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:equipmentManagementcreateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementcreateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementcreateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:createResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementdeleteRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementdeleteRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:equipmentManagementdeleteRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementdeleteRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementdeleteRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:deleteRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementdeleteResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementdeleteResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:equipmentManagementStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:equipmentManagementdeleteResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementdeleteResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementdeleteResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:deleteResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementupdateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementupdateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:equipmentManagementupdateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementupdateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementupdateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:updateRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementupdateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementupdateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:equipmentManagementStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:equipmentManagementupdateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  equipmentManagementupdateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="equipmentManagementupdateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:updateResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  updateRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="updateRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdEquipmentManagement" type="xsd:string"/>
+      <xsd:element name="loginUsername" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="loginPassword" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="telephoneNumber" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="rgPort" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="sipServer" type="xsd:string"/>
+      <xsd:element name="subaction" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  updateResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="updateResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdEquipmentManagement" type="xsd:string"/>
+      <xsd:element name="subaction" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+</wsdl:types>
+<wsdl:message name="cancelStatusUpdateRequest">
+<wsdl:part element="prd:equipmentManagementcancelResponse" name="equipmentManagementcancelStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="Error">
+<wsdl:part name="Error" type="ord:Error"/>
+</wsdl:message>
+<wsdl:message name="createStatusUpdateRequest">
+<wsdl:part element="prd:equipmentManagementcreateResponse" name="equipmentManagementcreateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="createRequest">
+<wsdl:part element="prd:equipmentManagementcreateRequest" name="equipmentManagementcreateRequest"/>
+</wsdl:message>
+<wsdl:message name="updateStatusUpdateRequest">
+<wsdl:part element="prd:equipmentManagementupdateResponse" name="equipmentManagementupdateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="cancelRequest">
+<wsdl:part element="prd:equipmentManagementcancelRequest" name="equipmentManagementcancelRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteRequest">
+<wsdl:part element="prd:equipmentManagementdeleteRequest" name="equipmentManagementdeleteRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteStatusUpdateRequest">
+<wsdl:part element="prd:equipmentManagementdeleteResponse" name="equipmentManagementdeleteStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="updateRequest">
+<wsdl:part element="prd:equipmentManagementupdateRequest" name="equipmentManagementupdateRequest"/>
+</wsdl:message>
+<wsdl:portType name="equipmentManagementServices">
+<wsdl:operation name="create">
+<wsdl:input message="tns:createRequest" name="createRequest"/>
+</wsdl:operation>
+<wsdl:operation name="update">
+<wsdl:input message="tns:updateRequest" name="updateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<wsdl:input message="tns:deleteRequest" name="deleteRequest"/>
+</wsdl:operation>
+<wsdl:operation name="cancel">
+<wsdl:input message="tns:cancelRequest" name="cancelRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:portType name="equipmentManagementCallbackServices">
+<wsdl:operation name="createStatusUpdate">
+<wsdl:input message="tns:createStatusUpdateRequest" name="createStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="cancelStatusUpdate">
+<wsdl:input message="tns:cancelStatusUpdateRequest" name="cancelStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<wsdl:input message="tns:deleteStatusUpdateRequest" name="deleteStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="updateStatusUpdate">
+<wsdl:input message="tns:updateStatusUpdateRequest" name="updateStatusUpdateRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="equipmentManagementBindingSOAP" type="tns:equipmentManagementServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="create">
+<soap:operation soapAction="SNI-FA_equipmentManagement_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="update">
+<soap:operation soapAction="SNI-FA_equipmentManagement_1.0_update_Asynchronous" style="document"/>
+<wsdl:input name="updateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<soap:operation soapAction="SNI-FA_equipmentManagement_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="cancel">
+<soap:operation soapAction="SNI-FA_equipmentManagement_1.0_cancel_Asynchronous" style="document"/>
+<wsdl:input name="cancelRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:binding name="equipmentManagementCallbackBindingSOAP" type="tns:equipmentManagementCallbackServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="createStatusUpdate">
+<soap:operation soapAction="SNI-FA_equipmentManagement_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="cancelStatusUpdate">
+<soap:operation soapAction="SNI-FA_equipmentManagement_1.0_cancel_Asynchronous" style="document"/>
+<wsdl:input name="cancelStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<soap:operation soapAction="SNI-FA_equipmentManagement_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="updateStatusUpdate">
+<soap:operation soapAction="SNI-FA_equipmentManagement_1.0_update_Asynchronous" style="document"/>
+<wsdl:input name="updateStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="equipmentManagement">
+<wsdl:port binding="tns:equipmentManagementBindingSOAP" name="equipmentManagementServices">
+<soap:address location="http://localhost:8080/path/equipmentManagementServices"/>
+</wsdl:port>
+<wsdl:port binding="tns:equipmentManagementCallbackBindingSOAP" name="equipmentManagementCallbackServices">
+<soap:address location="http://localhost:8080/path/equipmentManagementCallbackServices"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

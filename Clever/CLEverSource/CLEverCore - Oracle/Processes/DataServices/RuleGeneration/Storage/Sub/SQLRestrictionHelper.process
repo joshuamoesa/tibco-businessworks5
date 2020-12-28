@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/BusinessDomain" xmlns:ns5="http://www.tibco.com/CLEver/Policy" xmlns:ns6="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://www.tibco.com/CLEver/Rule" xmlns:ns7="http://www.tibco.com/CLEver/ExceptionCode" xmlns:ns8="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns1="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:ns4="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns3="http://www.tibco.com/CLEver/ExceptionType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/CLEver/HistoryRetain">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Rule" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Rule.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/HistoryRetain" schemaLocation="/Shared Resources/Schema Definitions/CLEver/HistoryRetain.xsd"/>
+    <pd:name>Processes/DataServices/RuleGeneration/Storage/Sub/SQLRestrictionHelper.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="SubTable" type="xsd:string"/>
+                    <xsd:element name="Restriction" type="xsd:string"/>
+                    <xsd:element name="JoinColumn" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>57</pd:startX>
+    <pd:startY>66</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <xsl:choose>
+                <xsl:when test="$Start/Input/Restriction!='*'">
+                    <Where>
+                        <xsl:value-of select="concat($Start/Input/JoinColumn,' IN (Select ID from ', $Start/Input/SubTable,' where ',tib:concat-sequence-format($accMapWhere/AccumulatedOutput/root/Where,' OR ', false()),')')"/>
+                    </Where>
+                </xsl:when>
+                <xsl:otherwise>
+                    <Where>
+                        <xsl:value-of select="''"/>
+                    </Where>
+                </xsl:otherwise>
+            </xsl:choose>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Where" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>454</pd:endX>
+    <pd:endY>68</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1296753701497</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>180</pd:x>
+        <pd:y>148</pd:y>
+        <pd:width>135</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>tib:tokenize($Start/Input/Restriction, '|')</pd:over>
+            <pd:iterationElementSlot>Restriction</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:outSlot>accMapWhere</pd:outSlot>
+            <pd:activityOutputName>MapWhere</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>MapWhere</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapWhere</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="MapWhere">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>239</pd:x>
+            <pd:y>212</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Where" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <xsl:variable name="var" select="tib:tokenize($Start/Input/Restriction, '|')[$i]"/>
+                    <xsl:choose>
+                        <xsl:when test="contains($var,'*')">
+                            <Where>
+                                <xsl:value-of select="concat(&quot;name ='&quot;,tib:concat-sequence-format(tib:tokenize-allow-empty($var, '*'),'%',false()),&quot;'&quot;)"/>
+                            </Where>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <Where>
+                                <xsl:value-of select="concat(&quot;name ='&quot;,$var,&quot;'&quot;)"/>
+                            </Where>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>No Restrictions</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/Input/Restriction='*'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

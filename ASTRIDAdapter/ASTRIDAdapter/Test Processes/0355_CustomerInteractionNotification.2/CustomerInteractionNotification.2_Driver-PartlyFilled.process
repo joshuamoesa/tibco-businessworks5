@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/TangoAdapter/Imported/ProductGroup_Tango.xsd" xmlns:eai="java://com.kpn.eai.tools.Tools" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx3="http://www.tibco.com/schemas/Subscribe/CustomerInteractionNotification.2.xsd" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/2.0/Publish" xmlns:pfx4="http://www.tibco.com/schemas/Publish/CustomerInteractionNotification.2.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/Generic/CustomerInteractionNotification.2.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/UpdateOrderStatus.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/imported/ordermessage.xsd" schemaLocation="/XSDSchemas/OrderServices/Imported/ProductGroup_CCO.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/TangoAdapter/Imported/ProductGroup_Tango.xsd" schemaLocation="/XSDSchemas/TangoAdapter/Imported/ProductGroup_Tango.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/2.0/Publish" schemaLocation="/XSDSchemas/ASTRIDAdapter/Imported/0355_CustomerInteractionNotification_2.4_Publish_EAI_BUS_SIDE.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/schemas/Publish/CustomerInteractionNotification.2.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Publish/CustomerInteractionNotification.2.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/schemas/Subscribe/CustomerInteractionNotification.2.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/schemas/Subscribe/CustomerInteractionNotification.2.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Subscribe/CustomerInteractionNotification.2.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/Generic/CustomerInteractionNotification.2.xsd" schemaLocation="/XSDSchemas/Generic/CustomerInteractionNotification.2.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/0355_CustomerInteractionNotification.2/CustomerInteractionNotification.2_Driver-PartlyFilled.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>251</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <element ref="pfx5:CustomerInteractionNotification"/>
+        </config>
+        <pd:inputBindings>
+            <pfx5:CustomerInteractionNotification>
+                <ns:CMH>
+                    <ns:ID>
+                        <xsl:value-of select="'997'"/>
+                    </ns:ID>
+                    <ns:NAME>
+                        <xsl:value-of select="'CustomerInteractionNotification'"/>
+                    </ns:NAME>
+                    <ns:FID>
+                        <xsl:value-of select="'FID'"/>
+                    </ns:FID>
+                    <ns:MID>
+                        <xsl:value-of select="'997.10'"/>
+                    </ns:MID>
+                    <ns:PARADIGM>
+                        <xsl:value-of select="'Publish'"/>
+                    </ns:PARADIGM>
+                    <ns:OBJECT>
+                        <xsl:value-of select="'OBJ'"/>
+                    </ns:OBJECT>
+                    <ns:VERSION>
+                        <xsl:value-of select="'6.10.1'"/>
+                    </ns:VERSION>
+                    <ns:FROM>
+                        <xsl:attribute name="ns:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns:FROM>
+                    <ns:TO>
+                        <xsl:attribute name="ns:DESTINATION">
+                            <xsl:value-of select="&quot;FAT.FIXED.Operations.ASTRIDAdapter.Subscribe.CustomerInteractionNotification.2&quot;"/>
+                        </xsl:attribute>
+                    </ns:TO>
+                    <ns:TRACKING>
+                        <ns:MESSAGE_ID>
+                            <xsl:value-of select="eai:createGUID()"/>
+                        </ns:MESSAGE_ID>
+                        <ns:ITEM>
+                            <xsl:attribute name="ns:APPINFO">
+                                <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:EVENT">
+                                <xsl:value-of select="'ProvisioningWorkorderNotification'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns:ITEM>
+                    </ns:TRACKING>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;MESSAGE_DESTINATION_IT_DOMAIN&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="&quot;ASTRID&quot;"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;MESSAGE_ORIGINATION_IT_DOMAIN&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="&quot;REGGEFIBER&quot;"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                </ns:CMH>
+                <ns4:BODY>
+                    <CUSTOMER_INTERACTION_NOTIFICATION>
+                        <CUSTOMER_INTERACTION_REPORT>
+                            <INTERACTION_DATETIME>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </INTERACTION_DATETIME>
+                        </CUSTOMER_INTERACTION_REPORT>
+                        <INTERACTION_CLASS>
+                            <INTERACTION_TYPE>
+                                <xsl:value-of select="&quot;INCIDENT_REPORT_REQUEST&quot;"/>
+                            </INTERACTION_TYPE>
+                        </INTERACTION_CLASS>
+                    </CUSTOMER_INTERACTION_NOTIFICATION>
+                </ns4:BODY>
+            </pfx5:CustomerInteractionNotification>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>347</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.Operations.ASTRIDAdapter.Subscribe.CustomerInteractionNotification.2</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInput>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx5:CustomerInteractionNotification, false(),true())"/>
+                </Body>
+            </pfx2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

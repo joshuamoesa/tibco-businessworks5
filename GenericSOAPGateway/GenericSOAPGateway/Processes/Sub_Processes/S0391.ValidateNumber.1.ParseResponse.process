@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_input.xsd" xmlns:pfx2="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_output.xsd" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/fixed/PMAdapter/common/PMResponse.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetails.xsd" xmlns:pfx6="http://xmlns.kpn.com/EAI/fixed/0407_HoldCollections/1.0/Response" xmlns:pfx7="http://xmlns.kpn.com/fixed/PMAdapter/response/HoldCollections.xsd" xmlns:pfx8="http://xmlns.kpn.com/fixed/NumberServices/Request/ValidateNumber.1.xsd" xmlns:pfx9="http://xmlns.kpn.com/fixed/NumberServices/Response/ValidateNumber.xsd" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0391_ValidateNumber/1.0/Response">
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_ParseResponse_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_ParseResponse_output.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd" schemaLocation="/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetails.xsd" schemaLocation="/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetails.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/PMAdapter/response/HoldCollections.xsd" schemaLocation="/XSDSchemas/PMAdapter/Response/HoldCollections.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/NumberServices/Response/ValidateNumber.xsd" schemaLocation="/XSDSchemas/NumberServices/Response/ValidateNumber.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0391.ValidateNumber.1.ParseResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:Input"/>
+    <pd:startX>149</pd:startX>
+    <pd:startY>72</pd:startY>
+    <pd:returnBindings>
+        <pfx2:Output>
+            <pfx2:CMH>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateNumberResponse/ns:CMH/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateNumberResponse/ns:CMH/@*"/>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateNumberResponse/ns:CMH/node()"/>
+            </pfx2:CMH>
+            <pfx2:RESULT_STATUS>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateNumberResponse/RESULT_STATUS/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateNumberResponse/RESULT_STATUS/@*"/>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateNumberResponse/RESULT_STATUS/node()"/>
+            </pfx2:RESULT_STATUS>
+            <pfx2:CompleteBody>
+                <xsl:copy-of select="$Parse-XML/pfx9:ValidateNumberResponse"/>
+            </pfx2:CompleteBody>
+        </pfx2:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:Output"/>
+    <pd:endX>448</pd:endX>
+    <pd:endY>73</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>282</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx9:ValidateNumberResponse"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/pfx:Input/pfx:ResultString"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

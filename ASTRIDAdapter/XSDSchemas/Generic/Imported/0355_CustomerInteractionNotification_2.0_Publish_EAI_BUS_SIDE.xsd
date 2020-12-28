@@ -1,0 +1,1017 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/2.0/Publish" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/2.0/Publish">
+	<xs:simpleType name="cityName_type">
+		<xs:annotation>
+			<xs:documentation>The name of the city as it occurs in the property address of the customer organization.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CKRNumber_type">
+		<xs:annotation>
+			<xs:documentation>CKR number for the customer.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="countryName_type">
+		<xs:annotation>
+			<xs:documentation>The name of the country in which the customer organization is settled.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="houseNumber_type">
+		<xs:annotation>
+			<xs:documentation>The housenumber as it occurs in the property address of the customer organization.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="6"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="houseNumberExtension_type">
+		<xs:annotation>
+			<xs:documentation>The housenumber extension as it occurs in the property address of the customer organization.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="6"/>
+			<xs:minLength value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="streetName_type">
+		<xs:annotation>
+			<xs:documentation>The name of the street as it occurs in the property address of the customer organization.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="24"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="genericZipcode_type">
+		<xs:annotation>
+			<xs:documentation>The zipcode as it occurs in the property address of the customer organization.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dutchPostcodeNumbers_type">
+		<xs:annotation>
+			<xs:documentation>Specifies the customer address dutch postcode number part.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dutchPostcodeLetters_type">
+		<xs:annotation>
+			<xs:documentation>Specifies the customer address dutch postcode letters part.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="givenNames_type">
+		<xs:annotation>
+			<xs:documentation>First name of the contact person</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="initials_type">
+		<xs:annotation>
+			<xs:documentation>Initials of the contact person</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="6"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="familyName_type">
+		<xs:annotation>
+			<xs:documentation>Official surname of the contact person</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="70"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="familyNamePrefix_type">
+		<xs:annotation>
+			<xs:documentation>A prefix for the surname. This can be something like, 'van', 'van der', etcetera.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="emailAddress_type">
+		<xs:annotation>
+			<xs:documentation>The e-mail address of the contact person is supplied in this field</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="320">
+				<xs:annotation>
+					<xs:documentation>Maximum length of an email address according to RFC 2821 is 64 for the local part (mail box) and 255 for the global part (domain). With the extra space for the '@' character the total is 320.</xs:documentation>
+				</xs:annotation>
+			</xs:maxLength>
+			<xs:pattern value="([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(([a-zA-Z0-9_-])*\.([a-zA-Z0-9_-])+)+">
+				<xs:annotation>
+					<xs:documentation>Validates whether an string conforms to the RFC 2822 which describes (among others) e-mail addresses.</xs:documentation>
+				</xs:annotation>
+			</xs:pattern>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberCountryCode_type">
+		<xs:annotation>
+			<xs:documentation>The country code of the phone number.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3"/>
+			<xs:minLength value="1"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="\d+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberAreaCode_type">
+		<xs:annotation>
+			<xs:documentation>The area code of the phone number.
+	  The area code specifies a national destination code: identifying a numbering area
+	  within a numbering plan for a country (or countries sharing such numbering plan).
+	  Such a numbering plan may be absent, may represent a geographical, logical, network
+	  or other basis or a combination thereof for a numbering scheme.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="5"/>
+			<xs:minLength value="1"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="\d*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberSubscriberNumber_type">
+		<xs:annotation>
+			<xs:documentation>The subscriber number of the phone number in the specified area code.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="15"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="\d+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberFreeFormat_type">
+		<xs:annotation>
+			<xs:documentation>An unstructured representation of a phoneNumber.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="25"/>
+			<xs:minLength value="1"/>
+			<xs:whiteSpace value="collapse"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberFormatted_type">
+		<xs:annotation>
+			<xs:documentation>A string representing a phoneNumber containing only digits and optionally white space,
+		  possibly preceded by a plus sign.
+		  A formatted phone number is dialable when the + symbol is replaced by
+		  the digits required to access an international phone line and where all other
+		  characters other than digits are ignored.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="tns:phoneNumberFreeFormat_type">
+			<xs:pattern value="\+?[\d\-\s]{1,25}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumber_type">
+		<xs:annotation>
+			<xs:documentation>A string representing a phoneNumber containing digits and
+		  possibly white space, hyphen, parenthesis pairs, and a preceding a plus sign.
+		  An unformatted phone number requires human interpretation
+		  (e.g. leave out leading 0 from area code when using country code)
+		  to infer the actual phone number to be dialed.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="tns:phoneNumberFreeFormat_type">
+			<xs:pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="incidentReportId_type">
+		<xs:annotation>
+			<xs:documentation>A unique identifier for the interaction report. This field is used to specify the identification of the interaction subject as known by the service provider (e.g. KPN). This can be the Ticket ID, Change ID, etcetera. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="15"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="structuredPhoneNumber_type">
+		<xs:choice>
+			<xs:element name="DETAILED">
+				<xs:annotation>
+					<xs:documentation>A structured representation of a phone number,
+		  separating country code, area code and subscriber number.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="COUNTRY_CODE" type="tns:phoneNumberCountryCode_type" minOccurs="0"/>
+						<xs:element name="AREA_CODE" type="tns:phoneNumberAreaCode_type" minOccurs="0"/>
+						<xs:element name="SUBSCRIBER_NUMBER" type="tns:phoneNumberSubscriberNumber_type"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FORMATTED" type="tns:phoneNumberFormatted_type">
+				<xs:annotation>
+					<xs:documentation>A string representing a phoneNumber containing only digits and optionally white space,
+		  possibly preceded by a plus sign.
+		  A formatted phone number is dialable when the + symbol is replaced by
+		  the digits required to access an international phone line and where all other
+		  characters other than digits are ignored.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UNFORMATTED" type="tns:phoneNumber_type">
+				<xs:annotation>
+					<xs:documentation>A string representing a phoneNumber containing digits and
+		  possibly white space, hyphen, parenthesis pairs, and a preceding a plus sign.
+		  An unformatted phone number requires human interpretation
+		  (e.g. leave out leading 0 from area code when using country code)
+		  to infer the actual phone number to be dialed.
+		  </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FREEFORMAT" type="tns:phoneNumberFreeFormat_type">
+				<xs:annotation>
+					<xs:documentation>A string that can not be dialed but can by used by a human to determine a phone number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="address_type">
+		<xs:sequence>
+			<xs:element name="CITY_NAME" type="tns:cityName_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The name of the city as it occurs in the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="COUNTRY" type="tns:countryName_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The name of the country in which the adress is located.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HOUSE_NUMBER" type="tns:houseNumber_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The housenumber as it occurs in the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The housenumber extension as it occurs in the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="STREET_NAME" type="tns:streetName_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The name of the street as it occurs in the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ZIP_CODE" type="tns:genericZipcode_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The zipcode as it occurs in the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="POSTCODE_NUMBERS" type="tns:dutchPostcodeNumbers_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the address dutch postcode number part.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="POSTCODE_LETTERS" type="tns:dutchPostcodeLetters_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the address dutch postcode letters part.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LOCATION_DESCRIPTION" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Additional information to make the address more specific, e.g. a room number, or that may help in locating the address.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="contactPerson_type">
+		<xs:sequence>
+			<xs:element name="PHONE_NUMBER" type="tns:structuredPhoneNumber_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The telephone number of the contact person that can be used to make contact.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FAX_NUMBER" type="tns:structuredPhoneNumber_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The fax number of the contact person that can be used to make contact.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MOBILE_NUMBER" type="tns:structuredPhoneNumber_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The mobile telephone number of the contact person that can be used to make contact.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="GIVEN_NAME" type="tns:givenNames_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>First name of the contact person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="INITIALS" type="tns:initials_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Initials of the contact person</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FAMILY_NAME" type="tns:familyName_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Official surname of the contact person</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FAMILY_NAME_PREFIX" type="tns:familyNamePrefix_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A prefix for the surname. This can be something like, 'van', 'van der', etcetera.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FULL_NAME" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The name of a contact person of the customer.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PREFERRED_CONTACT_METHOD" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>It can be specified in this field if a contact person has a preferred way to be contacted.
+Possible values are:
+* E-Mail
+* Fax
+* Telephone</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EMAIL_ADDRESS" type="tns:emailAddress_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The email address of a contact person of the customer.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="customerID_type">
+		<xs:sequence>
+			<xs:element name="ID_CKR" type="tns:CKRNumber_type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The customer CKR identification number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ID_MCCS" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The customer MCCS identification number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ID_KPN" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The KPN customer relation number (UCM identification)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="reportOwner_type">
+		<xs:sequence>
+			<xs:element name="ENDUSER_NAME" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Employee identification for employee that accepted the initial request (the initial contact employee).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OWNING_GROUP" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Organisation group currently responsible for the report processing (for future use).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACCEPTING_GROUP" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Organisation group taking responsibility for the report processing (for future use).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>This is the BODY object for KPN EAI service number 0355 - CustomerInteractionNotification version 2.0 Publish message.</xs:documentation>
+			<xs:documentation>Schema for service:'CustomerInteractionNotification', version:'2.0'</xs:documentation>
+			<xs:documentation>Generated on 2008-03-19 17:01:22Z</xs:documentation>
+			<xs:documentation>Service paradigm is intended to be Publish/Subscribe</xs:documentation>
+			<xs:documentation>Service ID is:'0355'</xs:documentation>
+			<xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+			<xs:documentation>KPN EAI message body class.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CUSTOMER_INTERACTION_NOTIFICATION" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ATTACHMENT" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Attachments can be used to supply more in to depth information for this message.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ATTACHMENT_ID" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>A unique identifier is supplied in this field to identify this attachment.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ATTACHMENT_URL" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>A reference to the location of the attachment is supplied in this field, enabling separate download through another transfer protocol.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ATTACHMENT_TYPE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The type of the attachment can be specified in this field. optionally, the type may be inferred by the receiver from the attachment name (ATTACHMENT_ID).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ATTACHMENT_DESCRIPTION" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This field contains a comprehensive description of the attachment or a summary of the contents in the attachment.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ATTACHMENT_DATA" type="xs:base64Binary" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This field can be used to store the attachment itself. It is only to be used for reatively small attachments. For large attachements, the service provides the ATTACHMENT_URL field, allowing  download through a separate transfer, to be implemented by ysupplier and recipient of the service message separately from EAI. The publisher should endeavour to keep the total EAI message  size acceptable (agreeable for publisher, receiver and EAI).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ATTACHMENT_ORIGINAL_SIZE" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This field can be used to specify the original size for the attachment.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="INQUIRY" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="INQUIRY_TYPE" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Specifies the type of inquiry contained in this request. such as RfI, RfQ, etc..</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CUSTOMER_CONTRACT_ITEM" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>An interaction Contract refers to an official agreement between parties that describes the products, services or resources to which both parties have agreed to use or deliver.
+In this service the contract item can be related to the official contract that was signed by both parties under which a collection of products, service and resources fall, or just part of the contract, being a product, a service of a product offering or a resource being used for a service.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="INTERACTION_ACTIVITY" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifies the activity that should enable, activate, repair or otherwise modify the service.
+(Note: corresponds to supported_service and parameters.)</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="PARAMETER" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>In the parameters the customer can specify any additional parameters that might be needed to execute the activity.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="NAME" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Name of the parameter</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="VALUE" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Value of the parameter</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="ACTIVITY" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>The customer can specify the activity he would like to be undertaken as part of this interaction, e.g. upgrade/downgrade, repair, etc.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ACTIVITY_START" type="xs:dateTime" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Planned date / time to start the activity.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ACTIVITY_END" type="xs:dateTime" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Planned date / time for completion of the activity.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="INTERACTION_ITEM" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>The interaction item is a product, service or resource that relates to the customer interaction.
+
+(Note: corresponds to MOR0 - managed object report type 0).</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ATTRIBUTE" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>The attributes of the interaction item that are affected by this interaction.
+
+(Note: corresponds to MOR1 - managed object report type 1).</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="NAME" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Name of the attribute</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OLD_VALUE" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Old value of the attribute.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="NEW_VALUE" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The new value of the attribute. </xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="PROPERTY_ADDRESS" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Location of the object or service delivery.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType mixed="false">
+															<xs:complexContent mixed="false">
+																<xs:extension base="tns:address_type">
+																	<xs:sequence>
+																		<xs:element name="LOCATION_CODE" type="xs:string" minOccurs="0">
+																			<xs:annotation>
+																				<xs:documentation>Location code of the location of the managed object</xs:documentation>
+																			</xs:annotation>
+																		</xs:element>
+																	</xs:sequence>
+																</xs:extension>
+															</xs:complexContent>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="INTERACTION_ITEM_ID" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The unique ID of the of the item that is specified in a mutually agreed item repository.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="INTERACTION_ITEM_NAME" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The unique name of the of the item that is specified in a mutually agreed item repository.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ACTION" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>NEW, CHANGED or DELETED.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CLASS" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>Type of interaction item that is to be created, changed or deleted.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="SERVICE_NAME" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Contract identifier to which this customer interaction relates.
+This can be a service or product name from a mutually agreed to service portfolio.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="PROVIDER_ID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Identification of the provider that supports / delivers the service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="PROVIDER_NAME" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Name of the provider that supports / delivers the service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="MARKET_SEGMENT" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Identification of market segmentation for service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="INTERACTION_STATUS" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Interaction subject status information.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CUSTOMER_REQUEST_STATUS" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The Customer Request Status specifies an optional status that can be assigned to the interaction.
+						For states related to incidents, this denotes the current state of the incident report, for which X.790 defines values.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_STATUS_DATE" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Date and time of status change.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CONFIRMATION_DUE_TIME" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The period, expressed in number of regular working hours, in which the customer is expected to confirm of reject the changes described in the Customer Service Request.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CUSTOMER_REQUEST_STATUS_ACCEPTED" type="xs:boolean" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This field is meaningful in a state change confirmation message, where it indicates that the sending party accepts or rejects a state change as requested by the other party in an earlier state change request message.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ERROR_CODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Error code detailing the status information.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ERROR_DESCRIPTION" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Status/error description, additional information.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INCIDENT_REPORT_STATE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Denotes the current state of the incident report. These are defined in X.790</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INCIDENT_REPORT_DATE" type="xs:dateTime" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PROGRESS_EVENT" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Provides information concerning the reported progress (status change).</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CUSTOMER_CONTACT_PERSON" type="tns:contactPerson_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifiy the service using organisation contact person detaills.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SUPPLIER_CONTACT_PERSON" type="tns:contactPerson_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifiy the service providing (e.g. KPN) organisation contact person detaills.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ACTIVITY_INFORMATION_LIST" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ACTICITY_INFORMATION" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ACTIVITY_INFORMATION_VALUE" type="xs:string" minOccurs="0"/>
+																<xs:element name="ACTIVITY_INFORMATION_CHANGE_DATE" type="xs:dateTime"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="QUESTION_LIST" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="QUESTION" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ANALYSIS_QUESTION" type="xs:string"/>
+																<xs:element name="ANALYSIS_ANSWER" type="xs:string" minOccurs="0"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="PROGRESS_TYPE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifies the type/kind of progress reported in the message.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INITIATOR" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Indicates which party initiated contact.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CONTACT_METHOD" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Indicates the mode of contact, e.i. mail, phone, </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="DESCRIPTION" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>A short, to the point, description of the contact content, topics and arrangements</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="NEXT_EVENT_DATE" type="xs:date" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Date for the next contact event. Any follow-up actions described should then be completed.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="FOLLOWUP_ACTION_DESCRIPTION" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Describe actions, if any, to be undertaken before the next contact event.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ANALYSIS_INFORMATION" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Current information on the analysis of the trouble.
+</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CLOSURE_SERVICE_TYPE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>A predefined catagory indicating in general the solution for the trouble.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SERVICE_LEVEL_AGREEMENT" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Information regarding the Service Level Agreement covering this interaction.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CATEGORY" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifies the Service Level Agreement category that covers this interaction.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SLA_FUNCTION" type="xs:string" minOccurs="0"/>
+										<xs:element name="SLA_NAME" type="xs:string" minOccurs="0"/>
+										<xs:element name="SLA_CLEARING_DATE" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifies Service Level Agreement (SLA) based incident closure date and time; the time at which, according to SLA, the incident should be resolved. (Clearing time indicate the 'deadline' after which the SLA is violated.)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CUSTOMER_ORGANIZATION" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The customer represents the external party which whom KPN interacts.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="PROPERTY_ADDRESS" type="tns:address_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifies the relevant customer address.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CONTACT_PERSON" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>The contact persons for this interaction are specified in these fields. Possible contact persons are the reporting person and the handling contact person. This is indicated in the CONTACT_ROLE.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType mixed="false">
+												<xs:complexContent mixed="false">
+													<xs:extension base="tns:contactPerson_type">
+														<xs:sequence>
+															<xs:element name="CONTACT_ROLE" type="xs:string">
+																<xs:annotation>
+																	<xs:documentation>The role this contact person has in the interaction.
+Allowed values are:
+-Contact
+-Reporter</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+														</xs:sequence>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="CUSTOMER_ORGANIZATION_NAME" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The name of the organization of the customer to who is affected by the trouble or incident</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CUSTOMER_UNIT_NAME" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This field can be used to specify the customer business unit that is involved in this report.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SUPPLIER_CONTACT_PERSON_NAME" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The service provider responsible manager.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CUSTOMER_ID" type="tns:customerID_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>KPN's identification number for the customer.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CUSTOMER_INTERACTION_REPORT">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="B2B_IDENTIFICATION" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Customer request identification information.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="CUSTOMER_INTERACTION_SUPPLIER_REFERENCE_ID" type="tns:incidentReportId_type" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>A unique identifier for the interaction report. This field is used to specify the identification of the interaction subject as known by the service provider (e.g. KPN). This can be the Ticket ID, Change ID, etcetera. </xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CUSTOMER_INTERACTION_CONSUMER_ID" type="tns:incidentReportId_type" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>This field contains the identifier that the customer has assigned to this interaction.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CUSTOMER_INTERACTION_CONSUMER_SUB_ID" type="tns:incidentReportId_type" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The customer can use this field to specify an additional ID for this interaction.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="EAI_IDENTIFICATION" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>KPN ticket identification information.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="SRMO_TICKET_ID" type="tns:incidentReportId_type" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Central KPN ticket id, as issued by the ticket management system in the SRMO domain (i.c. Astrid).</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CRM_TICKET_ID" type="tns:incidentReportId_type" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Ticket id as issued by CRM domain when initial CRM ticket is entered in CRM system.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="TROUBLE_ID" type="tns:incidentReportId_type" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Identification for related trouble report, if any.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ADDITIONAL_INFORMATION" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Allow free additional information from different sources.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="SOURCE" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>Additional information source.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ADDITIONAL_INFORMATION" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>Additional information regarding the customer notification as provided by the 'source'.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ANALYSIS_EXPERT_CODE" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The additional information may represent analysis information, for which an optional expert code may indicate a problem class or problem area.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="REPORT_OWNER" type="tns:reportOwner_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Identification of the employee accepting the customer notification (request, complaint, report).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_INITIATION" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Denotes if the incident report was created reactive or proactive.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="EXTERNAL_REFERENCE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Report (ticket) identification in external domain, e.g. customer ticket number (bonnummer klant).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_RELATED_ID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The reference can be used to reference other tickets, incidents or other external elements.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_DATETIME" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The date and time the message was created i.c. the problem was detected.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_REQUEST_DATE" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Date and time this interaction is to take place. This could be a wish date, planned date etc.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_REQUEST_COMPLETE_DATE" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Date and time issues subject to this interaction are considered closed, not further actions or modifications will be allowed.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ROOT_EVENT_TIME" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The date and time of the root event.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_REASON_CODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This field is used to inform about the reason of the interaction. For example, when a ticket is put on hold, this field can be used to give the reason for the hold action.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_DESCRIPTION_SHORT" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>A short description of the trouble.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_DESCRIPTION_LONG" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>A long description of the trouble.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="IMPACT" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The impact field can be used by the customer to give their opinion on the impact on their business of the communicated change or incident.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="URGENCY" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The customer can use the urgency field to indicate the urgency of this interaction.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="PRIORITY" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The priority field can be used to indicate relative priority in relation to other problem reports.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INCIDENT_CLASS" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>An enumerated field classifying the incident encountered.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TROUBLE_TYPE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The category of the trouble that was detected</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="PERCEIVED_TROUBLE_SEVERITY" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The Perceived Trouble Severity attribute allows the manager to indicate the effect of the trouble on the managed object being reported.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="EXTENDED_INFORMATION" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="INTERACTION_CLASS" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Denotes the interaction type and subtype. This assists the recipient of the message in interpreting the information.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="INTERACTION_TYPE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Denotes the interaction type. This assists the recipient of the message in interpreting the information.
+
+The current possible values are:
+- INCIDENT_REPORT_REQUEST
+- CHANGE_REQUEST
+- REQUEST_FOR_INFORMATION
+- REQUEST_FOR_QUOTATION
+- CONFIRMATION
+- STATUS_UPDATE
+- STATUS_CONFIRMATION
+- INTERACTION_UPDATE
+Not all values are relevant for all publisher-subscriber interaction processes.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INTERACTION_SUBTYPE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Denotes the interaction type subclass. This assists the recipient of the message in interpreting the information.
+For Confirmations this can be Accept or Reject. For updates this field specifies the type of update etcetera.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

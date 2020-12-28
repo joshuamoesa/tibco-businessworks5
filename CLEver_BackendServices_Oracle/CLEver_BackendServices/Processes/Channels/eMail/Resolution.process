@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/Channel" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns1="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/CLEver/Resolution" xmlns:pfx4="http://xmlns.tibco.com/body" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/CLEver/Notification" xmlns:pfx2="http://www.tibco.com/CLEver/Policy">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Resolution" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Resolution.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Notification" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Notification.xsd"/>
+    <pd:name>Processes/Channels/eMail/Resolution.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx5:ResolutionFull"/>
+                    <xsd:element ref="pfx:Exception"/>
+                    <xsd:element ref="pfx2:PolicyFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>36</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>528</pd:endX>
+    <pd:endY>61</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1284386762855</pd:targetNamespace>
+    <pd:activity name="Send Mail">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>246</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>%%Connections/Channels/eMail/MailHost%%</host>
+            <authenticate>true</authenticate>
+            <password>%%Connections/Channels/eMail/Password%%</password>
+            <username>%%Connections/Channels/eMail/UserName%%</username>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns2:mailActivityInput>
+                <from>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/Connections/Channels/eMail/FromAdress"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/ns:Channel/ns:Parameter[ns:Name='eMailTo']/ns:Value"/>
+                </to>
+                <cc>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/ns:Channel/ns:Parameter[ns:Name='eMailCC']/ns:Value"/>
+                </cc>
+                <bcc>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/ns:Channel/ns:Parameter[ns:Name='eMailBCC']/ns:Value"/>
+                </bcc>
+                <subject>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='Subject']/pfx5:Value"/>
+                </subject>
+                <pfx4:bodyElement>
+                    <bodyText>
+                        <xsl:value-of select="concat('&lt;html>&lt;body bgcolor=&quot;#F7EEA7&quot;>&lt;table  border=&quot;1&quot;>'&#xA;,&#xA;'&lt;tr>&lt;td>ProcessContext&lt;/td>&lt;td>BusinessDomain:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessDomain,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>TechnicalDomain:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:TechnicalDomain,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>BusinessOperation:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessOperation,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>TransactionID:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:TransactionID,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ServiceName:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:ServiceName,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ProcessName:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:ProcessName,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ComponentName:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:ComponentName,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>HostName:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:HostName,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>DateTime:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:DateTime,&#xA;'&lt;/td>&lt;/tr>',&#xA; tib:concat-sequence(for $var in $Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessRefs/ns1:Parameter return concat('&lt;tr>&lt;td>BusinessRefs:&lt;/td>&lt;td>',$var/ns1:Name,'&lt;/td>&lt;td>',$var/ns1:Value,'&lt;/td>&lt;/tr>')),&#xA;'&lt;tr>&lt;td>ExceptionDetail&lt;/td>&lt;td>ExceptionCategory:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionCategory,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ExceptionSeverity:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionSeverity,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ExceptionType:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionType,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ExceptionCode:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionCode,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>Message:&lt;/td>&lt;td>&lt;pre>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:Message,&#xA;'&lt;/pre>&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>TransactionData:&lt;/td>&lt;td>&lt;pre>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:TransactionData&#xA;,'&lt;/pre>&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>DumpAnalysis:&lt;/td>&lt;td>&lt;pre>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:DumpAnalysis,&#xA;'&lt;/pre>&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>Status:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:Status,'&lt;/td>&lt;/tr>&lt;/table border=&quot;0.5&quot;>&lt;/body>&lt;/html>')"/>
+                    </bodyText>
+                </pfx4:bodyElement>
+                <Headers>
+                    <Content-Type>
+                        <xsl:value-of select="'text/html'"/>
+                    </Content-Type>
+                </Headers>
+            </ns2:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateStatus">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>415</pd:x>
+        <pd:y>149</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Transactional/Exception/UpdateStatus.process</processName>
+            <processNameXPath/>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:if test="$Start/root/pfx:Exception/pfx:ID">
+                    <ID>
+                        <xsl:value-of select="$Start/root/pfx:Exception/pfx:ID"/>
+                    </ID>
+                </xsl:if>
+                <Status>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='ChangeStateTo']/pfx5:Value"/>
+                </Status>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send-Mail without authentication">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>251</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>%%Connections/Channels/eMail/MailHost%%</host>
+            <authenticate>false</authenticate>
+            <password>%%Connections/Channels/eMail/Password%%</password>
+            <username>%%Connections/Channels/eMail/UserName%%</username>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns2:mailActivityInput>
+                <from>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/Connections/Channels/eMail/FromAdress"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/ns:Channel/ns:Parameter[ns:Name='eMailTo']/ns:Value"/>
+                </to>
+                <cc>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/ns:Channel/ns:Parameter[ns:Name='eMailCC']/ns:Value"/>
+                </cc>
+                <bcc>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/ns:Channel/ns:Parameter[ns:Name='eMailBCC']/ns:Value"/>
+                </bcc>
+                <subject>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='Subject']/pfx5:Value"/>
+                </subject>
+                <pfx4:bodyElement>
+                    <bodyText>
+                        <xsl:value-of select="concat('&lt;html>&lt;body bgcolor=&quot;#F7EEA7&quot;>&lt;table  border=&quot;1&quot;>'&#xA;,&#xA;'&lt;tr>&lt;td>ProcessContext&lt;/td>&lt;td>BusinessDomain:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessDomain,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>TechnicalDomain:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:TechnicalDomain,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>BusinessOperation:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessOperation,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>TransactionID:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:TransactionID,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ServiceName:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:ServiceName,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ProcessName:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:ProcessName,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ComponentName:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:ComponentName,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>HostName:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:HostName,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>DateTime:&lt;/td>&lt;td>',$Start/root/pfx:Exception/ns1:ProcessContext/ns1:DateTime,&#xA;'&lt;/td>&lt;/tr>',&#xA; tib:concat-sequence(for $var in $Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessRefs/ns1:Parameter return concat('&lt;tr>&lt;td>BusinessRefs:&lt;/td>&lt;td>',$var/ns1:Name,'&lt;/td>&lt;td>',$var/ns1:Value,'&lt;/td>&lt;/tr>')),&#xA;'&lt;tr>&lt;td>ExceptionDetail&lt;/td>&lt;td>ExceptionCategory:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionCategory,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ExceptionSeverity:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionSeverity,'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ExceptionType:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionType,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>ExceptionCode:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionCode,&#xA;'&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>Message:&lt;/td>&lt;td>&lt;pre>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:Message,&#xA;'&lt;/pre>&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>TransactionData:&lt;/td>&lt;td>&lt;pre>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:TransactionData&#xA;,'&lt;/pre>&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>DumpAnalysis:&lt;/td>&lt;td>&lt;pre>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:DumpAnalysis,&#xA;'&lt;/pre>&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;/td>&lt;td>Status:&lt;/td>&lt;td>',$Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:Status,'&lt;/td>&lt;/tr>&lt;/table border=&quot;0.5&quot;>&lt;/body>&lt;/html>')"/>
+                    </bodyText>
+                </pfx4:bodyElement>
+                <Headers>
+                    <Content-Type>
+                        <xsl:value-of select="'text/html'"/>
+                    </Content-Type>
+                </Headers>
+            </ns2:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:xpathDescription>Use authentication</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>string-length($_globalVariables/ns3:GlobalVariables/Connections/Channels/eMail/UserName)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>UpdateStatus</pd:to>
+        <pd:xpathDescription>Need to change state</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='ChangeStateTo'])&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateStatus</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send-Mail without authentication</pd:from>
+        <pd:to>UpdateStatus</pd:to>
+        <pd:xpathDescription>Need to changestate</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='ChangeStateTo'])&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send-Mail without authentication</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send-Mail without authentication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

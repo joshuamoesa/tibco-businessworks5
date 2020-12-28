@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/request/GetCustomerDetails.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Request/0002_GetCustomerDetails_2.0_Request_EAI_BUS_SIDE.xsd" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0002_GetCustomerDetails/2.0/Request" xmlns:pfx5="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:pfx6="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" xmlns:pfx7="http://xmlns.kpn.com/fixed/DocumentServices/Request/SendNotification.xsd" xmlns:ns7="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0322.SendNotification.1" xmlns:ns8="http://www.kpn.com/StreamServeRequest" xmlns:ns9="http://xmlns.kpn.com/fixed/0322_SendNotification/1.0/Request">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/GetCustomerDetails.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/GetCustomerDetails.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0002_GetCustomerDetails/2.0/Request" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0002_GetCustomerDetails_2.0_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0322.SendNotification.1" schemaLocation="/WSDL/S0322.SendNotification.1.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/DocumentServices/Request/SendNotification.xsd" schemaLocation="/XSDSchemas/StreamServeAdapter/Request/SendNotificationRequest.xsd"/>
+    <xsd:import namespace="http://www.kpn.com/StreamServeRequest" schemaLocation="/XSDSchemas/StreamServeAdapter/Imported/StreamServeRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/0322_SendNotification/1.0/Request" schemaLocation="/XSDSchemas/StreamServeAdapter/Imported/0322_SendNotification_1.0_Request_EAI_BUS_SIDE.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0322.SendNotification.1.InputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx5:Input"/>
+    <pd:startX>155</pd:startX>
+    <pd:startY>163</pd:startY>
+    <pd:returnBindings>
+        <pfx6:Output>
+            <pfx6:Destination>
+                <xsl:value-of select="$Map-Data/pfx7:SendNotification/ns2:CMH/ns2:TO/@ns2:DESTINATION"/>
+            </pfx6:Destination>
+            <pfx6:BodyContainer>
+                <xsl:copy-of select="$Map-Data/pfx7:SendNotification"/>
+            </pfx6:BodyContainer>
+        </pfx6:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx6:Output"/>
+    <pd:endX>521</pd:endX>
+    <pd:endY>163</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>320</pd:x>
+        <pd:y>168</pd:y>
+        <config>
+            <element ref="pfx7:SendNotification"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx5:Input/pfx5:BodyContainer/*" element="ns9:SendNotification"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx7:SendNotification>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="&quot;1011&quot;"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="&quot;SendNotification&quot;"/>
+                    </ns2:NAME>
+                    <ns2:MID>
+                        <xsl:value-of select="&quot;1011.10&quot;"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="&quot;SendNotificationRequest&quot;"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.Enterprise.StreamServe.Request.SendNotification.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx5:Input/pfx5:TrackingId"/>
+                        </ns2:MESSAGE_ID>
+                    </ns2:TRACKING>
+                </ns2:CMH>
+                <pfx7:REQUESTOR>
+                    <pfx7:APPLICATION_ID>
+                        <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns9:SendNotification/ns9:REQUESTOR/ns9:APPLICATION_ID"/>
+                    </pfx7:APPLICATION_ID>
+                    <pfx7:USERNAME>
+                        <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns9:SendNotification/ns9:REQUESTOR/ns9:USERNAME"/>
+                    </pfx7:USERNAME>
+                    <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns9:SendNotification/ns9:REQUESTOR/ns9:PASSWORD">
+                        <pfx7:PASSWORD>
+                            <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns9:SendNotification/ns9:REQUESTOR/ns9:PASSWORD"/>
+                        </pfx7:PASSWORD>
+                    </xsl:if>
+                </pfx7:REQUESTOR>
+                <xsl:for-each select="$Start/pfx5:Input/pfx5:BodyContainer/ns9:SendNotification/ns9:DELIVERY">
+                    <pfx7:DELIVERY>
+                        <pfx7:DESTINATION>
+                            <xsl:if test="ns9:DESTINATION/ns9:COMPANY_NAME">
+                                <pfx7:COMPANY_NAME>
+                                    <xsl:value-of select="ns9:DESTINATION/ns9:COMPANY_NAME"/>
+                                </pfx7:COMPANY_NAME>
+                            </xsl:if>
+                            <xsl:if test="ns9:DESTINATION/ns9:ARCHIVE">
+                                <pfx7:ARCHIVE>
+                                    <xsl:value-of select="ns9:DESTINATION/ns9:ARCHIVE"/>
+                                </pfx7:ARCHIVE>
+                            </xsl:if>
+                            <pfx7:CUSTOMER_ID>
+                                <xsl:if test="ns9:DESTINATION/ns9:CUSTOMER_ID/ns9:ID_CKR">
+                                    <pfx7:ID_CKR>
+                                        <xsl:value-of select="ns9:DESTINATION/ns9:CUSTOMER_ID/ns9:ID_CKR"/>
+                                    </pfx7:ID_CKR>
+                                </xsl:if>
+                                <xsl:if test="ns9:DESTINATION/ns9:CUSTOMER_ID/ns9:ID_MCCS">
+                                    <pfx7:ID_MCCS>
+                                        <xsl:value-of select="ns9:DESTINATION/ns9:CUSTOMER_ID/ns9:ID_MCCS"/>
+                                    </pfx7:ID_MCCS>
+                                </xsl:if>
+                                <xsl:if test="ns9:DESTINATION/ns9:CUSTOMER_ID/ns9:ID_ACCOUNT">
+                                    <pfx7:ID_ACCOUNT>
+                                        <xsl:value-of select="ns9:DESTINATION/ns9:CUSTOMER_ID/ns9:ID_ACCOUNT"/>
+                                    </pfx7:ID_ACCOUNT>
+                                </xsl:if>
+                            </pfx7:CUSTOMER_ID>
+                            <pfx7:CONTACT_NAME>
+                                <xsl:if test="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:ARISTOCRATIC_TITLE">
+                                    <pfx7:ARISTOCRATIC_TITLE>
+                                        <xsl:value-of select="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:ARISTOCRATIC_TITLE"/>
+                                    </pfx7:ARISTOCRATIC_TITLE>
+                                </xsl:if>
+                                <xsl:for-each select="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:ACADEMIC_TITLE">
+                                    <pfx7:ACADEMIC_TITLE>
+                                        <xsl:value-of select="."/>
+                                    </pfx7:ACADEMIC_TITLE>
+                                </xsl:for-each>
+                                <xsl:if test="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:CLERICAL_TITLE">
+                                    <pfx7:CLERICAL_TITLE>
+                                        <xsl:value-of select="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:CLERICAL_TITLE"/>
+                                    </pfx7:CLERICAL_TITLE>
+                                </xsl:if>
+                                <xsl:if test="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:FIRST_NAME">
+                                    <pfx7:FIRST_NAME>
+                                        <xsl:value-of select="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:FIRST_NAME"/>
+                                    </pfx7:FIRST_NAME>
+                                </xsl:if>
+                                <pfx7:INITIALS>
+                                    <xsl:value-of select="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:INITIALS"/>
+                                </pfx7:INITIALS>
+                                <xsl:if test="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:FAMILY_NAME_PREFIX">
+                                    <pfx7:FAMILY_NAME_PREFIX>
+                                        <xsl:value-of select="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:FAMILY_NAME_PREFIX"/>
+                                    </pfx7:FAMILY_NAME_PREFIX>
+                                </xsl:if>
+                                <pfx7:FAMILY_NAME>
+                                    <xsl:value-of select="ns9:DESTINATION/ns9:CONTACT_NAME/ns9:FAMILY_NAME"/>
+                                </pfx7:FAMILY_NAME>
+                            </pfx7:CONTACT_NAME>
+                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS">
+                                <pfx7:SURFACE_ADDRESS>
+                                    <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS">
+                                        <pfx7:LOGICAL_ADDRESS>
+                                            <pfx7:POBOX>
+                                                <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:POBOX"/>
+                                            </pfx7:POBOX>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:DUTCH_POSTCODE">
+                                                <pfx7:DUTCH_POSTCODE>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:DUTCH_POSTCODE"/>
+                                                </pfx7:DUTCH_POSTCODE>
+                                            </xsl:if>
+                                            <pfx7:CITY_NAME>
+                                                <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:CITY_NAME"/>
+                                            </pfx7:CITY_NAME>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:CITY_CODE">
+                                                <pfx7:CITY_CODE>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:CITY_CODE"/>
+                                                </pfx7:CITY_CODE>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:COUNTRY">
+                                                <pfx7:COUNTRY>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:COUNTRY"/>
+                                                </pfx7:COUNTRY>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:ZIPCODE_BEFORE">
+                                                <pfx7:ZIPCODE_BEFORE>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:ZIPCODE_BEFORE"/>
+                                                </pfx7:ZIPCODE_BEFORE>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:ZIPCODE_AFTER">
+                                                <pfx7:ZIPCODE_AFTER>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:LOGICAL_ADDRESS/ns9:ZIPCODE_AFTER"/>
+                                                </pfx7:ZIPCODE_AFTER>
+                                            </xsl:if>
+                                        </pfx7:LOGICAL_ADDRESS>
+                                    </xsl:if>
+                                    <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS">
+                                        <pfx7:PROPERTY_ADDRESS>
+                                            <pfx7:STREET_NAME>
+                                                <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:STREET_NAME"/>
+                                            </pfx7:STREET_NAME>
+                                            <pfx7:HOUSE_NUMBER>
+                                                <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:HOUSE_NUMBER"/>
+                                            </pfx7:HOUSE_NUMBER>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:HOUSE_NUMBER_EXTENSION">
+                                                <pfx7:HOUSE_NUMBER_EXTENSION>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:HOUSE_NUMBER_EXTENSION"/>
+                                                </pfx7:HOUSE_NUMBER_EXTENSION>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:HOUSEBOAT_REFERENCE">
+                                                <pfx7:HOUSEBOAT_REFERENCE>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:HOUSEBOAT_REFERENCE"/>
+                                                </pfx7:HOUSEBOAT_REFERENCE>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:TRAILER_REFERENCE">
+                                                <pfx7:TRAILER_REFERENCE>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:TRAILER_REFERENCE"/>
+                                                </pfx7:TRAILER_REFERENCE>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:LOCATION_DESCRIPTION">
+                                                <pfx7:LOCATION_DESCRIPTION>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:LOCATION_DESCRIPTION"/>
+                                                </pfx7:LOCATION_DESCRIPTION>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:DUTCH_POSTCODE">
+                                                <pfx7:DUTCH_POSTCODE>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:DUTCH_POSTCODE"/>
+                                                </pfx7:DUTCH_POSTCODE>
+                                            </xsl:if>
+                                            <pfx7:CITY_NAME>
+                                                <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:CITY_NAME"/>
+                                            </pfx7:CITY_NAME>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:CITY_CODE">
+                                                <pfx7:CITY_CODE>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:CITY_CODE"/>
+                                                </pfx7:CITY_CODE>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:COUNTRY">
+                                                <pfx7:COUNTRY>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:COUNTRY"/>
+                                                </pfx7:COUNTRY>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:ZIPCODE_BEFORE">
+                                                <pfx7:ZIPCODE_BEFORE>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:ZIPCODE_BEFORE"/>
+                                                </pfx7:ZIPCODE_BEFORE>
+                                            </xsl:if>
+                                            <xsl:if test="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:ZIPCODE_AFTER">
+                                                <pfx7:ZIPCODE_AFTER>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:SURFACE_ADDRESS/ns9:PROPERTY_ADDRESS/ns9:ZIPCODE_AFTER"/>
+                                                </pfx7:ZIPCODE_AFTER>
+                                            </xsl:if>
+                                        </pfx7:PROPERTY_ADDRESS>
+                                    </xsl:if>
+                                </pfx7:SURFACE_ADDRESS>
+                            </xsl:if>
+                            <xsl:if test="ns9:DESTINATION/ns9:EMAIL_DELIVERY">
+                                <pfx7:EMAIL_DELIVERY>
+                                    <pfx7:REPLY_ALLOWED>
+                                        <xsl:value-of select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:REPLY_ALLOWED"/>
+                                    </pfx7:REPLY_ALLOWED>
+                                    <xsl:if test="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:IMPORTANCE">
+                                        <pfx7:IMPORTANCE>
+                                            <xsl:value-of select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:IMPORTANCE"/>
+                                        </pfx7:IMPORTANCE>
+                                    </xsl:if>
+                                    <xsl:for-each select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:TO">
+                                        <pfx7:TO>
+                                            <xsl:if test="ns9:DISPLAY_NAME">
+                                                <pfx7:DISPLAY_NAME>
+                                                    <xsl:value-of select="ns9:DISPLAY_NAME"/>
+                                                </pfx7:DISPLAY_NAME>
+                                            </xsl:if>
+                                            <pfx7:EMAIL_ADDRESS>
+                                                <xsl:value-of select="ns9:EMAIL_ADDRESS"/>
+                                            </pfx7:EMAIL_ADDRESS>
+                                        </pfx7:TO>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:CC">
+                                        <pfx7:CC>
+                                            <xsl:if test="ns9:DISPLAY_NAME">
+                                                <pfx7:DISPLAY_NAME>
+                                                    <xsl:value-of select="ns9:DISPLAY_NAME"/>
+                                                </pfx7:DISPLAY_NAME>
+                                            </xsl:if>
+                                            <pfx7:EMAIL_ADDRESS>
+                                                <xsl:value-of select="ns9:EMAIL_ADDRESS"/>
+                                            </pfx7:EMAIL_ADDRESS>
+                                        </pfx7:CC>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:BCC">
+                                        <pfx7:BCC>
+                                            <xsl:if test="ns9:DISPLAY_NAME">
+                                                <pfx7:DISPLAY_NAME>
+                                                    <xsl:value-of select="ns9:DISPLAY_NAME"/>
+                                                </pfx7:DISPLAY_NAME>
+                                            </xsl:if>
+                                            <pfx7:EMAIL_ADDRESS>
+                                                <xsl:value-of select="ns9:EMAIL_ADDRESS"/>
+                                            </pfx7:EMAIL_ADDRESS>
+                                        </pfx7:BCC>
+                                    </xsl:for-each>
+                                    <xsl:if test="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:FROM">
+                                        <pfx7:FROM>
+                                            <xsl:if test="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:FROM/ns9:DISPLAY_NAME">
+                                                <pfx7:DISPLAY_NAME>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:FROM/ns9:DISPLAY_NAME"/>
+                                                </pfx7:DISPLAY_NAME>
+                                            </xsl:if>
+                                            <pfx7:EMAIL_ADDRESS>
+                                                <xsl:value-of select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:FROM/ns9:EMAIL_ADDRESS"/>
+                                            </pfx7:EMAIL_ADDRESS>
+                                        </pfx7:FROM>
+                                    </xsl:if>
+                                    <xsl:if test="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:REPLY_TO">
+                                        <pfx7:REPLY_TO>
+                                            <xsl:if test="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:REPLY_TO/ns9:DISPLAY_NAME">
+                                                <pfx7:DISPLAY_NAME>
+                                                    <xsl:value-of select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:REPLY_TO/ns9:DISPLAY_NAME"/>
+                                                </pfx7:DISPLAY_NAME>
+                                            </xsl:if>
+                                            <pfx7:EMAIL_ADDRESS>
+                                                <xsl:value-of select="ns9:DESTINATION/ns9:EMAIL_DELIVERY/ns9:REPLY_TO/ns9:EMAIL_ADDRESS"/>
+                                            </pfx7:EMAIL_ADDRESS>
+                                        </pfx7:REPLY_TO>
+                                    </xsl:if>
+                                </pfx7:EMAIL_DELIVERY>
+                            </xsl:if>
+                        </pfx7:DESTINATION>
+                        <pfx7:DOCUMENT_SPECIFICATION>
+                            <xsl:if test="ns9:DOCUMENT_SPECIFICATION/ns9:EVENT_ID">
+                                <pfx7:EVENT_ID>
+                                    <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:EVENT_ID"/>
+                                </pfx7:EVENT_ID>
+                            </xsl:if>
+                            <xsl:if test="ns9:DOCUMENT_SPECIFICATION/ns9:EVENT_NAME">
+                                <pfx7:EVENT_NAME>
+                                    <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:EVENT_NAME"/>
+                                </pfx7:EVENT_NAME>
+                            </xsl:if>
+                            <pfx7:DOCUMENT_TYPE>
+                                <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:DOCUMENT_TYPE"/>
+                            </pfx7:DOCUMENT_TYPE>
+                            <xsl:if test="ns9:DOCUMENT_SPECIFICATION/ns9:MARKET_SEGMENT">
+                                <pfx7:MARKET_SEGMENT>
+                                    <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:MARKET_SEGMENT"/>
+                                </pfx7:MARKET_SEGMENT>
+                            </xsl:if>
+                            <xsl:if test="ns9:DOCUMENT_SPECIFICATION/ns9:PRODUCT_ID">
+                                <pfx7:PRODUCT_ID>
+                                    <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:PRODUCT_ID"/>
+                                </pfx7:PRODUCT_ID>
+                            </xsl:if>
+                            <xsl:if test="ns9:DOCUMENT_SPECIFICATION/ns9:PRODUCT_GROUP">
+                                <pfx7:PRODUCT_GROUP>
+                                    <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:PRODUCT_GROUP"/>
+                                </pfx7:PRODUCT_GROUP>
+                            </xsl:if>
+                            <pfx7:BRAND_ID>
+                                <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:BRAND_ID"/>
+                            </pfx7:BRAND_ID>
+                            <xsl:if test="ns9:DOCUMENT_SPECIFICATION/ns9:BRAND_NAME">
+                                <pfx7:BRAND_NAME>
+                                    <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:BRAND_NAME"/>
+                                </pfx7:BRAND_NAME>
+                            </xsl:if>
+                            <pfx7:SUBJECT>
+                                <xsl:value-of select="ns9:DOCUMENT_SPECIFICATION/ns9:SUBJECT"/>
+                            </pfx7:SUBJECT>
+                        </pfx7:DOCUMENT_SPECIFICATION>
+                    </pfx7:DELIVERY>
+                </xsl:for-each>
+                <pfx7:PROPERTIES>
+                    <xsl:copy-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns9:SendNotification/ns9:PROPERTIES/*"/>
+                </pfx7:PROPERTIES>
+                <pfx7:CONTENT>
+                    <xsl:copy-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns9:SendNotification/ns9:CONTENT/*"/>
+                </pfx7:CONTENT>
+            </pfx7:SendNotification>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Load build xsd into the Mapper</pd:description>
+        <pd:x>346</pd:x>
+        <pd:y>115</pd:y>
+        <pd:width>128</pd:width>
+        <pd:height>38</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

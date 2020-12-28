@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated on 2008/11/04 14:33:18 with EAIPlugin 1.2.0 -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:grp="http://kpn.com/products/WMP" xmlns:ord="http://kpn.com/eai/generic/order/1.0" xmlns:prd="http://kpn.com/products/WMP/serviceAccessVoIP/data/v1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://kpn.com/products/WMP/serviceAccessVoIP/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/products/WMP/serviceAccessVoIP/v1">
+<wsdl:documentation>
+    Service Access VoIP commercial product
+
+    Version History:
+    * 1.0 - Initial version
+</wsdl:documentation>
+<wsdl:types>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/WMP" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_activation  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_activation">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Active"/>
+      <xsd:enumeration value="Inactive"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_callBarringServiceNumbers  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_callBarringServiceNumbers">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="0906"/>
+      <xsd:enumeration value="0906-0909"/>
+      <xsd:enumeration value="0900-0906-0909"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_carrierType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_carrierType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="FTTC"/>
+      <xsd:enumeration value="FTTH"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_orderScenario  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_orderScenario">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="New"/>
+      <xsd:enumeration value="Migrate"/>
+      <xsd:enumeration value="Move"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_qualityOfService  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_qualityOfService">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Best Effort"/>
+      <xsd:enumeration value="Premium"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_telephoneNumber  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_telephoneNumber">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_zipcode  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_zipcode">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  WMPOrder  <<order>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="WMPOrder"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  WMPOrderItem  <<orderItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="WMPOrderItem">
+    <xsd:sequence>
+      <xsd:element name="requesterId" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="requiredProductInstanceId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="wegaId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="refOrderId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  WMPOrderStatus  <<orderStatus>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="WMPOrderStatus"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  WMPOrderStatusItem  <<orderStatusItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="WMPOrderStatusItem">
+    <xsd:sequence>
+      <xsd:element name="productInstanceId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="refOrderId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/eai/generic/order/1.0" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:simpleType name="OrderStatusEnumeration">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="INITIAL"/>
+      <xsd:enumeration value="ACCEPTED"/>
+      <xsd:enumeration value="REJECTED"/>
+      <xsd:enumeration value="ERROR"/>
+      <xsd:enumeration value="COMPLETED"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:complexType name="Error">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="detail" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Order">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="orderDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="OrderStatus">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="supplierOrderId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="error" type="ord:Error"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/WMP/serviceAccessVoIP/data/v1.0" version="1.0">
+  <xsd:import namespace="http://kpn.com/products/WMP"/>
+  <xsd:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+  <!-- ================================================== -->
+  <!-- =====  Element Declarations  -->
+  <!-- ================================================== -->
+  <xsd:element name="serviceAccessVoIPcreateRequest" type="prd:serviceAccessVoIPcreateRequest"/>
+  <xsd:element name="serviceAccessVoIPcreateResponse" type="prd:serviceAccessVoIPcreateResponse"/>
+  <xsd:element name="serviceAccessVoIPdeleteRequest" type="prd:serviceAccessVoIPdeleteRequest"/>
+  <xsd:element name="serviceAccessVoIPdeleteResponse" type="prd:serviceAccessVoIPdeleteResponse"/>
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPStatusEnum  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="serviceAccessVoIPStatusEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Rejected"/>
+      <xsd:enumeration value="Accepted"/>
+      <xsd:enumeration value="Failed"/>
+      <xsd:enumeration value="Completed"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createRequest">
+    <xsd:sequence>
+      <xsd:element name="ipVpn" type="xsd:string"/>
+      <xsd:element name="eapVlanId" type="xsd:string"/>
+      <xsd:element name="speedType" type="xsd:string"/>
+      <xsd:element name="qosAccess" type="grp:E_qualityOfService"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdServiceAccess" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteRequest"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteResponse"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPcreateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="serviceAccessVoIPcreateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderItem" type="prd:serviceAccessVoIPcreateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPcreateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="serviceAccessVoIPcreateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:createRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPcreateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="serviceAccessVoIPcreateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:serviceAccessVoIPStatusEnum"/>
+          <xsd:element name="OrderItem" type="prd:serviceAccessVoIPcreateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPcreateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="serviceAccessVoIPcreateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:createResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPdeleteRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="serviceAccessVoIPdeleteRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderItem" type="prd:serviceAccessVoIPdeleteRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPdeleteRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="serviceAccessVoIPdeleteRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderItem"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPdeleteResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="serviceAccessVoIPdeleteResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:serviceAccessVoIPStatusEnum"/>
+          <xsd:element name="OrderItem" type="prd:serviceAccessVoIPdeleteResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  serviceAccessVoIPdeleteResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="serviceAccessVoIPdeleteResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:WMPOrderStatusItem"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>
+</wsdl:types>
+<wsdl:message name="Error">
+<wsdl:part name="Error" type="ord:Error"/>
+</wsdl:message>
+<wsdl:message name="createStatusUpdateRequest">
+<wsdl:part element="prd:serviceAccessVoIPcreateResponse" name="serviceAccessVoIPcreateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="createRequest">
+<wsdl:part element="prd:serviceAccessVoIPcreateRequest" name="serviceAccessVoIPcreateRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteRequest">
+<wsdl:part element="prd:serviceAccessVoIPdeleteRequest" name="serviceAccessVoIPdeleteRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteStatusUpdateRequest">
+<wsdl:part element="prd:serviceAccessVoIPdeleteResponse" name="serviceAccessVoIPdeleteStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:portType name="serviceAccessVoIPServices">
+<wsdl:operation name="create">
+<wsdl:input message="tns:createRequest" name="createRequest"/>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<wsdl:input message="tns:deleteRequest" name="deleteRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:portType name="serviceAccessVoIPCallbackServices">
+<wsdl:operation name="createStatusUpdate">
+<wsdl:input message="tns:createStatusUpdateRequest" name="createStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<wsdl:input message="tns:deleteStatusUpdateRequest" name="deleteStatusUpdateRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="serviceAccessVoIPBindingSOAP" type="tns:serviceAccessVoIPServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="create">
+<soap:operation soapAction="WMP_serviceAccessVoIP_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<soap:operation soapAction="WMP_serviceAccessVoIP_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:binding name="serviceAccessVoIPCallbackBindingSOAP" type="tns:serviceAccessVoIPCallbackServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="createStatusUpdate">
+<soap:operation soapAction="WMP_serviceAccessVoIP_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<soap:operation soapAction="WMP_serviceAccessVoIP_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="serviceAccessVoIP">
+<wsdl:port binding="tns:serviceAccessVoIPCallbackBindingSOAP" name="serviceAccessVoIPCallbackServices">
+<soap:address location="http://localhost:8080/path/serviceAccessVoIPCallbackServices"/>
+</wsdl:port>
+<wsdl:port binding="tns:serviceAccessVoIPBindingSOAP" name="serviceAccessVoIPServices">
+<soap:address location="http://localhost:8080/path/serviceAccessVoIPServices"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

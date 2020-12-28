@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="http://webservices.kpn-lls.com/V0.2/MmspOrdering.wsdl" xmlns:ns="EcnsXsd_V0.2">
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl" location="/WSDL/EcnsOrdering.wsdl"/>
+    <pd:name>EClipsAdapter/Test Processes/ZIPB ECLIPS/StartNumberInportSynchronisation SOAP.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>85</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <service>pfx:EcnsOrdering</service>
+            <wsdlNamespaceRoot>http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl/StartSyncInportOperationImpl</wsdlNamespaceRoot>
+            <operation>StartSyncInportOperation</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>/ProcessDefinitions/V0.2/StartSyncInportServer</soapAction>
+            <sharedChannel>/EClipsAdapter/Test Processes/Resources/HTTP Connection.sharedhttp</sharedChannel>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>321</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <ns:EcnsStartSyncInportResp>
+                    <ns:EcnsErrorResponseStruct>
+                        <ns:ErrorCode>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </ns:ErrorCode>
+                    </ns:EcnsErrorResponseStruct>
+                    <ns:StartSyncInportRespStruct>
+                        <ns:PackagerCode>
+                            <xsl:value-of select="&quot;pac&quot;"/>
+                        </ns:PackagerCode>
+                        <ns:PackagerOrderId>
+                            <xsl:value-of select="&quot;porder&quot;"/>
+                        </ns:PackagerOrderId>
+                        <ns:NsnOrderId>
+                            <xsl:value-of select="123"/>
+                        </ns:NsnOrderId>
+                        <ns:TelcoCode>
+                            <xsl:value-of select="&quot;tcode&quot;"/>
+                        </ns:TelcoCode>
+                        <ns:EcnsOrderFeedbackStruct>
+                            <ns:StatusCode>
+                                <xsl:value-of select="&quot;3&quot;"/>
+                            </ns:StatusCode>
+                            <ns:StatusDescription>
+                                <xsl:value-of select="&quot;Geleverd&quot;"/>
+                            </ns:StatusDescription>
+                            <ns:OrderSituationCode>
+                                <xsl:value-of select="&quot;ocode&quot;"/>
+                            </ns:OrderSituationCode>
+                            <ns:OrderSituationDescription>
+                                <xsl:value-of select="&quot;dcs&quot;"/>
+                            </ns:OrderSituationDescription>
+                            <ns:AdditionalSituationInfo>
+                                <xsl:value-of select="&quot;add&quot;"/>
+                            </ns:AdditionalSituationInfo>
+                        </ns:EcnsOrderFeedbackStruct>
+                    </ns:StartSyncInportRespStruct>
+                </ns:EcnsStartSyncInportResp>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

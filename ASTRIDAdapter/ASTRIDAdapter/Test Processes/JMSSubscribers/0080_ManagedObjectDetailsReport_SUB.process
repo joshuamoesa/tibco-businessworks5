@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx2="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/ManagedObjectDetailsReport.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/ManagedObjectDetailsReport.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Publish/ManagedObjectDetailsReport.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/JMSSubscribers/0080_ManagedObjectDetailsReport_SUB.process</pd:name>
+    <pd:startName>Receive JMS Message</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive JMS Message">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:description>TestStub for reading the queue for TroubleReport</pd:description>
+        <pd:x>63</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>%%Common/JMS/JmsMaxSessions%%</maxSessions>
+                <destination>%%Env%%.FIXED.%%ASTRIDAdapter/ComponentDomain%%.EDTAdapter.Subscribe.ManagedObjectDetailsReport.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>423</pd:endX>
+    <pd:endY>119</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Confirm JMS Message">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>320</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <ConfirmEvent>Receive JMS Message</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log JMS Message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>63</pd:x>
+        <pd:y>183</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04052&quot;"/>
+                </MsgCode>
+                <xsl:if test="$Receive-JMS-Message/ns2:ActivityOutput/JMSHeaders/ns2:JMSDestination">
+                    <Parameter>
+                        <xsl:value-of select="$Receive-JMS-Message/ns2:ActivityOutput/JMSHeaders/ns2:JMSDestination"/>
+                    </Parameter>
+                </xsl:if>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Message/ns2:ActivityOutput/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse Message">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>184</pd:x>
+        <pd:y>185</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx2:ManagedObjectDetailsReport"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Receive-JMS-Message/ns2:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm anyway">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>190</pd:x>
+        <pd:y>60</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm JMS Message</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Message</pd:from>
+        <pd:to>Confirm anyway</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Message</pd:from>
+        <pd:to>Log JMS Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Message</pd:from>
+        <pd:to>Parse Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Message</pd:from>
+        <pd:to>Confirm anyway</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm anyway</pd:from>
+        <pd:to>Confirm JMS Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Message</pd:from>
+        <pd:to>Confirm JMS Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

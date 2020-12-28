@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://java.sun.com/products/oss/xml/ServiceActivation" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:ns1="http://java.sun.com/products/oss/xml/Common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://Enterprise.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns22="http://xmlns.kpn.com/eai/common/errors" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns4="http://schemas.tibco.com/bw/plugins/xml/5.0/xmlExceptions" xmlns:pfx5="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd" xmlns:ns5="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns6="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd"/>
+    <xsd:import namespace="http://Enterprise.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" schemaLocation="/XSDSchemas/xAuthority/BVoIPEnterpriseDataServiceValue.xsd"/>
+    <xsd:import namespace="http://java.sun.com/products/oss/xml/ServiceActivation" schemaLocation="/XSDSchemas/xAuthority/AllTypes.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Inbound/Subprocesses/Requests/createOrderByValueRequest.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="correlationID" type="xsd:string"/>
+                    <xsd:element ref="pfx:createOrderByValueRequest"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>34</pd:startX>
+    <pd:startY>88</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:for-each select="$Wait/getOrderTypesResponse/pfx:getOrderTypesResponse">
+                <pfx:getOrderTypesResponse>
+                    <xsl:for-each select="pfx:orderTypes">
+                        <pfx:orderTypes>
+                            <xsl:for-each select="ns1:item">
+                                <ns1:item>
+                                    <xsl:copy-of select="./@xsi:nil"/>
+                                    <xsl:value-of select="."/>
+                                </ns1:item>
+                            </xsl:for-each>
+                        </pfx:orderTypes>
+                    </xsl:for-each>
+                </pfx:getOrderTypesResponse>
+            </xsl:for-each>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>505</pd:endX>
+    <pd:endY>93</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="ns22:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Publish createOrderByValue Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>352</pd:x>
+        <pd:y>105</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Subprocesses/PublisherJMS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <correlationID>
+                    <xsl:value-of select="$Start/input/correlationID"/>
+                </correlationID>
+                <body>
+                    <xsl:value-of select="$Render-createOrderByValue-Request/xmlString"/>
+                </body>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Render createOrderByValue Request">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>176</pd:x>
+        <pd:y>96</pd:y>
+        <config>
+            <renderAsText>text</renderAsText>
+            <validateInput>false</validateInput>
+            <textEncoding>UTF-8</textEncoding>
+            <term ref="pfx:createOrderByValueRequest"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/input/pfx:createOrderByValueRequest"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>177</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;XAuth-03010&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="eai:getMessageText(&quot;XAuth-03010&quot;)"/>
+                </messageCode>
+                <data>
+                    <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                        <xsl:when test="exists($_error_Render-createOrderByValue-Request)">
+                            <ns22:Error>
+                                <ns22:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03011&quot;"/>
+                                </ns22:MsgCode>
+                                <ns22:Params>
+                                    <xsl:value-of select="&quot;createServicesRequest&quot;"/>
+                                </ns22:Params>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                            </ns22:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Publish-createOrderByValue-Request)">
+                            <ns22:Error>
+                                <ns22:MsgCode>
+                                    <xsl:value-of select="$_error_Publish-createOrderByValue-Request/ns22:Error/ns22:MsgCode"/>
+                                </ns22:MsgCode>
+                                <xsl:for-each select="$_error_Publish-createOrderByValue-Request/ns22:Error/ns22:Params">
+                                    <ns22:Params>
+                                        <xsl:value-of select="."/>
+                                    </ns22:Params>
+                                </xsl:for-each>
+                                <xsl:copy-of select="$_error_Publish-createOrderByValue-Request/ns22:Error/ns3:ErrorReport"/>
+                            </ns22:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns22:Error>
+                                <ns22:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03010&quot;"/>
+                                </ns22:MsgCode>
+                                <ns22:Params>
+                                    <xsl:value-of select="&quot;createServicesRequest&quot;"/>
+                                </ns22:Params>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                            </ns22:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Render createOrderByValue Request</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish createOrderByValue Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render createOrderByValue Request</pd:from>
+        <pd:to>Publish createOrderByValue Request</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render createOrderByValue Request</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish createOrderByValue Request</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Shiva Ganta (Atos Origin Nederland B.V.) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<!--
+      The following elements represent the four message types supported by the SFI.
+   -->
+	<!-- sfiRequest is used to carry SFI operations from the OMA System to Cramer. -->
+	<xsd:element name="sfiRequest" type="SfiRequestType"/>
+	<!-- sfiResponse is used to carry the result of SFI operations from Cramer to the OM System. -->
+	<xsd:element name="sfiResponse" type="SfiResponseType"/>
+	<!-- sfiEvent is used to carry asynchronous events from Cramer to the OM System. -->
+	<xsd:element name="sfiEvent" type="SfiEventType"/>
+	<!-- sfiEventAck is used by the OM System to indicate successful receipt of an event. -->
+	<xsd:element name="sfiEventAck" type="SfiEventAckType"/>
+	<!--
+      The following types represent the SFI request message and operations.
+   -->
+	<xsd:complexType name="SfiRequestType">
+		<xsd:sequence>
+			<xsd:element name="requestId" type="RequestIdType"/>
+			<xsd:element name="userName" type="ObjectNameType"/>
+			<xsd:element name="context" type="ErrorMessageType" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:element name="constrService" type="ConstrServiceOpType"/>
+				<xsd:element name="constrOrder" type="ConstrOrderOpType"/>
+				<xsd:element name="modifyOrder" type="ModifyOrderOpType"/>
+				<xsd:element name="cancelOrder" type="CancelOrderOpType"/>
+				<xsd:element name="checkOrder" type="CheckOrderOpType"/>
+				<xsd:element name="realizeOrder" type="RealizeOrderOpType"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following type is used to represent the Construct Service operation. -->
+	<xsd:complexType name="ConstrServiceOpType">
+		<xsd:sequence>
+			<xsd:element name="serviceType" type="ServiceTypeType"/>
+			<xsd:element name="serviceName" type="ObjectNameType"/>
+			<xsd:element name="subscriberName" type="ObjectNameType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following type is used to represent the Construct Order operation. -->
+	<xsd:complexType name="ConstrOrderOpType">
+		<xsd:sequence>
+			<xsd:element name="serviceId" type="ObjectReferenceType"/>
+			<xsd:element ref="order"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following type is used to represent the Modify Order operation. -->
+	<xsd:complexType name="ModifyOrderOpType">
+		<xsd:sequence>
+			<xsd:element name="orderId" type="ObjectReferenceType"/>
+			<xsd:element ref="order"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following type is used to represent the Cancel Order operation. -->
+	<xsd:complexType name="CancelOrderOpType">
+		<xsd:sequence>
+			<xsd:element name="orderId" type="ObjectReferenceType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following type is used to represent the Check Order operation. -->
+	<xsd:complexType name="CheckOrderOpType">
+		<xsd:sequence>
+			<xsd:element name="orderId" type="ObjectReferenceType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following type is used to represent the Realize Order operation. -->
+	<xsd:complexType name="RealizeOrderOpType">
+		<xsd:sequence>
+			<xsd:element name="orderId" type="ObjectReferenceType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following abstract type represents a generic Order object.  This type is
+     extended below to define Create, Modify and Discontinue subclasses. -->
+	<xsd:complexType name="OrderType" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="orderName" type="ObjectNameType"/>
+			<xsd:element name="plannedCompDate" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- Define order as a top level element so that it can be used as a substitution group -->
+	<xsd:element name="order" type="OrderType"/>
+	<!-- The following abstract types extend the generic Order.  These types should be
+    extended to define service specific order types. -->
+	<xsd:complexType name="CreateServiceOrderType" abstract="true">
+		<xsd:complexContent>
+			<xsd:extension base="OrderType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ModifyServiceOrderType" abstract="true">
+		<xsd:complexContent>
+			<xsd:extension base="OrderType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="DisconServiceOrderType" abstract="true">
+		<xsd:complexContent>
+			<xsd:extension base="OrderType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!--
+      The following types represent the SFI response message and operation responses.
+   -->
+	<xsd:complexType name="SfiResponseType">
+		<xsd:sequence>
+			<xsd:element name="requestId" type="RequestIdType"/>
+			<xsd:choice>
+				<xsd:element name="constrServiceResp" type="ConstrServiceRespType"/>
+				<xsd:element name="constrOrderResp" type="ConstrOrderRespType"/>
+				<xsd:element name="modifyOrderResp" type="ModifyOrderRespType"/>
+				<xsd:element name="cancelOrderResp" type="CancelOrderRespType"/>
+				<xsd:element name="checkOrderResp" type="CheckOrderRespType"/>
+				<xsd:element name="realizeOrderResp" type="RealizeOrderRespType"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ConstrServiceRespType">
+		<xsd:sequence>
+			<xsd:element name="serviceId" type="ObjectReferenceType" minOccurs="0"/>
+			<xsd:element name="serviceName" type="ObjectNameType"/>
+			<xsd:element name="errorCode" type="ErrorCodeType"/>
+			<xsd:element name="errorMessage" type="ErrorMessageType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ConstrOrderRespType">
+		<xsd:sequence>
+			<xsd:element name="orderId" type="ObjectReferenceType" minOccurs="0"/>
+			<xsd:element name="orderName" type="ObjectNameType"/>
+			<xsd:element name="errorCode" type="ErrorCodeType"/>
+			<xsd:element name="errorMessage" type="ErrorMessageType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ModifyOrderRespType">
+		<xsd:sequence>
+			<xsd:element name="errorCode" type="ErrorCodeType"/>
+			<xsd:element name="errorMessage" type="ErrorMessageType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CancelOrderRespType">
+		<xsd:sequence>
+			<xsd:element name="errorCode" type="ErrorCodeType"/>
+			<xsd:element name="errorMessage" type="ErrorMessageType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CheckOrderRespType">
+		<xsd:sequence>
+			<xsd:element name="errorCode" type="ErrorCodeType"/>
+			<xsd:element name="errorMessage" type="ErrorMessageType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RealizeOrderRespType">
+		<xsd:sequence>
+			<xsd:element name="errorCode" type="ErrorCodeType"/>
+			<xsd:element name="errorMessage" type="ErrorMessageType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+      The following types represent the SFI event message and events.
+   -->
+	<xsd:complexType name="SfiEventType">
+		<xsd:sequence>
+			<xsd:element name="requestId" type="RequestIdType"/>
+			<xsd:element name="userName" type="ObjectNameType"/>
+			<xsd:element name="context" type="ErrorMessageType" minOccurs="0"/>
+			<xsd:element ref="event"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following abstract type represents a generic event object.  This type is
+    extended below to define a Status Update Event subclass.  Further extensions
+    should be added for other event types. -->
+	<xsd:complexType name="EventType" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="orderId" type="ObjectReferenceType"/>
+			<xsd:element name="dateAndTime" type="xsd:dateTime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- Define event as a top level element so that it can be used as a substitution group -->
+	<xsd:element name="event" type="EventType"/>
+	<!-- The following type extends the generic Event to give the Status Update Event. -->
+	<xsd:complexType name="StatusUpdateEventType">
+		<xsd:complexContent>
+			<xsd:extension base="EventType">
+				<xsd:sequence>
+					<xsd:element name="fromStatus" type="OrderStatusType"/>
+					<xsd:element name="toStatus" type="OrderStatusType"/>
+					<xsd:element name="reason" type="ErrorMessageType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- Add it to the Event substitution group -->
+	<xsd:element name="statusUpdateEvent" type="StatusUpdateEventType" substitutionGroup="event"/>
+	<!-- The following type extends the generic Event to give the Feasibility Check Event. -->
+	<xsd:complexType name="FeasCheckEventType">
+		<xsd:complexContent>
+			<xsd:extension base="EventType">
+				<xsd:sequence>
+					<xsd:element name="errorCode" type="ErrorCodeType"/>
+					<xsd:element name="errorMessage" type="ErrorMessageType"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- Add it to the Event substitution group -->
+	<xsd:element name="feasCheckEvent" type="FeasCheckEventType" substitutionGroup="event"/>
+	<!-- The following type extends the generic Event to give the Attribute Update Event. -->
+	<xsd:complexType name="AttribUpdateEventType">
+		<xsd:complexContent>
+			<xsd:extension base="EventType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- Add it to the Event substitution group -->
+	<xsd:element name="attribUpdateEvent" type="AttribUpdateEventType" substitutionGroup="event"/>
+	<!--
+      The following types represent the SFI event acknowledge message.
+   -->
+	<xsd:complexType name="SfiEventAckType">
+		<xsd:sequence>
+			<xsd:element name="requestId" type="RequestIdType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+      The following general types are used in the SFI interface.
+   -->
+	<!-- The following type is used to represent order object statuses. -->
+	<xsd:simpleType name="OrderStatusType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CREATED"/>
+			<xsd:enumeration value="IN-PROGRESS"/>
+			<xsd:enumeration value="IN-FEASIBILITY"/>
+			<xsd:enumeration value="COMPLETED"/>
+			<xsd:enumeration value="PARTIALLY-COMPLETED"/>
+			<xsd:enumeration value="ABANDONED"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- The following type is used to represent service object statuses. -->
+	<xsd:simpleType name="ServiceStatusType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CREATED"/>
+			<xsd:enumeration value="IN-PROGRESS"/>
+			<xsd:enumeration value="ACTIVE"/>
+			<xsd:enumeration value="DISCONTINUED"/>
+			<xsd:enumeration value="CANCELLED"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- The following type is used to represent valid service types. It is intended that this type will be derived and restricted to valid service types before use. -->
+	<xsd:simpleType name="ServiceTypeType">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<!-- The following type is used to ensure names are valid. -->
+	<xsd:simpleType name="ObjectNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="50"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- The following type is used to represent Request Ids. -->
+	<xsd:simpleType name="RequestIdType">
+		<xsd:restriction base="xsd:unsignedLong"/>
+	</xsd:simpleType>
+	<!-- The following type is used to represent Error Codes. -->
+	<xsd:simpleType name="ErrorCodeType">
+		<xsd:restriction base="xsd:unsignedInt"/>
+	</xsd:simpleType>
+	<!-- The following type is used to represent Error Messages. -->
+	<!--  <xsd:simpleType name="ErrorMessageType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="2000"/>
+    </xsd:restriction>
+  </xsd:simpleType> -->
+	<!-- OR 13420 -->
+	<xsd:complexType name="ErrorMessageType" mixed="true">
+		<xsd:sequence>
+			<xsd:element name="MSG" type="G11NMessageType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="G11NMessageType" mixed="true">
+		<xsd:sequence>
+			<xsd:element name="KEY" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="PARAM" type="ParamG11NMessageType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ParamG11NMessageType" mixed="true">
+		<xsd:sequence>
+			<xsd:element name="CHAR" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DATE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following type is used to represent inventory object references. -->
+	<xsd:complexType name="ObjectReferenceType">
+		<xsd:sequence>
+			<xsd:element name="dimObjectType" type="xsd:unsignedInt"/>
+			<xsd:element name="dimObjectId" type="xsd:unsignedInt"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

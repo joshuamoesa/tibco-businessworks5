@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated on 2008/10/28 15:15:09 with EAIPlugin 1.2.0 -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:grp="http://kpn.com/products/SNI-FA" xmlns:ord="http://kpn.com/eai/generic/order/1.0" xmlns:prd="http://kpn.com/products/SNI-FA/user/data/v1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://kpn.com/products/SNI-FA/user/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/products/SNI-FA/user/v1">
+<wsdl:documentation>
+    User functional product
+
+    Version History:
+    * 1.0 - Initial version
+</wsdl:documentation>
+<wsdl:types>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/eai/generic/order/1.0" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:simpleType name="OrderStatusEnumeration">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="INITIAL"/>
+      <xsd:enumeration value="ACCEPTED"/>
+      <xsd:enumeration value="REJECTED"/>
+      <xsd:enumeration value="ERROR"/>
+      <xsd:enumeration value="COMPLETED"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:complexType name="Error">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="detail" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Order">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="orderDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="OrderStatus">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="supplierOrderId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="error" type="ord:Error"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/SNI-FA" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_activation  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_activation">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Active"/>
+      <xsd:enumeration value="Inactive"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_callBarringServiceNumbers  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_callBarringServiceNumbers">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="0906"/>
+      <xsd:enumeration value="0906-0909"/>
+      <xsd:enumeration value="0900-0906-0909"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_carrierType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_carrierType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="FTTC"/>
+      <xsd:enumeration value="FTTH"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_keyType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_keyType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="source"/>
+      <xsd:enumeration value="target"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_orderScenario  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_orderScenario">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="New"/>
+      <xsd:enumeration value="Migrate"/>
+      <xsd:enumeration value="Move"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_qualityOfService  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_qualityOfService">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Best Effort"/>
+      <xsd:enumeration value="Premium"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_yesNo  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_yesNo">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Y"/>
+      <xsd:enumeration value="N"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_telephoneNumber  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_telephoneNumber">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_zipcode  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_zipcode">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrder  <<order>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrder">
+    <xsd:sequence>
+      <xsd:element name="type" type="xsd:string"/>
+      <xsd:element name="keyType" type="grp:E_keyType"/>
+      <xsd:element name="requesterId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderItem  <<orderItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderItem">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="serviceInstanceId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderStatus  <<orderStatus>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderStatus">
+    <xsd:sequence>
+      <xsd:element name="keyType" type="grp:E_keyType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderStatusItem  <<orderStatusItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderStatusItem">
+    <xsd:sequence>
+      <xsd:element name="serviceInstanceId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/SNI-FA/user/data/v1.0" version="1.0">
+  <xsd:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+  <xsd:import namespace="http://kpn.com/products/SNI-FA"/>
+  <!-- ================================================== -->
+  <!-- =====  Element Declarations  -->
+  <!-- ================================================== -->
+  <xsd:element name="usercreateRequest" type="prd:usercreateRequest"/>
+  <xsd:element name="usercreateResponse" type="prd:usercreateResponse"/>
+  <xsd:element name="userdeleteRequest" type="prd:userdeleteRequest"/>
+  <xsd:element name="userdeleteResponse" type="prd:userdeleteResponse"/>
+  <xsd:element name="userupdateRequest" type="prd:userupdateRequest"/>
+  <xsd:element name="userupdateResponse" type="prd:userupdateResponse"/>
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userStatusEnum  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="userStatusEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Rejected"/>
+      <xsd:enumeration value="Failed"/>
+      <xsd:enumeration value="Completed"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createRequest">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdUser" type="xsd:string"/>
+      <xsd:element name="fpIdSpTemplate" type="xsd:string"/>
+      <xsd:element name="username" type="xsd:string"/>
+      <xsd:element name="password" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="customerId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdUser" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdUser" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdUser" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  updateRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="updateRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdUser" type="xsd:string"/>
+      <xsd:element name="password" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  updateResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="updateResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdUser" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  usercreateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="usercreateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:usercreateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  usercreateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="usercreateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:createRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  usercreateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="usercreateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:userStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:usercreateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  usercreateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="usercreateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:createResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userdeleteRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="userdeleteRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:userdeleteRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userdeleteRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="userdeleteRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:deleteRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userdeleteResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="userdeleteResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:userStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:userdeleteResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userdeleteResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="userdeleteResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:deleteResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userupdateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="userupdateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:userupdateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userupdateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="userupdateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:updateRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userupdateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="userupdateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:userStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:userupdateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  userupdateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="userupdateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:updateResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>
+</wsdl:types>
+<wsdl:message name="Error">
+<wsdl:part name="Error" type="ord:Error"/>
+</wsdl:message>
+<wsdl:message name="createStatusUpdateRequest">
+<wsdl:part element="prd:usercreateResponse" name="usercreateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="createRequest">
+<wsdl:part element="prd:usercreateRequest" name="usercreateRequest"/>
+</wsdl:message>
+<wsdl:message name="updateStatusUpdateRequest">
+<wsdl:part element="prd:userupdateResponse" name="userupdateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteRequest">
+<wsdl:part element="prd:userdeleteRequest" name="userdeleteRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteStatusUpdateRequest">
+<wsdl:part element="prd:userdeleteResponse" name="userdeleteStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="updateRequest">
+<wsdl:part element="prd:userupdateRequest" name="userupdateRequest"/>
+</wsdl:message>
+<wsdl:portType name="userCallbackServices">
+<wsdl:operation name="createStatusUpdate">
+<wsdl:input message="tns:createStatusUpdateRequest" name="createStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<wsdl:input message="tns:deleteStatusUpdateRequest" name="deleteStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="updateStatusUpdate">
+<wsdl:input message="tns:updateStatusUpdateRequest" name="updateStatusUpdateRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:portType name="userServices">
+<wsdl:operation name="create">
+<wsdl:input message="tns:createRequest" name="createRequest"/>
+</wsdl:operation>
+<wsdl:operation name="update">
+<wsdl:input message="tns:updateRequest" name="updateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<wsdl:input message="tns:deleteRequest" name="deleteRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="userCallbackBindingSOAP" type="tns:userCallbackServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="createStatusUpdate">
+<soap:operation soapAction="SNI-FA_user_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<soap:operation soapAction="SNI-FA_user_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="updateStatusUpdate">
+<soap:operation soapAction="SNI-FA_user_1.0_update_Asynchronous" style="document"/>
+<wsdl:input name="updateStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:binding name="userBindingSOAP" type="tns:userServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="create">
+<soap:operation soapAction="SNI-FA_user_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="update">
+<soap:operation soapAction="SNI-FA_user_1.0_update_Asynchronous" style="document"/>
+<wsdl:input name="updateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<soap:operation soapAction="SNI-FA_user_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="user">
+<wsdl:port binding="tns:userCallbackBindingSOAP" name="userCallbackServices">
+<soap:address location="http://localhost:8080/path/userCallbackServices"/>
+</wsdl:port>
+<wsdl:port binding="tns:userBindingSOAP" name="userServices">
+<soap:address location="http://localhost:8080/path/userServices"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

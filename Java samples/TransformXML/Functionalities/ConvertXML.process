@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Resources/XSD/Request_CREATEB2BSERVICE_2.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/ns/no_namespace_schema_location/Resources/XSD/Request_CREATEB2BSERVICE_2.xsd" schemaLocation="/Resources/XSD/Request_CREATEB2BSERVICE_2.xsd"/>
+    <pd:name>Functionalities/ConvertXML.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:inputSet"/>
+    <pd:startX>83</pd:startX>
+    <pd:startY>96</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>398</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1391594457283</pd:targetNamespace>
+    <pd:activity name="ConvertXMLToObject">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>233</pd:x>
+        <pd:y>96</pd:y>
+        <config>
+            <javaArchive>/Resources/AliasLibrary.aliaslib</javaArchive>
+            <fileName>ConvertXMLConvertXMLToObject</fileName>
+            <packageName>Functionalities.ConvertXML</packageName>
+            <fullsource>package Functionalities.ConvertXML;
+import java.util.*;
+import java.io.*;
+
+import nl.ziggo.adpcramer.*;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.thoughtworks.xstream.converters.extended.ISO8601SqlTimestampConverter;
+
+public class ConvertXMLConvertXMLToObject{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String in_xmlstring = "";
+	protected String out_applicationname = "";
+	protected String out_xmlstring = "";
+	public String getin_xmlstring() {
+		return in_xmlstring;
+	}
+	public void setin_xmlstring(String val) {
+		in_xmlstring = val;
+	}
+	public String getout_applicationname() {
+		return out_applicationname;
+	}
+	public void setout_applicationname(String val) {
+		out_applicationname = val;
+	}
+	public String getout_xmlstring() {
+		return out_xmlstring;
+	}
+	public void setout_xmlstring(String val) {
+		out_xmlstring = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public ConvertXMLConvertXMLToObject() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String in_xmlstring
+	Out : String out_applicationname
+	Out : String out_xmlstring
+* Available Variables: DO NOT MODIFY *****/
+
+XStreamTranslator translator = new XStreamTranslator();
+InputSet inputsetObject = (InputSet)translator.fromXML(in_xmlstring);		
+		
+
+
+XStream xstream = new XStream(new StaxDriver());
+out_xmlstring = xstream.toXML(inputsetObject);
+}
+}
+</fullsource>
+            <inputData>
+                <row>
+                    <fieldName>in_xmlstring</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </inputData>
+            <outputData>
+                <row>
+                    <fieldName>out_applicationname</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>out_xmlstring</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode/>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <in_xmlstring>
+                    <xsl:value-of select="tib:render-xml($Start/inputSet)"/>
+                </in_xmlstring>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>ConvertXMLToObject</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ConvertXMLToObject</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>&lt;?xml version = "1.0" encoding = "UTF-8"?&gt;
+&lt;inputSet&gt;
+	&lt;businesstransactionID&gt;02ccb1d2-d6ce-4a8b-9999-e477f8cd178e&lt;/businesstransactionID&gt;
+	&lt;sentTimeStamp&gt;2014-02-04T15:12:36.296+01:00&lt;/sentTimeStamp&gt;
+	&lt;host&gt;host&lt;/host&gt;
+	&lt;application&gt;application&lt;/application&gt;
+	&lt;operation&gt;operation&lt;/operation&gt;
+	&lt;user&gt;user&lt;/user&gt;
+	&lt;location&gt;
+		&lt;postalcode&gt;1254ds&lt;/postalcode&gt;
+		&lt;houseNumber&gt;9&lt;/houseNumber&gt;
+		&lt;houseNumberExtension&gt;1a&lt;/houseNumberExtension&gt;
+		&lt;room&gt;k0.12&lt;/room&gt;
+	&lt;/location&gt;
+	&lt;service&gt;
+		&lt;serviceType&gt;servicetype&lt;/serviceType&gt;
+		&lt;serviceSpecification&gt;servicespecification&lt;/serviceSpecification&gt;
+		&lt;serviceName&gt;servicename&lt;/serviceName&gt;
+		&lt;characteristicList&gt;
+			&lt;characteristic&gt;
+				&lt;name&gt;name1&lt;/name&gt;
+				&lt;value&gt;value1&lt;/value&gt;
+			&lt;/characteristic&gt;
+			&lt;characteristic&gt;
+				&lt;name&gt;name2&lt;/name&gt;
+				&lt;value&gt;value2&lt;/value&gt;
+			&lt;/characteristic&gt;
+		&lt;/characteristicList&gt;
+		&lt;associatedServiceList&gt;
+			&lt;associatedService&gt;
+				&lt;serviceType&gt;serviceType1&lt;/serviceType&gt;
+				&lt;serviceSpecification&gt;serviceSpecification1&lt;/serviceSpecification&gt;
+				&lt;serviceName&gt;serviceName1&lt;/serviceName&gt;
+			&lt;/associatedService&gt;
+			&lt;associatedService&gt;
+				&lt;serviceType&gt;serviceType2&lt;/serviceType&gt;
+				&lt;serviceSpecification&gt;serviceSpecification2&lt;/serviceSpecification&gt;
+				&lt;serviceName&gt;serviceName2&lt;/serviceName&gt;
+			&lt;/associatedService&gt;
+		&lt;/associatedServiceList&gt;
+		&lt;resourceList&gt;
+			&lt;resource&gt;
+				&lt;resourceType&gt;resourceType1&lt;/resourceType&gt;
+				&lt;resourceSpecification&gt;resourceSpecification1&lt;/resourceSpecification&gt;
+				&lt;resourceName&gt;resourceName1&lt;/resourceName&gt;
+				&lt;characteristicList&gt;
+					&lt;characteristic&gt;
+						&lt;name&gt;name1&lt;/name&gt;
+						&lt;value&gt;value1&lt;/value&gt;
+					&lt;/characteristic&gt;
+					&lt;characteristic&gt;
+						&lt;name&gt;name2&lt;/name&gt;
+						&lt;value&gt;value2&lt;/value&gt;
+					&lt;/characteristic&gt;
+				&lt;/characteristicList&gt;
+			&lt;/resource&gt;
+			&lt;resource&gt;
+				&lt;resourceType&gt;resourceType2&lt;/resourceType&gt;
+				&lt;resourceSpecification&gt;resourceSpecification2&lt;/resourceSpecification&gt;
+				&lt;resourceName&gt;resourceName2&lt;/resourceName&gt;
+				&lt;characteristicList&gt;
+					&lt;characteristic&gt;
+						&lt;name&gt;name1&lt;/name&gt;
+						&lt;value&gt;value1&lt;/value&gt;
+					&lt;/characteristic&gt;
+					&lt;characteristic&gt;
+						&lt;name&gt;name2&lt;/name&gt;
+						&lt;value&gt;value2&lt;/value&gt;
+					&lt;/characteristic&gt;
+				&lt;/characteristicList&gt;
+			&lt;/resource&gt;
+		&lt;/resourceList&gt;
+	&lt;/service&gt;
+&lt;/inputSet&gt;</pd:description>
+        <pd:x>381</pd:x>
+        <pd:y>367</pd:y>
+        <pd:width>624</pd:width>
+        <pd:height>365</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

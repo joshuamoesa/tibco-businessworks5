@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/SoapUri.xsd">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/SoapUri.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/SoapUri.xsd"/>
+    <pd:name>IKKAdapter/Test Processes/Utils/ParseURI.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="uri" type="xsd:string"/>
+    </pd:startType>
+    <pd:startX>80</pd:startX>
+    <pd:startY>174</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$soapURI/SoapUri"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="SoapUri" type="pfx:SoapUri"/>
+    </pd:endType>
+    <pd:endX>462</pd:endX>
+    <pd:endY>175</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <soapURI>
+            <xsd:element name="SoapUri" type="pfx:SoapUri"/>
+        </soapURI>
+    </pd:processVariables>
+    <pd:activity name="ProtocolError">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>144</pd:x>
+        <pd:y>316</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;uri protocol error&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;ParseURIError&quot;"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>143</pd:x>
+        <pd:y>80</pd:y>
+        <pd:width>251</pd:width>
+        <pd:height>175</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Init</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>assign</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Init</pd:from>
+            <pd:to>assign</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Init">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>220</pd:x>
+            <pd:y>174</pd:y>
+            <config>
+                <variableName>soapURI</variableName>
+            </config>
+            <pd:inputBindings>
+                <SoapUri>
+                    <hostname>
+                        <xsl:value-of select="substring-before( substring-after($Start/uri, &quot;http://&quot;), &quot;/&quot;)"/>
+                    </hostname>
+                    <port>
+                        <xsl:value-of select="substring-before( substring-after($Start/uri, &quot;http://&quot;), &quot;/&quot;)"/>
+                    </port>
+                    <resourcePath>
+                        <xsl:value-of select="concat(&quot;/&quot;, substring-after( substring-after($Start/uri, &quot;http://&quot;), &quot;/&quot;))"/>
+                    </resourcePath>
+                    <filter>
+                        <xsl:value-of select="substring-after(substring-after(substring-after($Start/uri, &quot;http://&quot;), &quot;/&quot;), &quot;?&quot;)"/>
+                    </filter>
+                </SoapUri>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="assign">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>313</pd:x>
+            <pd:y>175</pd:y>
+            <config>
+                <variableName>soapURI</variableName>
+            </config>
+            <pd:inputBindings>
+                <SoapUri>
+                    <hostname>
+                        <xsl:value-of select="if (string-length($soapURI/SoapUri/hostname) = 0 or string-length(substring-before($soapURI/SoapUri/hostname, &quot;:&quot;)) = 0)&#xA;then &quot;localhost&quot;&#xA;else substring-before($soapURI/SoapUri/hostname, &quot;:&quot;)"/>
+                    </hostname>
+                    <port>
+                        <xsl:value-of select="if (string-length($soapURI/SoapUri/port) = 0  or string-length(substring-after($soapURI/SoapUri/port, &quot;:&quot;)) = 0)&#xA;then &quot;80&quot;&#xA;else substring-after($soapURI/SoapUri/port, &quot;:&quot;)"/>
+                    </port>
+                    <resourcePath>
+                        <xsl:value-of select="if (contains($soapURI/SoapUri/resourcePath, &quot;?&quot;))&#xA;then substring-before($soapURI/SoapUri/resourcePath, &quot;?&quot;)&#xA;else $soapURI/SoapUri/resourcePath"/>
+                    </resourcePath>
+                    <xsl:if test="$soapURI/SoapUri/filter">
+                        <filter>
+                            <xsl:value-of select="$soapURI/SoapUri/filter"/>
+                        </filter>
+                    </xsl:if>
+                </SoapUri>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ProtocolError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65281</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>ProtocolError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

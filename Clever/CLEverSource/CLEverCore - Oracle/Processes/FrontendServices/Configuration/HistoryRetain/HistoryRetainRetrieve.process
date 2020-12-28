@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://www.tibco.com/CLEver/Configuration/HistoryRetain" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/CLEver/FrontendServices/Configuration/HistoryRetain/HistoryRetainInterfaceSpecs" xmlns:ns2="http://www.tibco.com/CLEver/HistoryRetain" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns12="http://www.tibco.com/CLEver/Exception" xmlns:ns4="http://www.tibco.com/CLEver/InternalException" xmlns:ns22="http://www.tibco.com/CLEver/Configuration/BusinessDomain" xmlns:ns13="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:CleverUtils="java://Clever.CleverUtils">
+    <wsdl:import namespace="http://www.tibco.com/CLEver/Configuration/HistoryRetain" location="/Processes/FrontendServices/Configuration/HistoryRetain/Rule.wsdl"/>
+    <pd:name>Processes/FrontendServices/Configuration/HistoryRetain/HistoryRetainRetrieve.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:Retrieve_HistoryRetain_Input"/>
+    <pd:startX>119</pd:startX>
+    <pd:startY>153</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:Retrieve_HistoryRetain_Output>
+            <part1>
+                <ns1:Retrieve_HistoryRetain_Output>
+                    <xsl:copy-of select="$Retrieve-HistoryRetain/ns2:HistoryRetains"/>
+                </ns1:Retrieve_HistoryRetain_Output>
+            </part1>
+        </wsdlPfx:Retrieve_HistoryRetain_Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:Retrieve_HistoryRetain_Output"/>
+    <pd:endX>435</pd:endX>
+    <pd:endY>156</pd:endY>
+    <pd:errorSchemas>
+        <Fault wsMsgRef="wsdlPfx:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Retrieve HistoryRetain">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>257</pd:x>
+        <pd:y>163</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/HistoryRetain/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/HistoryRetain/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/wsdlPfx:Retrieve_HistoryRetain_Input/part1/ns1:Retrieve_HistoryRetain_Input/pfx:Version"/>
+                </Version>
+                <xsl:copy-of select="$Start/wsdlPfx:Retrieve_HistoryRetain_Input/part1/ns1:Retrieve_HistoryRetain_Input/pfx:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>47</pd:x>
+        <pd:y>276</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>284</pd:x>
+        <pd:y>288</pd:y>
+        <config>
+            <faultName>Fault</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns13:ActivityInput>
+                <data>
+                    <wsdlPfx:Exception>
+                        <part1>
+                            <ns4:ExceptionEnvelope>
+                                <ns4:Exception>
+                                    <Service>
+                                        <xsl:value-of select="substring-after(substring-before($_error/ns3:ErrorReport/ProcessStack, '.'), 'FrontendServices/')"/>
+                                    </Service>
+                                    <ErrorMessage>
+                                        <xsl:value-of select="$FormatError/Output/ErrorMessage"/>
+                                    </ErrorMessage>
+                                    <ErrorCode>
+                                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                                    </ErrorCode>
+                                    <ns4:Error>
+                                        <ns4:ErrorReport>
+                                            <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                            <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                        </ns4:ErrorReport>
+                                    </ns4:Error>
+                                </ns4:Exception>
+                            </ns4:ExceptionEnvelope>
+                        </part1>
+                    </wsdlPfx:Exception>
+                </data>
+            </ns13:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FormatError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>292</pd:y>
+        <config>
+            <processName>/Processes/InternalServices/Exception Handler/FormatErrorHumanReadable.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ns4:Exception>
+                    <Service>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionSeverity/Name,'.',$_globalVariables/ns:GlobalVariables/StaticVariables/Operations/Create)"/>
+                    </Service>
+                    <ErrorMessage>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                    </ErrorMessage>
+                    <ErrorCode>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                    </ErrorCode>
+                    <ns4:Error>
+                        <ns4:ErrorReport>
+                            <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                        </ns4:ErrorReport>
+                    </ns4:Error>
+                </ns4:Exception>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Retrieve HistoryRetain</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Retrieve HistoryRetain</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>FormatError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FormatError</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

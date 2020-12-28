@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:pfx2="http://www.tibco.com/CLEver/Policy" xmlns:pfx3="http://www.tibco.com/CLEver/Notification" xmlns:ns="http://www.tibco.com/CLEver/Channel" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:pfx4="http://xmlns.tibco.com/body" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:XSLTCache="java://XSLTTransform" xmlns:ns1="http://www.tibco.com/CLEver/ExtraTypes">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Notification" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Notification.xsd"/>
+    <pd:name>Processes/BackendServices/Transactional/Shared/ReplaceVariables.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:NotificationFull"/>
+                    <xsd:element ref="pfx:Exception"/>
+                    <xsd:element ref="pfx2:PolicyFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>29</pd:startX>
+    <pd:startY>61</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Schema0/root"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:NotificationFull"/>
+                    <xsd:element ref="pfx:Exception"/>
+                    <xsd:element ref="pfx2:PolicyFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>557</pd:endX>
+    <pd:endY>155</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Schema0>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx3:NotificationFull"/>
+                        <xsd:element ref="pfx:Exception"/>
+                        <xsd:element ref="pfx2:PolicyFull"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </Schema0>
+    </pd:processVariables>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>242</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx3:NotificationFull"/>
+                            <xsd:element ref="pfx:Exception"/>
+                            <xsd:element ref="pfx2:PolicyFull"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$ReplaceVariables/root/param"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>395</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <variableName>Schema0</variableName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Parse-XML/root"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>225</pd:y>
+        <config>
+            <variableName>Schema0</variableName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ReplaceVariables">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>135</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="param" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:variable name="BusinessDomain" select="XSLTCache:StringReplace(tib:render-xml($Start/root), &quot;\$\{BusinessDomain\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessDomain)"/>
+                <xsl:variable name="TechnicalDomain" select="XSLTCache:StringReplace($BusinessDomain, &quot;\$\{TechnicalDomain\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:TechnicalDomain)"/>
+                <xsl:variable name="BusinessConcept" select="XSLTCache:StringReplace($TechnicalDomain, &quot;\$\{BusinessConcept\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessConcept)"/>
+                <xsl:variable name="BusinessOperation" select="XSLTCache:StringReplace($BusinessConcept, &quot;\$\{BusinessOperation\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:BusinessOperation)"/>
+                <xsl:variable name="TransactionId" select="XSLTCache:StringReplace($BusinessOperation, &quot;\$\{TransactionId\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:TransactionID)"/>
+                <xsl:variable name="Service" select="XSLTCache:StringReplace($TransactionId, &quot;\$\{Service\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:ServiceName)"/>
+                <xsl:variable name="Component" select="XSLTCache:StringReplace($Service, &quot;\$\{Component\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:ComponentName)"/>
+                <xsl:variable name="ProcedureName" select="XSLTCache:StringReplace($Component, &quot;\$\{ProcedureName\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:ProcessName)"/>
+                <xsl:variable name="HostName" select="XSLTCache:StringReplace($ProcedureName, &quot;\$\{HostName\}&quot;, $Start/root/pfx:Exception/ns1:ProcessContext/ns1:HostName)"/>
+                <xsl:variable name="ExceptionCategory" select="XSLTCache:StringReplace($HostName, &quot;\$\{ExceptionCategory\}&quot;, $Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionCategory)"/>
+                <xsl:variable name="ExceptionCode" select="XSLTCache:StringReplace($ExceptionCategory, &quot;\$\{ExceptionCode\}&quot;, $Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionCode)"/>
+                <xsl:variable name="ExceptionSeverity" select="XSLTCache:StringReplace($ExceptionCode, &quot;\$\{ExceptionSeverity\}&quot;, $Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionSeverity)"/>
+                <xsl:variable name="Exception" select="XSLTCache:StringReplace($ExceptionSeverity, &quot;\$\{ExceptionType\}&quot;, $Start/root/pfx:Exception/pfx:ExceptionDetail/pfx:ExceptionType)"/>
+                <param>
+                    <xsl:value-of select="$Exception"/>
+                </param>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ReplaceVariables</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Assign-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReplaceVariables</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReplaceVariables</pd:from>
+        <pd:to>Assign-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

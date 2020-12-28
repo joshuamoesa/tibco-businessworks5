@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://www.tibco.com/CLEver/FrontendServices/Security/Login" xmlns:pfx0="http://www.tibco.com/CLEver/FrontendServices/Security/Login/LoginInterfaceSpecs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file">
+    <wsdl:import namespace="http://www.tibco.com/CLEver/FrontendServices/Security/Login" location="/Processes/FrontendServices/Security/Login/Login.wsdl"/>
+    <pd:name>Processes/FrontendServices/Security/Login/Login.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:Execute_Login_Input"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>50</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:Execute_Login_Output>
+            <parameters>
+                <xsl:copy-of select="$Login/pfx0:Execute_Login_Output"/>
+            </parameters>
+        </wsdlPfx:Execute_Login_Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:Execute_Login_Output"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>50</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Login">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>272</pd:x>
+        <pd:y>50</pd:y>
+        <config>
+            <processName>/Processes/DataServices/Security/Login/Login.process</processName>
+            <processNameXPath/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/wsdlPfx:Execute_Login_Input/parameters/pfx0:Execute_Login_Input"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Login</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Login</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

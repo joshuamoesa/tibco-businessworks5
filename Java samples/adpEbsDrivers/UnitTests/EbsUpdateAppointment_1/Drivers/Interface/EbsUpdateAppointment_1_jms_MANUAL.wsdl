@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:ns1="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0" xmlns:tns="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsUpdateAppointment/1/jms" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsUpdateAppointment/1/Schema" xmlns:jms="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:jndi="http://www.tibco.com/namespaces/ws/2004/soap/apis/jndi" name="Untitled" targetNamespace="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsUpdateAppointment/1/jms">
+    <wsdl:types>
+        <xs:schema xmlns:cdm="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsUpdateAppointment/1/Schema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bi="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0" targetNamespace="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsUpdateAppointment/1/Schema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0"/>
+            <xs:complexType name="AddressIdentifier">
+                <xs:annotation>
+                    <xs:documentation>See ICC Architecture guidelines for explanation of entities with the -Identifier suffix. 
+Note that the identifier is local to the context in which the address is used. For instance a list of addresses might be provided with an Order and each address is referred to from the various Order lines. The ID of the address must be unique within the context of the Order, but not outside of the Order.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="ID" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>An optional identifier of the address, note that the identifier might be local to the context in which the address is used such as an order. The id has no use outside such a context.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="externalID" minOccurs="0">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute ref="cdm:keyField"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="localReference" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The localReference element is an element used whenever the ID element of the entity in question cannot be used. Reasons for this are for instance that no value is available to uniquely identify the entity by. Still it must be possible to refer to the entity within the context of a message. To avoid the use of the ID element and its (mandatory) keyField and associated meanings, the localReference element can used.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="addressType" type="cdm:AddressType">
+                    <xs:annotation>
+                        <xs:documentation>This attribute is of type AddressType, which uses enumerated values. See AddressType annotation for description of the enumarated values.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:complexType>
+            <xs:simpleType name="AddressType">
+                <xs:annotation>
+                    <xs:documentation>AddressType has enumerations PROPERTY_ADDRESS, POBOX_ADDRESS and FREEPOST_ADDRESS.
+PROPERTY_ADDRESS «- An actual phsical address of a property. Examples: address where customer actually lives; address where engineer can be sent to.
+POBOX_ADDRESS    «- When this type is selected, the convention is that the houseNumber contains the POBOX number.
+FREEPOST_ADDRESS «- When this type is selected, the convention is that the houseNumber contains the FREEPOST number.</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="FREEPOST_ADDRESS"/>
+                    <xs:enumeration value="POBOX_ADDRESS"/>
+                    <xs:enumeration value="PROPERTY_ADDRESS"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="CustomerIdentifier">
+                <xs:sequence>
+                    <xs:element name="ID" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The ID of the customer being referenced.</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="keyField" fixed="cdm:customerID" use="required" type="xs:string">
+                                        <xs:annotation>
+                                            <xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="type" type="cdm:CustomerType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Type of Customer such as 'RESIDENTIAL', 'BUSINESS' or 'WHOLESALE'.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="externalID" minOccurs="0">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute ref="cdm:keyField"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CustomerType">
+                <xs:annotation>
+                    <xs:documentation>A dedicated type that is used to model the type of Customer. Examples are: RESIDENTIAL, BUSINESS, WHOLESALE.
+Ziggo systems that deal with CustomerType are for example: Oracle eBS, RBM. Process components that deal with it are for example: prcCustomer.
+Notes: A complex type is used to allow for addition of an attribute (keyField), which is not possible for simple types; This is currently a string based type with no restrictions.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="keyField" fixed="cdm:customerType" use="required" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:complexType name="ProductIdentifier">
+                <xs:sequence>
+                    <xs:element name="ID" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The identifier of the specific Product (instance) to which this reference refers.</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="keyField" fixed="cdm:productID" use="required" type="xs:anySimpleType">
+                                        <xs:annotation>
+                                            <xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="localReference" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Used in message context to refer to a product while the official Product ID (MDM) is not available.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="ProductOfferName">
+                <xs:annotation>
+                    <xs:documentation>The (commercial) name given to the product offer. </xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+            <xs:complexType name="ProductOfferingIdentifier">
+                <xs:annotation>
+                    <xs:documentation>A unique identifier for a ProductOffering which is to be used by all elements that need to refer to a ProductOffering</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="ID" minOccurs="0">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="keyField" default="cdm:productOfferingID" type="xs:string">
+                                        <xs:annotation>
+                                            <xs:documentation>When a keyField attribute is available in an element, the keyField attribute's name and value are extracted by CSL and used as logging keys (e.g. in CLEver)
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». 
+Removing an element's keyField attribute will disable logging for that element.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ProductOrderIdentifier">
+                <xs:sequence>
+                    <xs:element name="ID" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Unique Identifier for a Product Order. No other product order is allowed to have the same ID.</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="keyField" fixed="cdm:productOrderID" use="required" type="xs:string">
+                                        <xs:annotation>
+                                            <xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys.
+Example: «ID keyField="cdm:productOrderID"»12345678«/ID» is logged as: «name»cdm:productOrderID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="type" type="xs:string" minOccurs="0"/>
+                    <xs:element name="externalID" minOccurs="0">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute ref="cdm:keyField"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ResourceIdentifier">
+                <xs:sequence>
+                    <xs:element name="ID" minOccurs="0">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="keyField" fixed="cdm:resourceID" use="required" type="xs:anySimpleType">
+                                        <xs:annotation>
+                                            <xs:documentation>When a keyField attribute is available in an element, the value of that element must be logged. The keyField attribute's value is used as one of the logging keys. 
+Example: «ID keyField="cdm:productID"»12345678«/ID» is logged as: «name»cdm:productID«/name»«value»12345678«/value». Remove the attribute altogether to disable logging.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="localReference" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>A local reference to a resource when the ID of the resource is not known or available. </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="type" type="cdm:ResourceType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Indicates the type of the resource. Uses simple type ResourceType, which is restricted to enumerators: LOGICAL_RESOURCE or PHYSICAL_RESOURCE.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="ResourceType">
+                <xs:annotation>
+                    <xs:documentation>Indicates the type of the resource being either a LOGICAL_RESOURCE or PHYSICAL_RESOURCE.</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="LOGICAL_RESOURCE"/>
+                    <xs:enumeration value="PHYSICAL_RESOURCE"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="ServiceRequest">
+                <xs:annotation>
+                    <xs:documentation>A Service Request is an Oracle eBS concept and is generally a request for another department to do something, e.g.: send out an engineer; restitute money; send letter. Many eBS Orders generate Service Requests (mostly when engineer is sent out). Service Requests often break down into Tasks (ServiceRequestTask).</xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+                    <xs:extension base="cdm:ServiceRequestIdentifier">
+                        <xs:sequence>
+                            <xs:element name="type" type="xs:string" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>The type of service request, not free text, but managed by the master system (eBS)</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="status" type="xs:string" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Indicates the status of the service request, for example 'UNPLANNED', 'PLANNED', 'COMPLETED'.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="customer" type="cdm:CustomerIdentifier" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Refers to the customer who made the request for service.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="order" type="cdm:ProductOrderIdentifier" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Identifieds the product order this service request relates to.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="products" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>A list of products involved in this service request.</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence minOccurs="0">
+                                        <xs:element name="product" type="cdm:ProductIdentifier" maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                    <xs:attribute ref="cdm:modifier"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="productOffer" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>A reference to the product offer under which this service request is made. The product offer must also relate to the products listed in the service request.</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="cdm:ProductOfferingIdentifier">
+                                            <xs:sequence minOccurs="0">
+                                                <xs:element name="name" type="cdm:ProductOfferName" minOccurs="0">
+                                                    <xs:annotation>
+                                                        <xs:documentation>The (commercial) name given to the product offer. </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="location" type="cdm:AddressIdentifier" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Refers to the location where the service request will take place</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="remarks" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Free text remarks regarding the service request and related activities.</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="remark" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="remarkDateTime" type="xs:dateTime" minOccurs="0"/>
+                                                    <xs:element name="remarkText" type="xs:string" minOccurs="0"/>
+                                                    <xs:element name="createdBy" type="xs:string" minOccurs="0"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute ref="cdm:modifier"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="requestedTimePeriod" type="cdm:TimePeriod" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>The timeframe within which the service request appointment could be scheduled.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="resources" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Contains a list of resources that are involved in this serviceRequest.</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="resource" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation>A resource involved in this serviceRequest.</xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:complexContent>
+                                                    <xs:extension base="cdm:ResourceIdentifier">
+                                                        <xs:sequence>
+                                                            <xs:element name="action" type="xs:string" minOccurs="0">
+                                                                <xs:annotation>
+                                                                    <xs:documentation>Indicates the action the engineer must perform on the resource in order to complete the serviceRequest. E.g. 'CONNECT' or 'DISCONNECT'</xs:documentation>
+                                                                </xs:annotation>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:extension>
+                                                </xs:complexContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute ref="cdm:modifier"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="tasks" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>A list of tasks the engineer must/will/has performed in order to complete the service request.</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="task" type="cdm:ServiceRequestTask" maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute ref="cdm:modifier"/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ServiceRequestIdentifier">
+                <xs:sequence>
+                    <xs:element name="ID" minOccurs="0">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="keyField" fixed="cdm:serviceRequestID" type="xs:string">
+                                        <xs:annotation>
+                                            <xs:documentation>Attribute has 2 purposes. 
+- ESB will automatically log elements that have the keyField attribute. The value of keyfield can be used to search for all messages containing this field in TIBCO's CLEver logging application.
+- The attribute also clearly identifies the source of an external identifier or reference that is valid for a specific backend. 
+The restriction is: [a-z]{3}:[a-zA-Z]*
+Which means: 
+FIRST a 3-letter lowercase acronym describing the system where the identifier or reference has meaning. E.g. msd, rbm, ebs, ccw
+THEN a colon ':' 
+THEN a text describing the identifier, which must follow standards for element names. I.e. lowerCamelCase</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="localReference" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ServiceRequestTask">
+                <xs:annotation>
+                    <xs:documentation>A task, part of a service request to be executed by an engineer.</xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+                    <xs:extension base="cdm:ServiceRequestTaskIdentifier">
+                        <xs:sequence>
+                            <xs:element name="type" type="xs:string" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>An indicator of the type of task. The types are not free text as such, but managed by the master system (eBS)</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="status" type="xs:string" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Status of the progress of the task. When all tasks are completed then a serviceRequest can be considered completed.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="scheduledTimePeriod" type="cdm:TimePeriod" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Timeframe in which the actual task is scheduled and within which the engineer is expected to perform the task.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ServiceRequestTaskIdentifier">
+                <xs:sequence>
+                    <xs:element name="ID" minOccurs="0">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="keyField" fixed="cdm:serviceRequestTaskID" type="xs:string"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="TimePeriod">
+                <xs:annotation>
+                    <xs:documentation>The TimePeriod object is used to model a start date (and time) and an end date (and time). It is used wherever needed in many different contexts throughout the CDM.</xs:documentation>
+                    <xs:documentation>The TimePeriod class denotes a period in time with a start and an end-date. Note that the end-date may expressed relatively to the start using the duration attribute.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="startDateTime" type="xs:dateTime" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The (absolute) start of the time period.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="endDateTime" type="xs:dateTime" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The absolute end of the time period.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="Request">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="bi:RequestType">
+                            <xs:sequence>
+                                <xs:element name="body">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="serviceRequest" type="cdm:ServiceRequest"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Response">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="bi:ResponseType">
+                            <xs:sequence>
+                                <xs:element name="body">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="serviceRequest" type="cdm:ServiceRequest" minOccurs="0"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:attribute name="keyField">
+                <xs:annotation>
+                    <xs:documentation>Attribute has 2 purposes. 
+- ESB will automatically log elements that have the keyField attribute. The value of keyfield can be used to search for all messages containing this field in TIBCO's CLEver logging application.
+- The attribute also clearly identifies the source of an external identifier or reference that is valid for a specific backend. 
+The restriction is: [a-z]{2,4}:[a-zA-Z]*
+Which means: 
+FIRST a 2, 3, or 4 letter lowercase abbreviation describing the system where the identifier or reference has meaning. E.g. msd, rbm, ebs, cw, hrhb. This abbreviation should follow the same rules as used to name Adapter-service names (see naming guidelines).
+THEN a colon ':' 
+THEN a text describing the identifier, which must follow standards for element names. I.e. lowerCamelCase</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[a-z]{2,4}:[a-zA-Z]*"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="modifier">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="ADD">
+                            <xs:annotation>
+                                <xs:documentation>Indicates that the entity's value(s) are to be added to the current value(s). 
+
+Example 1 (Simple Content): 
+This modifier is not used for simple content.
+
+Example 2 (Complex Content):
+This modifier is not used for complex conten
+t.
+Example 3 (List Content):
+«values modifier="ADD"»
+  «value»additional value one«/value»
+  «value»additional value two«/value»
+«/values» 
+will add the values 'additional value one' and 'additional value two' to the current list of values.
+NOTE: For List Content this is the default expected behaviour. So the modifier can be omitted altogether in this situation.</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="REMOVE">
+                            <xs:annotation>
+                                <xs:documentation>Indicates that the entity's value(s) must be removed from the value(s).
+
+Example 1 (Simple Content): 
+This modifier is not used for simple content situations. Here the appropriate situation would be:
+«entity nil="true" /»
+
+Example 2 (Complex Content):
+«entity modifier="REMOVE"»
+  «ID»1234«/ID»
+«/values» 
+will remove the entity with ID=1234. Note that it makes no sense in specifying any nested elements for this entity.
+
+Example 3 (List Content):
+«values modifier="REMOVE"»
+  «value»old value one«/value»
+  «value»old value two«/value»
+«/values» 
+will remove values 'old value one' and 'old value two' from the list of existing values. If the current list contains more values these are then unaffected.
+Note: To remove all values without specifying them you could use «values modifier="REPLACE /», effectively replacing the current list with an empty one.
+</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="REPLACE">
+                            <xs:annotation>
+                                <xs:documentation>Indicates that the entity's value(s) are a replacement of the current value(s). 
+Example 1 (Simple Content): 
+For simple content the value is not used, instead the modifier is used on the complex content (see below)
+
+Example 2 (Complex Content):
+«entity modifier="REPLACE"»
+  «ID»1234«/ID»
+  «element1»new value one«/element1»
+  «element2»new value two«/element2»
+«/values» 
+will replace all the (mutable) elements of the entity with ID=1234. The expected behaviour is that any previously assigned elements of the entity are erased and (if provided) are overwritten by the new values. So none of the previous values are to be retained even if their elements have been ommitted.
+
+Example 3 (List Content):
+«values modifier="REPLACE"»
+  «value»First new value«/value»
+  «value»Second new value«/value»
+«/values» 
+will replace all current values with the values provided in the list.</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="UPDATE">
+                            <xs:annotation>
+                                <xs:documentation>Indicates the element should be updated, retaining the values of the elements that have been omitted.
+Example 1 (Simple Content): 
+For simple content the value is not used, instead the modifier is used on the complex content the simple element is part of (if applicable)(see below)
+
+Example 2 (Complex Content):
+The UPDATE value is the default for complex content the following example...
+«entity modifier="UPDATE"»
+  «ID»1234«/ID»
+  «element1»new value one«/element1»
+  «element2»new value two«/element2»
+«/values» 
+
+...is identical to:
+«entity»
+  «ID»1234«/ID»
+  «element1»new value one«/element1»
+  «element2»new value two«/element2»
+«/values» 
+
+Both variants will update all the (mutable) elements of the entity having ID=1234 for which a value is provided. In the example above only element1 and element2 will be updated. Any other elements that have been omitted will not be touched.
+
+Example 3 (List Content):
+For list content where the content is a simple type this modifier value is not used, because the list items do not have an ID to idenify the current values with.
+For list content where the content is a complex type this modifier effectively passes the control to the modifier on each complex entry in the list. However, just as with Example-2 above, the UPDATE modifier is also implicit in this case, so can simply be omitted altogether. Note that this allows you to mix ADD, REMOVE and UPDATE modifiers for each complex entry in the list, so that some complex entries in the list could be added, some removed and some updated.</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:schema>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bi="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0" targetNamespace="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:complexType name="AttributeType">
+                <xs:sequence>
+                    <xs:element name="key">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="value">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="AttributesType">
+                <xs:sequence>
+                    <xs:element name="attribute" type="bi:AttributeType" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="AuditContextType">
+                <xs:annotation>
+                    <xs:documentation>The audit context block offers a means to add additional information to the message such as performance metrics and special remarks.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="receivedTimestamp" type="xs:dateTime" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Identifies the date and time that this message has been picked up.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="responseTimestamp" type="xs:dateTime" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Identifies the date and time that this message has been processed.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="processingTime" type="xs:decimal" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The duration of the processing of the initial message in seconds with at least millisecond accuracy.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorStackType">
+                <xs:sequence>
+                    <xs:element name="error" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:complexContent>
+                                <xs:extension base="bi:ErrorType">
+                                    <xs:sequence>
+                                        <xs:element name="sequence" type="xs:positiveInteger">
+                                            <xs:annotation>
+                                                <xs:documentation>Identifies in what order the errors occurred.</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:extension>
+                            </xs:complexContent>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorType">
+                <xs:sequence>
+                    <xs:element name="classification">
+                        <xs:annotation>
+                            <xs:documentation>Used to shed light on what a consumer can do with this error. Previously known as Functional vs Technical error type.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="FUNCTIONAL"/>
+                                <xs:enumeration value="TECHNICAL"/>
+                                <xs:enumeration value="UNDETERMINED"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="category" type="xs:nonNegativeInteger">
+                        <xs:annotation>
+                            <xs:documentation>Defines the category to which this error belongs. Previously named 'errorCode'. Described in detail in Ziggo ICC Error handling documentation. Current values are:
+0. Not-specified (e.g. there is no category)
+1. Insufficient Data
+2. Invalid Data
+3. Business Rule Violation
+4. Object Not Found
+5. Duplicate Object
+6. Insufficient Rights
+7. Stale Data
+8. Service Unavailable
+9. Un-attributable Error
+10. Undetermined Result</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="code">
+                        <xs:annotation>
+                            <xs:documentation>The combination 'category' and 'code' is used to identify an unique error scenario for this operation.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="message" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>The actual error message that was generated.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="source" type="bi:SourceContextType">
+                        <xs:annotation>
+                            <xs:documentation>Describes what the source is of this error.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="payload" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Contains the specific data that was used in the conditional expression. Only used when throwing a non-retryable error.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="stackTrace" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Classig, unparsed stacktrace.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="HeaderType">
+                <xs:annotation>
+                    <xs:documentation>The generic header of every request, response and fault message. Note that securityContext is mainly used in a request, auditContext in the response. Also note that notifications do not make use of this header structure.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="cmmVersion" fixed="3" type="xs:positiveInteger">
+                        <xs:annotation>
+                            <xs:documentation>Version of this Canonical Message Model</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="messageContext" type="bi:MessageContextType">
+                        <xs:annotation>
+                            <xs:documentation>The message context structure contains information on how the message should be handled when in flight. It specifies among other things the priority and expiration time of the message.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="sourceContext" type="bi:SourceContextType">
+                        <xs:annotation>
+                            <xs:documentation>Source context describes where a message or an error came from. The source context is forwarded with every message on the bus for logging purposes.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="securityContext" type="bi:SecurityContextType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>This context can be used to pass through tokens or other identifiers to secure authenticity of a user or system.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="messageControl" type="bi:MessageControlType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The message control structure contains information on how the message should be handled when in flight. It specifies among other things the priority and expiration time of the message.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="auditContext" type="bi:AuditContextType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The audit context returns basic performance information of the message.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="attributes" type="bi:AttributesType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Optional attributes type that can be used for future extensions and additions.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="MessageContextType">
+                <xs:annotation>
+                    <xs:documentation>The message context structure contains information on how the message should be handled when in flight. It specifies among other things the priority and expiration time of the message.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="businessTransactionID">
+                        <xs:annotation>
+                            <xs:documentation>Unique string used to identify the message chain through the business.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="externalCorrelationID">
+                        <xs:annotation>
+                            <xs:documentation>This correlation key is used to associate the request with an (asynchronous) response for a consumer outside ESB.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="sentTimestamp" type="xs:dateTime">
+                        <xs:annotation>
+                            <xs:documentation>Indicates when the message has been sent. Example for usage in The Nederlands: 2013-01-18T21:32:52+01:00 (winter) or 2013-07-12T21:32:52+02:00 (summer).</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="messageID" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Unique message ID, generated on the ESB.
+</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:length value="36"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="correlationID" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Generated correlation key used for asynchronous communication by ESB services.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:length value="36"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="conversationID" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>A business transaction is a chain identifier with multiple flows through ESB. The conversation ID is a unique identifier for 1 flow through the ESB.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:length value="36"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="MessageControlType">
+                <xs:annotation>
+                    <xs:documentation>The message control structure contains information on how the message should be handled when in flight. It specifies among other things the priority and expiration time of the message.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="expiration" type="xs:dateTime" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The expiration specifies the moment after which the message can safely be discarded. By default the expiration is not set which means that the messages will never expire. If a value is provided, then each component must copy the value similar to the businessTransactionID. If possible the component should abort further processing of the message after the point of expiration. The value of the expiration field must be copied to all subsequent messages, similar to the businessTransactionID.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="replyTo" default="false" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>This field must be set for asynchronous requests; i.e. it identifies the JMS queue where the response must be sent.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="RequestType">
+                <xs:annotation>
+                    <xs:documentation>Base type of a CMM Request. Every operation must use this type as base and is allowed to extend this with a 'body' element.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="header" type="bi:HeaderType">
+                        <xs:annotation>
+                            <xs:documentation>The generic CMM header. Used in every request. In a default SOAP request, a consumer only has to fill in the mandatory fields.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ResponseType">
+                <xs:annotation>
+                    <xs:documentation>Base type of a CMM Response. Every operation must use this type as base and is allowed to extend this with a 'body' element.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="header" type="bi:HeaderType">
+                        <xs:annotation>
+                            <xs:documentation>The generic CMM header. Used in every response.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SecurityAttributeType">
+                <xs:annotation>
+                    <xs:documentation>This context can be used to pass through tokens or other identifiers to secure authenticity of a user or system.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="key">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="value">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SecurityContextType">
+                <xs:annotation>
+                    <xs:documentation>This context can be used to pass through tokens or other identifiers to secure authenticity of a user or system.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="securityAttribute" type="bi:SecurityAttributeType" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>This context can be used to pass through tokens or other identifiers to secure authenticity of a user or system.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SourceContextType">
+                <xs:annotation>
+                    <xs:documentation>Source context describes where a message or an error came from. The source context is forwarded with every message on the bus for logging purposes.</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="host">
+                        <xs:annotation>
+                            <xs:documentation>The IP address or hostname of the machine. Used for logging.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="application">
+                        <xs:annotation>
+                            <xs:documentation>The name of the application/system. Within the ESB this element contains the Component name (e.g. Deployment)</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="operation" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>Specifies the operation from which the message originated. The operation may also have a version which must be concatenated to the operation. Within the ESB the operation contains the {service} '_' {version}.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="user" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Identification of the user using this application.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="Fault">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="header" type="bi:HeaderType"/>
+                        <xs:element name="error" type="bi:ErrorType"/>
+                        <xs:element name="errorStack" type="bi:ErrorStackType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:service name="EbsUpdateAppointment_1">
+        <wsdl:port name="EbsUpdateAppointment_1.Endpoint" binding="tns:EbsUpdateAppointment_1.EndpointBinding">
+            <soap:address location=""/>
+            <jndi:context>
+                <jndi:property name="java.naming.factory.initial" type="java.lang.String">com.tibco.tibjms.naming.TibjmsInitialContextFactory</jndi:property>
+                <jndi:property name="java.naming.provider.url" type="java.lang.String">tibjmsnaming://localhost:7222</jndi:property>
+            </jndi:context>
+            <jms:connectionFactory>QueueConnectionFactory</jms:connectionFactory>
+            <jms:targetAddress destination="queue">icc.adpebs.ebsupdateappointment.1.queue</jms:targetAddress>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="EbsUpdateAppointmentPortType">
+        <wsdl:operation name="EbsUpdateAppointment_1">
+            <wsdl:input message="tns:EbsUpdateAppointmentRequest"/>
+            <wsdl:output message="tns:EbsUpdateAppointmentResponse"/>
+            <wsdl:fault name="fault1" message="tns:EbsUpdateAppointmentFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="EbsUpdateAppointment_1.EndpointBinding" type="tns:EbsUpdateAppointmentPortType">
+        <soap:binding style="document" transport="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS"/>
+        <jms:binding messageFormat="Text"/>
+        <wsdl:operation name="EbsUpdateAppointment_1">
+            <soap:operation style="document" soapAction="EbsUpdateAppointment_1"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="Request"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="Response"/>
+            </wsdl:output>
+            <wsdl:fault name="fault1">
+                <soap:fault use="literal" name="fault1"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="EbsUpdateAppointmentRequest">
+        <wsdl:part name="Request" element="ns0:Request"/>
+    </wsdl:message>
+    <wsdl:message name="EbsUpdateAppointmentResponse">
+        <wsdl:part name="Response" element="ns0:Response"/>
+    </wsdl:message>
+    <wsdl:message name="EbsUpdateAppointmentFault">
+        <wsdl:part name="Fault" element="ns1:Fault"/>
+    </wsdl:message>
+</wsdl:definitions>

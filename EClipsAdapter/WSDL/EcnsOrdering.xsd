@@ -1,0 +1,800 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Roque Goes (Atos Origin Nederland B.V.) -->
+<!--version 0.2.7 (CR24 : introductie KequestKey) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gl="Global" xmlns:ecnsxs="EcnsXsd_V0.2" targetNamespace="EcnsXsd_V0.2" elementFormDefault="qualified">
+	<xsd:import namespace="Global" schemaLocation="MmspGlobal.xsd"/>
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">Structures for the E-CLIPS TelNumber WebService </xsd:documentation>
+	</xsd:annotation>
+	<!-- ============================= DEFINITION OF THE SUB STRUCTUREs =================================== -->
+	<xsd:element name="EcnsErrorResponseStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ErrorCode" type="gl:AN1-6"/>
+				<xsd:element name="ErrorDescription" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ErrorDetails" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="EcnsOrderFeedbackStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="StatusCode" type="gl:StatusCodeEnum"/>
+				<xsd:element name="StatusDescription" type="gl:StatusDescriptionEnum"/>
+				<xsd:element name="OrderSituationCode" type="gl:AN1-6"/>
+				<xsd:element name="OrderSituationDescription" type="gl:AN1-30"/>
+				<xsd:element name="AdditionalSituationInfo" type="gl:AN1-200" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="TelnrList">
+		<xsd:sequence>
+			<xsd:element name="TelephoneNumber" type="gl:AN20" maxOccurs="250"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TariffDataStruct">
+		<xsd:sequence>
+			<xsd:element name="TariffPeak" type="gl:AN1-8" minOccurs="0"/>
+			<xsd:element name="TariffOffPeak" type="gl:AN1-8" minOccurs="0"/>
+			<xsd:element name="TariffUnit" type="gl:CurrencyEnum" minOccurs="0"/>
+			<xsd:element name="TariffType" type="gl:TariffTypeEnum" minOccurs="0"/>
+			<xsd:element name="TariffBtw" type="gl:BtwEnum" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="AddressStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Street" type="gl:AN1-24"/>
+				<xsd:element name="HouseNumber" type="gl:AN1-4"/>
+				<xsd:element name="HouseNumberExt" type="gl:AN1-5" minOccurs="0"/>
+				<xsd:element name="PostalCodeConnectionAddress" type="gl:ValidPostalCode" minOccurs="0"/>
+				<xsd:element name="City" type="gl:AN1-24"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="CustomerInfoOutportingStruct">
+		<xsd:sequence>
+			<xsd:element name="Initials" type="gl:AN1-6" minOccurs="0"/>
+			<xsd:element name="Prefix" type="gl:AN1-10" minOccurs="0"/>
+			<xsd:element name="LastName" type="gl:AN1-70" minOccurs="0"/>
+			<xsd:element name="CompanyName" type="gl:AN1-70" minOccurs="0"/>
+			<xsd:element ref="ecnsxs:AddressStruct" minOccurs="0"/>
+			<xsd:element name="CountryCode" type="gl:AN1-3"/>
+			<xsd:element name="CustomerId" type="gl:AN1-20" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="NumberSeriesListItemStruct">
+		<xsd:sequence>
+			<xsd:element name="NrLow" type="gl:AN1-20"/>
+			<xsd:element name="NrHigh" type="gl:AN1-20"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="NumberSeriesListStruct">
+		<xsd:sequence>
+			<xsd:element name="NumberSeriesListItem" type="ecnsxs:NumberSeriesListItemStruct" maxOccurs="250"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MMAccountNrsDeletedList">
+		<xsd:sequence>
+			<xsd:element name="MMAccountNr" type="gl:AN1-20" maxOccurs="10000"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- Request structure for Read TelephoneNumber (response structure is "Standard Response") -->
+	<xsd:element name="InportTelnrsReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCodeRecipient" type="gl:AN1-6"/>
+				<xsd:element name="TelcoCodeDonor" type="gl:AN1-6"/>
+				<xsd:element ref="ecnsxs:AddressStruct"/>
+				<xsd:element name="WishDateInport" type="xsd:dateTime"/>
+				<!-- next field added for ZIPB, CR 20-->
+				<xsd:element name="VoIPPlatformCode" type="gl:AN1-30" minOccurs="0"/>
+				<!-- next field added for ZIPB-->
+				<xsd:element name="AutoSyncYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element name="Telnrs" type="ecnsxs:TelnrList"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request and synchronical response structures for the ReadTelnr operation -->
+	<xsd:element name="ReadTelnrReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="TelephoneNumber" type="gl:AN20"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ReadTelnrRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsErrorResponseStruct"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30" minOccurs="0"/>
+				<xsd:element name="NumberServiceOrderId" type="xsd:integer" minOccurs="0"/>
+				<xsd:element name="TelephoneNumber" type="gl:AN20" minOccurs="0"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="ActualTelcoYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element name="NsnStatusCode" type="gl:AN1-30" minOccurs="0"/>
+				<xsd:element name="CurrentOrderYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ReserveTelnrReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="PostalCodeConnectionAddress" type="gl:ValidPostalCode" minOccurs="0"/>
+				<xsd:element name="TelnrSequenceTypeMM" type="gl:MMTelnrTypeEnum"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ReserveTelnrSyncRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="TelephoneNumber" type="gl:AN10"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ReserveTelnrForInportReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="TelephoneNumber" type="gl:AN10"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ReleaseTelnrReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="TelephoneNumber" type="gl:AN10"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- ============ Asynchronical Response Structures ===================== -->
+	<!-- Request structure for asynchronic feedback of Inport Telnrs (Response is Standard Response-->
+	<xsd:element name="ResultInportTelnrsReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCodeRecipient" type="gl:AN1-6"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+				<xsd:element name="Telnrs" type="ecnsxs:TelnrList"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for asynchronic feedback of Reserve Telnr (Response is Standard Response-->
+	<xsd:element name="ResultReserveTelnrReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="TelephoneNumber" type="gl:AN10"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for asynchronic feedback of Reserve Telnr For Inport (Response is Standard Response-->
+	<xsd:element name="ResultReserveTelnrForInportReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="TelephoneNumber" type="gl:AN10"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ResultReleaseTelnrReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="TelephoneNumber" type="gl:AN10"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- ================ MESSAGES FOR THE OUTPORTING PROCESS========= -->
+	<xsd:element name="RequestAgreeToOutportReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element name="PortingId" type="gl:AN1-26"/>
+				<xsd:element name="TelcoCodeRecipient" type="gl:AN1-6"/>
+				<xsd:element name="TelcoCodeDonor" type="gl:AN1-6"/>
+				<xsd:element name="CustomerInfo" type="ecnsxs:CustomerInfoOutportingStruct"/>
+				<xsd:element name="WishDateTime" type="xsd:dateTime"/>
+				<xsd:element name="TelnrTypeCOIN" type="gl:COINTelnrTypeEnum"/>
+				<xsd:element name="Note" type="gl:AN1-100" minOccurs="0"/>
+				<xsd:element name="TariffData" type="ecnsxs:TariffDataStruct" minOccurs="0"/>
+				<xsd:element name="PointOfPresence" type="gl:AN1-24" minOccurs="0"/>
+				<xsd:element name="NumberSeriesList" type="ecnsxs:NumberSeriesListStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ReminderAgreeToOutportReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PortingId" type="gl:AN1-26"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ResponseAgreeToOutportReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PortingId" type="gl:AN1-26"/>
+				<xsd:element name="BlockingYN" type="gl:ValidYN"/>
+				<xsd:element name="BlockingCode" type="gl:AN1-2" minOccurs="0"/>
+				<xsd:element name="Note" type="gl:AN1-100" minOccurs="0"/>
+				<xsd:element name="ProposedDateTime" type="xsd:dateTime" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ResultOutportPerformedReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PortingId" type="gl:AN1-26"/>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCodeDonor" type="gl:AN1-6"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+				<xsd:element name="OutportedNumberSeriesList" type="ecnsxs:NumberSeriesListStruct"/>
+				<xsd:element name="MMAccountNrs" type="ecnsxs:MMAccountNrsDeletedList" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ResultOutportRefusedReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PortingId" type="gl:AN1-26"/>
+				<xsd:element name="BlockingYN" type="gl:ValidYN"/>
+				<xsd:element name="BlockingCode" type="gl:AN1-2" minOccurs="0"/>
+				<xsd:element name="Note" type="gl:AN1-100" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--============= MESSAGES HandleDeactivation and HandlePortingRequest ========== -->
+	<!-- AFHDEA -->
+	<xsd:element name="HandleDeactivationReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="BroadcastId" type="gl:AN1-19"/>
+				<xsd:element name="TelcoCodeOrigin" type="gl:AN1-6"/>
+				<xsd:element name="PlannedDateTime" type="xsd:dateTime"/>
+				<xsd:element name="TelnrSequenceTypeMM" type="gl:MMTelnrTypeEnum"/>
+				<xsd:element name="NumberSeriesList" type="ecnsxs:NumberSeriesListStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- AFHPRQ -->
+	<xsd:element name="HandlePortingRequestReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="TelcoCodeRecipient" type="gl:AN1-6"/>
+				<xsd:element name="TelcoCodeDonor" type="gl:AN1-6"/>
+				<xsd:element name="Initials" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="Prefix" type="gl:AN1-10" minOccurs="0"/>
+				<xsd:element name="LastName" type="gl:AN1-70" minOccurs="0"/>
+				<xsd:element name="CompanyName" type="gl:AN1-70" minOccurs="0"/>
+				<xsd:element name="Street" type="gl:AN1-24" minOccurs="0"/>
+				<xsd:element name="HouseNumber" type="gl:AN1-4" minOccurs="0"/>
+				<xsd:element name="HouseNumberExt" type="gl:AN1-5" minOccurs="0"/>
+				<xsd:element name="PostalCodeConnectionAddress" type="gl:ValidPostalCode" minOccurs="0"/>
+				<xsd:element name="City" type="gl:AN1-24" minOccurs="0"/>
+				<xsd:element name="CountryCode" type="gl:AN1-3" minOccurs="0"/>
+				<xsd:element name="CustomerId" type="gl:AN1-20" minOccurs="0"/>
+				<xsd:element name="WishDateTime" type="xsd:dateTime" minOccurs="0"/>
+				<xsd:element name="TelnrSequenceTypeMM" type="gl:MMTelnrTypeEnum" minOccurs="0"/>
+				<xsd:element name="Note" type="gl:AN1-100" minOccurs="0"/>
+				<xsd:element name="PortingId" type="gl:AN1-26"/>
+				<xsd:element name="TariffData" type="ecnsxs:TariffDataStruct" minOccurs="0"/>
+				<xsd:element name="PointOfPresence" type="gl:AN1-24" minOccurs="0"/>
+				<xsd:element name="NumberSeriesList" type="ecnsxs:NumberSeriesListStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--============= NEW MESSAGES FOR ZIPB ========== -->
+	<!-- For Functional product RESTNR -->
+	<xsd:element name="ReserveNumberSeriesReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="PostalCodeConnectionAddress" type="gl:ValidPostalCode" minOccurs="0"/>
+				<xsd:element name="TelnrSequenceTypeMM" type="gl:MMTelnrTypeEnum"/>
+				<xsd:element name="NrOfTelnrs" type="xsd:integer"/>
+				<xsd:element name="InBlockYN" type="gl:ValidYN"/>
+				<xsd:element name="VoIPPlatformCode" type="gl:AN1-30"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Functional product RTNRIP -->
+	<xsd:element name="ReserveNumberSeriesForInportReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="NrLow" type="gl:AN1-20"/>
+				<xsd:element name="NrHigh" type="gl:AN1-20"/>
+				<xsd:element name="InBlockYN" type="gl:ValidYN"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Functional product TOETNR -->
+	<xsd:element name="AssignNumberSeriesReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NrLow" type="gl:AN1-20"/>
+				<xsd:element name="NrHigh" type="gl:AN1-20"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="VoIPPlatformCode" type="gl:AN1-30"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Functional product VRGTNR -->
+	<xsd:element name="ReleaseNumberSeriesReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="NrLow" type="gl:AN1-20"/>
+				<xsd:element name="NrHigh" type="gl:AN1-20"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Functional product INPTNR -->
+	<xsd:element name="InportNumberSeriesReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCodeRecipient" type="gl:AN1-6"/>
+				<xsd:element name="TelcoCodeDonor" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="Initials" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="Prefix" type="gl:AN1-10" minOccurs="0"/>
+				<xsd:element name="LastName" type="gl:AN1-70" minOccurs="0"/>
+				<xsd:element name="CompanyName" type="gl:AN1-70" minOccurs="0"/>
+				<xsd:element ref="ecnsxs:AddressStruct"/>
+				<xsd:element name="WishDateTime" type="xsd:dateTime"/>
+				<xsd:element name="NrLow" type="gl:AN1-20"/>
+				<xsd:element name="NrHigh" type="gl:AN1-20"/>
+				<xsd:element name="VoIPPlatformCode" type="gl:AN1-30" minOccurs="0"/>
+				<xsd:element name="AutoSyncYN" type="gl:ValidYN"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request For Functional product STSYNC -->
+	<xsd:element name="StartSyncInportReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TelcoCodeRecipient" type="gl:AN1-6"/>
+				<xsd:element name="TelcoCodeDonor" type="gl:AN1-6" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Reply on Functional product STSYNC -->
+	<xsd:element name="StartSyncInportRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for asynchronic feedback on INPTNR (Response is Standard Response)-->
+	<xsd:element name="ResultInportNumberSeriesReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCodeRecipient" type="gl:AN1-6"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+				<xsd:element name="NrLow" type="gl:AN1-20"/>
+				<xsd:element name="NrHigh" type="gl:AN1-20"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for asynchronic feedback on RESTNR (Response is Standard Response)-->
+	<xsd:element name="ResultReserveNumberSeriesReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+				<xsd:element name="NumberSeriesList" type="ecnsxs:NumberSeriesListStruct" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for asynchronic feedback on TRNRIP (Response is Standard Response)-->
+	<xsd:element name="ResultReserveNumberSeriesForInportReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+				<xsd:element name="NrLow" type="gl:AN1-20"/>
+				<xsd:element name="NrHigh" type="gl:AN1-20"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for asynchronic feedback on TOETNR (Response is Standard Response)-->
+	<xsd:element name="ResultAssignNumberSeriesReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+				<xsd:element name="NrLow" type="gl:AN1-20"/>
+				<xsd:element name="NrHigh" type="gl:AN1-20"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for asynchronic feedback on VRGTNR (Response is Standard Response)-->
+	<xsd:element name="ResultReleaseNumberSeriesReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="NsnOrderId" type="xsd:integer"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="RequestKey" type="gl:AN1-50" minOccurs="0"/>
+				<xsd:element ref="ecnsxs:EcnsOrderFeedbackStruct"/>
+				<xsd:element name="NrLow" type="gl:AN1-20"/>
+				<xsd:element name="NrHigh" type="gl:AN1-20"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--============= DEFINITION OF THE MAIN STRUCTURES ================================== -->
+	<!-- xsd definition: EcnsHeaderStruct -->
+	<xsd:element name="EcnsHeaderStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Sender" type="xsd:string"/>
+				<xsd:element name="Receiver" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- ========= DEFINITION OF THE ECNS MESSAGES ===============================-->
+	<!-- xsd definition: EcnsStandardResponse -->
+	<xsd:element name="EcnsStandardResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ErrorCode" type="gl:AN1-6"/>
+				<xsd:element name="ErrorDescription" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ErrorDetails" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Inport Telnrs operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsInportTelnrs">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:InportTelnrsReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For synchronic Read Telnr operations -->
+	<xsd:element name="EcnsReadTelnrReq">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ReadTelnrReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="EcnsReadTelnrResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:ReadTelnrRespStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Reserve Telnr operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsReserveTelnr">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ReserveTelnrReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For synchronical Reserve Telnr operation (CR-16) -->
+	<xsd:element name="EcnsReserveTelnrSyncResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsErrorResponseStruct"/>
+				<xsd:element ref="ecnsxs:ReserveTelnrSyncRespStruct" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Reserve Telnr for Inport operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsReserveTelnrForInport">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ReserveTelnrForInportReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Release Telnr operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsReleaseTelnr">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ReleaseTelnrReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For asyncronic reply to packager of the Inport Telnrs operation -->
+	<xsd:element name="EcnsResultInportTelnrs">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultInportTelnrsReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For asyncronic reply to packager of the Reserve Telnr operation -->
+	<xsd:element name="EcnsResultReserveTelnr">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultReserveTelnrReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For asyncronic reply to packager of the Reserve Telnr for Inport operation -->
+	<xsd:element name="EcnsResultReserveTelnrForInport">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultReserveTelnrForInportReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For asyncronic reply to packager of the Release Telnr for Inport operation -->
+	<xsd:element name="EcnsResultReleaseTelnr">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultReleaseTelnrReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For outporting operations -->
+	<xsd:element name="EcnsRequestAgreeToOutport">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:RequestAgreeToOutportReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="EcnsReminderAgreeToOutport">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ReminderAgreeToOutportReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="EcnsResponseAgreeToOutport">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResponseAgreeToOutportReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="EcnsResultOutportPerformed">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultOutportPerformedReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="EcnsResultOutportRefused">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultOutportRefusedReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Messages from E-CLIPS GUI or Adapter Porting Services; NOT FROM Packagers -->
+	<xsd:element name="EcnsHandleDeactivation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:HandleDeactivationReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="EcnsHandlePortingRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:HandlePortingRequestReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- New messages for ZIPB -->
+	<!-- INPTNR operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsInportNumberSeries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:InportNumberSeriesReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- RESTNR operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsReserveNumberSeries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ReserveNumberSeriesReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- RTNRIP operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsReserveNumberSeriesForInport">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ReserveNumberSeriesForInportReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- TOETNR operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsAssignNumberSeries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:AssignNumberSeriesReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- VRGTNR operation (asynchronic result by calling a packager operation) -->
+	<xsd:element name="EcnsReleaseNumberSeries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ReleaseNumberSeriesReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- STSSYNC synchronic operation -->
+	<xsd:element name="EcnsStartSyncInportReq">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:StartSyncInportReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="EcnsStartSyncInportResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsErrorResponseStruct"/>
+				<xsd:element ref="ecnsxs:StartSyncInportRespStruct" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--Asynchronic result on INPTNR operation -->
+	<xsd:element name="EcnsResultInportNumberSeries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultInportNumberSeriesReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--Asynchronic result on RESTNR operation -->
+	<xsd:element name="EcnsResultReserveNumberSeries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultReserveNumberSeriesReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--Asynchronic result on RTNRIP operation -->
+	<xsd:element name="EcnsResultReserveNumberSeriesForInport">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultReserveNumberSeriesForInportReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--Asynchronic result on TOETNR operation -->
+	<xsd:element name="EcnsResultAssignNumberSeries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultAssignNumberSeriesReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--Asynchronic result on VRGTNR operation -->
+	<xsd:element name="EcnsResultReleaseNumberSeries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ecnsxs:EcnsHeaderStruct"/>
+				<xsd:element ref="ecnsxs:ResultReleaseNumberSeriesReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

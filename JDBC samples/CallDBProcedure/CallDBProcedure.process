@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <pd:name>CallDBProcedure.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>124</pd:startX>
+    <pd:startY>107</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>510</pd:endX>
+    <pd:endY>107</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1390996290418</pd:targetNamespace>
+    <pd:activity name="Java Code">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>387</pd:x>
+        <pd:y>108</pd:y>
+        <config>
+            <fileName>CallDBProcedureJavaCode</fileName>
+            <packageName>CallDBProcedure</packageName>
+            <fullsource>package CallDBProcedure;
+import java.util.*;
+import java.io.*;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.internal.OracleTypes;
+import oracle.sql.ARRAY;
+import oracle.sql.ArrayDescriptor; 
+import oracle.sql.STRUCT;
+import oracle.sql.StructDescriptor;
+
+import com.tibco.plugin.java.JavaConnectionAccessor; 
+
+public class CallDBProcedureJavaCode{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected Object input = null;
+	protected String output = "";
+	public Object getinput() {
+		return input;
+	}
+	public void setinput(Object val) {
+		input = val;
+	}
+	public String getoutput() {
+		return output;
+	}
+	public void setoutput(String val) {
+		output = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public CallDBProcedureJavaCode() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : Object input
+	Out : String output
+* Available Variables: DO NOT MODIFY *****/
+
+/* Available Variables: DO NOT MODIFY
+	In  : Object input
+	Out : String output
+* Available Variables: DO NOT MODIFY *****/
+
+//JavaConnectionAccessor javaConnectionAccessor = (JavaConnectionAccessor)input; 
+//java.sql.Connection con = javaConnectionAccessor.getDBConnection(); 
+
+JavaConnectionAccessor javaConnectionAccessor = (JavaConnectionAccessor)input; 
+Connection con = null;
+Class.forName("oracle.jdbc.driver.OracleDriver");
+con = javaConnectionAccessor.getDBConnection(); 
+
+		//Connection con = null;
+
+		//try {
+		//	// Setup the JDBC connection
+		//	Class.forName("oracle.jdbc.OracleDriver");
+		//	con = DriverManager.getConnection("jdbc:oracle:thin:@localhost ",
+		//			"ESB_STUBS", "ESB_STUBS");
+		//} catch (Exception e) {
+		//	System.out.println(e);
+		//}
+
+OracleCallableStatement ocs = null;
+String str = null;
+
+		try {
+			// Declare the Vector array of objects.
+			Vector&lt;Object&gt; vector = new Vector&lt;Object&gt;();
+			
+			// Declare a Object array
+			Object[] attr = new Object[2];
+			attr[0] = (Object) new String("BUSINESSTRANSACTIONID");
+			attr[1] = (Object) new String("EXTERNALCORRELATIONID");
+
+			try {
+				// Create the descriptor of the SQL structured object
+				StructDescriptor structdesc = StructDescriptor
+						.createDescriptor("O_COLLECTIONSIMPLE", con);
+				vector.add((Object) new STRUCT(structdesc, con, attr));
+
+				// Create the descriptor of the SQL structured array
+				ArrayDescriptor arraydesc = ArrayDescriptor.createDescriptor(
+						"T_COLLECTIONLISTSIMPLE", con);
+
+				// Wire O_COLLECTIONSIMPLE and T_COLLECTIONLISTSIMPLE together
+				Object obj_array[] = vector.toArray();
+				ARRAY array = new ARRAY(arraydesc, con, obj_array);
+
+				// Declare a Object array
+				Object[] attr1 = new Object[2];
+				attr1[0] = (Object) new String("COLLECTIONID");
+				attr1[1] = (Object) array;
+
+				// Create the descriptor of the SQL structured object
+				StructDescriptor structdesc2 = StructDescriptor
+						.createDescriptor("O_COLLECTIONCOMPLEX", con);
+				
+				// Create a Struct object that contains a value for each attribute of the SQL structured type that it represents
+				STRUCT p1struct = new STRUCT(structdesc2, con, attr1);
+
+				// prepare the callable statement
+				CallableStatement cstm = con.prepareCall("{ call ESB_STUBS.TEST.GETCOMPLEX(?,?) }");
+
+				// First input argument
+				cstm.setObject(1, p1struct);
+
+				// Register output parameter
+				cstm.registerOutParameter(2, OracleTypes.VARCHAR);
+				
+				// Execute the stored procedure
+				cstm.execute();
+
+				// Extract the output parameter
+				output = cstm.getString(2);
+				//if (str != null) {
+				//	output = str;
+				//}
+
+				System.out.println(cstm.getString(2));
+
+			} catch (Exception e) {
+				System.err
+						.println("Error: " + e.getMessage());
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			if (ocs != null) {
+				try {
+					ocs.close();
+				} catch (SQLException e) {
+					System.err.println("SQLException: " + e.getMessage());
+				}
+			}
+		}
+}
+}
+</fullsource>
+            <javaArchive>/AliasLibrary.aliaslib</javaArchive>
+            <outputData>
+                <row>
+                    <fieldName>output</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </outputData>
+            <inputData>
+                <row>
+                    <fieldName>input</fieldName>
+                    <fieldType>ObjectReference</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </inputData>
+            <byteCode>
+                <class>
+                    <name>CallDBProcedureJavaCode</name>
+                    <byteCode>yv66vgAAADIAsgkAMQBSCQAxAFMKAAsAVAgAVQcAVggAVwoAWABZCwAFAFoHAFsKAAkAVAcAXAcAXQgAXgoADABfCABgCABhCgBiAGMHAGQKABIAZQoACQBmCABnCgBoAGkKAAkAagcAawoAGABsCABtCABuCABvCwBwAHELAHIAcwsAcgB0CwByAHULAHIAdgkAdwB4CgB5AHoHAHsJAHcAfAcAfQoAJgBUCAB+CgAmAH8KACQAgAoAJgCBCwCCAIMHAIQIAIUKAC0AgAoAeQCGBwCHAQAFaW5wdXQBABJMamF2YS9sYW5nL09iamVjdDsBAAZvdXRwdXQBABJMamF2YS9sYW5nL1N0cmluZzsBAAhnZXRpbnB1dAEAFCgpTGphdmEvbGFuZy9PYmplY3Q7AQAEQ29kZQEAD0xpbmVOdW1iZXJUYWJsZQEACHNldGlucHV0AQAVKExqYXZhL2xhbmcvT2JqZWN0OylWAQAJZ2V0b3V0cHV0AQAUKClMamF2YS9sYW5nL1N0cmluZzsBAAlzZXRvdXRwdXQBABUoTGphdmEvbGFuZy9TdHJpbmc7KVYBAAY8aW5pdD4BAAMoKVYBAAZpbnZva2UBAA1TdGFja01hcFRhYmxlBwCHBwBWBwCIBwCJBwBdBwBbBwCKBwB7BwCEBwCLBwCLAQAKRXhjZXB0aW9ucwEAClNvdXJjZUZpbGUBABxDYWxsREJQcm9jZWR1cmVKYXZhQ29kZS5qYXZhDAAyADMMADQANQwAQABBAQAAAQAsY29tL3RpYmNvL3BsdWdpbi9qYXZhL0phdmFDb25uZWN0aW9uQWNjZXNzb3IBAB9vcmFjbGUuamRiYy5kcml2ZXIuT3JhY2xlRHJpdmVyBwCMDACNAI4MAI8AkAEAEGphdmEvdXRpbC9WZWN0b3IBABBqYXZhL2xhbmcvT2JqZWN0AQAQamF2YS9sYW5nL1N0cmluZwEAFUJVU0lORVNTVFJBTlNBQ1RJT05JRAwAQAA/AQAVRVhURVJOQUxDT1JSRUxBVElPTklEAQAST19DT0xMRUNUSU9OU0lNUExFBwCRDACSAJMBABFvcmFjbGUvc3FsL1NUUlVDVAwAQACUDACVAJYBABZUX0NPTExFQ1RJT05MSVNUU0lNUExFBwCXDACSAJgMAJkAmgEAEG9yYWNsZS9zcWwvQVJSQVkMAEAAmwEADENPTExFQ1RJT05JRAEAE09fQ09MTEVDVElPTkNPTVBMRVgBACd7IGNhbGwgRVNCX1NUVUJTLlRFU1QuR0VUQ09NUExFWCg/LD8pIH0HAIgMAJwAnQcAngwAnwCgDAChAKIMAKMApAwApQCmBwCnDACoAKkHAKoMAKsAPwEAE2phdmEvbGFuZy9FeGNlcHRpb24MAKwAqQEAF2phdmEvbGFuZy9TdHJpbmdCdWlsZGVyAQAHRXJyb3I6IAwArQCuDACvAD0MALAAPQcAiQwAsQBBAQAVamF2YS9zcWwvU1FMRXhjZXB0aW9uAQAOU1FMRXhjZXB0aW9uOiAMAKsAOwEAJ0NhbGxEQlByb2NlZHVyZS9DYWxsREJQcm9jZWR1cmVKYXZhQ29kZQEAE2phdmEvc3FsL0Nvbm5lY3Rpb24BACNvcmFjbGUvamRiYy9PcmFjbGVDYWxsYWJsZVN0YXRlbWVudAEAE1tMamF2YS9sYW5nL09iamVjdDsBABNqYXZhL2xhbmcvVGhyb3dhYmxlAQAPamF2YS9sYW5nL0NsYXNzAQAHZm9yTmFtZQEAJShMamF2YS9sYW5nL1N0cmluZzspTGphdmEvbGFuZy9DbGFzczsBAA9nZXREQkNvbm5lY3Rpb24BABcoKUxqYXZhL3NxbC9Db25uZWN0aW9uOwEAG29yYWNsZS9zcWwvU3RydWN0RGVzY3JpcHRvcgEAEGNyZWF0ZURlc2NyaXB0b3IBAEYoTGphdmEvbGFuZy9TdHJpbmc7TGphdmEvc3FsL0Nvbm5lY3Rpb247KUxvcmFjbGUvc3FsL1N0cnVjdERlc2NyaXB0b3I7AQBIKExvcmFjbGUvc3FsL1N0cnVjdERlc2NyaXB0b3I7TGphdmEvc3FsL0Nvbm5lY3Rpb247W0xqYXZhL2xhbmcvT2JqZWN0OylWAQADYWRkAQAVKExqYXZhL2xhbmcvT2JqZWN0OylaAQAab3JhY2xlL3NxbC9BcnJheURlc2NyaXB0b3IBAEUoTGphdmEvbGFuZy9TdHJpbmc7TGphdmEvc3FsL0Nvbm5lY3Rpb247KUxvcmFjbGUvc3FsL0FycmF5RGVzY3JpcHRvcjsBAAd0b0FycmF5AQAVKClbTGphdmEvbGFuZy9PYmplY3Q7AQBGKExvcmFjbGUv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</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <input>
+                    <xsl:value-of select="$JDBC-Get-Connection/output/JavaConnectionAccessor"/>
+                </input>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JDBC Get Connection">
+        <pd:type>com.tibco.plugin.jdbc.JDBCGetConnectionActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCGetConnectionActivity</pd:resourceType>
+        <pd:x>252</pd:x>
+        <pd:y>115</pd:y>
+        <config>
+            <commit>false</commit>
+            <jdbcSharedConfig>/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Get Connection</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Get Connection</pd:from>
+        <pd:to>Java Code</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Java Code</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

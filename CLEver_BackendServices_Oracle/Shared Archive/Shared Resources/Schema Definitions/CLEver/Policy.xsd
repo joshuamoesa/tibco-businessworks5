@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.tibco.com/CLEver/Policy"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.tibco.com/CLEver/ExtraTypes"
+	 xmlns:ns1="http://www.tibco.com/CLEver/Resolution"
+	 xmlns:ns2="http://www.tibco.com/CLEver/Notification"
+	 xmlns:ns3="http://www.tibco.com/CLEver/Schedule"
+	 targetNamespace="http://www.tibco.com/CLEver/Policy"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="ExtraTypes.xsd"/>
+	<xsd:import namespace="http://www.tibco.com/CLEver/Resolution" schemaLocation="Resolution.xsd"/>
+	<xsd:import namespace="http://www.tibco.com/CLEver/Notification" schemaLocation="Notification.xsd"/>
+	<xsd:import namespace="http://www.tibco.com/CLEver/Schedule" schemaLocation="Schedule.xsd"/>
+	<xsd:element name="Policy">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ID" type="xsd:integer" minOccurs="0"/>
+				<xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="Description" type="xsd:string" minOccurs="0"/>
+				<xsd:element ref="PolicyNotifications"/>
+				<xsd:element name="Resolution" type="xsd:integer" minOccurs="0"/>
+				<xsd:element name="Schedule" type="xsd:integer" minOccurs="0"/>
+				<xsd:element name="Version" type="xsd:string" minOccurs="0"/>
+				<xsd:element ref="ns0:Parameters" minOccurs="0"/>
+				<xsd:element ref="ns0:SecurityInfo" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Policies">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Policy" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="PolicyNotifications">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PolicyNotification" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="ReferenceID" type="xsd:integer"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="PolicyFull">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ID" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="Description" type="xsd:string" minOccurs="0"/>
+				<xsd:element ref="ns2:NotificationsFull"/>
+				<xsd:element ref="ns1:ResolutionFull"/>
+				<xsd:element ref="ns3:Schedule"/>
+				<xsd:element name="Parameters" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Type" type="xsd:string"/>
+							<xsd:element ref="ns0:Parameter" minOccurs="0" maxOccurs="unbounded"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

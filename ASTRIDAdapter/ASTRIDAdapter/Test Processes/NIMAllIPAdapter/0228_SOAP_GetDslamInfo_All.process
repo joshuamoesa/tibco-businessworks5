@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GET_DYNAMICSTRUCTURE" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:GenericMessageRequest" xmlns:pfx3="urn:ASTRIDAdapter.GetDslamInfo" xmlns:pfx4="urn:GET_CUSTOMER_DETAILS">
+    <wsdl:import namespace="urn:GET_DYNAMICSTRUCTURE" location="/WSDL/ASTRIDAdapter/getdynamicstructure.wsdl"/>
+    <wsdl:import namespace="urn:ASTRIDAdapter.GetDslamInfo" location="/WSDL/ASTRIDAdapter/GetDslamInfo.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/NIMAllIPAdapter/0228_SOAP_GetDslamInfo_All.process</pd:name>
+    <pd:description>Test process faking ASTRID for sending client soap request's</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>47</pd:startX>
+    <pd:startY>83</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>321</pd:endX>
+    <pd:endY>85</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:description>ASTRID SOAP request for GetDslamInfo</pd:description>
+        <pd:x>178</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <timeout>%%ASTRIDAdapter/Test/Timeout%%</timeout>
+            <service>pfx3:GetDslamInfoService</service>
+            <servicePort>GetDslamInfoSoap</servicePort>
+            <operation>GetDslamInfo</operation>
+            <soapAction>""</soapAction>
+            <endpointURL>http://localhost:%%ASTRIDAdapter/Outbound/SOAP/ServerPort%%/ASTRIDAdapter/Processes/GetDslamInfo</endpointURL>
+            <useProxy>false</useProxy>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity/>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx3:GetDslamInfoRequest>
+                    <pfx3:request_type>
+                        <xsl:value-of select="&quot;cardInfo&quot;"/>
+                    </pfx3:request_type>
+                    <pfx3:managed_object_instance>
+                        <xsl:value-of select="&quot;node_name&quot;"/>
+                    </pfx3:managed_object_instance>
+                    <pfx3:moit_managed_object_class>
+                        <xsl:value-of select="&quot;rack_id&quot;"/>
+                    </pfx3:moit_managed_object_class>
+                    <pfx3:moit_managed_object_instance>
+                        <xsl:value-of select="&quot;shelf_id&quot;"/>
+                    </pfx3:moit_managed_object_instance>
+                    <pfx3:moit_supported_service_instance>
+                        <xsl:value-of select="&quot;card_id&quot;"/>
+                    </pfx3:moit_supported_service_instance>
+                </pfx3:GetDslamInfoRequest>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

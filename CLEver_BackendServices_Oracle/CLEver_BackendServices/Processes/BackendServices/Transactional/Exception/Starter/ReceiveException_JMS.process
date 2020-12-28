@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/CLEver/ExtraTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.ziggo.nl/Integration/ESB/Notification/ExceptionNotification/1" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.ziggo.nl/Integration/ESB/Generic/CMM/1.0" xmlns:pfx3="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx2="http://www.tibco.com/CLEver/Log" xmlns:pfx="http://www.tibco.com/CLEver/Exception">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Log" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Log.xsd"/>
+    <xsd:import namespace="http://www.ziggo.nl/Integration/ESB/Notification/ExceptionNotification/1" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExceptionNotification_v1.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <xsd:import namespace="http://www.ziggo.nl/Integration/ESB/Generic/CMM/1.0" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Ziggo ICC - Common Message Model -v1.1.xsd"/>
+    <pd:name>Processes/BackendServices/Transactional/Exception/Starter/ReceiveException_JMS.process</pd:name>
+    <pd:startName>Receive Exception</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive Exception">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>72</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>23</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Connections/JMS/EventBus/ExceptionQueue%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Shared Resources/Connections/JMS/JMS.sharedjmscon</ConnectionReference>
+            <OutDataxsdString ref="pfx4:CMM"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>575</pd:endX>
+    <pd:endY>60</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1326171297566</pd:targetNamespace>
+    <pd:activity name="Send out Exception Error">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>343</pd:x>
+        <pd:y>183</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Naming/Environment%%.%%Naming/Organisation%%.%%Naming/FunctionalDomain%%.%%Naming/Application%%.%%Connections/JMS/EventBus/ExceptionQueue%%.ERROR</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Shared Resources/Connections/JMS/JMS.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx:Exception"/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:copy-of select="$Map-Data/pfx:Exception"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>254</pd:x>
+        <pd:y>290</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>475</pd:x>
+        <pd:y>290</pd:y>
+        <config>
+            <ConfirmEvent>Receive Exception</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>291</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(' Exception occured while parsing incomming message' ,tib:render-xml($_error))"/>
+                </message>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm normal">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>453</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <ConfirmEvent>Receive Exception</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ReceiveException">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>337</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <processName>/Processes/BackendServices/Transactional/Exception/Implementation/ReceiveException.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Map-Data/pfx:Exception"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>206</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <element ref="pfx:Exception"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/*" element="pfx5:exceptionNotification"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx:Exception>
+                <ns1:ProcessContext>
+                    <ns1:BusinessDomain>
+                        <xsl:value-of select="concat($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:businessContext/pfx4:channel,$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:businessContext/pfx4:marketSegment)"/>
+                    </ns1:BusinessDomain>
+                    <ns1:BusinessOperation>
+                        <xsl:value-of select="concat($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:bpmContext/pfx4:processName,'/',$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:bpmContext/pfx4:processStep)"/>
+                    </ns1:BusinessOperation>
+                    <ns1:BusinessRefs>
+                        <xsl:if test="exists($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:businessContext/pfx4:keyFields/pfx4:keyField)">
+                            <xsl:for-each select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:businessContext/pfx4:keyFields/pfx4:keyField">
+                                <ns1:Parameter>
+                                    <ns1:Name>
+                                        <xsl:value-of select="pfx4:name"/>
+                                    </ns1:Name>
+                                    <ns1:Value>
+                                        <xsl:value-of select="pfx4:value"/>
+                                    </ns1:Value>
+                                </ns1:Parameter>
+                            </xsl:for-each>
+                        </xsl:if>
+                    </ns1:BusinessRefs>
+                    <ns1:TransactionID>
+                        <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:messageContext/pfx4:businessTransactionID"/>
+                    </ns1:TransactionID>
+                    <ns1:ServiceName>
+                        <xsl:value-of select="concat($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:serviceContext/pfx4:serviceName,&quot;/&quot;,$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:serviceContext/pfx4:serviceVersion,&quot;/&quot;,$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:serviceContext/pfx4:messageType)"/>
+                    </ns1:ServiceName>
+                    <ns1:ProcessName>
+                        <xsl:value-of select="concat($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:sourceContext/pfx4:operation,'/',$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:sourceContext/pfx4:version,'/',$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:sourceContext/pfx4:step)"/>
+                    </ns1:ProcessName>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:sourceContext/pfx4:application">
+                        <ns1:ComponentName>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:sourceContext/pfx4:application"/>
+                        </ns1:ComponentName>
+                    </xsl:if>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:sourceContext/pfx4:host">
+                        <ns1:HostName>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:sourceContext/pfx4:host"/>
+                        </ns1:HostName>
+                    </xsl:if>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:messageContext/pfx4:timestamp">
+                        <ns1:DateTime>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:header/pfx4:messageContext/pfx4:timestamp"/>
+                        </ns1:DateTime>
+                    </xsl:if>
+                </ns1:ProcessContext>
+                <pfx:ExceptionDetail>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:category">
+                        <pfx:ExceptionCategory>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:category"/>
+                        </pfx:ExceptionCategory>
+                    </xsl:if>
+                    <pfx:ExceptionSeverity>
+                        <xsl:value-of select="if($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification/pfx5:severity='CRITICAL')&#xA;then&#xA;1&#xA;else&#xA;if($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification/pfx5:severity='HIGH')&#xA;then&#xA;3&#xA;else&#xA;if($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification/pfx5:severity='MEDIUM')&#xA;then&#xA;5&#xA;else&#xA;if($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification/pfx5:severity='LOW')&#xA;then&#xA;7&#xA;else&#xA;if($Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification/pfx5:severity='TRIVIAL')&#xA;then&#xA;9&#xA;else&#xA;&quot;&quot;"/>
+                    </pfx:ExceptionSeverity>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:type">
+                        <pfx:ExceptionType>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:type"/>
+                        </pfx:ExceptionType>
+                    </xsl:if>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:code">
+                        <pfx:ExceptionCode>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:code"/>
+                        </pfx:ExceptionCode>
+                    </xsl:if>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:message">
+                        <pfx:Message>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:message"/>
+                        </pfx:Message>
+                    </xsl:if>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:replayDestination">
+                        <pfx:ReplyDestination>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:replayDestination"/>
+                        </pfx:ReplyDestination>
+                    </xsl:if>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:transactionData">
+                        <pfx:TransactionData>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:transactionData"/>
+                        </pfx:TransactionData>
+                    </xsl:if>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:dumpAnalysis">
+                        <pfx:DumpAnalysis>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:dumpAnalysis"/>
+                        </pfx:DumpAnalysis>
+                    </xsl:if>
+                    <xsl:if test="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:status">
+                        <pfx:Status>
+                            <xsl:value-of select="$Receive-Exception/ns:ActivityOutput/Body/pfx4:CMM/pfx4:body/pfx5:exceptionNotification[1]/pfx5:status"/>
+                        </pfx:Status>
+                    </xsl:if>
+                </pfx:ExceptionDetail>
+            </pfx:Exception>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Send out Exception Error</pd:from>
+        <pd:to>Confirm normal</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm normal</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveException</pd:from>
+        <pd:to>Confirm normal</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveException</pd:from>
+        <pd:to>Send out Exception Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive Exception</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>ReceiveException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

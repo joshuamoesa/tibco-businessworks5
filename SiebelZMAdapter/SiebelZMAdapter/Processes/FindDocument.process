@@ -1,0 +1,1261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/1185890677454" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="http://xmlns.example.com/1185953248309" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/fixed/DocumentServices/Request/FindDocument.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3="http://www.siebel.com/xml/KZM_Docs_DB_Documents" xmlns:ns4="http://xmlns.kpn.com/fixed/SiebelZM/FindDocument.1" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="http://xmlns.kpn.com/eai/common/errors" xmlns:ns7="http://schemas.tibco.com/bw/plugins/soap/5.0/SoapPluginExceptions" xmlns:pfx3="http://xmlns.kpn.com/fixed/SiebelZM/FindDocument.1/FindDocument.1Impl" xmlns:pfx4="http://xmlns.kpn.com/fixed/DocumentServices/Response/FindDocument.xsd" xmlns:pfx5="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns0="http://www.siebel.com/xml/KZM%20-%20Docs%20DB%20Retrieval">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/DocumentServices/Request/FindDocument.xsd" schemaLocation="/XSDSchemas/DocumentServices/Request/FindDocumentRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/DocumentServices/Response/FindDocument.xsd" schemaLocation="/XSDSchemas/DocumentServices/Response/FindDocumentResponse.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/FindDocument.1" schemaLocation="/WSDL/SiebelZMAdapter/FindDocument.wsdl"/>
+    <wsdl:import namespace="http://xmlns.example.com/1185953248309"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/FindDocument.1/FindDocument.1Impl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/FindDocument.1" location="/WSDL/SiebelZMAdapter/FindDocument.wsdl"/>
+    <pd:name>SiebelZMAdapter/Processes/FindDocument.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>58</pd:x>
+        <pd:y>134</pd:y>
+        <config>
+            <service>ns4:FindDocument.1.PortType</service>
+            <wsdlNamespaceRoot>http://xmlns.kpn.com/fixed/SiebelZM/FindDocument.1/FindDocument.1Impl</wsdlNamespaceRoot>
+            <operation>FindDocument.1</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>""</soapAction>
+            <sharedChannel>/SiebelZMAdapter/Shared Resources/HTTP Connection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1098</pd:endX>
+    <pd:endY>438</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="CreateMessageId">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Guid_field" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Guid_field>
+                <xsl:value-of select="eai:createGUID()"/>
+            </Guid_field>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogSOAPRequest">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>293</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;SiebelZM-04001&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$CreateMessageId/Guid_field"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/SiebelZMAdapter/Outbound/SOAP/SSLServerPort"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($SOAPEventSource/inputMessage/ns4:Request,false(),true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>385</pd:x>
+        <pd:y>131</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="TryCatchProcess">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>465</pd:x>
+        <pd:y>2</pd:y>
+        <pd:width>620</pd:width>
+        <pd:height>233</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallDocumentServices</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPSendReply</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallDocumentServices</pd:from>
+            <pd:to>ParseRVResponse</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseRVResponse</pd:from>
+            <pd:to>MapSOAPReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSOAPReply</pd:from>
+            <pd:to>LogSOAPReply</pd:to>
+            <pd:xpathDescription>Trace</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("SiebelZM-04002")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogSOAPReply</pd:from>
+            <pd:to>SOAPSendReply</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSOAPReply</pd:from>
+            <pd:to>SOAPSendReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallDocumentServices">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>549</pd:x>
+            <pd:y>124</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Requester.process</processName>
+            </config>
+            <pd:inputBindings>
+                <RequesterIn>
+                    <Destination>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env,&quot;.FIXED.Enterprise.DocumentServices.Request.FindDocument.1&quot;)"/>
+                    </Destination>
+                    <Timeout>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/SiebelZMAdapter/Outbound/Services/FindDocument/rvTimeout"/>
+                    </Timeout>
+                    <Body>
+                        <ns1:FindDocument>
+                            <ns2:CMH>
+                                <ns2:ID>
+                                    <xsl:value-of select="&quot;751&quot;"/>
+                                </ns2:ID>
+                                <ns2:NAME>
+                                    <xsl:value-of select="&quot;FindDocument&quot;"/>
+                                </ns2:NAME>
+                                <ns2:FID>
+                                    <xsl:value-of select="concat( $SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:user,$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:role,$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:documenttype)"/>
+                                </ns2:FID>
+                                <ns2:MID>
+                                    <xsl:value-of select="&quot;751.10&quot;"/>
+                                </ns2:MID>
+                                <ns2:PARADIGM>
+                                    <xsl:value-of select="&quot;REQUEST&quot;"/>
+                                </ns2:PARADIGM>
+                                <ns2:OBJECT>
+                                    <xsl:value-of select="&quot;FindDocument&quot;"/>
+                                </ns2:OBJECT>
+                                <ns2:VERSION>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns2:VERSION>
+                                <ns2:FROM>
+                                    <xsl:attribute name="ns2:COMPONENT_ID">
+                                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentId"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns2:COMPONENT_VERSION">
+                                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentVersion"/>
+                                    </xsl:attribute>
+                                </ns2:FROM>
+                                <ns2:TO>
+                                    <xsl:attribute name="ns2:DESTINATION">
+                                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env,&quot;.FIXED.Enterprise.DocumentServices.Request.FindDocument.1&quot;)"/>
+                                    </xsl:attribute>
+                                </ns2:TO>
+                                <ns2:TRACKING>
+                                    <ns2:MESSAGE_ID>
+                                        <xsl:value-of select="$CreateMessageId/Guid_field"/>
+                                    </ns2:MESSAGE_ID>
+                                    <ns2:ITEM>
+                                        <xsl:attribute name="ns2:APPINFO">
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentId"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns2:EVENT">
+                                            <xsl:value-of select="&quot;FindDocument&quot;"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns2:TIMESTAMP">
+                                            <xsl:value-of select="tib:timestamp()"/>
+                                        </xsl:attribute>
+                                    </ns2:ITEM>
+                                </ns2:TRACKING>
+                            </ns2:CMH>
+                            <ns1:REQUESTOR>
+                                <ns1:APPLICATION_ID>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:applicationid"/>
+                                </ns1:APPLICATION_ID>
+                                <ns1:USERNAME>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:user"/>
+                                </ns1:USERNAME>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:role">
+                                    <ns1:ROLE>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:role"/>
+                                    </ns1:ROLE>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:password">
+                                    <ns1:PASSWORD>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:password"/>
+                                    </ns1:PASSWORD>
+                                </xsl:if>
+                            </ns1:REQUESTOR>
+                            <ns1:DOCUMENT_INFORMATION>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:URL=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;URL&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_SUBJECT=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_SUBJECT&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_PARENT_ACCOUNT_ID=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_PARENT_ACCOUNT_ID&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_ORIGINATING_SYSTEM=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_ORIGINATING_SYSTEM&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_ORIGINATING_IDENTIFIER=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_ORIGINATING_IDENTIFIER&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_ORDER_ID=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_ORDER_ID&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CKR_NR_HIST=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CKR_NR_HIST&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_MEDIUM=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_MEDIUM&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_BRIEFNUMMER=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_BRIEFNUMMER&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_BRIEFKENMERK=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_BRIEFKENMERK&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_FILETYPE=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_FILETYPE&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_FILENAME=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_FILENAME&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_DIRECTION=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_DIRECTION&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_CUSTOMER_CONTACT_ID=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_CUSTOMER_CONTACT_ID&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_CREATIONDATE=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_CREATIONDATE&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_CREATEDBY=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_CREATEDBY&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_CONTRACTNUMBER=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_CONTRACTNUMBER&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CRM_BRAND=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CRM_BRAND&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:CKR_NR=&quot;Y&quot;">
+                                    <ns1:PROPERTY_NAME>
+                                        <xsl:value-of select="&quot;CKR_NR&quot;"/>
+                                    </ns1:PROPERTY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:orderinginformation/ns3:ordering !=&quot;&quot;">
+                                    <ns1:ORDERING>
+                                        <ns1:PROPERTY_NAME>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:orderinginformation/ns3:ordering"/>
+                                        </ns1:PROPERTY_NAME>
+                                        <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:orderinginformation/ns3:orderby">
+                                            <ns1:ORDER>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:orderinginformation/ns3:orderby"/>
+                                            </ns1:ORDER>
+                                        </xsl:if>
+                                    </ns1:ORDERING>
+                                </xsl:if>
+                            </ns1:DOCUMENT_INFORMATION>
+                            <ns1:DOCUMENT_SELECTION>
+                                <ns1:DOCUMENT_TYPE>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:documenttype"/>
+                                </ns1:DOCUMENT_TYPE>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:marketsegment">
+                                    <ns1:MARKET_SEGMENT>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:marketsegment"/>
+                                    </ns1:MARKET_SEGMENT>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_SUBJECT/ns3:CRM_SUBJECT!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_SUBJECT&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_SUBJECT/ns3:CRM_SUBJECT"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_SUBJECT/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_SUBJECT/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_PARENT_ACCOUNT_ID/ns3:parentaccountid!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_PARENT_ACCOUNT_ID&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_PARENT_ACCOUNT_ID/ns3:parentaccountid"/>
+                                            </ns1:VALUE>
+                                            <ns1:COMPARATOR>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_PARENT_ACCOUNT_ID/ns3:comparator"/>
+                                            </ns1:COMPARATOR>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORIGINATING_SYSTEM/ns3:CRM_ORIGINATING_SYSTEM!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_ORIGINATING_SYSTEM&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORIGINATING_SYSTEM/ns3:CRM_ORIGINATING_SYSTEM"/>
+                                            </ns1:VALUE>
+                                            <ns1:COMPARATOR>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORIGINATING_SYSTEM/ns3:comparator"/>
+                                            </ns1:COMPARATOR>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORIGINATING_IDENTIFIER/ns3:CRM_ORIGINATING_IDENTIFIER !=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_ORIGINATING_IDENTIFIER&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORIGINATING_IDENTIFIER/ns3:CRM_ORIGINATING_IDENTIFIER"/>
+                                            </ns1:VALUE>
+                                            <ns1:COMPARATOR>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORIGINATING_IDENTIFIER/ns3:comparator"/>
+                                            </ns1:COMPARATOR>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORDER_ID/ns3:orderid !=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_ORDER_ID&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORDER_ID/ns3:orderid"/>
+                                            </ns1:VALUE>
+                                            <ns1:COMPARATOR>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_ORDER_ID/ns3:comparator"/>
+                                            </ns1:COMPARATOR>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CKR_NR_HIST/ns3:CKR_NR_HIST !=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CKR_NR_HIST&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CKR_NR_HIST/ns3:CKR_NR_HIST"/>
+                                            </ns1:VALUE>
+                                            <ns1:COMPARATOR>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CKR_NR_HIST/ns3:comparator"/>
+                                            </ns1:COMPARATOR>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_MEDIUM/ns3:CRM_MEDIUM !=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_MEDIUM&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_MEDIUM/ns3:CRM_MEDIUM"/>
+                                            </ns1:VALUE>
+                                            <ns1:COMPARATOR>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_MEDIUM/ns3:comparator"/>
+                                            </ns1:COMPARATOR>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRIEFNUMMER/ns3:CRM_BRIEFNUMMER!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_BRIEFNUMMER&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRIEFNUMMER/ns3:CRM_BRIEFNUMMER"/>
+                                            </ns1:VALUE>
+                                            <ns1:COMPARATOR>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRIEFNUMMER/ns3:comparator"/>
+                                            </ns1:COMPARATOR>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRIEFKENMERK/ns3:CRM_BRIEFKENMERK!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_BRIEFKENMERK&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRIEFKENMERK/ns3:CRM_BRIEFKENMERK"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRIEFKENMERK/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRIEFKENMERK/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_FILETYPE/ns3:CRM_FILETYPE!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_FILETYPE&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_FILETYPE/ns3:CRM_FILETYPE"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_FILETYPE/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_FILETYPE/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_FILENAME/ns3:CRM_FILENAME!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_FILENAME&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_FILENAME/ns3:CRM_FILENAME"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_FILENAME/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_FILENAME/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_DIRECTION/ns3:CRM_DIRECTION!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_DIRECTION&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_DIRECTION/ns3:CRM_DIRECTION"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_DIRECTION/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_DIRECTION/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CUSTOMER_CONTACT_ID/ns3:CRM_CUSTOMER_CONTACT_ID!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_CUSTOMER_CONTACT_ID&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CUSTOMER_CONTACT_ID/ns3:CRM_CUSTOMER_CONTACT_ID"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CUSTOMER_CONTACT_ID/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CUSTOMER_CONTACT_ID/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CREATIONDATE/ns3:CRM_CREATIONDATE!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_CREATIONDATE&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CREATIONDATE/ns3:CRM_CREATIONDATE"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CREATIONDATE/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CREATIONDATE/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CREATEDBY/ns3:CRM_CREATEDBY!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_CREATEDBY&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CREATEDBY/ns3:CRM_CREATEDBY"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CREATEDBY/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CREATEDBY/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CONTRACTNUMBER/ns3:CRM_CONTRACTNUMBER!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_CONTRACTNUMBER&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CONTRACTNUMBER/ns3:CRM_CONTRACTNUMBER"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CONTRACTNUMBER/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_CONTRACTNUMBER/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRAND/ns3:CRM_BRAND!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CRM_BRAND&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRAND/ns3:CRM_BRAND"/>
+                                            </ns1:VALUE>
+                                            <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRAND/ns3:comparator">
+                                                <ns1:COMPARATOR>
+                                                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CRM_BRAND/ns3:comparator"/>
+                                                </ns1:COMPARATOR>
+                                            </xsl:if>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CKR_NR/ns3:CKR_NR!=&quot;&quot;">
+                                    <ns1:DOCUMENT_SPECIFICATION>
+                                        <ns1:DOCUMENT_PROPERTY>
+                                            <ns1:PROPERTY_NAME>
+                                                <xsl:value-of select="&quot;CKR_NR&quot;"/>
+                                            </ns1:PROPERTY_NAME>
+                                            <ns1:VALUE>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CKR_NR/ns3:CKR_NR"/>
+                                            </ns1:VALUE>
+                                            <ns1:COMPARATOR>
+                                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:searchattributes/ns3:CKR_NR/ns3:comparator"/>
+                                            </ns1:COMPARATOR>
+                                        </ns1:DOCUMENT_PROPERTY>
+                                    </ns1:DOCUMENT_SPECIFICATION>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:domain">
+                                    <ns1:DOMAIN>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:domain"/>
+                                    </ns1:DOMAIN>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:productgroup">
+                                    <ns1:PRODUCT_GROUP>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:header/ns3:productgroup"/>
+                                    </ns1:PRODUCT_GROUP>
+                                </xsl:if>
+                                <ns1:SELECTION_RANGE>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:fetchoptions/ns3:maxfetch !=&quot;&quot;">
+                                        <ns1:MAX_RESULTS>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:fetchoptions/ns3:maxfetch"/>
+                                        </ns1:MAX_RESULTS>
+                                    </xsl:if>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:fetchoptions/ns3:startfetch !=&quot;&quot;">
+                                        <ns1:RANGE_OFFSET>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/ns3:kzmdocsdbdocuments/ns3:message/ns3:body/ns3:requestedinformation/ns3:fetchoptions/ns3:startfetch"/>
+                                        </ns1:RANGE_OFFSET>
+                                    </xsl:if>
+                                </ns1:SELECTION_RANGE>
+                            </ns1:DOCUMENT_SELECTION>
+                        </ns1:FindDocument>
+                    </Body>
+                </RequesterIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ParseRVResponse">
+            <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+            <pd:x>670</pd:x>
+            <pd:y>128</pd:y>
+            <config>
+                <inputStyle>text</inputStyle>
+                <xsdVersion>default</xsdVersion>
+                <validateOutput>true</validateOutput>
+                <term ref="pfx4:FindDocument"/>
+            </config>
+            <pd:inputBindings>
+                <xmlString>
+                    <xsl:value-of select="$CallDocumentServices/RequesterOut/Body"/>
+                </xmlString>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="MapSOAPReply">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>793</pd:x>
+            <pd:y>129</pd:y>
+            <config>
+                <element ref="ns4:Response"/>
+            </config>
+            <pd:inputBindings>
+                <ns4:Response>
+                    <ns4:RESULT>
+                        <xsl:if test="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT_STATUS/@pfx5:ERROR_CODE">
+                            <xsl:attribute name="pfx5:ERROR_CODE">
+                                <xsl:value-of select="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT_STATUS/@pfx5:ERROR_CODE"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT_STATUS/@pfx5:ERROR_DESCRIPTION">
+                            <xsl:attribute name="pfx5:ERROR_DESCRIPTION">
+                                <xsl:value-of select="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT_STATUS/@pfx5:ERROR_DESCRIPTION"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT_STATUS/@pfx5:MSG_CODE">
+                            <xsl:attribute name="pfx5:MSG_CODE">
+                                <xsl:value-of select="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT_STATUS/@pfx5:MSG_CODE"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:attribute name="pfx5:STATUS">
+                            <xsl:value-of select="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT_STATUS/@pfx5:STATUS"/>
+                        </xsl:attribute>
+                    </ns4:RESULT>
+                    <ns0:SiebelMessage>
+                        <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/@IntObjectFormat">
+                            <xsl:attribute name="IntObjectFormat">
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/@IntObjectFormat"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/@IntObjectName">
+                            <xsl:attribute name="IntObjectName">
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/@IntObjectName"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/@MessageId">
+                            <xsl:attribute name="MessageId">
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/@MessageId"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/@MessageType">
+                            <xsl:attribute name="MessageType">
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/ns4:Request/ns3:SiebelMessage/@MessageType"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <ns0:docsdbretrieval>
+                            <xsl:choose>
+                                <xsl:when test="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT/pfx4:HAS_MORE =&quot;true&quot;">
+                                    <ns0:hasMore>
+                                        <xsl:value-of select="&quot;Y&quot;"/>
+                                    </ns0:hasMore>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <ns0:hasMore>
+                                        <xsl:value-of select="&quot;N&quot;"/>
+                                    </ns0:hasMore>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="exists($ParseRVResponse/pfx4:FindDocument/pfx4:RESULT/pfx4:LAST_FETCHED)">
+                                <ns0:lastFetched>
+                                    <xsl:value-of select="min($ParseRVResponse/pfx4:FindDocument/pfx4:RESULT/pfx4:LAST_FETCHED)"/>
+                                </ns0:lastFetched>
+                            </xsl:if>
+                            <xsl:for-each select="$ParseRVResponse/pfx4:FindDocument/pfx4:RESULT/pfx4:DOCUMENT_REFERENCE">
+                                <ns0:docsdbdocumentinformation>
+                                    <xsl:if test="pfx4:DOCUMENT_ADDRESS/pfx4:DOCUMENT_RETRIEVAL_ADDRESS">
+                                        <ns0:URL>
+                                            <xsl:value-of select="pfx4:DOCUMENT_ADDRESS/pfx4:DOCUMENT_RETRIEVAL_ADDRESS"/>
+                                        </ns0:URL>
+                                    </xsl:if>
+                                    <ns0:CRM_SUBJECT>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME = &quot;CRM_SUBJECT&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_SUBJECT>
+                                    <ns0:CRM_PARENT_ACCOUNT_ID>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_PARENT_ACCOUNT_ID&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_PARENT_ACCOUNT_ID>
+                                    <ns0:CRM_ORIGINATING_SYSTEM>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_ORIGINATING_SYSTEM&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_ORIGINATING_SYSTEM>
+                                    <ns0:CRM_ORIGINATING_IDENTIFIER>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_ORIGINATING_IDENTIFIER&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_ORIGINATING_IDENTIFIER>
+                                    <ns0:CRM_ORDER_ID>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_ORDER_ID&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_ORDER_ID>
+                                    <ns0:CKR_NR_HIST>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CKR_NR_HIST&quot;]/pfx4:VALUE"/>
+                                    </ns0:CKR_NR_HIST>
+                                    <ns0:CRM_MEDIUM>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_MEDIUM&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_MEDIUM>
+                                    <ns0:CRM_FILETYPE>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_FILETYPE&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_FILETYPE>
+                                    <ns0:CRM_FILENAME>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_FILENAME&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_FILENAME>
+                                    <ns0:documentType>
+                                        <xsl:value-of select="pfx4:DOCUMENT_CLASSIFICATION/pfx4:DOCUMENT_TYPE"/>
+                                    </ns0:documentType>
+                                    <ns0:documentId>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:DOCUMENT_ID"/>
+                                    </ns0:documentId>
+                                    <ns0:CRM_DIRECTION>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_DIRECTION&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_DIRECTION>
+                                    <ns0:CRM_CUSTOMER_CONTACT_ID>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_CUSTOMER_CONTACT_ID&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_CUSTOMER_CONTACT_ID>
+                                    <ns0:CRM_CREATIONDATE>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_CREATIONDATE&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_CREATIONDATE>
+                                    <ns0:CRM_CREATEDBY>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_CREATEDBY&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_CREATEDBY>
+                                    <ns0:CRM_CONTRACTNUMBER>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_CONTRACTNUMBER&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_CONTRACTNUMBER>
+                                    <ns0:CRM_BRIEFNUMMER>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_BRIEFNUMMER&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_BRIEFNUMMER>
+                                    <ns0:CRM_BRIEFKENMERK>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_BRIEFKENMERK&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_BRIEFKENMERK>
+                                    <ns0:CRM_BRAND>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CRM_BRAND&quot;]/pfx4:VALUE"/>
+                                    </ns0:CRM_BRAND>
+                                    <ns0:CKR_NR>
+                                        <xsl:value-of select="pfx4:DOCUMENT_INFORMATION/pfx4:PROPERTY[pfx4:PROPERTY_NAME=&quot;CKR_NR&quot;]/pfx4:VALUE"/>
+                                    </ns0:CKR_NR>
+                                </ns0:docsdbdocumentinformation>
+                            </xsl:for-each>
+                        </ns0:docsdbretrieval>
+                    </ns0:SiebelMessage>
+                </ns4:Response>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPSendReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+            <pd:x>992</pd:x>
+            <pd:y>127</pd:y>
+            <config>
+                <eventSource>SOAPEventSource</eventSource>
+            </config>
+            <pd:inputBindings>
+                <outputMessage>
+                    <xsl:copy-of select="$MapSOAPReply/ns4:Response"/>
+                </outputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogSOAPReply">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>918</pd:x>
+            <pd:y>60</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;SiebelZM-04002&quot;"/>
+                    </MsgCode>
+                    <MsgId>
+                        <xsl:value-of select="$CreateMessageId/Guid_field"/>
+                    </MsgId>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($MapSOAPReply/ns4:Response, false(),true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="ErrorTryCatchProcess">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>107</pd:x>
+        <pd:y>298</pd:y>
+        <pd:width>543</pd:width>
+        <pd:height>255</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LogError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPErrorReply</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogError</pd:from>
+            <pd:to>MapSOAPErrorReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSOAPErrorReply</pd:from>
+            <pd:to>SOAPErrorReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSOAPErrorReply</pd:from>
+            <pd:to>LogSOAPErrorReply</pd:to>
+            <pd:xpathDescription>Trace</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("SiebelZM-04002")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogSOAPErrorReply</pd:from>
+            <pd:to>SOAPErrorReply</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="LogError">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>191</pd:x>
+            <pd:y>432</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ErrorTraceIn>
+                    <ns6:Errors>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error_SOAPEventSource)">
+                                <ns6:Error>
+                                    <ns6:MsgCode>
+                                        <xsl:value-of select="&quot;SiebelZM-03005&quot;"/>
+                                    </ns6:MsgCode>
+                                    <ns6:Params>
+                                        <xsl:value-of select="&quot;FindDocument&quot;"/>
+                                    </ns6:Params>
+                                    <xsl:if test="$CreateMessageId/Guid_field">
+                                        <ns6:MsgId>
+                                            <xsl:value-of select="$CreateMessageId/Guid_field"/>
+                                        </ns6:MsgId>
+                                    </xsl:if>
+                                    <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                    <xsl:choose>
+                                        <xsl:when test="exists($_error_SOAPEventSource/ActivityErrors/ns7:InvalidEnvelopeException)">
+                                            <ns6:ActivityError>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:InvalidEnvelopeException/ancestor-or-self::*/namespace::node()"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:InvalidEnvelopeException/@*"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:InvalidEnvelopeException/node()"/>
+                                            </ns6:ActivityError>
+                                        </xsl:when>
+                                        <xsl:when test="exists($_error_SOAPEventSource/ActivityErrors/ns7:InternalException)">
+                                            <ns6:ActivityError>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:InternalException/ancestor-or-self::*/namespace::node()"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:InternalException/@*"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:InternalException/node()"/>
+                                            </ns6:ActivityError>
+                                        </xsl:when>
+                                        <xsl:when test="exists($_error_SOAPEventSource/ActivityErrors/ns7:ConfigurationException)">
+                                            <ns6:ActivityError>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:ConfigurationException/ancestor-or-self::*/namespace::node()"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:ConfigurationException/@*"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:ConfigurationException/node()"/>
+                                            </ns6:ActivityError>
+                                        </xsl:when>
+                                        <xsl:when test="exists($_error_SOAPEventSource/ActivityErrors/ns7:DeserializationException)">
+                                            <ns6:ActivityError>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:DeserializationException/ancestor-or-self::*/namespace::node()"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:DeserializationException/@*"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:DeserializationException/node()"/>
+                                            </ns6:ActivityError>
+                                        </xsl:when>
+                                        <xsl:when test="exists($_error_SOAPEventSource/ActivityErrors/ns7:ServerException)">
+                                            <ns6:ActivityError>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:ServerException/ancestor-or-self::*/namespace::node()"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:ServerException/@*"/>
+                                                <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ns7:ServerException/node()"/>
+                                            </ns6:ActivityError>
+                                        </xsl:when>
+                                        <xsl:otherwise/>
+                                    </xsl:choose>
+                                </ns6:Error>
+                            </xsl:when>
+                            <xsl:when test="exists($_error_CallDocumentServices)">
+                                <xsl:copy-of select="$_error_CallDocumentServices/ns6:Error"/>
+                            </xsl:when>
+                            <xsl:when test="exists($_error_ParseRVResponse)">
+                                <ns6:Error>
+                                    <ns6:MsgCode>
+                                        <xsl:value-of select="&quot;SiebelZM-03006&quot;"/>
+                                    </ns6:MsgCode>
+                                    <xsl:if test="$CreateMessageId/Guid_field">
+                                        <ns6:MsgId>
+                                            <xsl:value-of select="$CreateMessageId/Guid_field"/>
+                                        </ns6:MsgId>
+                                    </xsl:if>
+                                    <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                    <xsl:if test="exists($_error_ParseRVResponse)">
+                                        <ns6:ActivityError>
+                                            <xsl:copy-of select="$_error_ParseRVResponse/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error_ParseRVResponse/ActivityErrors/@*"/>
+                                            <xsl:copy-of select="$_error_ParseRVResponse/ActivityErrors/node()"/>
+                                        </ns6:ActivityError>
+                                    </xsl:if>
+                                </ns6:Error>
+                            </xsl:when>
+                            <xsl:when test="count($_error_SOAPSendReply/ns7:ServerException)>0">
+                                <ns6:Error>
+                                    <ns6:MsgCode>
+                                        <xsl:value-of select="&quot;SiebelZM-03007&quot;"/>
+                                    </ns6:MsgCode>
+                                    <xsl:if test="$CreateMessageId/Guid_field">
+                                        <ns6:MsgId>
+                                            <xsl:value-of select="$CreateMessageId/Guid_field"/>
+                                        </ns6:MsgId>
+                                    </xsl:if>
+                                    <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                    <xsl:if test="exists($_error_SOAPSendReply/ns7:ServerException)">
+                                        <ns6:ActivityError>
+                                            <xsl:copy-of select="$_error_SOAPSendReply/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error_SOAPSendReply/@*"/>
+                                            <xsl:copy-of select="$_error_SOAPSendReply/node()"/>
+                                        </ns6:ActivityError>
+                                    </xsl:if>
+                                </ns6:Error>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <ns6:Error>
+                                    <ns6:MsgCode>
+                                        <xsl:value-of select="&quot;SiebelZM-03008&quot;"/>
+                                    </ns6:MsgCode>
+                                    <xsl:if test="$CreateMessageId/Guid_field">
+                                        <ns6:MsgId>
+                                            <xsl:value-of select="$CreateMessageId/Guid_field"/>
+                                        </ns6:MsgId>
+                                    </xsl:if>
+                                    <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                </ns6:Error>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </ns6:Errors>
+                </ErrorTraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="MapSOAPErrorReply">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>324</pd:x>
+            <pd:y>431</pd:y>
+            <config>
+                <element ref="ns4:Response"/>
+            </config>
+            <pd:inputBindings>
+                <ns4:Response>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_SOAPEventSource)">
+                            <ns4:RESULT>
+                                <xsl:attribute name="pfx5:ERROR_DESCRIPTION">
+                                    <xsl:value-of select="concat('Incorrect data supplied in message: ', $_error_SOAPEventSource/ActivityErrors/*[1]/msg)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="pfx5:STATUS">
+                                    <xsl:value-of select="&quot;3&quot;"/>
+                                </xsl:attribute>
+                            </ns4:RESULT>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_CallDocumentServices)">
+                            <ns4:RESULT>
+                                <xsl:attribute name="pfx5:ERROR_DESCRIPTION">
+                                    <xsl:value-of select="concat(&quot;Application not available: &quot;, $_error_CallDocumentServices/ns6:Error/ns5:ErrorReport/Msg)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="pfx5:STATUS">
+                                    <xsl:value-of select="&quot;2&quot;"/>
+                                </xsl:attribute>
+                            </ns4:RESULT>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_ParseRVResponse)">
+                            <ns4:RESULT>
+                                <xsl:attribute name="pfx5:ERROR_DESCRIPTION">
+                                    <xsl:value-of select="concat(&quot;General un-attributable error: Error while parsing RV-response:&quot;, $_error/ns5:ErrorReport/Msg)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="pfx5:STATUS">
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </xsl:attribute>
+                            </ns4:RESULT>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_SOAPSendReply)">
+                            <ns4:RESULT>
+                                <xsl:attribute name="pfx5:ERROR_DESCRIPTION">
+                                    <xsl:value-of select="concat(&quot;General un-attributable error: Error in SOAP response&quot;, $_error_SOAPSendReply/ns7:ServerException/msg)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="pfx5:STATUS">
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </xsl:attribute>
+                            </ns4:RESULT>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns4:RESULT>
+                                <xsl:attribute name="pfx5:ERROR_DESCRIPTION">
+                                    <xsl:value-of select="concat(&quot;General un-attributable error: &quot;, $_error/ns5:ErrorReport/Msg)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="pfx5:STATUS">
+                                    <xsl:value-of select="1"/>
+                                </xsl:attribute>
+                            </ns4:RESULT>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns4:Response>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPErrorReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+            <pd:x>537</pd:x>
+            <pd:y>431</pd:y>
+            <config>
+                <eventSource>SOAPEventSource</eventSource>
+            </config>
+            <pd:inputBindings>
+                <outputMessage>
+                    <xsl:copy-of select="$MapSOAPErrorReply/ns4:Response"/>
+                </outputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogSOAPErrorReply">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>457</pd:x>
+            <pd:y>352</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;SiebelZM-04002&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$CreateMessageId/Guid_field">
+                        <MsgId>
+                            <xsl:value-of select="$CreateMessageId/Guid_field"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($MapSOAPErrorReply/ns4:Response, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="IgnoreErrors">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>389</pd:x>
+        <pd:y>638</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>CreateMessageId</pd:from>
+        <pd:to>LogSOAPRequest</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("SiebelZM-04001")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPRequest</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateMessageId</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>TryCatchProcess</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TryCatchProcess</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TryCatchProcess</pd:from>
+        <pd:to>ErrorTryCatchProcess</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorTryCatchProcess</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorTryCatchProcess</pd:from>
+        <pd:to>IgnoreErrors</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IgnoreErrors</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>CreateMessageId</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>ErrorTryCatchProcess</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

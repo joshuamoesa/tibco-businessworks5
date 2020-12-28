@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <pd:name>Common/Template Processes/Template_Subscribe_TestPublicationServiceRV.process</pd:name>
+    <pd:startName>Receive RV Publication</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive RV Publication">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>82</pd:x>
+        <pd:y>107</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>true</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsRawRVObjectForOutput>false</wantsRawRVObjectForOutput>
+            <subject>%%Env%%.FIXED.Operations.TestComponent1.Publish.TestPublicationService.1</subject>
+            <sharedChannel>/Common/Shared Resources/RVCMQ Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx2:msg"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>663</pd:endX>
+    <pd:endY>101</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Confirm RV Publication">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>520</pd:x>
+        <pd:y>109</pd:y>
+        <config>
+            <ConfirmEvent>Receive RV Publication</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ThrowException">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>370</pd:x>
+        <pd:y>278</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ThrowException.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ThrowExceptionIn>
+                <ComponentId>
+                    <xsl:value-of select="&quot;TestComponent2&quot;"/>
+                </ComponentId>
+                <ComponentVersion>
+                    <xsl:value-of select="&quot;1.0.0&quot;"/>
+                </ComponentVersion>
+                <ns4:Errors>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Process-Publication)">
+                            <xsl:copy-of select="$_error_Process-Publication/ns4:Errors/ns4:Error"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns4:Error>
+                                <ns4:MsgCode>
+                                    <xsl:value-of select="&quot;EAI-03056&quot;"/>
+                                </ns4:MsgCode>
+                                <ns4:Params>
+                                    <xsl:value-of select="&quot;FILLINSERVICENAME&quot;"/>
+                                </ns4:Params>
+                                <xsl:if test="$Receive-RV-Publication/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple">
+                                    <ns4:MsgId>
+                                        <xsl:value-of select="eai:getMessageId($Receive-RV-Publication/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple)"/>
+                                    </ns4:MsgId>
+                                </xsl:if>
+                                <ns3:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </ns3:ErrorReport>
+                            </ns4:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns4:Errors>
+                <xsl:if test="$Receive-RV-Publication/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple">
+                    <TextBody>
+                        <xsl:value-of select="$Receive-RV-Publication/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple"/>
+                    </TextBody>
+                </xsl:if>
+                <RV>
+                    <SendSubject>
+                        <xsl:value-of select="$Receive-RV-Publication/ActivityOutput/sendSubject"/>
+                    </SendSubject>
+                    <xsl:if test="$Receive-RV-Publication/ActivityOutput/replySubject">
+                        <ReplySubject>
+                            <xsl:value-of select="$Receive-RV-Publication/ActivityOutput/replySubject"/>
+                        </ReplySubject>
+                    </xsl:if>
+                </RV>
+            </ThrowExceptionIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Process Publication">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>366</pd:x>
+        <pd:y>109</pd:y>
+        <config>
+            <processName>/Common/Template Processes/Template_Main_TestPublicationService.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <Body>
+                    <xsl:value-of select="$Receive-RV-Publication/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple"/>
+                </Body>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log RV Publication">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>231</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04002&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="eai:getMessageId($Receive-RV-Publication/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple)"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Receive-RV-Publication/ActivityOutput/sendSubject"/>
+                </Parameter>
+                <xsl:if test="$Receive-RV-Publication/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple">
+                    <Parameter>
+                        <xsl:value-of select="$Receive-RV-Publication/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple"/>
+                    </Parameter>
+                </xsl:if>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm RV Publication</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ThrowException</pd:from>
+        <pd:to>Confirm RV Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive RV Publication</pd:from>
+        <pd:to>ThrowException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive RV Publication</pd:from>
+        <pd:to>Log RV Publication</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("EAI-04002")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process Publication</pd:from>
+        <pd:to>ThrowException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process Publication</pd:from>
+        <pd:to>Confirm RV Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log RV Publication</pd:from>
+        <pd:to>Process Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive RV Publication</pd:from>
+        <pd:to>Process Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

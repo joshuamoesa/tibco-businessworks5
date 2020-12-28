@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"
+	 targetNamespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:complexType name="APPLICATION_CREDENTIAL">
+		<xsd:annotation>
+			<xsd:documentation>This type contains a set of application specific credentials for a caller.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TARGET_APPLICATION" type="xsd:string"/>
+			<xsd:element name="APPLICATION_ID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="APPLICATION_PASSWORD" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="USER_ID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="USER_PASSWORD" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Input">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="TrackingId" type="xsd:string"/>
+				<xsd:element name="UserName" type="xsd:string"/>
+				<xsd:element name="ApplicationId" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="UserId" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="APPLICATION_CREDENTIALS" type="APPLICATION_CREDENTIAL" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="BodyContainer">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:any namespace="##any" processContents="strict"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

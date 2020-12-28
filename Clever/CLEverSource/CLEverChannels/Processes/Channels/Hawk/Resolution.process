@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:pfx2="http://www.tibco.com/CLEver/Policy" xmlns:pfx3="http://www.tibco.com/CLEver/Notification" xmlns:ns="http://www.tibco.com/CLEver/Channel" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:pfx4="http://xmlns.tibco.com/body" xmlns:pfx5="http://www.tibco.com/CLEver/Resolution" xmlns:ns1="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:CLEver_Hawk="java://com.tibco.CLEver.Hawk.CLEver_Hawk">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Resolution" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Resolution.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Notification" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Notification.xsd"/>
+    <pd:name>Processes/Channels/Hawk/Resolution.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx5:ResolutionFull"/>
+                    <xsd:element ref="pfx:Exception"/>
+                    <xsd:element ref="pfx2:PolicyFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>82</pd:startX>
+    <pd:startY>61</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>528</pd:endX>
+    <pd:endY>61</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="UpdateStatus">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>390</pd:x>
+        <pd:y>207</pd:y>
+        <config>
+            <processName>/Processes/DataServices_MsSql/Transactional/Exception/UpdateStatus.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Transactional/Exception/UpdateStatus.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:if test="$Start/root/pfx:Exception/pfx:ID">
+                    <ID>
+                        <xsl:value-of select="$Start/root/pfx:Exception/pfx:ID"/>
+                    </ID>
+                </xsl:if>
+                <Status>
+                    <xsl:value-of select="$Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='ChangeStateTo']/pfx5:Value"/>
+                </Status>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Resolution">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>202</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="param" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <param>
+                    <xsl:value-of select="CLEver_Hawk:SendResolution($Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='Action']/pfx5:Value,$Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='Misc1']/pfx5:Value,$Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='Misc2']/pfx5:Value)"/>
+                </param>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Resolution</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateStatus</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Resolution</pd:from>
+        <pd:to>UpdateStatus</pd:to>
+        <pd:xpathDescription>ChangeStateToisfilled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Start/root/pfx5:ResolutionFull/pfx5:Parameter[pfx5:Name='ChangeStateTo'])&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Resolution</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+<!--
+********************************************************************************
+Project Name          : VoIPR3
+Unit Name             : ccbi.xsd
+Code Description      : KPN  schema to extend Cramer's OMA sfi.xsd
+
+Review Record  Developer        Ver        Date         Change Description
+               Ian Brander      0.1        19-5-05      Initial version
+               Marcel Pouwels   0.2        31-5-05      updates included
+               Marcel Pouwels   0.3        11-7-05      events included and modifyTelnum updated    
+           Marcel Pouwels     1.0          27-10-05   VoIPR3 functionality      
+*********************************************************************************
+-->
+   <!-- This schema extends the standard Cramer OMA schema and makes reference to types which are part of that schema -->
+   <xsd:include schemaLocation="sfi.xsd"/>
+
+   <!--
+
+      CONSTRUCT ORDER PROVIDE NUMBER MANAGEMENT SERVICE
+
+   -->
+   <xsd:complexType name="PROVIDENUMBERMANAGEMENTSERVICETYPE">
+      <xsd:complexContent>
+         <xsd:extension base="CreateServiceOrderType">
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add PROVIDENUMBERMANAGEMENTSERVICETYPE to the order substitution group -->
+   <xsd:element name="provideNumberManagementService" type="PROVIDENUMBERMANAGEMENTSERVICETYPE" substitutionGroup="order"/>
+
+   <!--
+
+      CONSTRUCT ORDER CREATE TELEPHONE NUMBER
+
+   -->
+   <xsd:complexType name="CREATETELEPHONENUMBERTYPE">
+      <xsd:complexContent>
+         <xsd:extension base="ModifyServiceOrderType">
+            <xsd:sequence>
+               <xsd:element name="OFMOrderId" type="xsd:string"/>
+               <xsd:element name="telephoneNumber" type="xsd:string"/>
+               <xsd:element name="PBXID" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+               <xsd:element name="PBXAccessNumber" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add CREATETELEPHONENUMBERTYPE to the order substitution group -->
+   <xsd:element name="createTelephoneNumber" type="CREATETELEPHONENUMBERTYPE" substitutionGroup="order"/>
+
+   <!--
+CONSTRUCT ORDER MODIFY TELEPHONE NUMBER
+
+   -->
+   <xsd:complexType name="MODIFYTELEPHONENUMBERTYPE">
+      <xsd:complexContent>
+         <xsd:extension base="ModifyServiceOrderType">
+            <xsd:sequence>
+               <xsd:element name="telephoneNumber" type="xsd:string"/>
+               <xsd:element name="newNumberBlockName" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+	       <xsd:element name="includeNumberBlock" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+               <xsd:element name="blockingCode" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+               <xsd:element name="provisionStatus" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+               <xsd:element name="provisionStatusStartDate" type="xsd:string" maxOccurs="1" minOccurs="0" />
+               <xsd:element name="provisionStatusEndDate" type="xsd:string" maxOccurs="1" minOccurs="0" />
+               <xsd:element name="specialNumber" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+           <xsd:element name="PBXID" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+               <xsd:element name="PBXAccessNumber" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add MODIFYTELEPHONENUMBER to the order substitution group -->
+   <xsd:element name="modifyTelephoneNumber" type="MODIFYTELEPHONENUMBERTYPE" substitutionGroup="order"/>
+
+   <!--
+
+      CONSTRUCT ORDER SELECT TELEPHONE NUMBER
+
+   -->
+   <xsd:complexType name="SELECTTELEPHONENUMBERTYPE">
+      <xsd:complexContent>
+         <xsd:extension base="ModifyServiceOrderType">
+            <xsd:sequence>
+               <xsd:element name="postCode" type="xsd:string"/>
+               <xsd:element name="notoSelect" type="xsd:unsignedInt"/>
+               <xsd:element name="selectionAlgorithm" type="xsd:unsignedInt"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add SELECTTELEPHONENUMBERTYPE to the order substitution group -->
+   <xsd:element name="selectTelephoneNumber" type="SELECTTELEPHONENUMBERTYPE" substitutionGroup="order"/>
+
+   <!--
+
+      CONSTRUCT ORDER CHANGE PACKAGER
+
+   -->
+   <xsd:complexType name="CHANGEPACKAGERTYPE">
+      <xsd:complexContent>
+         <xsd:extension base="ModifyServiceOrderType">
+            <xsd:sequence>
+               <xsd:element name="subscriberName" type="xsd:string"/>
+               <xsd:element name="telephoneNumber" type="xsd:string"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add CHANGEPACKAGERTYPE to the order substitution group -->
+   <xsd:element name="changePackager" type="CHANGEPACKAGERTYPE" substitutionGroup="order"/>
+
+
+   <!--
+
+      CONSTRUCT ORDER Number Status Check
+   -->
+  
+   <xsd:complexType name="NUMBERSTATUSCHECK">
+      <xsd:complexContent>
+         <xsd:extension base="ModifyServiceOrderType">
+            <xsd:sequence>
+               <xsd:element name="statusCheckName" type="xsd:string"/>
+               <xsd:element name="action" type="xsd:unsignedInt"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add NUMBERSTATUSCHECK to the order substitution group -->
+    <xsd:element name="numberStatusCheck" type="NUMBERSTATUSCHECK" substitutionGroup="order"/>
+
+   <!--
+
+      EVENTS
+
+   -->
+   <!--
+      Event Type : NUMBER LIST
+   -->
+   <xsd:complexType name="NUMBERLISTEVENTTYPE">
+      <xsd:complexContent>
+         <xsd:extension base="AttribUpdateEventType">
+            <xsd:sequence>
+               <xsd:element name="TelephoneNumber" type="xsd:string" maxOccurs="unbounded" minOccurs="0"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add NumberListType to the Event subtitution group -->
+
+   <xsd:element name="numberListEvent" type="NUMBERLISTEVENTTYPE" substitutionGroup="event"/>
+
+   <!--
+      Event Type : NetNumber
+   --> 
+   <xsd:complexType name="NETNUMBEREVENTTYPE">
+      <xsd:complexContent>
+         <xsd:extension base="AttribUpdateEventType">
+            <xsd:sequence>
+           <xsd:element name="postCode" type="xsd:string" />
+               <xsd:element name="netNumber" type="xsd:string" />
+     <xsd:element name="messageNumber"  type="xsd:unsignedInt" />
+     <xsd:element name="NumberOfMessage" type="xsd:unsignedInt" />
+
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add NumberListType to the Event subtitution group -->
+
+   <xsd:element name="netNumberEvent" type="NETNUMBEREVENTTYPE" substitutionGroup="event"/>
+
+   <!--
+      Event Type : NumberStatus
+   -->
+   <xsd:complexType name="NUMBERSTATUSEVENTTYPE">
+      <xsd:complexContent>
+         <xsd:extension base="AttribUpdateEventType">
+            <xsd:sequence>
+               <xsd:element name="number" type="xsd:string" />
+           <xsd:element name="numberType"  type="xsd:string" />
+           <xsd:element name="provisionStatus"  type="xsd:string" />
+           <xsd:element name="provisionStatusStartDate"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+            <xsd:element name="provisionStatusEndDate"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+            <xsd:element name="blockingCode"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+            <xsd:element name="SpecialNumber"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="packagerName"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="operatorName"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="packagerService"  type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="numberBlock"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="numberBlockProvisionStatus"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+      <xsd:element name="messageNumber"  type="xsd:unsignedInt" />
+     <xsd:element name="NumberOfMessage" type="xsd:unsignedInt" />
+
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add NumberListType to the Event subtitution group -->
+
+   <xsd:element name="numberStatusEvent" type="NUMBERSTATUSEVENTTYPE" substitutionGroup="event"/>
+
+   <!--
+      Event Type : NumberBlock Status
+   -->
+   <xsd:complexType name="NUMBERBLOCKSTATUSEVENTTYPE">
+      <xsd:complexContent>
+         <xsd:extension base="AttribUpdateEventType">
+            <xsd:sequence>
+               <xsd:element name="numberBlock" type="xsd:string" />
+           <xsd:element name="numberBlockType"  type="xsd:string" />
+           <xsd:element name="provisionStatus"  type="xsd:string" />
+           <xsd:element name="PBXIdentification" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+               <xsd:element name="PBXAccessNumber" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+           <xsd:element name="inServiceNumbers"  type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="reservedNumbers"  type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="blockedNumbers"  type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="quarantineNumbers"  type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="portedOutNumbers"  type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="freeNumbers"  type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="packagerName"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="operatorName"  type="xsd:string" maxOccurs="1" minOccurs="0" />
+           <xsd:element name="packagerService"  type="xsd:unsignedInt" maxOccurs="1" minOccurs="0" />
+     <xsd:element name="messageNumber"  type="xsd:unsignedInt" />
+     <xsd:element name="NumberOfMessage" type="xsd:unsignedInt" />
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <!-- Add NumberListType to the Event subtitution group -->
+
+   <xsd:element name="numberBlockStatusEvent" type="NUMBERBLOCKSTATUSEVENTTYPE" substitutionGroup="event"/>
+
+</xsd:schema>

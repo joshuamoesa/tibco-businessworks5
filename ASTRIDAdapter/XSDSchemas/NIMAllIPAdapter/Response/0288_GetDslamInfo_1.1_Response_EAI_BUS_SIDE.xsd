@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0288_GetDslamInfo/1.1/Response" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0288_GetDslamInfo/1.1/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="nodeName_type">
+    <xs:annotation>
+      <xs:documentation>Name of the NODE in HBIS format (e.g. Gn2/ADM16/25)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="50" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="physicalResourceStatus_type">
+    <xs:annotation>
+      <xs:documentation>Administrative status of the node (e.g. in service, planned, phased out,...)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nodeType_type">
+    <xs:annotation>
+      <xs:documentation>NODE type name is in the table NODETYPE referenced by this field in NODE table</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nodeSubType_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="8" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ipAddressFormat_type">
+    <xs:annotation>
+      <xs:documentation>One of the follwing formats: 
+0 - dotted decimal (default)
+1 - CIDR
+</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer" />
+  </xs:simpleType>
+  <xs:simpleType name="subnetMask_type">
+    <xs:annotation>
+      <xs:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="streetName_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="24" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="houseNumber_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="houseNumberExtension_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="6" />
+      <xs:minLength value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dutchPostcode_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}[a-zA-Z]{2}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cityName_type">
+    <xs:annotation>
+      <xs:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="portType_type">
+    <xs:annotation>
+      <xs:documentation>"ODF" </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="50" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="rackPosition_type">
+    <xs:annotation>
+      <xs:documentation>Tbd</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="6" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="shelfPosition_type">
+    <xs:annotation>
+      <xs:documentation>Tbd</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="14" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="shelfType_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="255" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="slotPosition_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="14" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cardType_type">
+    <xs:annotation>
+      <xs:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="serviceType_type">
+    <xs:annotation>
+      <xs:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="vlanId_type">
+    <xs:annotation>
+      <xs:documentation>This is the CVLan</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="serviceId_type">
+    <xs:annotation>
+      <xs:documentation>Service instance Id, attribute otf the C-VLAN</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="vpnId_type">
+    <xs:annotation>
+      <xs:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BODY">
+    <xs:annotation>
+      <xs:documentation>This is the BODY object for KPN EAI service number 0288 - GetDslamInfo version 1.1 Response message.</xs:documentation>
+      <xs:documentation>Automatically generated schema for service:'GetDslamInfo', version:'1.1'</xs:documentation>
+      <xs:documentation>Generated on 2008-01-08 11:45:15Z</xs:documentation>
+      <xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+      <xs:documentation>Service ID is:'0288'</xs:documentation>
+      <xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+      <xs:documentation>KPN EAI message body class.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" maxOccurs="1" name="DSLAM">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="1" name="NODE">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="IP_ADDRESS">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="IP_ADDRESS_VALUE" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>IP address of the node in the internal network. Also known as Management ip address or loopback ip address (IPv4)</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="IP_ADDRESS_FORMAT" type="tns:ipAddressFormat_type">
+                            <xs:annotation>
+                              <xs:documentation>One of the follwing formats: 
+0 - dotted decimal (default)
+1 - CIDR
+</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="ADDRESS">
+                      <xs:annotation>
+                        <xs:documentation>Physical address of the NODE</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="GPS">
+                            <xs:annotation>
+                              <xs:documentation>Geographical location of the Dslam</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="1" name="LATITUDE" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>Geographical position latitude (geogr. breedte)</xs:documentation>
+                                    <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="LONGITUDE" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>Geographical position longitude (geogr. lengte)
+</xs:documentation>
+                                    <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="STREET_NAME" type="tns:streetName_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER" type="tns:houseNumber_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="DUTCH_POSTCODE" type="tns:dutchPostcode_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="CITY_NAME" type="tns:cityName_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="PORT">
+                      <xs:annotation>
+                        <xs:documentation>The ODF port </xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="PORT_TYPE" type="tns:portType_type">
+                            <xs:annotation>
+                              <xs:documentation>"ODF" </xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="PORT_ID" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>Id of the PORT as registered in EMS.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="PORT_NAME" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>Name of the PORT in HBIS format</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="RACK">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="SHELF">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SLOT">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="CARD">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:annotation>
+                                              <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                            </xs:annotation>
+                                            <xs:element minOccurs="0" maxOccurs="1" name="PHYSICAL_PORT">
+                                              <xs:annotation>
+                                                <xs:documentation>Ports on the Dslam. Either to the customer (UNI) or network (NNI)</xs:documentation>
+                                              </xs:annotation>
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:annotation>
+                                                    <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                                  </xs:annotation>
+                                                  <xs:element minOccurs="0" maxOccurs="1" name="ACCESS_LOCATION">
+                                                    <xs:annotation>
+                                                      <xs:documentation>Physical address of the NT</xs:documentation>
+                                                    </xs:annotation>
+                                                    <xs:complexType>
+                                                      <xs:sequence>
+                                                        <xs:annotation>
+                                                          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:element minOccurs="0" maxOccurs="1" name="GPS">
+                                                          <xs:annotation>
+                                                            <xs:documentation>Geographical location of the Dslam</xs:documentation>
+                                                          </xs:annotation>
+                                                          <xs:complexType>
+                                                            <xs:sequence>
+                                                              <xs:annotation>
+                                                                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                                              </xs:annotation>
+                                                              <xs:element minOccurs="0" maxOccurs="1" name="LATITUDE" type="xs:string">
+                                                                <xs:annotation>
+                                                                  <xs:documentation>Geographical position latitude (geogr. breedte)</xs:documentation>
+                                                                  <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                                </xs:annotation>
+                                                              </xs:element>
+                                                              <xs:element minOccurs="0" maxOccurs="1" name="LONGITUDE" type="xs:string">
+                                                                <xs:annotation>
+                                                                  <xs:documentation>Geographical position longitude (geogr. lengte)
+</xs:documentation>
+                                                                  <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                                </xs:annotation>
+                                                              </xs:element>
+                                                            </xs:sequence>
+                                                          </xs:complexType>
+                                                        </xs:element>
+                                                        <xs:element minOccurs="0" maxOccurs="1" name="STREET_NAME" type="tns:streetName_type">
+                                                          <xs:annotation>
+                                                            <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                          </xs:annotation>
+                                                        </xs:element>
+                                                        <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER" type="tns:houseNumber_type">
+                                                          <xs:annotation>
+                                                            <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                          </xs:annotation>
+                                                        </xs:element>
+                                                        <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" />
+                                                        <xs:element minOccurs="0" maxOccurs="1" name="DUTCH_POSTCODE" type="tns:dutchPostcode_type">
+                                                          <xs:annotation>
+                                                            <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                          </xs:annotation>
+                                                        </xs:element>
+                                                        <xs:element minOccurs="0" maxOccurs="1" name="CITY_NAME" type="tns:cityName_type">
+                                                          <xs:annotation>
+                                                            <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                          </xs:annotation>
+                                                        </xs:element>
+                                                      </xs:sequence>
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                  <xs:element minOccurs="0" maxOccurs="unbounded" name="SERVICE">
+                                                    <xs:complexType>
+                                                      <xs:sequence>
+                                                        <xs:annotation>
+                                                          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:element minOccurs="0" maxOccurs="1" name="VLAN_ID" type="tns:vlanId_type">
+                                                          <xs:annotation>
+                                                            <xs:documentation>This is the CVLan</xs:documentation>
+                                                            <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                          </xs:annotation>
+                                                        </xs:element>
+                                                      </xs:sequence>
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                  <xs:element minOccurs="1" maxOccurs="1" name="PORT_TYPE" type="tns:portType_type">
+                                                    <xs:annotation>
+                                                      <xs:documentation>Type of port either UNI or NNI
+</xs:documentation>
+                                                    </xs:annotation>
+                                                  </xs:element>
+                                                  <xs:element minOccurs="0" maxOccurs="1" name="PORT_ID" type="xs:string">
+                                                    <xs:annotation>
+                                                      <xs:documentation>Identifier of the PORT as known in EMS</xs:documentation>
+                                                    </xs:annotation>
+                                                  </xs:element>
+                                                  <xs:element minOccurs="0" maxOccurs="1" name="PORT_STATUS" type="xs:string">
+                                                    <xs:annotation>
+                                                      <xs:documentation>Administrative status of the PORT (e.g. in service, planned, phased out,...)</xs:documentation>
+                                                      <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                    </xs:annotation>
+                                                  </xs:element>
+                                                  <xs:element minOccurs="0" maxOccurs="1" name="SIP_STIFT" type="xs:string">
+                                                    <xs:annotation>
+                                                      <xs:documentation>xDF-id (sip stift)</xs:documentation>
+                                                    </xs:annotation>
+                                                  </xs:element>
+                                                  <xs:element minOccurs="0" maxOccurs="1" name="PORT_NAME" type="xs:string">
+                                                    <xs:annotation>
+                                                      <xs:documentation>Name of the PORT in HBIS format</xs:documentation>
+                                                      <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                    </xs:annotation>
+                                                  </xs:element>
+                                                  <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_TYPE" type="tns:serviceType_type">
+                                                    <xs:annotation>
+                                                      <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                                    </xs:annotation>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                              </xs:complexType>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" maxOccurs="1" name="CARD_TYPE" type="tns:cardType_type">
+                                              <xs:annotation>
+                                                <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                              </xs:annotation>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" maxOccurs="1" name="CARD_STATUS" type="xs:string">
+                                              <xs:annotation>
+                                                <xs:documentation>Administrative status of the CARD (e.g. in service, planned, phased out,...)</xs:documentation>
+                                                <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                              </xs:annotation>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" maxOccurs="1" name="CARD_POSITION" type="xs:string">
+                                              <xs:annotation>
+                                                <xs:documentation>Place of the card (in the rack) E.g. ZK454.1 </xs:documentation>
+                                                <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                              </xs:annotation>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" maxOccurs="1" name="CARD_BRAND" type="xs:string">
+                                              <xs:annotation>
+                                                <xs:documentation>Specification information about the card (brand, version) E.g. Alcatel, 3AL34962AB, 3.001.2B</xs:documentation>
+                                                <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                              </xs:annotation>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" maxOccurs="1" name="CARD_ID" type="xs:string">
+                                              <xs:annotation>
+                                                <xs:documentation>Identifier of the CARD as known in EMS</xs:documentation>
+                                                <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                              </xs:annotation>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" maxOccurs="1" name="CARD_NAME" type="xs:string">
+                                              <xs:annotation>
+                                                <xs:documentation>Unique identifier of the card (HBIS?)</xs:documentation>
+                                                <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                              </xs:annotation>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" maxOccurs="1" name="CARD_VERSION" type="xs:string">
+                                              <xs:annotation>
+                                                <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                              </xs:annotation>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="SLOT_NAME" type="xs:string">
+                                        <xs:annotation>
+                                          <xs:documentation>Name of the SLOT in HBIS format</xs:documentation>
+                                          <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="SLOT_POSITION" type="tns:slotPosition_type">
+                                        <xs:annotation>
+                                          <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SHELF_POSITION" type="tns:shelfPosition_type">
+                                  <xs:annotation>
+                                    <xs:documentation>Tbd</xs:documentation>
+                                    <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SHELF_TYPE" type="tns:shelfType_type">
+                                  <xs:annotation>
+                                    <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SHELF_STATUS" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>Administrative status of the SELF (e.g. in service, planned, phased out,...)</xs:documentation>
+                                    <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SHELF_ID" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>Identifier of the SHELF as known in EMS</xs:documentation>
+                                    <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SHELF_NAME" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>Name of SHELF in HBIS format</xs:documentation>
+                                    <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="RACK_POSITION" type="tns:rackPosition_type">
+                            <xs:annotation>
+                              <xs:documentation>Tbd</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="RACK_ID" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>Id of the RACK as known in EMS</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="RACK_STATUS" type="tns:physicalResourceStatus_type">
+                            <xs:annotation>
+                              <xs:documentation>Administrative status of the RACK</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="RACK_NAME" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>Name of the RACK in HBIS format</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="SERVICE">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_ID" type="tns:serviceId_type">
+                            <xs:annotation>
+                              <xs:documentation>Service instance Id, attribute otf the C-VLAN</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_OPERATOR_ID" type="tns:serviceId_type">
+                            <xs:annotation>
+                              <xs:documentation>Transport instance.
+The ID of the operator delivering the service customer. This field is retrieved throuhg a direct relation with the above service ID</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="E_NUMBER" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>The E-number is the service object of the type e-number related to the ODF port (Ethernet number)</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="WAP_AREA" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="WAP_VLAN_ID" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="VPN" type="tns:vpnId_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="NODE_NAME" type="tns:nodeName_type">
+                      <xs:annotation>
+                        <xs:documentation>Name of the NODE in HBIS format (e.g. Gn2/ADM16/25)</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="NODE_STATUS" type="tns:physicalResourceStatus_type">
+                      <xs:annotation>
+                        <xs:documentation>Administrative status of the node (e.g. in service, planned, phased out,...)</xs:documentation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="NODE_TYPE" type="tns:nodeType_type">
+                      <xs:annotation>
+                        <xs:documentation>NODE type name is in the table NODETYPE referenced by this field in NODE table</xs:documentation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="NODE_SUB_TYPE" type="tns:nodeSubType_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="DOMAIN">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="TYPE" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Domain where the node is acting.</xs:documentation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

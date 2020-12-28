@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798195751" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802669975" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802669975" schemaLocation="/XSDSchemas/EnginAdapter/Response/GetCustomerContract.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086798195751" schemaLocation="/XSDSchemas/EnginAdapter/Request/GetCustomerContract.xsd"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/0004_GetCustomerContract_Stub.process</pd:name>
+    <pd:startName>GetCustomerContract Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetCustomerContract Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>152</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Order.EnginAdapter.Request.GetCustomerContract.1</subject>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/EDTAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx:GetCustomerContract"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to GetCustomerContract Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>299</pd:x>
+        <pd:y>81</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetCustomerContract Subscriber</eventSource>
+            <xsdString ref="pfx2:GetCustomerContract"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="&quot;004&quot;"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$GetCustomerContract-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <ns:MID>
+                            <xsl:value-of select="&quot;004.30&quot;"/>
+                        </ns:MID>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="&quot;REPLY&quot;"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="&quot;CO_CustomerDetails&quot;"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$GetCustomerContract-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$GetCustomerContract-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <ns:TRACKING>
+                            <ns:MESSAGE_ID>
+                                <xsl:value-of select="$GetCustomerContract-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                            </ns:MESSAGE_ID>
+                            <xsl:copy-of select="$GetCustomerContract-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:ITEM"/>
+                            <xsl:for-each select="$GetCustomerContract-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:SEQUENCE_NO">
+                                <ns:SEQUENCE_NO>
+                                    <xsl:value-of select="."/>
+                                </ns:SEQUENCE_NO>
+                            </xsl:for-each>
+                        </ns:TRACKING>
+                    </ns:CMH>
+                    <pfx2:RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;No error&quot;"/>
+                        </xsl:attribute>
+                    </pfx2:RESULT_STATUS>
+                    <pfx2:SERVICE_LEVEL_AGREEMENT>
+                        <INDEX>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </INDEX>
+                        <CONTRACT_WORKING_HOURS_CODE>
+                            <xsl:value-of select="&quot;26&quot;"/>
+                        </CONTRACT_WORKING_HOURS_CODE>
+                        <CONTRACT_RESPONSE_HOURS>
+                            <xsl:value-of select="&quot;2&quot;"/>
+                        </CONTRACT_RESPONSE_HOURS>
+                        <SLA_TYPE_CODE>
+                            <xsl:value-of select="&quot;PLU&quot;"/>
+                        </SLA_TYPE_CODE>
+                        <CENTRAL_CUSTOMER_ID>
+                            <xsl:value-of select="&quot;CCID&quot;"/>
+                        </CENTRAL_CUSTOMER_ID>
+                    </pfx2:SERVICE_LEVEL_AGREEMENT>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetCustomerContract Subscriber</pd:from>
+        <pd:to>Reply to GetCustomerContract Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to GetCustomerContract Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

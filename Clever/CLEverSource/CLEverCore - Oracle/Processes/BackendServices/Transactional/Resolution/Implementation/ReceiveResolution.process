@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://www.tibco.com/CLEver/Log" xmlns:pfx3="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pfx4="http://www.tibco.com/CLEver/Resolution" xmlns:pfx5="http://www.tibco.com/CLEver/Policy" xmlns:pfx6="http://www.tibco.com/CLEver/Channel">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Log" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Log.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <pd:name>Processes/BackendServices/Transactional/Resolution/Implementation/ReceiveResolution.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx4:ResolutionFull"/>
+                    <xsd:element ref="pfx:Exception"/>
+                    <xsd:element ref="pfx5:PolicyFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>141</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>525</pd:endX>
+    <pd:endY>136</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.TransactionGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>82</pd:x>
+        <pd:y>46</pd:y>
+        <pd:width>322</pd:width>
+        <pd:height>174</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>transactionGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:transactionType>JDBCTransaction</pd:transactionType>
+            <pd:includeCheckpoint>false</pd:includeCheckpoint>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ReplaceVariables</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Handle Resolution</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ReplaceVariables</pd:from>
+            <pd:to>Handle Resolution</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Handle Resolution">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>302</pd:x>
+            <pd:y>139</pd:y>
+            <config>
+                <processName>/Processes/Channels/Ignore/Resolution.process</processName>
+                <processNameXPath>concat('/Processes/Channels/',$Start/Input/pfx4:ResolutionFull/pfx6:Channel/pfx6:TransportMechanism,'/Resolution.process')</processNameXPath>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <xsl:copy-of select="$ReplaceVariables/root/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$ReplaceVariables/root/@*"/>
+                    <xsl:copy-of select="$ReplaceVariables/root/node()"/>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ReplaceVariables">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>170</pd:x>
+            <pd:y>135</pd:y>
+            <config>
+                <processName>/Processes/BackendServices/Transactional/Resolution/Implementation/ReplaceVariables.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <xsl:copy-of select="$Start/Input/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Start/Input/@*"/>
+                    <xsl:copy-of select="$Start/Input/node()"/>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_WORKORDERS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_WORKORDERS">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_WORKORDERS">
+            <xsd:element name="GetWorkorders" type="s:KSD_GetWorkorders"/>
+            <xsd:complexType name="KSD_GetWorkorders">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="CKRNummer" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="GetWorkordersResponse" type="s:KSD_Workorders"/>
+            <xsd:complexType name="KSD_Workorders">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="AWOs" type="s:AWO_number"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="AWO_number">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="AWO" type="s:AWO_value"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="AWO_value">
+                <xsd:sequence>
+                    <xsd:element name="Value" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="GetWorkordersRequestMsg">
+        <part name="parameters" element="s:GetWorkorders"/>
+    </message>
+    <message name="GetWorkordersResponseMsg">
+        <part name="parameters" element="s:GetWorkordersResponse"/>
+    </message>
+    <portType name="GET_WORKORDERSPortType">
+        <operation name="GetWorkorders">
+            <input message="s:GetWorkordersRequestMsg"/>
+            <output message="s:GetWorkordersResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="GET_WORKORDERSSoapBinding" type="s:GET_WORKORDERSPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetWorkorders">
+            <soap:operation soapAction="urn:GET_WORKORDERS/GetWorkorders" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GET_WORKORDERS_SERVICE">
+        <port name="GET_WORKORDERSSoap" binding="s:GET_WORKORDERSSoapBinding">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/GetWorkOrders"/>
+        </port>
+    </service>
+</definitions>

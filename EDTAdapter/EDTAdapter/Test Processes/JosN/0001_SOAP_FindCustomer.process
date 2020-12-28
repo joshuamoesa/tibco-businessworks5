@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:pfx2="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx3="http://xmlns.example.com/unique/default/namespace/1087453986478">
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/0001_SOAP_FindCustomer.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>276</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <timeout>30</timeout>
+            <endpointURL>http://localhost:%%EDTAdapter/Outbound/SOAP/ServerPort%%/EDTAdapter/Processes/FindCustomer</endpointURL>
+            <service>pfx2:FIND_CUSTOMER_SERVICE</service>
+            <servicePort>FIND_CUSTOMERSoap</servicePort>
+            <operation>FindCustomer</operation>
+            <soapAction>urn:FIND_CUSTOMER/FindCustomer</soapAction>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx2:FindCustomer>
+                    <pfx2:GUID>
+                        <xsl:value-of select="&quot;001&quot;"/>
+                    </pfx2:GUID>
+                    <pfx2:Organisatie>
+                        <xsl:value-of select="&quot;Atos Origin&quot;"/>
+                    </pfx2:Organisatie>
+                    <pfx2:Straat>
+                        <xsl:value-of select="&quot;Wijkstraat&quot;"/>
+                    </pfx2:Straat>
+                    <pfx2:Huisnr>
+                        <xsl:value-of select="&quot;39&quot;"/>
+                    </pfx2:Huisnr>
+                    <pfx2:Huisnr_Toev>
+                        <xsl:value-of select="&quot;-&quot;"/>
+                    </pfx2:Huisnr_Toev>
+                    <pfx2:Pstcodcyf>
+                        <xsl:value-of select="&quot;9901&quot;"/>
+                    </pfx2:Pstcodcyf>
+                    <pfx2:Pstcodlet>
+                        <xsl:value-of select="&quot;AG&quot;"/>
+                    </pfx2:Pstcodlet>
+                    <pfx2:Plaats>
+                        <xsl:value-of select="&quot;Appingedam&quot;"/>
+                    </pfx2:Plaats>
+                    <pfx2:Telefoonnummer>
+                        <xsl:value-of select="&quot;0596533470&quot;"/>
+                    </pfx2:Telefoonnummer>
+                </pfx2:FindCustomer>
+                <ns:_configData/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1095237788188" xmlns:ns="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx3="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" schemaLocation="/XSDSchemas/Common/ErrorMessage.xsd"/>
+    <pd:name>Common/Sub Processes/Sub_LogError.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="LogError">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="EL_SUBJECT" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="STACK_TRACE" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="NewCMH" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="ID" type="xsd:string"/>
+                                <xsd:element name="NAME" type="xsd:string"/>
+                                <xsd:element name="FID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="MID" type="xsd:string"/>
+                                <xsd:element name="PARADIGM" type="xsd:string"/>
+                                <xsd:element name="OBJECT" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="VERSION" type="xsd:string"/>
+                                <xsd:element name="COMPONENT-ID" type="xsd:string"/>
+                                <xsd:element name="COMPONENT-VERSION" type="xsd:string"/>
+                                <xsd:element name="DESTINATION" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="ExistingCMH" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="COMPONENT-ID" type="xsd:string"/>
+                                <xsd:element name="COMPONENT-VERSION" type="xsd:string"/>
+                                <xsd:element name="PARADIGM" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="FID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="MID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="OBJECT" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="DESTINATION" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="COPY_ATTRIBUTES" type="xsd:boolean"/>
+                                <xsd:element name="EXTENT_TRACKING" type="xsd:boolean"/>
+                                <xsd:element name="CMH" type="pfx:CMHInfo"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="ResultStatus" type="ns:ResultStatus"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>34</pd:startY>
+    <pd:returnBindings>
+        <ErrorStatus>
+            <xsl:copy-of select="$Start/LogError/ResultStatus/ancestor-or-self::*/namespace::node()"/>
+            <xsl:copy-of select="$Start/LogError/ResultStatus/@*"/>
+            <xsl:copy-of select="$Start/LogError/ResultStatus/node()"/>
+        </ErrorStatus>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="ErrorStatus" type="ns:ResultStatus"/>
+    </pd:endType>
+    <pd:endX>457</pd:endX>
+    <pd:endY>34</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="ErrorLog">
+        <pd:type>com.tibco.plugin.tibrv.RVPubActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVPubActivity</pd:resourceType>
+        <pd:x>340</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx3:ErrorMessage"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <xsl:choose>
+                    <xsl:when test="$Start/LogError/EL_SUBJECT">
+                        <xsl:if test="$Start/LogError/EL_SUBJECT">
+                            <subject>
+                                <xsl:value-of select="$Start/LogError/EL_SUBJECT"/>
+                            </subject>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <subject>
+                            <xsl:value-of select="concat(&quot;ErrorLog.&quot;, $BuildCMH/CMH/pfx:TO/@pfx:DESTINATION)"/>
+                        </subject>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <body>
+                    <ns1:CMH xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd">
+                        <xsl:copy-of select="$BuildCMH/CMH/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$BuildCMH/CMH/@*"/>
+                        <xsl:copy-of select="$BuildCMH/CMH/node()"/>
+                    </ns1:CMH>
+                    <pfx3:RESULT_STATUS xmlns:ns1="http://xmlns.example.com/unique/default/namespace/1095237788188">
+                        <xsl:copy-of select="$Start/LogError/ResultStatus/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Start/LogError/ResultStatus/@*"/>
+                        <xsl:copy-of select="$Start/LogError/ResultStatus/node()"/>
+                    </pfx3:RESULT_STATUS>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>117</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;MsgCode: &quot;,$Start/LogError/ResultStatus/@ns:MSG_CODE,&quot;&#xD;&#xA;Msg: &quot;,$Start/LogError/ResultStatus/@ns:ERROR_DESCRIPTION,&quot;&#xD;&#xA;StackTrace: &quot;,$Start/LogError/STACK_TRACE)"/>
+                </message>
+                <xsl:if test="$Start/LogError/ResultStatus/@ns:ERROR_CODE">
+                    <msgCode>
+                        <xsl:value-of select="$Start/LogError/ResultStatus/@ns:ERROR_CODE"/>
+                    </msgCode>
+                </xsl:if>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="IgnoreLogError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>180</pd:x>
+        <pd:y>140</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="IgnoreError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>396</pd:x>
+        <pd:y>141</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="BuildCMH">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>252</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_FillCMH.process</processName>
+        </config>
+        <pd:inputBindings>
+            <CMH-IN>
+                <xsl:choose>
+                    <xsl:when test="$Start/LogError/NewCMH">
+                        <xsl:copy-of select="$Start/LogError/NewCMH"/>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$Start/LogError/ExistingCMH">
+                        <xsl:copy-of select="$Start/LogError/ExistingCMH"/>
+                    </xsl:when>
+                </xsl:choose>
+            </CMH-IN>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>BuildCMH</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>IgnoreLogError</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IgnoreLogError</pd:from>
+        <pd:to>BuildCMH</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorLog</pd:from>
+        <pd:to>IgnoreError</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IgnoreError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BuildCMH</pd:from>
+        <pd:to>ErrorLog</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

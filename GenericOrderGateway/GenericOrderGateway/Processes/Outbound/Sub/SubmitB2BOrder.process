@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://kpn.com/eai/genericorder" xmlns:ns="http://kpn.com/eai/product/generic" xmlns:pfx3="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" xmlns:pfx4="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx6="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" xmlns:pfx7="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" xmlns:pfx8="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" xmlns:ns3="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns1="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CDM/Product/Product_Type.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns4="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns5="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" xmlns:pfx9="http://kpn.com/eai/generic/order" xmlns:ns6="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:pfx10="http://xmlns.kpn.com/eai/common/errors" xmlns:ns7="http://www.tibco.com/pe/EngineTypes" xmlns:ns8="http://schemas.tibco.com/bw/pe/plugin/5.0/exceptions">
+    <xsd:import namespace="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" schemaLocation="/Schema/WMP/kpn.wod.w9.input.003.wsdl"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" schemaLocation="/Validation/ValidationService.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/genericorder" schemaLocation="/Schemas/cdm xsd's/CDM Order/GenericOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Request/ValidateMessageRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Response/ValidateMessageResponse.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/genericorder" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Order/GenericOrder.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CDM/Customer/Customer_Type.xsd" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Customer/Customer_Type.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/UpdateOrderStatus.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/generic/order" schemaLocation="/WSDL/WeakClient/WEAK.wsdl"/>
+    <xsd:import namespace="http://schemas.xmlsoap.org/soap/envelope/" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/WSDL/SOAP1.1.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>GenericOrderGateway/Processes/Outbound/Sub/SubmitB2BOrder.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                    <xsd:element name="operationType" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="operationID" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="sourceTP" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>35</pd:startY>
+    <pd:returnBindings>
+        <ServiceOut>
+            <Body>
+                <xsl:value-of select="$Wait/Response/*"/>
+            </Body>
+            <MsgId>
+                <xsl:value-of select="$ID/messageId/GUID"/>
+            </MsgId>
+        </ServiceOut>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="ServiceOut">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="MsgId" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>702</pd:endX>
+    <pd:endY>35</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx10:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Create SubmitOrder">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>335</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <element ref="pfx8:SubmitOrder"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:variable name="namespace" select="namespace-uri($Parse-B2B-Body/*[1])"/>
+            <xsl:variable name="parts" select="tib:tokenize($namespace,'/')"/>
+            <xsl:variable name="order" select="$Parse-B2B-Body/*[1]"/>
+            <xsl:variable name="orderItem" select="$order/*[local-name()=&quot;OrderItem&quot;]"/>
+            <xsl:variable name="PRODUCT_NAME" select="$parts[5]"/>
+            <xsl:variable name="ACTION_NAME" select="tib:substring-after-last($Start/ServiceIn/operationID, '/')"/>
+            <xsl:variable name="CUSTOMER_NAME" select="$_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitB2BOrder/CustomerName"/>
+            <xsl:variable name="GROUP_NAME" select="$parts[4]"/>
+            <xsl:variable name="PRODUCT_VERSION" select="$parts[7]"/>
+            <pfx8:SubmitOrder>
+                <ns4:CMH>
+                    <ns4:ID>
+                        <xsl:value-of select="'435'"/>
+                    </ns4:ID>
+                    <ns4:NAME>
+                        <xsl:value-of select="'SubmitGenericProductOrder'"/>
+                    </ns4:NAME>
+                    <ns4:FID>
+                        <xsl:value-of select="$order/*[local-name()=&quot;customerOrderId&quot;]"/>
+                    </ns4:FID>
+                    <ns4:MID>
+                        <xsl:value-of select="'1080.10'"/>
+                    </ns4:MID>
+                    <ns4:PARADIGM>
+                        <xsl:value-of select="'PUBLISH'"/>
+                    </ns4:PARADIGM>
+                    <ns4:OBJECT>
+                        <xsl:value-of select="'Order'"/>
+                    </ns4:OBJECT>
+                    <ns4:VERSION>
+                        <xsl:value-of select="'1.0'"/>
+                    </ns4:VERSION>
+                    <ns4:FROM>
+                        <xsl:attribute name="ns4:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns4:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns4:FROM>
+                    <ns4:TO>
+                        <xsl:attribute name="ns4:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/pfx5:GlobalVariables/Env, '.FIXED.', $_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/ComponentDomain, '.', $_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/ComponentId, '.Publish.SubmitGenericProductOrder.1')"/>
+                        </xsl:attribute>
+                    </ns4:TO>
+                    <ns4:TRACKING>
+                        <ns4:MESSAGE_ID>
+                            <xsl:value-of select="$ID/messageId/GUID"/>
+                        </ns4:MESSAGE_ID>
+                        <ns4:ITEM>
+                            <xsl:attribute name="ns4:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/ComponentId, ' ', $_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/ComponentVersion)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns4:EVENT">
+                                <xsl:value-of select="'PUBLISH'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns4:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns4:ITEM>
+                    </ns4:TRACKING>
+                </ns4:CMH>
+                <ns3:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="'EXECUTE'"/>
+                            </ORDER_TYPE>
+                            <COMMERCIAL_PRODUCT_CATEGORY>
+                                <xsl:value-of select="$CUSTOMER_NAME"/>
+                            </COMMERCIAL_PRODUCT_CATEGORY>
+                            <CUSTOMER_ID>
+                                <xsl:if test="$Start/ServiceIn/sourceTP">
+                                    <PARTY_ID>
+                                        <TYPE>
+                                            <xsl:value-of select="&quot;KPN-RELATION_ID&quot;"/>
+                                        </TYPE>
+                                        <ID>
+                                            <xsl:value-of select="$Start/ServiceIn/sourceTP"/>
+                                        </ID>
+                                    </PARTY_ID>
+                                </xsl:if>
+                            </CUSTOMER_ID>
+                            <EXTERNAL_REFERENCE>
+                                <xsl:value-of select="$order/*[local-name()=&quot;customerOrderId&quot;]"/>
+                            </EXTERNAL_REFERENCE>
+                            <CREATION_DATE>
+                                <xsl:value-of select="$order/*[local-name()=&quot;orderDateTime&quot;]"/>
+                            </CREATION_DATE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="upper-case(concat($PRODUCT_NAME, &quot;_&quot;,$ACTION_NAME))"/>
+                                </ORDER_ITEM_TYPE>
+                                <ORDER_ITEM_ACTION>
+                                    <xsl:value-of select="$ACTION_NAME"/>
+                                </ORDER_ITEM_ACTION>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="$GROUP_NAME"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT xsi:type="ns5:Product_Type">
+                                <GENERIC_ORDER_PRODUCT>
+                                    <PRODUCT_NAME>
+                                        <xsl:value-of select="$PRODUCT_NAME"/>
+                                    </PRODUCT_NAME>
+                                    <PRODUCT_VERSION>
+                                        <xsl:value-of select="substring($PRODUCT_VERSION,2,string-length($PRODUCT_VERSION))"/>
+                                    </PRODUCT_VERSION>
+                                    <ACTION_PARADIGM>
+                                        <xsl:value-of select="if($Start/ServiceIn/operationType=&quot;notify&quot;)&#xA;then&#xA;&quot;Asynchronous&quot;&#xA;else&#xA;&quot;Synchronous&quot;"/>
+                                    </ACTION_PARADIGM>
+                                    <xsl:if test="$order/*[local-name()=&quot;OrderParameters&quot;]">
+                                        <CUSTOM_ORDER_PARAMETERS>
+                                            <xsl:for-each select="$order/*[local-name()=&quot;OrderParameters&quot;]/*">
+                                                <xsl:copy-of select="."/>
+                                            </xsl:for-each>
+                                        </CUSTOM_ORDER_PARAMETERS>
+                                    </xsl:if>
+                                    <xsl:if test="$orderItem/*[not(local-name()=&quot;Parameters&quot;)]">
+                                        <CUSTOM_ITEM_PARAMETERS>
+                                            <xsl:for-each select="$orderItem/*[not(local-name()=&quot;Parameters&quot;)]">
+                                                <xsl:copy-of select="."/>
+                                            </xsl:for-each>
+                                        </CUSTOM_ITEM_PARAMETERS>
+                                    </xsl:if>
+                                    <xsl:if test="$orderItem/*[local-name()=&quot;Parameters&quot;]">
+                                        <ACTION_PARAMETERS>
+                                            <xsl:for-each select="$orderItem/*[local-name()=&quot;Parameters&quot;]/*">
+                                                <xsl:copy-of select="."/>
+                                            </xsl:for-each>
+                                        </ACTION_PARAMETERS>
+                                    </xsl:if>
+                                </GENERIC_ORDER_PRODUCT>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns3:BODY>
+            </pfx8:SubmitOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Publish SubmitOrder">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>470</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Publisher.process</processName>
+        </config>
+        <pd:inputBindings>
+            <PublisherIn>
+                <Destination>
+                    <xsl:value-of select="$Create-SubmitOrder/pfx8:SubmitOrder/ns4:CMH/ns4:TO/@ns4:DESTINATION"/>
+                </Destination>
+                <MessageId>
+                    <xsl:value-of select="$Create-SubmitOrder/pfx8:SubmitOrder/ns4:CMH/ns4:TRACKING/ns4:MESSAGE_ID"/>
+                </MessageId>
+                <Body>
+                    <xsl:copy-of select="$Create-SubmitOrder/pfx8:SubmitOrder"/>
+                </Body>
+                <JMS/>
+            </PublisherIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Wait">
+        <pd:type>com.tibco.plugin.waitnotify.WaitActivity</pd:type>
+        <pd:resourceType>ae.activities.waitActivity</pd:resourceType>
+        <pd:x>635</pd:x>
+        <pd:y>138</pd:y>
+        <config>
+            <sharedConfig>/GenericOrderGateway/Shared Resources/StatusUpdateConfiguration.sharednotify</sharedConfig>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <key>
+                    <xsl:value-of select="$Create-SubmitOrder/pfx8:SubmitOrder/ns3:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                </key>
+                <timeout>
+                    <xsl:value-of select="$_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitOrder/notificationTimeout"/>
+                </timeout>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert Order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>527</pd:x>
+        <pd:y>138</pd:y>
+        <config>
+            <processName>/GenericOrderGateway/Processes/Sub/InsertFindRemove.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EXTERNAL_REFERENCE>
+                    <xsl:value-of select="$Create-SubmitOrder/pfx8:SubmitOrder/ns3:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                </EXTERNAL_REFERENCE>
+                <Insert>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </Insert>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Remove Order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>638</pd:x>
+        <pd:y>242</pd:y>
+        <config>
+            <processName>/GenericOrderGateway/Processes/Sub/InsertFindRemove.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EXTERNAL_REFERENCE>
+                    <xsl:value-of select="$Create-SubmitOrder/pfx8:SubmitOrder/ns3:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                </EXTERNAL_REFERENCE>
+                <Insert>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </Insert>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ID">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>104</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <element>
+                <xsd:element name="messageId">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="GUID" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <messageId>
+                <GUID>
+                    <xsl:value-of select="eai:createGUID()"/>
+                </GUID>
+            </messageId>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse B2B Body">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>212</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term>
+                <xsd:any processContents="skip"/>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>341</pd:x>
+        <pd:y>246</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns7:ErrorReport/Msg"/>
+                </message>
+                <data>
+                    <pfx10:Errors>
+                        <xsl:choose>
+                            <xsl:when test="$_error_Parse-B2B-Body">
+                                <pfx10:Error>
+                                    <pfx10:MsgCode>
+                                        <xsl:value-of select="&quot;GOG-03004&quot;"/>
+                                    </pfx10:MsgCode>
+                                    <pfx10:Params>
+                                        <xsl:value-of select="$Start/ServiceIn/Body"/>
+                                    </pfx10:Params>
+                                    <pfx10:MsgId>
+                                        <xsl:value-of select="$ID/messageId/GUID"/>
+                                    </pfx10:MsgId>
+                                    <pfx10:ActivityError>
+                                        <xsl:copy-of select="$_error_Parse-B2B-Body/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error_Parse-B2B-Body/ActivityErrors/@*"/>
+                                        <xsl:copy-of select="$_error_Parse-B2B-Body/ActivityErrors/node()"/>
+                                    </pfx10:ActivityError>
+                                </pfx10:Error>
+                            </xsl:when>
+                            <xsl:when test="$_error_Publish-SubmitOrder">
+                                <xsl:copy-of select="$_error_Publish-SubmitOrder/pfx10:Error"/>
+                            </xsl:when>
+                            <xsl:when test="$_error_Insert-Order">
+                                <xsl:copy-of select="$_error_Insert-Order/pfx10:Error"/>
+                            </xsl:when>
+                            <xsl:when test="$_error_Wait">
+                                <pfx10:Error>
+                                    <xsl:if test="$_error_Wait/ns8:ActivityTimedOutException/msgCode">
+                                        <pfx10:MsgCode>
+                                            <xsl:value-of select="$_error_Wait/ns8:ActivityTimedOutException/msgCode"/>
+                                        </pfx10:MsgCode>
+                                    </xsl:if>
+                                    <xsl:if test="$_error_Wait/ns8:ActivityTimedOutException/msg">
+                                        <pfx10:Params>
+                                            <xsl:value-of select="$_error_Wait/ns8:ActivityTimedOutException/msg"/>
+                                        </pfx10:Params>
+                                    </xsl:if>
+                                </pfx10:Error>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx10:Error>
+                                    <pfx10:MsgCode>
+                                        <xsl:value-of select="&quot;GOG-03003&quot;"/>
+                                    </pfx10:MsgCode>
+                                    <pfx10:Params>
+                                        <xsl:value-of select="$Parse-B2B-Body/*"/>
+                                    </pfx10:Params>
+                                    <pfx10:MsgId>
+                                        <xsl:value-of select="$ID/messageId/GUID"/>
+                                    </pfx10:MsgId>
+                                </pfx10:Error>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </pfx10:Errors>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Create SubmitOrder</pd:from>
+        <pd:to>Publish SubmitOrder</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish SubmitOrder</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>ASYNC</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ID</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish SubmitOrder</pd:from>
+        <pd:to>Insert Order</pd:to>
+        <pd:xpathDescription>SYNC</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/ServiceIn/operationType!="notify"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert Order</pd:from>
+        <pd:to>Wait</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait</pd:from>
+        <pd:to>Remove Order</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407821</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse B2B Body</pd:from>
+        <pd:to>Create SubmitOrder</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse B2B Body</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create SubmitOrder</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish SubmitOrder</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert Order</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ID</pd:from>
+        <pd:to>Parse B2B Body</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Remove Order</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:CANCEL_APPOINTMENT" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:CANCEL_APPOINTMENT">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:CANCEL_APPOINTMENT">
+			<xsd:element name="CancelAppointmentRequest" type="s:KSD_CancelAppointment"/>
+			<xsd:complexType name="KSD_CancelAppointment">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="researchDepartmentCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="researchEmployeeCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="appointmentDate" nillable="true" type="xsd:date"/>
+					<xsd:element name="visitWindowStartTime" nillable="true" type="xsd:time"/>
+					<xsd:element name="visitWindowEndTime" nillable="true" type="xsd:time"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="CancelAppointmentResponse" type="s:KSD_Appointment"/>
+			<xsd:complexType name="KSD_Appointment">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="status" nillable="true" type="xsd:integer"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="CancelAppointmentRequestMsg">
+		<part name="parameters" element="s:CancelAppointmentRequest"/>
+	</message>
+	<message name="CancelAppointmentResponseMsg">
+		<part name="parameters" element="s:CancelAppointmentResponse"/>
+	</message>
+	<portType name="CANCEL_APPOINTMENTPortType">
+		<operation name="CancelAppointmentRequest">
+			<input message="s:CancelAppointmentRequestMsg"/>
+			<output message="s:CancelAppointmentResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="CANCEL_APPOINTMENTSoapBinding" type="s:CANCEL_APPOINTMENTPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="CancelAppointmentRequest">
+			<soap:operation soapAction="urn:CANCEL_APPOINTMENT/CancelAppointment" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="CANCEL_APPOINTMENT_SERVICE">
+		<wsdl:documentation>versie 2.0</wsdl:documentation>
+		<port name="CANCEL_APPOINTMENTSoap" binding="s:CANCEL_APPOINTMENTSoapBinding">
+			<soap:address location="http://localhost:9190/ExpertDeskAdapter"/>
+		</port>
+	</service>
+</wsdl:definitions>

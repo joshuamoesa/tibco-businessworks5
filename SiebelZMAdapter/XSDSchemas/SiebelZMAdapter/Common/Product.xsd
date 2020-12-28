@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by bhogeshwar k (Atos Origin Nederland B.V.) -->
+<!-- Created with Liquid XML Studio 1.0.6.0 (http://www.liquid-technologies.com) -->
+<xs:schema xmlns:c="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/CurrencyCode.xsd"
+	 xmlns="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd"
+	 xmlns:p="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/ContactPerson.xsd"
+	 xmlns:l="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/LegalFormCode.xsd"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/LegalFormCode.xsd" schemaLocation="../Common/LegalFormCode.xsd"/>
+	<xs:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/CurrencyCode.xsd" schemaLocation="../Common/CurrencyCode.xsd"/>
+	<xs:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/ContactPerson.xsd" schemaLocation="../Common/ContactPerson.xsd"/>
+	<xs:element name="PRODUCTLIST" type="type_ProductList"/>
+	<xs:element name="PRODUCT" type="type_SubProduct"/>
+	<xs:group name="group_Product">
+		<xs:choice>
+			<xs:element name="ACCESS_PRODUCT" type="type_Product"/>
+			<xs:element name="DOMAIN_PRODUCT" type="type_Product"/>
+			<xs:element name="EMAILBOX_PRODUCT" type="type_Product"/>
+			<xs:element name="DIRECTORY_LISTING_PRODUCT" type="type_Product"/>
+			<xs:element name="HARD_PHONE_PRODUCT" type="type_Product"/>
+			<xs:element name="INSTALLATION_PRODUCT" type="type_Product"/>
+			<xs:element name="IP_RANGE_PRODUCT" type="type_Product"/>
+			<xs:element name="EMAIL_BOX_CAPACITY_PRODUCT" type="type_Product"/>
+			<xs:element name="PHONE_NUMBER_RANGE_PRODUCT" type="type_Product"/>
+			<xs:element name="ONLINE_REMOTE_PRODUCT" type="type_Product"/>
+			<xs:element name="PBX_PRODUCT" type="type_Product"/>
+			<xs:element name="EFT_OVER_IP_PRODUCT" type="type_Product"/>
+			<xs:element name="ROUTER_PRODUCT" type="type_Product"/>
+			<xs:element name="SEAT_PRODUCT" type="type_Product"/>
+			<xs:element name="SEAT_FEATURES_PRODUCT" type="type_Product"/>
+			<xs:element name="SERVICE_LEVEL_PRODUCT" type="type_Product"/>
+			<xs:element name="SITE_FEATURES_PRODUCT" type="type_Product"/>
+			<xs:element name="INTERNET_ACCESS_PRODUCT" type="type_Product"/>
+			<xs:element name="SOFT_PHONE_PRODUCT" type="type_Product"/>
+			<xs:element name="ZIPB_PRODUCT" type="type_Product"/>
+			<xs:element name="WIFI_EQUIPMENT_PRODUCT" type="type_Product"/>
+			<xs:element name="WEB_SPACE_PRODUCT" type="type_Product"/>
+			<xs:element name="VOICE_CAPACITY_PRODUCT" type="type_Product"/>
+			<xs:element name="UNKNOWN_PRODUCT" type="type_Product"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="type_ProductList">
+		<xs:sequence>
+			<xs:element ref="PRODUCT" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="type_SubProduct">
+		<xs:group ref="group_Product"/>
+	</xs:complexType>
+	<xs:complexType name="type_Product">
+		<xs:sequence>
+			<xs:element name="QUANTITY" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="PRODUCT_INSTANCE_ID" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="30"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SERVICE_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="PRODUCTLIST" type="type_ProductList" minOccurs="0"/>
+			<xs:element name="MONTHLY_RECURRING_CHARGE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CURRENCY_CODE" default="EUR"/>
+						<xs:element name="AMOUNT" type="xs:decimal"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ONE_TIME_CHARGE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CURRENCY_CODE" type="c:type_CurrencyCode" default="EUR"/>
+						<xs:element name="AMOUNT" type="xs:decimal"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PRODUCT_STATUS" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="STATUS">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="30"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PRODUCT_SPECIFICATIONS" minOccurs="0">
+				<xs:complexType>
+					<xs:choice maxOccurs="unbounded">
+						<xs:element name="ACCESS_TYPE">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ACCOUNT_ID">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="CARRIER">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="CLASSIFICATION">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="CONNECTION_LINE_TYPE">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="CONTRACT_DURATION">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="DOMAIN_EXTENSION">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="DOMAIN_NAME">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="END">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="EQUIPMENT_TYPE">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="INSTALLATION_BY_ENGINEER" type="xs:boolean"/>
+						<xs:element name="LINE_SHARING" type="xs:boolean"/>
+						<xs:element name="MANAGED" type="xs:boolean"/>
+						<xs:element name="MIGRATE_TELCO" type="xs:boolean"/>
+						<xs:element name="NUMBER_OF_CONCURRENT_CALLS" type="xs:positiveInteger"/>
+						<xs:element name="PACKAGE_NAME" type="xs:string"/>
+						<xs:element name="OVERBOOKING_FACTOR">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+									<xs:totalDigits value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="PASSWORD">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="PORTING_REQUESTED" type="xs:boolean"/>
+						<xs:element name="PORTING_REQUIRED" type="xs:boolean"/>
+						<xs:element name="QUANTITY">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+									<xs:totalDigits value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="RELATION_QUANTITY_SIZE">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+									<xs:totalDigits value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ROUTER_TYPE">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SET_UPLINK">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SHIPMENT">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SIZE">
+							<xs:simpleType>
+								<xs:restriction base="xs:positiveInteger">
+									<xs:totalDigits value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="START">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="TERMINATE_VOICE" type="xs:boolean"/>
+						<xs:element name="TERMS_OF_USE" type="xs:boolean"/>
+						<xs:element name="TICKET_1">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="TICKET_2">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="TICKET_3">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="USERNAME">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="WHOLESALE_NEW_LINE" type="xs:boolean"/>
+						<xs:element name="WIFI_ENABLED" type="xs:boolean"/>
+						<xs:element name="DOWNLOAD_SPEED">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="UNIT" type="xs:string" default="MiB/s"/>
+									<xs:element name="AMOUNT">
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:totalDigits value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="MAILBOX_SIZE">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="UNIT" type="xs:string" default="MB"/>
+									<xs:element name="AMOUNT">
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:totalDigits value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="BACKUP_CAPACITY">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="UNIT" default="MB">
+										<xs:simpleType>
+											<xs:restriction base="xs:string"/>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="AMOUNT">
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:totalDigits value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="PHONE_NUMBER">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="UNFORMATTED">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="25"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="UNKNOWN_SPECIFICATION">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="NAME">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="75"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="VALUE">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="UPLOAD_SPEED">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="UNIT" default="MiB/s">
+										<xs:simpleType>
+											<xs:restriction base="xs:string"/>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="AMOUNT">
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:totalDigits value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="MINIMAL_DOWNLOAD_SPEED">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="UNIT" type="xs:string" default="MiB/s"/>
+									<xs:element name="AMOUNT">
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:totalDigits value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="MINIMAL_UPLOAD_SPEED">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="UNIT" type="xs:string" default="MiB/s"/>
+									<xs:element name="AMOUNT">
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:totalDigits value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="WEBSPACE_SIZE">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="UNIT" type="xs:string" default="MB"/>
+									<xs:element name="AMOUNT">
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:totalDigits value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PARTY_ROLE_PRODUCT_INVOLVEMENT" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PRODUCT_INVOLVEMENT_ROLE">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Contractor"/>
+									<xs:enumeration value="Billing Agent"/>
+									<xs:enumeration value="User"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="PARTY_ROLE">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PRIVACY_SETTING" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="30"/>
+												<xs:enumeration value="Opt-In"/>
+												<xs:enumeration value="Opt-Out: All Parties"/>
+												<xs:enumeration value="Opt-Out: Third Party"/>
+												<xs:enumeration value="Opt-Out: Affiliates"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="PARTY_ROLE_ID" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ID_CKR" minOccurs="0">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:pattern value="[A-Z,0-9]{8}"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="PARTY">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="FULL_PARTY_NAME">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:maxLength value="100"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="PARTY_ID" minOccurs="0">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:maxLength value="100"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="LEGAL_FORM_CODE" type="l:type_LegalFormCode" default="VG" minOccurs="0"/>
+												<xs:element name="IS_INTERNAL" type="xs:boolean" minOccurs="0"/>
+												<xs:element name="PRICE_LIST" type="xs:string" minOccurs="0"/>
+												<xs:element name="CONTACT_PERSON" type="p:type_ContactPerson" minOccurs="0" maxOccurs="unbounded"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

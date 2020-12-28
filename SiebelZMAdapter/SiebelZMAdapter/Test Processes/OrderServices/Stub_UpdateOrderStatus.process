@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/OrderServices/subscribe/UpdateOrderStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx2="http://xmlns.kpn.com/Outbound/Publish/UpdateOrderStatus.xsd" xmlns:ns3="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0248_ProcessProvisioningWorkOrder/2.0/Subscribe">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/Outbound/Publish/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/OrderServicesAdapter/Subscribe/UpdateOrderStatus.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0248_ProcessProvisioningWorkOrder/2.0/Subscribe" schemaLocation="/XSDSchemas/OrderServicesAdapter/Imported/PRODUCT.xsd"/>
+    <pd:name>SiebelZMAdapter/Test Processes/OrderServices/Stub_UpdateOrderStatus.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>139</pd:startX>
+    <pd:startY>101</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>453</pd:endX>
+    <pd:endY>97</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>352</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.Operations.SiebelZMAdapter.Subscribe.UpdateCRMOrderStatus.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx2:UpdateOrderStatus, false(),true())"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>238</pd:x>
+        <pd:y>100</pd:y>
+        <config>
+            <element ref="pfx2:UpdateOrderStatus"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:UpdateOrderStatus>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;342&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;UpdateOrderStatus&quot;"/>
+                    </ns1:NAME>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;Order&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="&quot;OrderServices&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="&quot;1.0.0&quot;"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/Env , &quot;.FIXED.Operations.SiebelZMAdapter.Subscribe.UpdateOrderStatus.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                </ns1:CMH>
+                <ns3:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="&quot;ZIPB&quot;"/>
+                            </ORDER_TYPE>
+                            <ORDER_ID>
+                                <xsl:value-of select="&quot;Order_ID&quot;"/>
+                            </ORDER_ID>
+                            <EXTERNAL_REFERENCE>
+                                <xsl:value-of select="&quot;Ext_Ref&quot;"/>
+                            </EXTERNAL_REFERENCE>
+                            <CREATION_DATE>
+                                <xsl:value-of select="&quot;1999-05-31T13:20:00-05:00&quot;"/>
+                            </CREATION_DATE>
+                            <OTHER_REFERENCE>
+                                <ORIGIN>
+                                    <xsl:value-of select="11"/>
+                                </ORIGIN>
+                                <REFERENCE>
+                                    <xsl:value-of select="12"/>
+                                </REFERENCE>
+                            </OTHER_REFERENCE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="&quot;Order_Item_Type&quot;"/>
+                                </ORDER_ITEM_TYPE>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="&quot;ZIPB_NEW&quot;"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT>
+                                <ns4:SERVICE_VISIT_PRODUCT/>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns3:BODY>
+            </pfx2:UpdateOrderStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

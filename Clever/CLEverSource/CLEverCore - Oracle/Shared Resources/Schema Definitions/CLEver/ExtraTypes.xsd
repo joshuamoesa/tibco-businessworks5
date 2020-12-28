@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/CLEver/ExtraTypes"
+	 targetNamespace="http://www.tibco.com/CLEver/ExtraTypes"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="Empty" type="xs:string"/>
+	<xs:element name="ID" type="xs:integer"/>
+	<xs:element name="ReturnValue" type="xs:string"/>
+	<xs:element name="Security">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="UserName" type="xs:string"/>
+				<xs:element name="Password" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Version" type="xs:string"/>
+	<xs:element name="Authentication">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Security"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Authorization">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="UserName" type="xs:string"/>
+				<xs:element name="Object" type="xs:string"/>
+				<xs:element name="Operation" type="xs:string"/>
+				<xs:element ref="Version" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ValidateOperation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Security"/>
+				<xs:element name="Object" type="xs:string"/>
+				<xs:element name="Operation" type="xs:string"/>
+				<xs:element ref="Version" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SecurityResult">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Approved" type="xs:boolean"/>
+				<xs:element name="Reason" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SecurityInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="isCreatable" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="isReadable" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="isUpdatable" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="isDeletable" type="xs:boolean" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Parameters">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Parameter">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Name" type="xs:string"/>
+				<xs:element name="Value" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RestrictionParameters">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TransactionId" type="xs:string" minOccurs="0"/>
+				<xs:element name="Service" type="xs:string" minOccurs="0"/>
+				<xs:element name="Component" type="xs:string" minOccurs="0"/>
+				<xs:element name="ProcedureName" type="xs:string" minOccurs="0"/>
+				<xs:element name="HostName" type="xs:string" minOccurs="0"/>
+				<xs:element name="ExceptionCategory" type="xs:string" minOccurs="0"/>
+				<xs:element name="ExceptionCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="ExceptionSeverity" type="xs:string" minOccurs="0"/>
+				<xs:element name="ExceptionType" type="xs:string" minOccurs="0"/>
+				<xs:element name="StartDate" type="xs:int" minOccurs="0"/>
+				<xs:element name="EndDate" type="xs:int" minOccurs="0"/>
+				<xs:element name="TechnicalDomain" type="xs:string" minOccurs="0"/>
+				<xs:element name="BusinessDomain" type="xs:string" minOccurs="0"/>
+				<xs:element name="BusinessOperation" type="xs:string" minOccurs="0"/>
+				<xs:element name="BusinessConcept" type="xs:string" minOccurs="0"/>
+				<xs:element name="Status" type="xs:string" minOccurs="0"/>
+				<xs:element name="Role" type="xs:string" minOccurs="0"/>
+				<xs:element name="BusinessRef" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Name" type="xs:string" minOccurs="0"/>
+							<xs:element name="Value" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ProcessContext">
+		<xs:sequence>
+			<xs:element name="BusinessDomain" type="xs:string" minOccurs="0"/>
+			<xs:element name="TechnicalDomain" type="xs:string" minOccurs="0"/>
+			<xs:element name="BusinessConcept" type="xs:string" minOccurs="0"/>
+			<xs:element name="BusinessOperation" type="xs:string" minOccurs="0"/>
+			<xs:element name="BusinessRefs" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TransactionID" type="xs:string"/>
+			<xs:element name="ServiceName" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProcessName" type="xs:string" minOccurs="0"/>
+			<xs:element name="ComponentName" type="xs:string" minOccurs="0"/>
+			<xs:element name="HostName" type="xs:string" minOccurs="0"/>
+			<xs:element name="DateTime" type="xs:dateTime" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ProcessContext" type="ProcessContext"/>
+	<xs:element name="ApplicationRole">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Roles">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Role" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Name" type="xs:string"/>
+										<xs:element ref="SecurityInfo"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

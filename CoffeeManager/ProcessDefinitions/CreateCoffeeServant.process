@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://kpn.com/products/CoffeeManager/Order/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://kpn.com/products/CoffeeManager/Order/data/v1.0" xmlns:pfx2="http://kpn.com/eai/generic/order/1.0">
+    <wsdl:import namespace="http://kpn.com/products/CoffeeManager/Order/v1" location="/WSDL/CoffeeManager.wsdl"/>
+    <pd:name>ProcessDefinitions/CreateCoffeeServant.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>97</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <service>pfx:OrderServices</service>
+            <wsdlNamespaceRoot>http://kpn.com/products/CoffeeManager/Order/v1/CreateImpl</wsdlNamespaceRoot>
+            <operation>Create</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>/ProcessDefinitions/CreateCoffeeServant</soapAction>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <sharedChannel>/SharedResources/HTTPSOAPConnection.sharedhttp</sharedChannel>
+            <httpURI/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>741</pd:endX>
+    <pd:endY>78</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Servant>
+            <xsd:element name="name" type="xsd:string"/>
+        </Servant>
+    </pd:processVariables>
+    <pd:activity name="AssignServant">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>423</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <variableName>Servant</variableName>
+        </config>
+        <pd:inputBindings>
+            <name>
+                <xsl:value-of select="$Java-Code/javaCodeActivityOutput/servant"/>
+            </name>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Java Code">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>259</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <fileName>CreateCoffeeServantJavaCode</fileName>
+            <packageName>ProcessDefinitions.CreateCoffeeServant</packageName>
+            <fullsource>package ProcessDefinitions.CreateCoffeeServant;
+import java.util.*;
+import java.io.*;
+public class CreateCoffeeServantJavaCode{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String participants = "";
+	protected String servant = "";
+	public String getparticipants() {
+		return participants;
+	}
+	public void setparticipants(String val) {
+		participants = val;
+	}
+	public String getservant() {
+		return servant;
+	}
+	public void setservant(String val) {
+		servant = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public CreateCoffeeServantJavaCode() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String participants
+	Out : String servant
+* Available Variables: DO NOT MODIFY *****/
+
+Random randomGenerator = new Random();
+String[] participantsArray = participants.split(" ");
+
+int randomInt = randomGenerator.nextInt(participantsArray.length);
+
+servant = participantsArray[randomInt];}
+}
+</fullsource>
+            <inputData>
+                <row>
+                    <fieldName>participants</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </inputData>
+            <outputData>
+                <row>
+                    <fieldName>servant</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>CreateCoffeeServantJavaCode</name>
+                    <byteCode>yv66vgAAADEALwkACgAeCQAKAB8KAAsAIAgAIQcAIgoABQAgCAAjCgAkACUKAAUAJgcAJwcAKAEADHBhcnRpY2lwYW50cwEAEkxqYXZhL2xhbmcvU3RyaW5nOwEAB3NlcnZhbnQBAA9nZXRwYXJ0aWNpcGFudHMBABQoKUxqYXZhL2xhbmcvU3RyaW5nOwEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBAA9zZXRwYXJ0aWNpcGFudHMBABUoTGphdmEvbGFuZy9TdHJpbmc7KVYBAApnZXRzZXJ2YW50AQAKc2V0c2VydmFudAEABjxpbml0PgEAAygpVgEABmludm9rZQEACkV4Y2VwdGlvbnMHACkBAApTb3VyY2VGaWxlAQAgQ3JlYXRlQ29mZmVlU2VydmFudEphdmFDb2RlLmphdmEMAAwADQwADgANDAAXABgBAAABABBqYXZhL3V0aWwvUmFuZG9tAQABIAcAKgwAKwAsDAAtAC4BAEJQcm9jZXNzRGVmaW5pdGlvbnMvQ3JlYXRlQ29mZmVlU2VydmFudC9DcmVhdGVDb2ZmZWVTZXJ2YW50SmF2YUNvZGUBABBqYXZhL2xhbmcvT2JqZWN0AQATamF2YS9sYW5nL0V4Y2VwdGlvbgEAEGphdmEvbGFuZy9TdHJpbmcBAAVzcGxpdAEAJyhMamF2YS9sYW5nL1N0cmluZzspW0xqYXZhL2xhbmcvU3RyaW5nOwEAB25leHRJbnQBAAQoSSlJACEACgALAAAAAgAEAAwADQAAAAQADgANAAAABgABAA8AEAABABEAAAAdAAEAAQAAAAUqtAABsAAAAAEAEgAAAAYAAQAAAAkAAQATABQAAQARAAAAIgACAAIAAAAGKiu1AAGxAAAAAQASAAAACgACAAAADAAFAA0AAQAVABAAAQARAAAAHQABAAEAAAAFKrQAArAAAAABABIAAAAGAAEAAAAPAAEAFgAUAAEAEQAAACIAAgACAAAABiortQACsQAAAAEAEgAAAAoAAgAAABIABQATAAEAFwAYAAEAEQAAADUAAgABAAAAESq3AAMqEgS1AAEqEgS1AAKxAAAAAQASAAAAEgAEAAAAFQAEAAYACgAHABAAFgABABkAGAACABEAAABFAAMABAAAACG7AAVZtwAGTCq0AAESB7YACE0rLL62AAk+KiwdMrUAArEAAAABABIAAAASAAQAAAAdAAgAHgASACAAGQAiABoAAAAEAAEAGwABABwAAAACAB0=</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <participants>
+                    <xsl:value-of select="$SOAPEventSource/inputMessage/ns:OrderCreateRequest/ns:OrderItem/ns:Parameters/ns:participants"/>
+                </participants>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>579</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <ns:OrderCreateResponse>
+                    <pfx2:supplierOrderId>
+                        <xsl:value-of select="'1'"/>
+                    </pfx2:supplierOrderId>
+                    <ns:status>
+                        <xsl:value-of select="'ACCEPTED'"/>
+                    </ns:status>
+                    <ns:OrderItem>
+                        <ns:Parameters>
+                            <ns:servant>
+                                <xsl:value-of select="$Servant/name"/>
+                            </ns:servant>
+                        </ns:Parameters>
+                    </ns:OrderItem>
+                </ns:OrderCreateResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>AssignServant</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>Java Code</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Java Code</pd:from>
+        <pd:to>AssignServant</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

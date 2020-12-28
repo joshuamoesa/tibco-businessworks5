@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Processes/DataServices/RuleGeneration/General/XsltGeneration/XsltBaseDocument.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="xsltElements" type="xsd:string"/>
+                    <xsd:element name="text" type="xsd:boolean" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>100</pd:startX>
+    <pd:startY>76</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <xsl:choose>
+                <xsl:when test="$Start/Input/text='true'">
+                    <xsltDocument>
+                        <xsl:value-of select="concat('&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;>&lt;xsl:output method=&quot;text&quot; version=&quot;4.0&quot; encoding=&quot;iso-8859-1&quot; indent=&quot;yes&quot;/>&lt;xsl:template match=&quot;/&quot;>',$Start/Input/xsltElements,'&lt;/xsl:template>&lt;/xsl:stylesheet>')"/>
+                    </xsltDocument>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsltDocument>
+                        <xsl:value-of select="concat('&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;>&lt;xsl:template match=&quot;/&quot;>&lt;root>',$Start/Input/xsltElements,'&lt;/root>&lt;/xsl:template>&lt;/xsl:stylesheet>')"/>
+                    </xsltDocument>
+                </xsl:otherwise>
+            </xsl:choose>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="xsltDocument" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>379</pd:endX>
+    <pd:endY>75</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <pd:name>Process Definition.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>27</pd:startX>
+    <pd:startY>35</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>686</pd:endX>
+    <pd:endY>35</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1367405193022</pd:targetNamespace>
+    <pd:activity name="JDBC Get Connection">
+        <pd:type>com.tibco.plugin.jdbc.JDBCGetConnectionActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCGetConnectionActivity</pd:resourceType>
+        <pd:x>217</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <commit>false</commit>
+            <jdbcSharedConfig>/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Java Code">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>434</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <fileName>ProcessDefinitionJavaCode</fileName>
+            <packageName>ProcessDefinition</packageName>
+            <fullsource>package ProcessDefinition;
+import java.util.*;
+import java.io.*;
+import java.sql.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import com.tibco.plugin.java.JavaConnectionAccessor;
+public class ProcessDefinitionJavaCode{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected Object db_conn = null;
+	protected String connection_status = "";
+	public Object getdb_conn() {
+		return db_conn;
+	}
+	public void setdb_conn(Object val) {
+		db_conn = val;
+	}
+	public String getconnection_status() {
+		return connection_status;
+	}
+	public void setconnection_status(String val) {
+		connection_status = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public ProcessDefinitionJavaCode() {
+	}
+
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : Object db_conn
+	Out : String connection_status
+* Available Variables: DO NOT MODIFY *****/
+
+StringWriter sw = new StringWriter();
+PrintWriter pw = new PrintWriter(sw);
+
+
+if (db_conn != null) {
+try{
+
+	Connection conn = ((JavaConnectionAccessor)db_conn).getDBConnection();
+
+	PreparedStatement update = conn.prepareStatement("insert into SPCODEVGROUPID values(?,?)");
+	update.setString(1,"Hi");
+        update.setString(2, "Abhash");
+	update.executeUpdate();
+}
+catch(Exception e){
+			e.printStackTrace(pw);
+			
+	connection_status=sw.toString();
+}
+}
+}
+}
+</fullsource>
+            <outputData>
+                <row>
+                    <fieldName>connection_status</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </outputData>
+            <inputData>
+                <row>
+                    <fieldName>db_conn</fieldName>
+                    <fieldType>ObjectReference</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </inputData>
+            <byteCode>
+                <class>
+                    <name>ProcessDefinitionJavaCode</name>
+                    <byteCode>yv66vgAAADIAUwkAFAAvCQAUADAKABUAMQgAMgcAMwoABQAxBwA0CgAHADUHADYLAAkANwgAOAsAOQA6CAA7CwA8AD0IAD4LADwAPwcAQAoAEQBBCgAFAEIHAEMHAEQBAAdkYl9jb25uAQASTGphdmEvbGFuZy9PYmplY3Q7AQARY29ubmVjdGlvbl9zdGF0dXMBABJMamF2YS9sYW5nL1N0cmluZzsBAApnZXRkYl9jb25uAQAUKClMamF2YS9sYW5nL09iamVjdDsBAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQAKc2V0ZGJfY29ubgEAFShMamF2YS9sYW5nL09iamVjdDspVgEAFGdldGNvbm5lY3Rpb25fc3RhdHVzAQAUKClMamF2YS9sYW5nL1N0cmluZzsBABRzZXRjb25uZWN0aW9uX3N0YXR1cwEAFShMamF2YS9sYW5nL1N0cmluZzspVgEABjxpbml0PgEAAygpVgEABmludm9rZQEADVN0YWNrTWFwVGFibGUHAEMHADMHADQHAEABAApFeGNlcHRpb25zAQAKU291cmNlRmlsZQEAHlByb2Nlc3NEZWZpbml0aW9uSmF2YUNvZGUuamF2YQwAFgAXDAAYABkMACQAJQEAAAEAFGphdmEvaW8vU3RyaW5nV3JpdGVyAQATamF2YS9pby9QcmludFdyaXRlcgwAJABFAQAsY29tL3RpYmNvL3BsdWdpbi9qYXZhL0phdmFDb25uZWN0aW9uQWNjZXNzb3IMAEYARwEAJmluc2VydCBpbnRvIFNQQ09ERVZHUk9VUElEIHZhbHVlcyg/LD8pBwBIDABJAEoBAAJIaQcASwwATABNAQAGQWJoYXNoDABOAE8BABNqYXZhL2xhbmcvRXhjZXB0aW9uDABQAFEMAFIAIQEAK1Byb2Nlc3NEZWZpbml0aW9uL1Byb2Nlc3NEZWZpbml0aW9uSmF2YUNvZGUBABBqYXZhL2xhbmcvT2JqZWN0AQATKExqYXZhL2lvL1dyaXRlcjspVgEAD2dldERCQ29ubmVjdGlvbgEAFygpTGphdmEvc3FsL0Nvbm5lY3Rpb247AQATamF2YS9zcWwvQ29ubmVjdGlvbgEAEHByZXBhcmVTdGF0ZW1lbnQBADAoTGphdmEvbGFuZy9TdHJpbmc7KUxqYXZhL3NxbC9QcmVwYXJlZFN0YXRlbWVudDsBABpqYXZhL3NxbC9QcmVwYXJlZFN0YXRlbWVudAEACXNldFN0cmluZwEAFihJTGphdmEvbGFuZy9TdHJpbmc7KVYBAA1leGVjdXRlVXBkYXRlAQADKClJAQAPcHJpbnRTdGFja1RyYWNlAQAYKExqYXZhL2lvL1ByaW50V3JpdGVyOylWAQAIdG9TdHJpbmcAIQAUABUAAAACAAQAFgAXAAAABAAYABkAAAAGAAEAGgAbAAEAHAAAAB0AAQABAAAABSq0AAGwAAAAAQAdAAAABgABAAAADQABAB4AHwABABwAAAAiAAIAAgAAAAYqK7UAAbEAAAABAB0AAAAKAAIAAAAQAAUAEQABACAAIQABABwAAAAdAAEAAQAAAAUqtAACsAAAAAEAHQAAAAYAAQAAABMAAQAiACMAAQAcAAAAIgACAAIAAAAGKiu1AAKxAAAAAQAdAAAACgACAAAAFgAFABcAAQAkACUAAQAcAAAANAACAAEAAAAQKrcAAyoBtQABKhIEtQACsQAAAAEAHQAAABIABAAAABkABAAKAAkACwAPABoAAQAmACUAAgAcAAAAyQADAAUAAABduwAFWbcABky7AAdZK7cACE0qtAABxgBHKrQAAcAACbkACgEATi0SC7kADAIAOgQZBAQSDbkADgMAGQQFEg+5AA4DABkEuQAQAQBXpwARTi0stgASKiu2ABO1AAKxAAEAGABLAE4AEQACAB0AAAA2AA0AAAAiAAgAIwARACYAGAApACUAKwAvACwAOQAtAEMALgBLADQATgAwAE8AMQBUADMAXAA2ACcAAAAWAAL/AE4AAwcAKAcAKQcAKgABBwArDQAsAAAABAABABEAAQAtAAAAAgAu</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <db_conn>
+                    <xsl:value-of select="$JDBC-Get-Connection/output/JavaConnectionAccessor"/>
+                </db_conn>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Get Connection</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Get Connection</pd:from>
+        <pd:to>Java Code</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Java Code</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

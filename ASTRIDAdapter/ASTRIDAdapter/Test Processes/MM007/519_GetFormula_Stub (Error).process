@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086801773556" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802560428" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1087368660275">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086801773556" schemaLocation="/XSDSchemas/EnginAdapter/Request/GetFormula.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802560428" schemaLocation="/XSDSchemas/EnginAdapter/Response/GetFormula.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/519_GetFormula_Stub (Error).process</pd:name>
+    <pd:startName>GetFormula Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetFormula Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>96</pd:x>
+        <pd:y>91</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Order.EnginAdapter.Request.GetFormula.1</subject>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx:GetFormula"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>389</pd:endX>
+    <pd:endY>81</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to GetFormula Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>252</pd:x>
+        <pd:y>91</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetFormula Subscriber</eventSource>
+            <xsdString ref="pfx2:GetFormula"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="&quot;519&quot;"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <ns:MID>
+                            <xsl:value-of select="&quot;519.30&quot;"/>
+                        </ns:MID>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="&quot;REPLY&quot;"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/ns:CMH/ns:OBJECT"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/ns:CMH/ns:VERSION"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <xsl:copy-of select="$GetFormula-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING"/>
+                    </ns:CMH>
+                    <RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;2&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;Some error&quot;"/>
+                        </xsl:attribute>
+                    </RESULT_STATUS>
+                    <TROUBLE_REPORT>
+                        <ns2:FORMULA_ID>
+                            <xsl:value-of select="&quot;XXX&quot;"/>
+                        </ns2:FORMULA_ID>
+                        <xsl:if test="$GetFormula-Subscriber/ActivityOutput/body/MM007_URGENCY_FLAG">
+                            <ns2:MM007C_TROUBLE_URGENCY_FLAG>
+                                <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/MM007_URGENCY_FLAG"/>
+                            </ns2:MM007C_TROUBLE_URGENCY_FLAG>
+                        </xsl:if>
+                        <xsl:if test="$GetFormula-Subscriber/ActivityOutput/body/MM007_URGENCY_ID">
+                            <ns2:MM007C_TROUBLE_URGENCY_ID>
+                                <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/MM007_URGENCY_ID"/>
+                            </ns2:MM007C_TROUBLE_URGENCY_ID>
+                        </xsl:if>
+                        <xsl:if test="$GetFormula-Subscriber/ActivityOutput/body/MM007_PRODUCT_TYPE_CODE">
+                            <ns2:MM007_PRODUCT_TYPE_CODE>
+                                <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/MM007_PRODUCT_TYPE_CODE"/>
+                            </ns2:MM007_PRODUCT_TYPE_CODE>
+                        </xsl:if>
+                        <xsl:if test="$GetFormula-Subscriber/ActivityOutput/body/MM007_SERVICE_HOURS_CODE">
+                            <ns2:MM007_SERVICE_HOURS_CODE>
+                                <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/MM007_SERVICE_HOURS_CODE"/>
+                            </ns2:MM007_SERVICE_HOURS_CODE>
+                        </xsl:if>
+                        <xsl:if test="$GetFormula-Subscriber/ActivityOutput/body/MM007_SERVICE_RESPONSE_WINDOW">
+                            <ns2:MM007_SERVICE_RESPONSE_WINDOW>
+                                <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/MM007_SERVICE_RESPONSE_WINDOW"/>
+                            </ns2:MM007_SERVICE_RESPONSE_WINDOW>
+                        </xsl:if>
+                        <xsl:if test="$GetFormula-Subscriber/ActivityOutput/body/MM007_TROUBLE_FLAG">
+                            <ns2:MM007_TROUBLE_URGENCY_FLAG>
+                                <xsl:value-of select="$GetFormula-Subscriber/ActivityOutput/body/MM007_TROUBLE_FLAG"/>
+                            </ns2:MM007_TROUBLE_URGENCY_FLAG>
+                        </xsl:if>
+                        <ns2:REPAIR_DEADLINE_DATE_TIME>
+                            <xsl:value-of select="&quot;2005-06-21T12:00:00&quot;"/>
+                        </ns2:REPAIR_DEADLINE_DATE_TIME>
+                    </TROUBLE_REPORT>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetFormula Subscriber</pd:from>
+        <pd:to>Reply to GetFormula Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to GetFormula Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

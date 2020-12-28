@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.FindCustomer" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FindCustomer" targetNamespace="urn:IKKAdapter.FindCustomer">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.FindCustomer">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/FindCustomer.xsd"/>
+            <xsd:element name="FindCustomerRequest" type="ikk:FindCustomerRequest"/>
+            <xsd:element name="FindCustomerResponse" type="ikk:FindCustomerResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="FindCustomerRequest">
+        <part element="ikk:FindCustomerRequest" name="parameters"/>
+    </message>
+    <message name="FindCustomerResponse">
+        <part element="ikk:FindCustomerResponse" name="parameters"/>
+    </message>
+    <portType name="FindCustomerPortType">
+        <operation name="FindCustomer">
+            <input message="ikk:FindCustomerRequest"/>
+            <output message="ikk:FindCustomerResponse"/>
+        </operation>
+    </portType>
+    <binding name="FindCustomerSoapBinding" type="ikk:FindCustomerPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="FindCustomer">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="FindCustomerService">
+        <port binding="ikk:FindCustomerSoapBinding" name="FindCustomerSoap">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/FindCustomer"/>
+        </port>
+    </service>
+</definitions>

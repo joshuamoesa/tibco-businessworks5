@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by M. Claus (KPN Telecom) -->
+<!-- Author John Poyser  -->
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Atos Origin (Atos Origin) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="../Location/PropertyAddress_Type.xsd"/>
+	<xsd:include schemaLocation="../Customer/Customer_Type.xsd"/>
+	<xsd:include schemaLocation="../Common/Common_Types.xsd"/>
+	<xsd:include schemaLocation="../Party/Party_Type.xsd"/>
+	<xsd:include schemaLocation="../Unallocated/Unallocated_Types.xsd"/>
+	<xsd:include schemaLocation="../Product/Product_Type.xsd"/>
+
+	<!--=============================================================-->
+	<xsd:complexType name="Order_Type">
+		<xsd:sequence>
+			<xsd:element name="ORDER_HEADER" type="OrderHeader_Type">
+				<xsd:annotation>
+					<xsd:documentation>General information about the entire order.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ORDER_ITEM" type="OrderItem_Type" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Orders must always contain at least one OrderItem.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OrderItem_Type">
+		<xsd:sequence>
+			<xsd:element name="ORDER_ITEM_HEADER" type="OrderItemHeader_Type">
+				<xsd:annotation>
+					<xsd:documentation>Contains identification key, item type and state info.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PRODUCT_CATEGORY" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The product category indicates the main type of products the order item is about.This field is mostly used for routing purposes. ## Indicates the function category of the product.</xsd:documentation>
+					<xsd:documentation>Note that the product category of all order items must be the same. Generic order will not split.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>Each Order Item is associated with a Product Category. This element contains a a choice group from which a single choice must be made. Several Product_Type definitions exist that together form the entire scala of available products. </xsd:documentation>
+					<xsd:documentation source="Design">The product is in the generic order an anyType and allows all information. The endpoints will have specific product xsd's.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="Product_Type"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CONTRACT" type="Contract_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>agreement details</xsd:documentation>
+					<xsd:documentation source="design">Will be removed in the next release
+</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OrderHeader_Type">
+		<xsd:sequence>
+			<xsd:element name="ORDER_TYPE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies a type for the order. PREQUALIFY, RESERVE, EXCECUTE, MODIFY, CANCEL, PAUSE, RESUME, STATUS_UPDATE</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:maxLength value="255"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="ORDER_ACTION" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies an action for the order. In general, the kind of action is initiated by the requesting service (eg create, read, update, delete).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COMMERCIAL_PRODUCT_CATEGORY">
+				<xsd:annotation>
+					<xsd:documentation>Eg. ZIPB IP, KPN MOBILE, MULTIPLAY Indicates the commercial type of the product being deliverd.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ORDER_ID" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The unique identifier of the order. Note that when assigning order id's extra precaution must be taken to ensure the uniqueness of the id.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:maxLength value="40"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="CUSTOMER_ID" type="CustomerId_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The identifier of the customer that will be the benificiary of the order. The customer is just another role being played by a party and therefore there are various possible id's.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EXTERNAL_REFERENCE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Reference code given to the order but then created by the customer (entity placing the order). This field should always be used in communication to the customer, since this is the only reference to the order that a customer might have. Note that this field could contain an id, but it is not required to be unique in any way. Note that this field is a special (and frequently occurring) case of the external_references structure.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:maxLength value="32"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="ORDER_STATUS" minOccurs="0">
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element name="ORDER_STATUS" type="orderState_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>String constants that define the states of the order e.g. InProgress, Cancelled, etc. </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ERROR_CODE" minOccurs="0"/>
+						<xsd:element name="ERROR_DESCRIPTION" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The ERROR_DESCRIPTION is meant to give more meaning to the ERROR_CODE. It gives a brief description of what went wrong.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ERROR_COMMENT" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The ERROR_COMMENT will contain comments that could be shown to a human user (customer, customer services agent, technical operations, etc).</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:sequence minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Temporary structure for Eclipse orders</xsd:documentation>
+							</xsd:annotation>
+							<xsd:element name="DELIVERY_STATUS_CODE">
+								<xsd:annotation>
+									<xsd:documentation>"3"
+"9"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:maxLength value="10"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+							<xsd:element name="DELIVERY_STATUS_DESCRIPTION">
+								<xsd:annotation>
+									<xsd:documentation>"Geleverd"
+"Afgewezen"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:maxLength value="25"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+							<xsd:element name="DELIVERY_STATUS_ADDITIONAL_INFORMATION" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="STATUS_CODE">
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:maxLength value="25"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+							<xsd:element name="STATUS_DESCRIPTION">
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:maxLength value="1000"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:element name="LAST_STATUS_CHANGE_DATE" type="xsd:dateTime" minOccurs="0"/>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CREATION_DATE" type="xsd:dateTime">
+				<xsd:annotation>
+					<xsd:documentation>Date the message was created by the application - may be different from when submitted to control layer</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DUE_DATE" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Date when the (entire) order has to be complete</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DELIVERY_ADDRESS" type="Address_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The address to which the goods must be supplied (if any)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ORDER_PRIORITY" type="xsd:unsignedByte" default="4" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Order priority, may be mapped to JMS priority - default is 4 (normal)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OTHER_REFERENCE" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Used to convey external identifiers or references to this order, these can be used for communication with external systems.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ORIGIN">
+							<xsd:annotation>
+								<xsd:documentation>The origin of the reference is indicated by the origin field. </xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:maxLength value="20"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="REFERENCE">
+							<xsd:annotation>
+								<xsd:documentation>The extenral reference itself. the field origin can be used to ensure that the proper reference is used in a specific context.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:maxLength value="32"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PARENT_ORDER" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>An optional sequence of orders that may have triggered this order. These identifiers can be used to trace the order to its root(s).</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PARENT_SYSTEM_REFERENCE" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>A refernece to the parent order system</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PARENT_ORDER_ID">
+							<xsd:annotation>
+								<xsd:documentation>The identifier of te parent.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+					<xsd:attribute name="sequenceNumber" type="xsd:positiveInteger" use="required">
+						<xsd:annotation>
+							<xsd:documentation>The sequence_number is required to make sure that when mapping to and from the sequence of PARENT_ORDER_ID elements the order may be modified unintentionally. Please note that parsers do not always respect the order of elements in sequences.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SALES_CHANNEL" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SALES_CHANNEL_ID" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="SALES_CHANNEL_NAME" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="SALES_PERSON" type="xsd:string" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OrderItemHeader_Type">
+		<xsd:sequence>
+			<xsd:element name="ORDER_ITEM_TYPE">
+				<xsd:annotation>
+					<xsd:documentation>E.g. NEW_INSTALLATION_ZIPB etc.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string"/>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="ORDER_ITEM_ACTION" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies an action for the order item. In general, the kind of action is initiated by the requesting service (eg create, read, update, delete).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ORDER_ITEM_ID" type="xsd:integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>to identify the order line</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EXTERNAL_REFERENCE" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A reference to the order assigned by the supplying system.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ORDER_ITEM_STATUS" type="orderItemState_Type" minOccurs="0"/>
+			<xsd:element name="DUE_DATE" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Date when the order item is due.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="REMARK" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TYPE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="REMARK">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:maxLength value="1024"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!--=============================================================-->
+	<xsd:complexType name="OrderStatus_Type">
+		<xsd:sequence>
+			<xsd:element name="ORDER_HEADER" type="OrderHeader_Type"/>
+			<xsd:element name="ORDER_ITEM" type="OrderItemStatus_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OrderItemStatus_Type">
+		<xsd:sequence>
+			<xsd:element name="ORDER_ITEM_HEADER" type="OrderItemHeader_Type">
+				<xsd:annotation>
+					<xsd:documentation>Contains identification key, item type and state info.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PRODUCT_CATEGORY" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>The product category indicate the main type of products the order item is about.This field is mostly used for routing purposes.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PRODUCT" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Each Order Item is associated with a Product Category. This element contains a choice group from which a single choice must be made. Several Product_Type definitions exist that together form the entire scala of available products. </xsd:documentation>
+					<xsd:documentation source="Design">The product is in the generic order an anyType and allows all information. The endpoints will have specific product xsd's.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="Product_Type"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!--=============================================================-->
+	<xsd:simpleType name="orderState_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Cancelled">
+				<xsd:annotation>
+					<xsd:documentation>The order has been cancelled and is no longer being processed. This is a final state from an order will rarely regress into other states.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="InProgress">
+				<xsd:annotation>
+					<xsd:documentation>The order is being processed and pending completion. It may be awaiting completion of other orders, confirmation from the customer, etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="Suspended">
+				<xsd:annotation>
+					<xsd:documentation>The order has been suspended, meaning that execution is halted until further notice. The order is still viable for completion but may require human intervention before continuation is possible.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="Complete">
+				<xsd:annotation>
+					<xsd:documentation>The order is complete and all order items have been fulfilled sucessfully.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="Rejected">
+				<xsd:annotation>
+					<xsd:documentation>The order has been rejected by the process responsible for handling orders. The reason for rejection may vary and will be stated in other fields.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="Failed">
+				<xsd:annotation>
+					<xsd:documentation>The order has failed. This is a final state in which the net-result of the order constitutes no change. (the order has failed completely and all effects have been undone)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="orderItemState_Type">
+		<xsd:restriction base="orderState_Type"/>
+	</xsd:simpleType>
+
+	<!--=============================================================-->
+	<xsd:complexType name="Contract_Type">
+		<xsd:sequence>
+			<xsd:element name="CONTRACT_NUMBER" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CONTRACT_PERIOD" type="ValidityPeriod_Type" minOccurs="0"/>
+			<xsd:element name="CONTRACT_VERSION" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BusinessParticipants_Type">
+		<xsd:sequence>
+			<xsd:element name="BusinessInteractionRole" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>e.g Administrator, contact etc</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ID" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>party id</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element name="CENTRAL_CUSTOMER_ID" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Fixed customers are identified by their CKR number</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="OtherID" type="xsd:string" minOccurs="0"/>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Description" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>additional infotrmation abouit this contact</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PrimaryContact" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>is this the primary contact role or a backup</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Type" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CONTACT_MEDIUM" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ContactPostalAddress" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+									<xsd:element name="ADDRESS" type="UnformatAddress_Type" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="Telephone" type="PhoneNumber_Type" minOccurs="0"/>
+						<xsd:element name="Mobile" type="PhoneNumber_Type" minOccurs="0"/>
+						<xsd:element name="Fax" type="PhoneNumber_Type" minOccurs="0"/>
+						<xsd:element name="EmailAddress" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="Validity" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>valid for</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="FromDate" type="xsd:date" minOccurs="0"/>
+									<xsd:element name="ToDate" type="xsd:date" minOccurs="0"/>
+									<xsd:element name="Status" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="Preferred_Channel" minOccurs="0">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:enumeration value="Post"/>
+									<xsd:enumeration value="Email"/>
+									<xsd:enumeration value="Fax"/>
+									<xsd:enumeration value="Mobile"/>
+									<xsd:enumeration value="Fixed"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Status" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>ACtive, In-Active, Longtem Leave; Short term Leave</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

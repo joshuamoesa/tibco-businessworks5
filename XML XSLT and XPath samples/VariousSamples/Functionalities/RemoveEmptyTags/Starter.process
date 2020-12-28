@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.ziggo.nl/example">
+    <xsd:import namespace="http://www.ziggo.nl/example" schemaLocation="/Functionalities/RemoveEmptyTags/Resources/XSD/Schema.xsd"/>
+    <pd:name>Functionalities/RemoveEmptyTags/Starter.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:input"/>
+    <pd:startX>87</pd:startX>
+    <pd:startY>108</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>510</pd:endX>
+    <pd:endY>110</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1390905235887</pd:targetNamespace>
+    <pd:activity name="1. Parse RemoveEmptyTags result">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>374</pd:x>
+        <pd:y>116</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:input"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$RemoveEmptyTags/*"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="1 RemoveEmptyTags">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>216</pd:x>
+        <pd:y>107</pd:y>
+        <config>
+            <processName>/Functionalities/RemoveEmptyTags/RemoveEmptyTags_all.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/pfx:input"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>1 RemoveEmptyTags</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>1 RemoveEmptyTags</pd:from>
+        <pd:to>1. Parse RemoveEmptyTags result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>1. Parse RemoveEmptyTags result</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>&lt;?xml version = "1.0" encoding = "UTF-8"?&gt;
+&lt;!-- EXAMPLE 1--&gt;
+&lt;root&gt;
+   &lt;paramRoot&gt;Hello&lt;/paramRoot&gt;
+      &lt;groupList&gt;
+         &lt;group&gt;
+            &lt;paramGroup/&gt;
+         &lt;/group&gt;
+         &lt;group&gt;
+            &lt;paramGroup&gt;Joshua&lt;/paramGroup&gt;
+         &lt;/group&gt;
+      &lt;/groupList&gt;
+&lt;/root&gt;</pd:description>
+        <pd:x>242</pd:x>
+        <pd:y>442</pd:y>
+        <pd:width>316</pd:width>
+        <pd:height>211</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (2)</pd:name>
+        <pd:description>&lt;?xml version = "1.0" encoding = "UTF-8"?&gt;
+&lt;input xmlns = "http://www.ziggo.nl/example"&gt;
+   &lt;customerNumber/&gt;
+   &lt;customerName&gt;Joshua&lt;/customerName&gt;
+   &lt;customerAge xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:nil = "true"/&gt;
+&lt;/input&gt;</pd:description>
+        <pd:x>688</pd:x>
+        <pd:y>405</pd:y>
+        <pd:width>534</pd:width>
+        <pd:height>118</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

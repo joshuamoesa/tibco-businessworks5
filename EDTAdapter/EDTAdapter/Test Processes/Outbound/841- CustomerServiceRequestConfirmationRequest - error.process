@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:B2B_CustomerServiceRequest_Confirmation" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org">
+    <wsdl:import namespace="urn:B2B_CustomerServiceRequest_Confirmation" location="/WSDL/Outbound/B2B_CustomerServiceRequest_Confirmation.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/Outbound/841- CustomerServiceRequestConfirmationRequest - error.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx:B2B_CustomerServiceRequest_ConfirmationService</service>
+            <servicePort>B2B_CustomerServiceRequest_ConfirmationSoap</servicePort>
+            <operation>Create</operation>
+            <soapAction>"urn:B2B_CustomerServiceRequest_Confirmation/Create"</soapAction>
+            <endpointURL>http://INVKG0016:48093/EDTAdapter/Processes/Outbound/CustomerServiceRequestConfirmation</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:Create>
+                    <ns:GUID>
+                        <xsl:value-of select="&quot;GUID&quot;"/>
+                    </ns:GUID>
+                    <ns:managed_object_class>
+                        <xsl:value-of select="&quot;mob&quot;"/>
+                    </ns:managed_object_class>
+                    <ns:message_origination_domain>
+                        <xsl:value-of select="&quot;itor&quot;"/>
+                    </ns:message_origination_domain>
+                    <ns:message_destination_domain>
+                        <xsl:value-of select="&quot;itde&quot;"/>
+                    </ns:message_destination_domain>
+                    <ns:message_creation_time>
+                        <xsl:value-of select="&quot;1999-05-31T13:20:00-05:00&quot;"/>
+                    </ns:message_creation_time>
+                    <ns:msg_code>
+                        <xsl:value-of select="12"/>
+                    </ns:msg_code>
+                    <ns:error_code>
+                        <xsl:value-of select="0"/>
+                    </ns:error_code>
+                    <ns:error_description>
+                        <xsl:value-of select="&quot;No Error&quot;"/>
+                    </ns:error_description>
+                    <ns:customer_service_request_reference_number>
+                        <xsl:value-of select="123"/>
+                    </ns:customer_service_request_reference_number>
+                    <ns:customer_service_request_number>
+                        <xsl:value-of select="&quot;csrn&quot;"/>
+                    </ns:customer_service_request_number>
+                    <ns:event_time>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </ns:event_time>
+                </pfx:Create>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

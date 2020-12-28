@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Roland Stulemeijer (KPN Telecom) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.kpn.com/EAI/fixed/0399_GetPhoneNumberInformation/1.0/Request"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>EAI Request BODY element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CUSTOMER">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CUSTOMER_ID">
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="ID_CKR" type="xs:string" nillable="true">
+											<xs:annotation>
+												<xs:documentation>CKR Customer identification  from the request message (nillable)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PROPERTY_ADDRESS">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DUTCH_POSTCODE_NUMERIC">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="4"/>
+										<xs:maxLength value="4"/>
+										<xs:pattern value="[0-9]{4}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DUTCH_POSTCODE_LETTERS">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="2"/>
+										<xs:maxLength value="2"/>
+										<xs:pattern value="[A-Z]{2}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="HOUSE_NUMBER">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="5"/>
+										<xs:pattern value="[a-z|A-Z|0-9]*"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="HOUSE_NUMBER_EXTENSION" minOccurs="0">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="4"/>
+										<xs:pattern value="[ -~]*"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PHONE_NUMBER" maxOccurs="7">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="UNFORMATTED">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="25"/>
+										<xs:pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

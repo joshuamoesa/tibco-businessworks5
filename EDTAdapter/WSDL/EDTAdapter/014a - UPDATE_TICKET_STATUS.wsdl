@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:UpdateTicketStatusRequest" xmlns:s2="http://tempuri.org" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:UpdateTicketStatusRequest">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:UpdateTicketStatusRequest">
+            <xsd:element name="UpdateTicketStatus" type="s:KSD_UpdateTicketStatus"/>
+            <xsd:complexType name="KSD_UpdateTicketStatus">
+                <xsd:sequence>
+                    <xsd:element name="ACCEPT_DATE_TIME" type="xsd:string"/>
+                    <xsd:element name="CUSTOMER_REF_NO" type="xsd:string"/>
+                    <xsd:element name="ERROR_CODE" type="xsd:string"/>
+                    <xsd:element name="ERROR_DESCRIPTION" type="xsd:string"/>
+                    <xsd:element name="EXTERNAL_CUSTOMER_REF_NO" type="xsd:string"/>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="MM007_SERVICE_ID" type="xsd:string"/>
+                    <xsd:element name="MM007_SOURCE" type="xsd:string"/>
+                    <xsd:element name="MM007_TARGET" type="xsd:string"/>
+                    <xsd:element name="STATUS_CODE" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="UpdateTicketStatusResponse" type="s2:KSD_TicketConfirmation"/>
+        </xsd:schema>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org">
+            <xsd:complexType name="KSD_TicketConfirmation">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="UpdateTicketStatusRequestMsg">
+        <part element="s:UpdateTicketStatus" name="parameters"/>
+    </message>
+    <message name="UpdateTicketStatusResponseMsg">
+        <part element="s:UpdateTicketStatusResponse" name="parameters"/>
+    </message>
+    <portType name="UPDATE_TICKET_STATUSPortType">
+        <operation name="UpdateTicketStatus">
+            <input message="s:UpdateTicketStatusRequestMsg"/>
+            <output message="s:UpdateTicketStatusResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="UPDATE_TICKET_STATUSSoapBinding" type="s:UPDATE_TICKET_STATUSPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="UpdateTicketStatus">
+            <soap:operation soapAction="urn:UPDATE_TICKET_STATUS/UpdateTicketStatus" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="UPDATE_TICKET_STATUS_SERVICE">
+        <port binding="s:UPDATE_TICKET_STATUSSoapBinding" name="UPDATE_TICKET_STATUSSoap">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/UpdateTicketStatus"/>
+        </port>
+    </service>
+</definitions>

@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by NLBSZSF2J (KPN Telecom) -->
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Atos Origin (Atos Origin) -->
+<!-- KPN EAI Party_Type.xsd
+Version 0.1
+Last edit date: 11/11/2006
+Revision history: 
+11/11/2006, processed kpn fixed data requirements and spell corrections
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="../Common/Common_Types.xsd"/>
+	<xsd:include schemaLocation="../Location/PropertyAddress_Type.xsd"/>
+	<xsd:complexType name="Party_Type">
+		<xsd:annotation>
+			<xsd:documentation>An entity that may be an Individual or an Organisation</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="PARTY_ID" type="PartyId_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The PARTY_ID is a unique identifier for a party. There are several identifiers for parties possible, therefore the PARTY_ID is a list of these types, all them optional (because not all of them have to apply simumtaneously)</xsd:documentation>
+					<xsd:documentation>The PARTY_ID is a unique identifier for a party. There are several identifiers for parties possible, therefore the PARTY_ID is a list of these types, all them optional (because not all of them have to apply simumtaneously)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PARTY_NAME" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A full name for the PARTY given by KPN (so not the official name)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PARTY_STATUS" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>This element contains fields referring to the business status of the Party.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DO_NOT_DELIVER" type="xsd:boolean" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>When true, the Party should not be allowed to purchase goods as a Customer (see also PartyRole).</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="VALIDITY_PERIOD" type="ValidityPeriod_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A VALIDITY_PERIOD for the PARTY.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LEGAL_FORM" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The LEGAL_FORM is an, in the eyes of the law, the type of legal entity (such as individual, partnership, proprietorship, corporation, association or other types of organization) that has, in the eyes of the law, the capacity to make a contract or an agreement and the abilities to assume an obligation and to pay off its debts. A PARTY, under the law, is responsible for its actions and can be sued for damages, in which case the LEGAL_FORM is used to determine the right course of actions.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="LEGAL_FORM_CODE" type="legalFormCode_Type" default="00">
+							<xsd:annotation>
+								<xsd:documentation>A code indicating the legal form of the PARTY.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="LEGAL_FORM_NAME" default="onbekend" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>A human readable form for the LEGAL_FORM_CODE.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:simpleContent>
+									<xsd:extension base="legalFormName_Type">
+										<xsd:attribute name="language" type="xsd:language" default="nl"/>
+									</xsd:extension>
+								</xsd:simpleContent>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="LEGAL_FORM_CHECK" type="xsd:boolean" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>To indicate that the legal form code has been verified</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:annotation>
+					<xsd:documentation>Note that the choice made here is co-dependend on the LEGAL_FORM/LEGAL_FORM_CODE.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:element name="INDIVIDUAL" type="Individual_Type"/>
+				<xsd:element name="ORGANISATION" type="Organisation_Type"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="legalFormCode_Type">
+		<xsd:annotation>
+			<xsd:documentation>Enumeration of legal form codes </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="2"/>
+			<xsd:whiteSpace value="collapse"/>
+			<xsd:enumeration value="00">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">onbekend'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="01">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">eenmanszaak'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="05">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">rederij'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="10">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">vennootschap onder firma (VOF)'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="20">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">commanditaire vennootschap (CV)'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="40">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">besloten vennootschap (BV)'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="50">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">naamloze vennootschap (NV)'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="60">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">cooperatieve vereniging'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="70">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">vereniging (ingeschreven)'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="74">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">stichting'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="80">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">onderlinge waarborg maatschappij'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="90">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">nevenv van een buitenl hoofdzaak'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="BT">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">buitenl rechtspersoon z vest in NL'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KG">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">kerkgenootschap'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MT">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">maatschap'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NP">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">natuurlijk persoon'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PR">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">publiekrechtelijk lichaam (overheid)'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="SV">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">samenwerkingsverband'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="VG">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">vereniging, niet ingeschreven'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="legalFormName_Type">
+		<xsd:annotation>
+			<xsd:documentation>Enumeration of legal form names</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:whiteSpace value="preserve"/>
+			<xsd:enumeration value="onbekend">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='00'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="eenmanszaak">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='01'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="rederij">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='05'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="vennootschap onder firma (VOF)">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='10'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="commanditaire vennootschap (CV)">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='20'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="besloten vennootschap (BV)">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='40'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="naamloze vennootschap (NV)">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='50'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="cooperatieve vereniging">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='60'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="vereniging (ingeschreven)">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='70'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="stichting">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='74'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="onderlinge waarborg maatschappij">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='80'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="nevenv van een buitenl hoofdzaak">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='90'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="buitenl rechtspersoon z vest in NL">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='BT'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="kerkgenootschap">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='KG'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="maatschap">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='MT'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="natuurlijk persoon">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='NP'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="publiekrechtelijk lichaam (overheid)">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='PR'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="samenwerkingsverband">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='SV'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="vereniging, niet ingeschreven">
+				<xsd:annotation>
+					<xsd:documentation source="CKR_HAKO">Corresponding to LEGAL_FORM_CODE='VG'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="PartyId_Type">
+		<xsd:sequence>
+			<xsd:element name="TIN_CODE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The TIN_CODE is an identifier for a PARTY wihin the customer administration of KPN Fixed.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:length value="10"/>
+						<xsd:pattern value="[0-9]{10}"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="ID_MCCS" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="IndividualIdentification_Type">
+		<xsd:choice>
+			<xsd:element name="PASSPORT">
+				<xsd:annotation>
+					<xsd:documentation>Any passport the individual may have produces upon request of identification. The list may contain old passports if present.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DOCUMENT_NUMBER">
+							<xsd:annotation>
+								<xsd:documentation>The number of the passport</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:maxLength value="20"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="SURNAME" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The surname of the individual as it appears on the passport</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="GIVEN_NAMES" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The given names of the individual as they appears on the passport</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DATE_OF_BIRTH" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The date of birth of the individual as it appears on the passport</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PLACE_OF_BIRTH" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The place of birth of the individual as it appears on the passport</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="NATIONALITY" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The nationality of the individual as it appears on the passport</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string"/>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="AUTHORITY" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The name of the authority who issued the passport as it appears on the passport</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string"/>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="ISSUE_DATE" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The issue date of the passport as it appears on the passport</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DATE_OF_EXPIRY" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The expiration date of the passport as it appears on the passport</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RENEWED_DATE_OF_EXPIRY" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The date of expiration of the passport after it has been renewed as it appears on the passport (most likely on another page)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PLACE_OF_ISSUE" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The place of issueing the passport.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NATIONAL_IDENTITY_CARD">
+				<xsd:annotation>
+					<xsd:documentation>Any identity card the individual may have produced upon request of identification. The list may contain old identity cards if present.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DOCUMENT_NUMBER">
+							<xsd:annotation>
+								<xsd:documentation>The number of the identity card</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:maxLength value="20"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="SURNAME" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The surname of the individual as it appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="GIVEN_NAMES" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The given names of the individual as they appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DATE_OF_BIRTH" type="xsd:date">
+							<xsd:annotation>
+								<xsd:documentation>The date of birth of the individual as it appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PLACE_OF_BIRTH" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The place of birth of the individual as it appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="NATIONALITY" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The nationality of the individual as it appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string"/>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="AUTHORITY">
+							<xsd:annotation>
+								<xsd:documentation>The name of the authority who issued the identity card as it appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string"/>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="ISSUE_DATE" type="xsd:date">
+							<xsd:annotation>
+								<xsd:documentation>The issue date of the identity card as it appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DATE_OF_EXPIRY" type="xsd:date">
+							<xsd:annotation>
+								<xsd:documentation>The expiration date of the identity card as it appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RENEWED_DATE_OF_EXPIRY" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The date of expiration of the identity card after it has been renewed as it appears on the identity card</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PLACE_OF_ISSUE" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The place of issueing the national identity card.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="DRIVING_LICENCE">
+				<xsd:annotation>
+					<xsd:documentation>Any driving licence the individual may have produced upon request of identification. The list may contain old driving licences if present.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DOCUMENT_NUMBER" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The number of the driving licence.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="SURNAME" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The surname of the individual as it appears on the driving licence.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="GIVEN_NAMES" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The given names of the individual as they appears on the driving licence.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DATE_OF_BIRTH" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The date of birth of the individual as it appears on the driving licence.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="AUTHORITY" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The name of the authority who issued the driving licence as it appears on the driving licence.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string"/>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="ISSUE_DATE" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The issue date of the driving licence as it appears on the driving licence.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RENEWED_DATE_OF_EXPIRY" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The date of expiration of the driving licence after it has been renewed as it appears on the driving licence.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DATE_OF_EXPIRY" type="xsd:date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The expiration date of the driving licence as it appears on the driving licence.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PLACE_OF_ISSUE" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The place of issueing the driving licence.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="Individual_Type">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0">
+				<xsd:element name="FORMATTED_NAME">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="ARISTOCRATIC_TITLE" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="ACADEMIC_TITLE" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="INITIALS" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="FAMILY_NAME_PREFIX" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="FAMILY_NAME" type="xsd:string" minOccurs="0"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="UNFORMATTED_NAME">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="COMPLETE_NAME" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>A complete and formatted name of the INDIVIDUAL, note that information in this field cannot be split ito its separate components.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="xsd:string">
+											<xsd:attribute name="sequence_number" type="xsd:positiveInteger" use="required">
+												<xsd:annotation>
+													<xsd:documentation>The sequence_number is required to make sure that when mapping to and from the sequence of COMPLETE_NAME elements the order may be modified unintentionally. Please note that parsers do not always respect the order of elements in sequences.</xsd:documentation>
+												</xsd:annotation>
+											</xsd:attribute>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="DATE_OF_BIRTH" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The DATE_OF_BIRTH of the INDIVIDUAL. See also the DATE_OF_BIRTH_CHECK.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATE_OF_BIRTH_CHECK" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>DATE_OF_BIRTH_CHECK is 'true' when the data of birth has been validated and is correct. Usually this value is set to true if some form of identification has been produced by the individual which confirms the DATE_OF_BIRTH.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GENDER" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="UNKNOWN"/>
+						<xsd:enumeration value="NOT_DISCLOSED"/>
+						<xsd:enumeration value="MALE"/>
+						<xsd:enumeration value="FEMALE"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="MARITAL_STATUS" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="SINGLE"/>
+						<xsd:enumeration value="MARRIED"/>
+						<xsd:enumeration value="DIVORSED"/>
+						<xsd:enumeration value="UNKNOWN"/>
+						<xsd:enumeration value="NOT_DISCLOSED"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="IDENTIFICATION" type="IndividualIdentification_Type" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Any form of identification of the individual.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Organisation_Type">
+		<xsd:sequence>
+			<xsd:element name="ORGANISATION_NAME" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The official name of the ORGANIZATION</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TRADING_NAME" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The TRADING_NAME is the name under which the organisation trades. This name differs from the PARTY_NAME element in the PARTY which is a KPN assigned name. The TRADING_NAME has a more official status (and is usually maintained by the KvK). Note that the name used for trading may also be related to trade marks and copyrights and is a more commonly known name of an organization.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="BRANCH_NAME" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>A branch name as it is referred to in this context is the name of an organizational level within a larger organization having functional/geographic responsibility for major operations. A larger corporation may have divided its operations in several branches and named them separately.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="KVK_REGISTRATION" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="KVK_NUMBER" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="KVK_REGISTRATION_TYPE" minOccurs="0"/>
+						<xsd:element name="KVK_NUMBER_CHECK" minOccurs="0"/>
+						<xsd:element name="BIK_CODE" minOccurs="0"/>
+						<xsd:element name="BIK_DESCRIPTION" minOccurs="0"/>
+						<xsd:element name="FINANCIAL_STATUS" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

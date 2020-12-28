@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest_v10.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/0355_CustomerInteractionNotification.2/CustomerInteractionNotification.2_Stub.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>85</pd:x>
+        <pd:y>87</pd:y>
+        <config>
+            <service>pfx:GenericMessageRequestPortType</service>
+            <wsdlNamespaceRoot>urn:GenericMessageRequest/GenericMessageImpl</wsdlNamespaceRoot>
+            <operation>GenericMessage</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/HTTP Server Connection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>483</pd:endX>
+    <pd:endY>83</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>298</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx:GenericMessageResponse>
+                    <pfx:GUID>
+                        <xsl:value-of select="''"/>
+                    </pfx:GUID>
+                    <pfx:error>
+                        <xsl:value-of select="''"/>
+                    </pfx:error>
+                    <pfx:error_message>
+                        <xsl:value-of select="''"/>
+                    </pfx:error_message>
+                    <pfx:error_status>
+                        <xsl:value-of select="0"/>
+                    </pfx:error_status>
+                </pfx:GenericMessageResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

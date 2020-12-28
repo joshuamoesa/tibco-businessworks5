@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--WSDL created on 01-09-2006 -->
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:intf="http://www.kpn.com/EpiphanyBusinessConnector/ReinitializeSession" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://www.kpn.com/EpiphanyBusinessConnector/ReinitializeSession" targetNamespace="http://www.kpn.com/EpiphanyBusinessConnector/ReinitializeSession">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.kpn.com/EpiphanyBusinessConnector/ReinitializeSession">
+            <complexType name="type_ReinitializeSessionRequest">
+                <sequence>
+                    <element name="SessionId" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="CkrNr" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="MobielNummer" nillable="true" type="xsd:string"/>
+                    <element name="ChannelType" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ContextString" nillable="true" type="xsd:string"/>
+                    <element name="ServerId" nillable="true" type="xsd:string"/>
+                    <element name="FrontEndId" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ChannelId" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="TeamId" nillable="true" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <element name="ReinitializeSessionRequest" type="impl:type_ReinitializeSessionRequest"/>
+            <complexType name="type_status">
+                <sequence>
+                    <element name="STATUS_CODE" type="xsd:integer"/>
+                    <element maxOccurs="1" minOccurs="0" name="MSG_CODE" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ERROR_CODE" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ERROR_DESCRIPTION" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <complexType name="type_ReinitializeSessionResponse">
+                <sequence>
+                    <element name="RESULT_STATUS" type="impl:type_status"/>
+                </sequence>
+            </complexType>
+            <element name="ReinitializeSessionResponse" type="impl:type_ReinitializeSessionResponse"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ReinitializeSessionRequest">
+        <wsdl:part element="impl:ReinitializeSessionRequest" name="ReinitializeSessionRequest"/>
+    </wsdl:message>
+    <wsdl:message name="ReinitializeSessionResponse">
+        <wsdl:part element="impl:ReinitializeSessionResponse" name="ReinitializeSessionResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="ReinitializeSessionPortType">
+        <wsdl:operation name="ReinitializeSession" parameterOrder="ReinitializeSessionRequest">
+            <wsdl:input message="impl:ReinitializeSessionRequest" name="ReinitializeSessionRequest"/>
+            <wsdl:output message="impl:ReinitializeSessionResponse" name="ReinitializeSessionResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ReinitializeSessionSoapSoapBinding" type="impl:ReinitializeSessionPortType">
+        <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="ReinitializeSession">
+            <wsdlsoap:operation soapAction=""/>
+            <wsdl:input name="ReinitializeSessionRequest">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ReinitializeSessionResponse">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ReinitializeSessionService">
+        <wsdl:port binding="impl:ReinitializeSessionSoapSoapBinding" name="ReinitializeSessionSoap">
+            <wsdlsoap:address location="http://hdxs7q.telecom.ptt.nl:9080/EBC/services/ReinitializeSessionSoap"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

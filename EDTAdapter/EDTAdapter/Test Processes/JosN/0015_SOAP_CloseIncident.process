@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:pfx2="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx3="urn:GET_CUSTOMER_DETAILS" xmlns:pfx4="urn:GET_CUSTOMER_CONTRACTS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="urn:GET_WORKORDERS" xmlns:pfx6="urn:CLOSE_INCIDENT" xmlns:pfx7="urn:CANCEL_APPOINTMENT" xmlns:pfx8="urn:CHECK_APPOINTMENT" xmlns:pfx9="urn:GetLineMeasurementUpdateRequest">
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_DETAILS" location="/WSDL/EDTAdapter/002 - GET_CUSTOMER_DETAILS.wsdl"/>
+    <wsdl:import namespace="urn:GET_WORKORDERS" location="/WSDL/EDTAdapter/003 - GET_WORKORDERS.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_CONTRACTS" location="/WSDL/EDTAdapter/004 - GET_CUSTOMER_CONTRACTS.wsdl"/>
+    <wsdl:import namespace="urn:CLOSE_INCIDENT" location="/WSDL/EDTAdapter/015 - CLOSE_INCIDENT.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/0015_SOAP_CloseIncident.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <timeout>60</timeout>
+            <endpointURL>http://localhost:%%EDTAdapter/Outbound/SOAP/ServerPort%%/EDTAdapter/Processes/CloseIncident</endpointURL>
+            <service>pfx6:CLOSE_INCIDENT_SERVICE</service>
+            <servicePort>CLOSE_INCIDENTSoap</servicePort>
+            <operation>CloseIncident</operation>
+            <soapAction>urn:CLOSE_INCIDENT/CloseIncident</soapAction>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx6:CloseIncident>
+                    <pfx6:GUID>
+                        <xsl:value-of select="&quot;3244534&quot;"/>
+                    </pfx6:GUID>
+                    <pfx6:customerRefNo>
+                        <xsl:value-of select="&quot;10035253&quot;"/>
+                    </pfx6:customerRefNo>
+                    <pfx6:productTypeId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx6:productTypeId>
+                    <pfx6:repairRemarks>
+                        <xsl:value-of select="&quot;No remarks&quot;"/>
+                    </pfx6:repairRemarks>
+                    <pfx6:closureReportCode>
+                        <xsl:value-of select="&quot;0&quot;"/>
+                    </pfx6:closureReportCode>
+                    <pfx6:createdOnDateTime>
+                        <xsl:value-of select="&quot;2005-05-14T00:00:00&quot;"/>
+                    </pfx6:createdOnDateTime>
+                    <pfx6:closedOnDateTime>
+                        <xsl:value-of select="&quot;2005-05-14T00:00:00&quot;"/>
+                    </pfx6:closedOnDateTime>
+                    <pfx6:causeCode>
+                        <xsl:value-of select="&quot;90&quot;"/>
+                    </pfx6:causeCode>
+                    <pfx6:closureMethod>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </pfx6:closureMethod>
+                </pfx6:CloseIncident>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

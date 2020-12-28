@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://www.tibco.com/CLEver/namespace/Custom" xmlns:pfx2="http://www.tibco.com/CLEver/Version" xmlns:pfx3="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns3="http://www.tibco.com/CLEver/Exception" xmlns:ns4="http://www.tibco.com/CLEver/InternalException" xmlns:pfx4="http://www.tibco.com/CLEver/Resolution" xmlns:ns5="http://www.tibco.com/CLEver/Channel" xmlns:ns6="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns7="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns8="http://www.tibco.com/CLEver/ExceptionType" xmlns:ns10="http://www.tibco.com/CLEver/Policy" xmlns:ns12="http://www.tibco.com/CLEver/Rule" xmlns:ns13="http://www.tibco.com/CLEver/Schedule" xmlns:ns14="http://www.tibco.com/CLEver/TechnicalDomain">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Version" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Version.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Resolution" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Resolution.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/Configuration/Version/Import/Resolution.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:Export"/>
+                    <xsd:element ref="pfx3:Security"/>
+                    <xsd:element name="Version" type="xsd:string"/>
+                    <xsd:element name="IDTransformations" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Type" type="xsd:string"/>
+                                <xsd:element name="New" type="xsd:string"/>
+                                <xsd:element name="Old" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>90</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <xsl:for-each select="$ResolutionID/AccumulatedOutput/IDTransformations">
+                <IDTransformations>
+                    <Type>
+                        <xsl:value-of select="'Resolution'"/>
+                    </Type>
+                    <New>
+                        <xsl:value-of select="new"/>
+                    </New>
+                    <Old>
+                        <xsl:value-of select="old"/>
+                    </Old>
+                </IDTransformations>
+            </xsl:for-each>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="IDTransformations" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Type" type="xsd:string"/>
+                                <xsd:element name="New" type="xsd:string"/>
+                                <xsd:element name="Old" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>662</pd:endX>
+    <pd:endY>88</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Group1">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>114</pd:x>
+        <pd:y>17</pd:y>
+        <pd:width>452</pd:width>
+        <pd:height>129</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/Input/pfx2:Export/pfx2:ConfigurationType[pfx2:Name='Resolution']/pfx2:ConfigurationObject</pd:over>
+            <pd:iterationElementSlot>Resolutions</pd:iterationElementSlot>
+            <pd:indexSlot>ResolutionIterator</pd:indexSlot>
+            <pd:outSlot>ResolutionID</pd:outSlot>
+            <pd:activityOutputName>Map Resolution ID</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map Resolution</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Resolution ID</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Resolution</pd:from>
+            <pd:to>Create</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Create</pd:from>
+            <pd:to>Map Resolution ID</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Create">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>328</pd:x>
+            <pd:y>83</pd:y>
+            <config>
+                <processName>/Processes/DataServices_Oracle/Configuration/Resolution/Create.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <xsl:for-each select="$Map-Resolution/pfx4:Resolution">
+                        <pfx4:Resolution>
+                            <pfx4:ID>
+                                <xsl:value-of select="pfx4:ID"/>
+                            </pfx4:ID>
+                            <pfx4:Name>
+                                <xsl:value-of select="pfx4:Name"/>
+                            </pfx4:Name>
+                            <pfx4:Description>
+                                <xsl:value-of select="pfx4:Description"/>
+                            </pfx4:Description>
+                            <xsl:variable name="var" select="$Map-Resolution/pfx4:Resolution/pfx4:ChannelID"/>
+                            <pfx4:ChannelID>
+                                <xsl:value-of select="$Start/Input/IDTransformations[Type='Channel' and Old=$var]/New"/>
+                            </pfx4:ChannelID>
+                            <xsl:copy-of select="pfx4:Parameter"/>
+                            <pfx3:Version>
+                                <xsl:value-of select="$Start/Input/Version"/>
+                            </pfx3:Version>
+                            <xsl:copy-of select="pfx3:SecurityInfo"/>
+                        </pfx4:Resolution>
+                    </xsl:for-each>
+                    <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map Resolution ID">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>475</pd:x>
+            <pd:y>90</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="IDTransformations">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="new" type="xsd:string"/>
+                                <xsd:element name="old" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <IDTransformations>
+                    <new>
+                        <xsl:value-of select="$Create/pfx3:ID"/>
+                    </new>
+                    <old>
+                        <xsl:value-of select="$Map-Resolution/pfx4:Resolution/pfx4:ID"/>
+                    </old>
+                </IDTransformations>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map Resolution">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>199</pd:x>
+            <pd:y>83</pd:y>
+            <config>
+                <element ref="pfx4:Resolution"/>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$Resolutions/pfx2:ConfigurationObject/*" element="pfx4:Resolution"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <xsl:copy-of select="$Resolutions/pfx2:ConfigurationObject/pfx4:Resolution"/>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

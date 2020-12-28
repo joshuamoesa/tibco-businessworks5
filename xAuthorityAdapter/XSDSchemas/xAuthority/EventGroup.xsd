@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:sa="http://java.sun.com/products/oss/xml/ServiceActivation"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://java.sun.com/products/oss/xml/ServiceActivation" schemaLocation="XmlServiceActivationSchema.xsd"/>
+	<xs:group name="EventGroup">
+		<xs:choice>
+			<xs:element ref="sa:orderCreateEvent"/>
+			<xs:element ref="sa:orderRemoveEvent"/>
+			<xs:element ref="sa:orderStateChangeEvent"/>
+			<xs:element ref="sa:orderAttributeValueChangeEvent"/>
+			<xs:element name="unknownEvent" type="xs:string"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="type_Group">
+		<xs:group ref="EventGroup"/>
+	</xs:complexType>
+	<xs:element name="Group" type="type_Group"/>
+</xs:schema>

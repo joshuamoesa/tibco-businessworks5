@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://kpn.com/products/CoffeeManager/Order/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://kpn.com/products/CoffeeManager/Order/data/v1.0" xmlns:pfx2="http://kpn.com/eai/generic/order/1.0" xmlns:pfx3="http://kpn.com/products/CoffeeManager/Order/v1/CreateImpl">
+    <wsdl:import namespace="http://kpn.com/products/CoffeeManager/Order/v1" location="/WSDL/CoffeeManager.wsdl"/>
+    <wsdl:import namespace="http://kpn.com/products/CoffeeManager/Order/v1/CreateImpl" location="/WSDL/CoffeeManagerConcrete.wsdl"/>
+    <pd:name>ProcessDefinitions/TestCreateCoffeeServant.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>424</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>284</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx3:CreateCoffeeServant</service>
+            <servicePort>SOAPEventSource</servicePort>
+            <operation>Create</operation>
+            <soapAction>/ProcessDefinitions/CreateCoffeeServant</soapAction>
+            <endpointURL>http://localhost:8081/ProcessDefinitions/CreateCoffeeServant</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns:OrderCreateRequest>
+                    <pfx2:orderDateTime>
+                        <xsl:value-of select="'2008-10-31T09:35:03.921Z'"/>
+                    </pfx2:orderDateTime>
+                    <ns:OrderItem>
+                        <ns:Parameters>
+                            <ns:participants>
+                                <xsl:value-of select="'test1'"/>
+                            </ns:participants>
+                        </ns:Parameters>
+                    </ns:OrderItem>
+                </ns:OrderCreateRequest>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

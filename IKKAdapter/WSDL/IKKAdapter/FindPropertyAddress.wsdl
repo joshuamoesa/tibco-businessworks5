@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.FindPropertyAddress" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FindPropertyAddress" targetNamespace="urn:IKKAdapter.FindPropertyAddress">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.FindPropertyAddress">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/FindPropertyAddress.xsd"/>
+            <xsd:element name="FindPropertyAddressRequest" type="ikk:FindPropertyAddressRequest"/>
+            <xsd:element name="FindPropertyAddressResponse" type="ikk:FindPropertyAddressResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="FindPropertyAddressRequest">
+        <part element="ikk:FindPropertyAddressRequest" name="parameters"/>
+    </message>
+    <message name="FindPropertyAddressResponse">
+        <part element="ikk:FindPropertyAddressResponse" name="parameters"/>
+    </message>
+    <portType name="FindPropertyAddressPortType">
+        <operation name="FindPropertyAddress">
+            <input message="ikk:FindPropertyAddressRequest"/>
+            <output message="ikk:FindPropertyAddressResponse"/>
+        </operation>
+    </portType>
+    <binding name="FindPropertyAddressSoapBinding" type="ikk:FindPropertyAddressPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="FindPropertyAddress">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="FindPropertyAddressService">
+        <port binding="ikk:FindPropertyAddressSoapBinding" name="FindPropertyAddressSoap">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/FindPropertyAddress"/>
+        </port>
+    </service>
+</definitions>

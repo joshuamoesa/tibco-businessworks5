@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx5="http://xmlns.kpn.com/fixed/EpiphanyINAAdapter/Request/GetInboundOffers.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Response/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Notify/TestNotificationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EpiphanyINAAdapter/Request/GetInboundOffers.xsd" schemaLocation="/XSDSchemas/EpiphanyINAAdapter/Request/GetInboundOffers.xsd"/>
+    <pd:name>IKKAdapter/Test Processes/Unit Test/Stubs/server stub GetInboundOffers Request.process</pd:name>
+    <pd:startName>Receive RV Request</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive RV Request">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>77</pd:x>
+        <pd:y>126</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>true</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsRawRVObjectForOutput>false</wantsRawRVObjectForOutput>
+            <subject>%%Env%%.FIXED.Order.EpiphanyINAAdapter.Request.GetInboundOffers.1</subject>
+            <sharedChannel>/Common/Shared Resources/RVCMQ Transport.rvtransport</sharedChannel>
+            <xmlEncoding>false</xmlEncoding>
+            <xsdString ref="pfx2:msg"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>440</pd:endX>
+    <pd:endY>128</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Parse-Request">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>207</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx5:GetInboundOffers"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Receive-RV-Request/ActivityOutput/body/pfx2:field[pfx2:name = 'xml']/pfx2:simple"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send RV Response">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>328</pd:x>
+        <pd:y>127</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>Receive RV Request</eventSource>
+            <xsdString ref="pfx2:msg"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <pfx2:field>
+                        <pfx2:name>
+                            <xsl:value-of select="&quot;xml&quot;"/>
+                        </pfx2:name>
+                        <pfx2:id>
+                            <xsl:value-of select="0"/>
+                        </pfx2:id>
+                        <pfx2:simple xsi:type="pfx2:tibrvXml">
+                            <xsl:value-of select="tib:render-xml($Parse-Request/pfx5:GetInboundOffers, false(), true())"/>
+                        </pfx2:simple>
+                    </pfx2:field>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Receive RV Request</pd:from>
+        <pd:to>Parse-Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse-Request</pd:from>
+        <pd:to>Send RV Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send RV Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

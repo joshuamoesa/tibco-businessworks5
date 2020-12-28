@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/request/RemoveAllCustomerReferences.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/ckradapter/request/RemoveCustomerReferences.xsd" xmlns:ns5="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0008_RemoveCustomerReferences_1.0_Request_EAI_BUS_SIDE.xsd" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0008_RemoveCustomerReferences/1.0/Request" xmlns:pfx6="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:pfx7="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/RemoveCustomerReferences.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/RemoveCustomerReferences.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/RemoveAllCustomerReferences.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/RemoveAllCustomerReferences.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0008_RemoveCustomerReferences/1.0/Request" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0008_RemoveCustomerReferences_1.0_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0008.RemoveCustomerReferences.1.InputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx6:Input"/>
+    <pd:startX>155</pd:startX>
+    <pd:startY>163</pd:startY>
+    <pd:returnBindings>
+        <pfx7:Output>
+            <pfx7:Destination>
+                <xsl:value-of select="$Map-Data/pfx5:RemoveCustomerReferences/ns2:CMH/ns2:TO/@ns2:DESTINATION"/>
+            </pfx7:Destination>
+            <pfx7:BodyContainer>
+                <xsl:copy-of select="$Map-Data/pfx5:RemoveCustomerReferences"/>
+            </pfx7:BodyContainer>
+        </pfx7:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx7:Output"/>
+    <pd:endX>522</pd:endX>
+    <pd:endY>164</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>323</pd:x>
+        <pd:y>171</pd:y>
+        <config>
+            <element ref="pfx5:RemoveCustomerReferences"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx6:Input/pfx6:BodyContainer/*" element="ns6:BODY"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx5:RemoveCustomerReferences>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="&quot;617&quot;"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="&quot;RemoveCustomerReferences&quot;"/>
+                    </ns2:NAME>
+                    <ns2:FID>
+                        <xsl:value-of select="concat($Start/pfx6:Input/pfx6:ApplicationId ,&quot;,&quot;,$Start/pfx6:Input/pfx6:UserId, &quot;,&quot;,$Start/pfx6:Input/pfx6:BodyContainer/ns6:BODY/CUSTOMER_REFERENCE/ROLE, &quot;,&quot;,$Start/pfx6:Input/pfx6:BodyContainer/ns6:BODY/CUSTOMER_REFERENCE/EXTERNAL_CUSTOMER_REFERENCE/REF_NAME)"/>
+                    </ns2:FID>
+                    <ns2:MID>
+                        <xsl:value-of select="&quot;617.10&quot;"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="&quot;CO_RemoveCustomerReferences&quot;"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.Order.CKRAdapter.Request.RemoveCustomerReferences.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx6:Input/pfx6:TrackingId"/>
+                        </ns2:MESSAGE_ID>
+                    </ns2:TRACKING>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;USER_ID&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx6:Input/pfx6:UserId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;APPLICATION_ID&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx6:Input/pfx6:ApplicationId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;CKR_TEST_ENVIRONMENT&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/CKRAdapter/CKR_TEST_ENVIRONMENT"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                </ns2:CMH>
+                <pfx5:APPLICATION_ID>
+                    <xsl:value-of select="$Start/pfx6:Input/pfx6:ApplicationId"/>
+                </pfx5:APPLICATION_ID>
+                <xsl:if test="$Start/pfx6:Input/pfx6:UserId">
+                    <pfx5:USER_ID>
+                        <xsl:value-of select="$Start/pfx6:Input/pfx6:UserId"/>
+                    </pfx5:USER_ID>
+                </xsl:if>
+                <pfx5:CUSTOMER_REFERENCE>
+                    <pfx2:ROLE>
+                        <xsl:value-of select="$Start/pfx6:Input/pfx6:BodyContainer/ns6:BODY/CUSTOMER_REFERENCE/ROLE"/>
+                    </pfx2:ROLE>
+                    <pfx2:EXTERNAL_CUSTOMER_REFERENCE>
+                        <pfx3:REF_NAME>
+                            <xsl:value-of select="$Start/pfx6:Input/pfx6:BodyContainer/ns6:BODY/CUSTOMER_REFERENCE/EXTERNAL_CUSTOMER_REFERENCE/REF_NAME"/>
+                        </pfx3:REF_NAME>
+                    </pfx2:EXTERNAL_CUSTOMER_REFERENCE>
+                </pfx5:CUSTOMER_REFERENCE>
+            </pfx5:RemoveCustomerReferences>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Import the build xsd here in InputEditor and design xsd after clicking the coersion button in Input tab</pd:description>
+        <pd:x>302</pd:x>
+        <pd:y>86</pd:y>
+        <pd:width>155</pd:width>
+        <pd:height>76</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

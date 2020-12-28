@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:pfx2="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx3="urn:GET_CUSTOMER_DETAILS" xmlns:pfx4="urn:GET_CUSTOMER_CONTRACTS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="urn:GET_WORKORDERS" xmlns:pfx6="urn:CHECK_APPOINTMENT" xmlns:pfx7="urn:GET_AGENDA" xmlns:pfx8="urn:CANCEL_APPOINTMENT" xmlns:pfx9="urn:CONCEPT_ASTRID_P011" xmlns:pfx10="urn:CONCEPT_ASTRID_WS_844" xmlns:pfx11="urn:GetCtpLineDetails" xmlns:pfx12="urn:GetLineFacilities" xmlns:pfx13="urn:GetPbxFacilities" xmlns:pfx14="urn:GetLineDetails">
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_DETAILS" location="/WSDL/EDTAdapter/002 - GET_CUSTOMER_DETAILS.wsdl"/>
+    <wsdl:import namespace="urn:GET_WORKORDERS" location="/WSDL/EDTAdapter/003 - GET_WORKORDERS.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_CONTRACTS" location="/WSDL/EDTAdapter/004 - GET_CUSTOMER_CONTRACTS.wsdl"/>
+    <wsdl:import namespace="urn:CHECK_APPOINTMENT" location="/WSDL/ASTRIDAdapter/011 - CHECK_APPOINTMENT.wsdl"/>
+    <wsdl:import namespace="urn:CONCEPT_ASTRID_P011" location="/WSDL/ASTRIDAdapter/CONCEPT_ASTRID_P011 versie 1.1.wsdl"/>
+    <wsdl:import namespace="urn:GetCtpLineDetails" location="/WSDL/ASTRIDAdapter/GetCtpLineDetails.wsdl"/>
+    <wsdl:import namespace="urn:GetLineFacilities" location="/WSDL/ASTRIDAdapter/GetLineFacilities.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/557_SOAP_GetLineFacilities.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>276</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <timeout>90</timeout>
+            <endpointURL>http://localhost:%%ASTRIDAdapter/Outbound/SOAP/ServerPort%%/ASTRIDAdapter/Processes/GetLineFacilities</endpointURL>
+            <service>pfx12:GetLineFacilitiesService</service>
+            <servicePort>GetLineFacilitiesSoap</servicePort>
+            <operation>GetInformation</operation>
+            <soapAction>urn:GetLineFacilities/GetInformation</soapAction>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx12:GetInformation>
+                    <pfx12:GUID>
+                        <xsl:value-of select="&quot;HGFD&quot;"/>
+                    </pfx12:GUID>
+                    <pfx12:AREA_CODE>
+                        <xsl:value-of select="&quot;a&quot;"/>
+                    </pfx12:AREA_CODE>
+                </pfx12:GetInformation>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

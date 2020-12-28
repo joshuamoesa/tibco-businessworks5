@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://webservices.kpn-lls.com/V0.2/MmspOrdering.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="MmspXsd_V0.2" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:pfx3="http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl" xmlns:ns2="EcnsXsd_V0.2" xmlns:pfx4="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService">
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/MmspOrdering.wsdl" location="/WSDL/MmspOrdering.wsdl"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl" location="/WSDL/EcnsOrdering.wsdl"/>
+    <pd:name>EClipsAdapter/Test Processes/ZIPB ECLIPS/AssignNumbersReply SOAP.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>274</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx3:EcnsOrderingService</service>
+            <servicePort>InportTelnrsHttpPort</servicePort>
+            <operation>ResultAssignNumberSeriesOperation</operation>
+            <soapAction>""</soapAction>
+            <endpointURL>http://localhost:6070/EClipsAdapter/Processes/Outbound/AssignNumbersReply</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns2:EcnsResultAssignNumberSeries>
+                    <ns2:EcnsHeaderStruct>
+                        <ns2:Sender>
+                            <xsl:value-of select="&quot;a&quot;"/>
+                        </ns2:Sender>
+                        <ns2:Receiver>
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </ns2:Receiver>
+                    </ns2:EcnsHeaderStruct>
+                    <ns2:ResultAssignNumberSeriesReqStruct>
+                        <ns2:PackagerCode>
+                            <xsl:value-of select="&quot;123&quot;"/>
+                        </ns2:PackagerCode>
+                        <ns2:PackagerOrderId>
+                            <xsl:value-of select="&quot;124&quot;"/>
+                        </ns2:PackagerOrderId>
+                        <ns2:NsnOrderId>
+                            <xsl:value-of select="100"/>
+                        </ns2:NsnOrderId>
+                        <ns2:TelcoCode>
+                            <xsl:value-of select="200"/>
+                        </ns2:TelcoCode>
+                        <ns2:EcnsOrderFeedbackStruct>
+                            <ns2:StatusCode>
+                                <xsl:value-of select="3"/>
+                            </ns2:StatusCode>
+                            <ns2:StatusDescription>
+                                <xsl:value-of select="&quot;Geleverd&quot;"/>
+                            </ns2:StatusDescription>
+                            <ns2:OrderSituationCode>
+                                <xsl:value-of select="&quot;osc&quot;"/>
+                            </ns2:OrderSituationCode>
+                            <ns2:OrderSituationDescription>
+                                <xsl:value-of select="&quot;osd&quot;"/>
+                            </ns2:OrderSituationDescription>
+                            <ns2:AdditionalSituationInfo>
+                                <xsl:value-of select="&quot;asinfo&quot;"/>
+                            </ns2:AdditionalSituationInfo>
+                        </ns2:EcnsOrderFeedbackStruct>
+                        <ns2:NrLow>
+                            <xsl:value-of select="100"/>
+                        </ns2:NrLow>
+                        <ns2:NrHigh>
+                            <xsl:value-of select="200"/>
+                        </ns2:NrHigh>
+                    </ns2:ResultAssignNumberSeriesReqStruct>
+                </ns2:EcnsResultAssignNumberSeries>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

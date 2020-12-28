@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0001_FindCustomer/2.2/Request" xmlns:pfx4="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:pfx5="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/TangoAdapter/Request/ProcessProvisioningWorkOrder.xsd" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0248_ProcessProvisioningWorkOrder/1.0/Request">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/TangoAdapter/Request/ProcessProvisioningWorkOrder.xsd" schemaLocation="/XSDSchemas/TangoAdapter/Request/ProcessProvisioningWorkOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0248_ProcessProvisioningWorkOrder/1.0/Request" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0248_ProcessProvisioningWorkOrder_1.0_Request_EAI_BUS_SIDE.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0248.ProcessProvisioningWorkOrder.1.InputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:Input"/>
+    <pd:startX>157</pd:startX>
+    <pd:startY>164</pd:startY>
+    <pd:returnBindings>
+        <pfx5:Output>
+            <pfx5:Destination>
+                <xsl:value-of select="$Map-Data/pfx6:ProcessProvisioningWorkOrder/ns2:CMH/ns2:TO/@ns2:DESTINATION"/>
+            </pfx5:Destination>
+            <pfx5:BodyContainer>
+                <xsl:copy-of select="$Map-Data/pfx6:ProcessProvisioningWorkOrder"/>
+            </pfx5:BodyContainer>
+        </pfx5:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx5:Output"/>
+    <pd:endX>517</pd:endX>
+    <pd:endY>168</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>322</pd:x>
+        <pd:y>168</pd:y>
+        <config>
+            <element ref="pfx6:ProcessProvisioningWorkOrder"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx4:Input/pfx4:BodyContainer/*" element="ns6:BODY"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx6:ProcessProvisioningWorkOrder>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="&quot;680&quot;"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="&quot;ProcessProvisioningWorkOrder&quot;"/>
+                    </ns2:NAME>
+                    <ns2:FID>
+                        <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/ID"/>
+                    </ns2:FID>
+                    <ns2:MID>
+                        <xsl:value-of select="&quot;680.10&quot;"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="&quot;WorkOrder&quot;"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.Operations.TangoAdapter.Request.ProcessProvisioningWorkOrder.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:TrackingId"/>
+                        </ns2:MESSAGE_ID>
+                    </ns2:TRACKING>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;SOURCE_SYSTEM&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:ApplicationId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                </ns2:CMH>
+                <pfx6:WORKORDER>
+                    <ID>
+                        <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/ID"/>
+                    </ID>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/CUSTOMER_ORDER_REFERENCE">
+                        <CUSTOMER_ORDER_REFERENCE>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/CUSTOMER_ORDER_REFERENCE"/>
+                        </CUSTOMER_ORDER_REFERENCE>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/BILLING_SYSTEM">
+                        <BILLING_SYSTEM>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/BILLING_SYSTEM"/>
+                        </BILLING_SYSTEM>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/INDOOR_OUTDOOR_ACTIVITY">
+                        <INDOOR_OUTDOOR_ACTIVITY>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/INDOOR_OUTDOOR_ACTIVITY"/>
+                        </INDOOR_OUTDOOR_ACTIVITY>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/ORGANIZATIONAL_UNIT">
+                        <ORGANIZATIONAL_UNIT>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/ORGANIZATIONAL_UNIT"/>
+                        </ORGANIZATIONAL_UNIT>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/PRODUCT_CATEGORY">
+                        <PRODUCT_CATEGORY>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/PRODUCT_CATEGORY"/>
+                        </PRODUCT_CATEGORY>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/DISTRICT_AREA">
+                        <DISTRICT_AREA>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/DISTRICT_AREA"/>
+                        </DISTRICT_AREA>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/CUSTOMER_ORDER_ID">
+                        <CUSTOMER_ORDER_ID>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/CUSTOMER_ORDER_ID"/>
+                        </CUSTOMER_ORDER_ID>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/NORM_DURATION">
+                        <NORM_DURATION>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/NORM_DURATION"/>
+                        </NORM_DURATION>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/TELCO_DESCRIPTION">
+                        <TELCO_DESCRIPTION>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/TELCO_DESCRIPTION"/>
+                        </TELCO_DESCRIPTION>
+                    </xsl:if>
+                    <xsl:for-each select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/WORK_ORDER_ITEM">
+                        <WORK_ORDER_ITEM>
+                            <xsl:if test="NETLINE_NUMBER">
+                                <NETLINE_NUMBER>
+                                    <xsl:value-of select="NETLINE_NUMBER"/>
+                                </NETLINE_NUMBER>
+                            </xsl:if>
+                            <CFS>
+                                <LOGICAL_RESOURCE>
+                                    <OLD_PHONE_NUMBER>
+                                        <xsl:if test="CFS/LOGICAL_RESOURCE/OLD_PHONE_NUMBER/PHONE_NUMBER">
+                                            <PHONE_NUMBER>
+                                                <xsl:value-of select="CFS/LOGICAL_RESOURCE/OLD_PHONE_NUMBER/PHONE_NUMBER"/>
+                                            </PHONE_NUMBER>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/LOGICAL_RESOURCE/OLD_PHONE_NUMBER/COUNTRY_CODE">
+                                            <COUNTRY_CODE>
+                                                <xsl:value-of select="CFS/LOGICAL_RESOURCE/OLD_PHONE_NUMBER/COUNTRY_CODE"/>
+                                            </COUNTRY_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/LOGICAL_RESOURCE/OLD_PHONE_NUMBER/AREA_CODE">
+                                            <AREA_CODE>
+                                                <xsl:value-of select="CFS/LOGICAL_RESOURCE/OLD_PHONE_NUMBER/AREA_CODE"/>
+                                            </AREA_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/LOGICAL_RESOURCE/OLD_PHONE_NUMBER/SUBSCRIBER_NUMBER">
+                                            <SUBSCRIBER_NUMBER>
+                                                <xsl:value-of select="CFS/LOGICAL_RESOURCE/OLD_PHONE_NUMBER/SUBSCRIBER_NUMBER"/>
+                                            </SUBSCRIBER_NUMBER>
+                                        </xsl:if>
+                                    </OLD_PHONE_NUMBER>
+                                    <NEW_PHONE_NUMBER>
+                                        <xsl:if test="CFS/LOGICAL_RESOURCE/NEW_PHONE_NUMBER/PHONE_NUMBER">
+                                            <PHONE_NUMBER>
+                                                <xsl:value-of select="CFS/LOGICAL_RESOURCE/NEW_PHONE_NUMBER/PHONE_NUMBER"/>
+                                            </PHONE_NUMBER>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/LOGICAL_RESOURCE/NEW_PHONE_NUMBER/COUNTRY_CODE">
+                                            <COUNTRY_CODE>
+                                                <xsl:value-of select="CFS/LOGICAL_RESOURCE/NEW_PHONE_NUMBER/COUNTRY_CODE"/>
+                                            </COUNTRY_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/LOGICAL_RESOURCE/NEW_PHONE_NUMBER/AREA_CODE">
+                                            <AREA_CODE>
+                                                <xsl:value-of select="CFS/LOGICAL_RESOURCE/NEW_PHONE_NUMBER/AREA_CODE"/>
+                                            </AREA_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/LOGICAL_RESOURCE/NEW_PHONE_NUMBER/SUBSCRIBER_NUMBER">
+                                            <SUBSCRIBER_NUMBER>
+                                                <xsl:value-of select="CFS/LOGICAL_RESOURCE/NEW_PHONE_NUMBER/SUBSCRIBER_NUMBER"/>
+                                            </SUBSCRIBER_NUMBER>
+                                        </xsl:if>
+                                    </NEW_PHONE_NUMBER>
+                                    <xsl:for-each select="CFS/LOGICAL_RESOURCE/IP">
+                                        <IP>
+                                            <ADDRESS>
+                                                <xsl:value-of select="ADDRESS"/>
+                                            </ADDRESS>
+                                            <SUBNET>
+                                                <xsl:value-of select="SUBNET"/>
+                                            </SUBNET>
+                                        </IP>
+                                    </xsl:for-each>
+                                </LOGICAL_RESOURCE>
+                                <PHYSICAL_RESOURCE>
+                                    <xsl:if test="CFS/PHYSICAL_RESOURCE/LINE[1]/QUALITY">
+                                        <LINE_QUALITY>
+                                            <xsl:value-of select="CFS/PHYSICAL_RESOURCE/LINE[1]/QUALITY"/>
+                                        </LINE_QUALITY>
+                                    </xsl:if>
+                                    <MUTATION>
+                                        <CODE>
+                                            <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/CODE"/>
+                                        </CODE>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/DESCRIPTION">
+                                            <DESCRIPTION>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/DESCRIPTION"/>
+                                            </DESCRIPTION>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/TYPE">
+                                            <TYPE>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/TYPE"/>
+                                            </TYPE>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/TYPE_DESCRIPTION">
+                                            <TYPE_DESCRIPTION>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/TYPE_DESCRIPTION"/>
+                                            </TYPE_DESCRIPTION>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/NOTE">
+                                            <NOTE>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/NOTE"/>
+                                            </NOTE>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/BUILD_CODE">
+                                            <BUILD_CODE>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/BUILD_CODE"/>
+                                            </BUILD_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/DEMOLITION_CODE">
+                                            <DEMOLITION_CODE>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/DEMOLITION_CODE"/>
+                                            </DEMOLITION_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/KANVAS_PLAATS">
+                                            <KANVAS_PLAATS>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/KANVAS_PLAATS"/>
+                                            </KANVAS_PLAATS>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/KANVAS_ADRES">
+                                            <KANVAS_ADRES>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/KANVAS_ADRES"/>
+                                            </KANVAS_ADRES>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/KANVAS_HOST">
+                                            <KANVAS_HOST>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/KANVAS_HOST"/>
+                                            </KANVAS_HOST>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/KANVAS_CGB">
+                                            <KANVAS_CGB>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/KANVAS_CGB"/>
+                                            </KANVAS_CGB>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/INVOERKABEL_SEQUENCE_NUMBER">
+                                            <INVOERKABEL_SEQUENCE_NUMBER>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/INVOERKABEL_SEQUENCE_NUMBER"/>
+                                            </INVOERKABEL_SEQUENCE_NUMBER>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/ADER_NUMMER">
+                                            <ADER_NUMMER>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/ADER_NUMMER"/>
+                                            </ADER_NUMMER>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/CAP_ID">
+                                            <CAP_ID>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/CAP_ID"/>
+                                            </CAP_ID>
+                                        </xsl:if>
+                                        <xsl:if test="CFS/PHYSICAL_RESOURCE/MUTATION/ENGINEER_ACTIVITY">
+                                            <ENGINEER_ACTIVITY>
+                                                <xsl:value-of select="CFS/PHYSICAL_RESOURCE/MUTATION/ENGINEER_ACTIVITY"/>
+                                            </ENGINEER_ACTIVITY>
+                                        </xsl:if>
+                                    </MUTATION>
+                                </PHYSICAL_RESOURCE>
+                            </CFS>
+                            <xsl:for-each select="FACILITY">
+                                <FACILITY>
+                                    <DESCRIPTION>
+                                        <xsl:value-of select="DESCRIPTION"/>
+                                    </DESCRIPTION>
+                                    <MUTATION_CODE>
+                                        <xsl:value-of select="MUTATION_CODE"/>
+                                    </MUTATION_CODE>
+                                    <MUTATION_DESCRIPTION>
+                                        <xsl:value-of select="MUTATION_DESCRIPTION"/>
+                                    </MUTATION_DESCRIPTION>
+                                </FACILITY>
+                            </xsl:for-each>
+                            <RFS>
+                                <ISRA>
+                                    <xsl:for-each select="RFS/ISRA">
+                                        <KANVAS_ISRA_REGEL>
+                                            <xsl:value-of select="KANVAS_ISRA_REGEL"/>
+                                        </KANVAS_ISRA_REGEL>
+                                    </xsl:for-each>
+                                </ISRA>
+                                <HOOFDVERDELER>
+                                    <xsl:for-each select="RFS/HOOFDVERDELER">
+                                        <KANVAS_HVD_REGEL>
+                                            <xsl:value-of select="KANVAS_HVD_REGEL"/>
+                                        </KANVAS_HVD_REGEL>
+                                    </xsl:for-each>
+                                </HOOFDVERDELER>
+                                <xsl:for-each select="RFS/KABELVERDELER">
+                                    <KABELVERDELER>
+                                        <KANVAS_KVD_DISTRIBUTIE_ADRES>
+                                            <xsl:value-of select="KANVAS_KVD_DISTRIBUTIE_ADRES"/>
+                                        </KANVAS_KVD_DISTRIBUTIE_ADRES>
+                                        <KANVAS_KVD_DISTRIBUTIE_PLAATS>
+                                            <xsl:value-of select="KANVAS_KVD_DISTRIBUTIE_PLAATS"/>
+                                        </KANVAS_KVD_DISTRIBUTIE_PLAATS>
+                                        <KANVAS_KVD_DISTRIBUTIE_PUNT>
+                                            <xsl:value-of select="KANVAS_KVD_DISTRIBUTIE_PUNT"/>
+                                        </KANVAS_KVD_DISTRIBUTIE_PUNT>
+                                        <KABELREGEL>
+                                            <xsl:for-each select="KABELREGEL">
+                                                <KANVAS_KVD_REGEL>
+                                                    <xsl:value-of select="KANVAS_KVD_REGEL"/>
+                                                </KANVAS_KVD_REGEL>
+                                            </xsl:for-each>
+                                        </KABELREGEL>
+                                    </KABELVERDELER>
+                                </xsl:for-each>
+                            </RFS>
+                            <CONNECTIONS_OVERVIEW>
+                                <xsl:for-each select="CONNECTIONS_OVERVIEW/KANVAS_BLOCK">
+                                    <KANVAS_BLOCK>
+                                        <KANVAS_LINE>
+                                            <xsl:value-of select="KANVAS_LINE"/>
+                                        </KANVAS_LINE>
+                                    </KANVAS_BLOCK>
+                                </xsl:for-each>
+                            </CONNECTIONS_OVERVIEW>
+                        </WORK_ORDER_ITEM>
+                    </xsl:for-each>
+                    <NOTE>
+                        <DESCRIPTION>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/NOTE/DESCRIPTION"/>
+                        </DESCRIPTION>
+                    </NOTE>
+                    <xsl:for-each select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/MILESTONE">
+                        <MILESTONE>
+                            <NAME>
+                                <xsl:value-of select="NAME"/>
+                            </NAME>
+                            <TIMESTAMP>
+                                <xsl:value-of select="TIMESTAMP"/>
+                            </TIMESTAMP>
+                        </MILESTONE>
+                    </xsl:for-each>
+                    <xsl:if test="exists($Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/SERVICE_VISIT)">
+                        <SERVICE_VISIT>
+                            <xsl:choose>
+                                <xsl:when test="exists($Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/SERVICE_VISIT/PLANNED_TIMESLOT[1])">
+                                    <xsl:for-each select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/SERVICE_VISIT/PLANNED_TIMESLOT[1]">
+                                        <PLANNED_TIMESLOT>
+                                            <START>
+                                                <xsl:value-of select="START"/>
+                                            </START>
+                                            <END>
+                                                <xsl:value-of select="END"/>
+                                            </END>
+                                        </PLANNED_TIMESLOT>
+                                    </xsl:for-each>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <URGENT>
+                                        <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/SERVICE_VISIT/URGENT[1]"/>
+                                    </URGENT>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </SERVICE_VISIT>
+                    </xsl:if>
+                    <xsl:for-each select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/RELATED_ACTIVITY">
+                        <RELATED_ACTIVITY>
+                            <CODE>
+                                <xsl:value-of select="CODE"/>
+                            </CODE>
+                            <xsl:if test="DESCRIPTION">
+                                <DESCRIPTION>
+                                    <xsl:value-of select="DESCRIPTION"/>
+                                </DESCRIPTION>
+                            </xsl:if>
+                            <xsl:if test="DATE">
+                                <DATE>
+                                    <xsl:value-of select="DATE"/>
+                                </DATE>
+                            </xsl:if>
+                        </RELATED_ACTIVITY>
+                    </xsl:for-each>
+                    <xsl:for-each select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/MATERIAL">
+                        <MATERIAL>
+                            <PART_NUMBER>
+                                <xsl:value-of select="PART_NUMBER"/>
+                            </PART_NUMBER>
+                            <xsl:if test="DESCRIPTION">
+                                <DESCRIPTION>
+                                    <xsl:value-of select="DESCRIPTION"/>
+                                </DESCRIPTION>
+                            </xsl:if>
+                            <xsl:if test="QUANTITY">
+                                <QUANTITY>
+                                    <xsl:value-of select="QUANTITY"/>
+                                </QUANTITY>
+                            </xsl:if>
+                            <xsl:if test="QUANTITY_COLLECTED">
+                                <QUANTITY_COLLECTED>
+                                    <xsl:value-of select="QUANTITY_COLLECTED"/>
+                                </QUANTITY_COLLECTED>
+                            </xsl:if>
+                            <xsl:if test="DELIVERING_METHOD">
+                                <DELIVERING_METHOD>
+                                    <xsl:value-of select="DELIVERING_METHOD"/>
+                                </DELIVERING_METHOD>
+                            </xsl:if>
+                            <PRICE>
+                                <AMOUNT>
+                                    <xsl:value-of select="PRICE/AMOUNT"/>
+                                </AMOUNT>
+                                <CURRENCY>
+                                    <xsl:value-of select="PRICE/CURRENCY"/>
+                                </CURRENCY>
+                            </PRICE>
+                            <xsl:for-each select="ATTRIBUTES">
+                                <ATTRIBUTES>
+                                    <NAME>
+                                        <xsl:value-of select="NAME"/>
+                                    </NAME>
+                                    <VALUE>
+                                        <xsl:value-of select="VALUE"/>
+                                    </VALUE>
+                                </ATTRIBUTES>
+                            </xsl:for-each>
+                        </MATERIAL>
+                    </xsl:for-each>
+                    <xsl:for-each select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/ACTIVITY">
+                        <ACTIVITY>
+                            <TASK_CODE>
+                                <xsl:value-of select="TASK_CODE"/>
+                            </TASK_CODE>
+                            <DESCRIPTION>
+                                <xsl:value-of select="DESCRIPTION"/>
+                            </DESCRIPTION>
+                        </ACTIVITY>
+                    </xsl:for-each>
+                    <PRODUCT>
+                        <ID>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/PRODUCT/ID"/>
+                        </ID>
+                        <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/PRODUCT/DESCRIPTION">
+                            <DESCRIPTION>
+                                <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/WORK_ORDER/PRODUCT/DESCRIPTION"/>
+                            </DESCRIPTION>
+                        </xsl:if>
+                    </PRODUCT>
+                </pfx6:WORKORDER>
+                <pfx6:CUSTOMER>
+                    <CONTRACTOR>
+                        <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/NAME">
+                            <NAME>
+                                <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/NAME"/>
+                            </NAME>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ID">
+                            <ID>
+                                <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ID"/>
+                            </ID>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/KVK_NUMBER">
+                            <KVK_NUMBER>
+                                <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/KVK_NUMBER"/>
+                            </KVK_NUMBER>
+                        </xsl:if>
+                        <ADDRESS>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/STREET_NAME">
+                                <STREET_NAME>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/STREET_NAME"/>
+                                </STREET_NAME>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/HOUSE_NUMBER">
+                                <HOUSE_NUMBER>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/HOUSE_NUMBER"/>
+                                </HOUSE_NUMBER>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/HOUSE_NUMBER_EXTENSION">
+                                <HOUSE_NUMBER_EXTENSION>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/HOUSE_NUMBER_EXTENSION"/>
+                                </HOUSE_NUMBER_EXTENSION>
+                            </xsl:if>
+                            <xsl:if test="exists($Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/DUTCH_POSTCODE)">
+                                <DUTCH_POSTCODE>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/DUTCH_POSTCODE"/>
+                                </DUTCH_POSTCODE>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/CITY_CODE">
+                                <CITY_CODE>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/CITY_CODE"/>
+                                </CITY_CODE>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/CITY_NAME">
+                                <CITY_NAME>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/CONTRACTOR/ADDRESS/CITY_NAME"/>
+                                </CITY_NAME>
+                            </xsl:if>
+                        </ADDRESS>
+                    </CONTRACTOR>
+                    <USER>
+                        <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NAME">
+                            <NAME>
+                                <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NAME"/>
+                            </NAME>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ID">
+                            <ID>
+                                <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ID"/>
+                            </ID>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/SCOPE">
+                            <SCOPE>
+                                <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/SCOPE"/>
+                            </SCOPE>
+                        </xsl:if>
+                        <ADDRESS>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/STREET_NAME">
+                                <STREET_NAME>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/STREET_NAME"/>
+                                </STREET_NAME>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/HOUSE_NUMBER">
+                                <HOUSE_NUMBER>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/HOUSE_NUMBER"/>
+                                </HOUSE_NUMBER>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/HOUSE_NUMBER_EXTENSION">
+                                <HOUSE_NUMBER_EXTENSION>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/HOUSE_NUMBER_EXTENSION"/>
+                                </HOUSE_NUMBER_EXTENSION>
+                            </xsl:if>
+                            <xsl:if test="exists($Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/DUTCH_POSTCODE)">
+                                <DUTCH_POSTCODE>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/DUTCH_POSTCODE"/>
+                                </DUTCH_POSTCODE>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/CITY_CODE">
+                                <CITY_CODE>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/CITY_CODE"/>
+                                </CITY_CODE>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/CITY_NAME">
+                                <CITY_NAME>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/ADDRESS/CITY_NAME"/>
+                                </CITY_NAME>
+                            </xsl:if>
+                        </ADDRESS>
+                        <CONTACT_PERSON>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/NAME">
+                                <NAME>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/NAME"/>
+                                </NAME>
+                            </xsl:if>
+                            <PHONE_NUMBER>
+                                <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/PHONE_NUMBER/PHONE_NUMBER">
+                                    <PHONE_NUMBER>
+                                        <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/PHONE_NUMBER/PHONE_NUMBER"/>
+                                    </PHONE_NUMBER>
+                                </xsl:if>
+                                <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/PHONE_NUMBER/COUNTRY_CODE">
+                                    <COUNTRY_CODE>
+                                        <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/PHONE_NUMBER/COUNTRY_CODE"/>
+                                    </COUNTRY_CODE>
+                                </xsl:if>
+                                <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/PHONE_NUMBER/AREA_CODE">
+                                    <AREA_CODE>
+                                        <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/PHONE_NUMBER/AREA_CODE"/>
+                                    </AREA_CODE>
+                                </xsl:if>
+                                <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/PHONE_NUMBER/SUBSCRIBER_NUMBER">
+                                    <SUBSCRIBER_NUMBER>
+                                        <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/CONTACT_PERSON/PHONE_NUMBER/SUBSCRIBER_NUMBER"/>
+                                    </SUBSCRIBER_NUMBER>
+                                </xsl:if>
+                            </PHONE_NUMBER>
+                        </CONTACT_PERSON>
+                        <PHONE_NUMBER>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/PHONE_NUMBER/PHONE_NUMBER">
+                                <PHONE_NUMBER>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/PHONE_NUMBER/PHONE_NUMBER"/>
+                                </PHONE_NUMBER>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/PHONE_NUMBER/COUNTRY_CODE">
+                                <COUNTRY_CODE>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/PHONE_NUMBER/COUNTRY_CODE"/>
+                                </COUNTRY_CODE>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/PHONE_NUMBER/AREA_CODE">
+                                <AREA_CODE>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/PHONE_NUMBER/AREA_CODE"/>
+                                </AREA_CODE>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/PHONE_NUMBER/SUBSCRIBER_NUMBER">
+                                <SUBSCRIBER_NUMBER>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/PHONE_NUMBER/SUBSCRIBER_NUMBER"/>
+                                </SUBSCRIBER_NUMBER>
+                            </xsl:if>
+                        </PHONE_NUMBER>
+                        <NEW_ADDRESS>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/STREET_NAME">
+                                <STREET_NAME>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/STREET_NAME"/>
+                                </STREET_NAME>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/HOUSE_NUMBER">
+                                <HOUSE_NUMBER>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/HOUSE_NUMBER"/>
+                                </HOUSE_NUMBER>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/HOUSE_NUMBER_EXTENSION">
+                                <HOUSE_NUMBER_EXTENSION>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/HOUSE_NUMBER_EXTENSION"/>
+                                </HOUSE_NUMBER_EXTENSION>
+                            </xsl:if>
+                            <xsl:if test="exists($Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/CITY_CODE)">
+                                <DUTCH_POSTCODE>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/DUTCH_POSTCODE"/>
+                                </DUTCH_POSTCODE>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/CITY_CODE">
+                                <CITY_CODE>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/CITY_CODE"/>
+                                </CITY_CODE>
+                            </xsl:if>
+                            <xsl:if test="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/CITY_NAME">
+                                <CITY_NAME>
+                                    <xsl:value-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY/CUSTOMER/USER/NEW_ADDRESS/CITY_NAME"/>
+                                </CITY_NAME>
+                            </xsl:if>
+                        </NEW_ADDRESS>
+                    </USER>
+                </pfx6:CUSTOMER>
+            </pfx6:ProcessProvisioningWorkOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Load Build xsd into the Mapper</pd:description>
+        <pd:x>315</pd:x>
+        <pd:y>103</pd:y>
+        <pd:width>128</pd:width>
+        <pd:height>38</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

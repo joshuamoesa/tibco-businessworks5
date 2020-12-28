@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated on 2008/10/28 15:15:11 with EAIPlugin 1.2.0 -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:grp="http://kpn.com/products/SNI-FA" xmlns:ord="http://kpn.com/eai/generic/order/1.0" xmlns:prd="http://kpn.com/products/SNI-FA/email/data/v1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://kpn.com/products/SNI-FA/email/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/products/SNI-FA/email/v1">
+<wsdl:documentation>
+    Email functional product
+
+    Version History:
+    * 1.0 - Initial version
+</wsdl:documentation>
+<wsdl:types>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/eai/generic/order/1.0" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:simpleType name="OrderStatusEnumeration">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="INITIAL"/>
+      <xsd:enumeration value="ACCEPTED"/>
+      <xsd:enumeration value="REJECTED"/>
+      <xsd:enumeration value="ERROR"/>
+      <xsd:enumeration value="COMPLETED"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:complexType name="Error">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="detail" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Order">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="orderDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="OrderStatus">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="supplierOrderId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="error" type="ord:Error"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/SNI-FA" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_activation  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_activation">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Active"/>
+      <xsd:enumeration value="Inactive"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_callBarringServiceNumbers  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_callBarringServiceNumbers">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="0906"/>
+      <xsd:enumeration value="0906-0909"/>
+      <xsd:enumeration value="0900-0906-0909"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_carrierType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_carrierType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="FTTC"/>
+      <xsd:enumeration value="FTTH"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_keyType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_keyType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="source"/>
+      <xsd:enumeration value="target"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_orderScenario  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_orderScenario">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="New"/>
+      <xsd:enumeration value="Migrate"/>
+      <xsd:enumeration value="Move"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_qualityOfService  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_qualityOfService">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Best Effort"/>
+      <xsd:enumeration value="Premium"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_yesNo  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_yesNo">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Y"/>
+      <xsd:enumeration value="N"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_telephoneNumber  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_telephoneNumber">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_zipcode  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_zipcode">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrder  <<order>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrder">
+    <xsd:sequence>
+      <xsd:element name="type" type="xsd:string"/>
+      <xsd:element name="keyType" type="grp:E_keyType"/>
+      <xsd:element name="requesterId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderItem  <<orderItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderItem">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="serviceInstanceId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderStatus  <<orderStatus>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderStatus">
+    <xsd:sequence>
+      <xsd:element name="keyType" type="grp:E_keyType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderStatusItem  <<orderStatusItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderStatusItem">
+    <xsd:sequence>
+      <xsd:element name="serviceInstanceId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/SNI-FA/email/data/v1.0" version="1.0">
+  <xsd:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+  <xsd:import namespace="http://kpn.com/products/SNI-FA"/>
+  <!-- ================================================== -->
+  <!-- =====  Element Declarations  -->
+  <!-- ================================================== -->
+  <xsd:element name="emailcreateRequest" type="prd:emailcreateRequest"/>
+  <xsd:element name="emailcreateResponse" type="prd:emailcreateResponse"/>
+  <xsd:element name="emaildeleteRequest" type="prd:emaildeleteRequest"/>
+  <xsd:element name="emaildeleteResponse" type="prd:emaildeleteResponse"/>
+  <xsd:element name="emailhijackRequest" type="prd:emailhijackRequest"/>
+  <xsd:element name="emailhijackResponse" type="prd:emailhijackResponse"/>
+  <xsd:element name="emailprequalRequest" type="prd:emailprequalRequest"/>
+  <xsd:element name="emailprequalResponse" type="prd:emailprequalResponse"/>
+  <xsd:element name="emailreadRequest" type="prd:emailreadRequest"/>
+  <xsd:element name="emailreadResponse" type="prd:emailreadResponse"/>
+  <xsd:element name="emailupdateRequest" type="prd:emailupdateRequest"/>
+  <xsd:element name="emailupdateResponse" type="prd:emailupdateResponse"/>
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailStatusEnum  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="emailStatusEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Rejected"/>
+      <xsd:enumeration value="Failed"/>
+      <xsd:enumeration value="Completed"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdSpTemplate" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fpIdEmail" type="xsd:string"/>
+      <xsd:element name="fpIdUser" type="xsd:string"/>
+      <xsd:element name="size" type="xsd:int"/>
+      <xsd:element name="spamFilter" type="xsd:boolean"/>
+      <xsd:element name="virusScan" type="xsd:boolean"/>
+      <xsd:element name="pop3Access" type="xsd:boolean"/>
+      <xsd:element name="smtpAccess" type="xsd:boolean"/>
+      <xsd:element name="imapAccess" type="xsd:boolean"/>
+      <xsd:element name="webmailAccess" type="xsd:boolean"/>
+      <xsd:element name="pushEmail" type="xsd:boolean"/>
+      <xsd:element name="fullOutlookAccess" type="xsd:boolean"/>
+      <xsd:element name="tasks" type="xsd:boolean"/>
+      <xsd:element name="notes" type="xsd:boolean"/>
+      <xsd:element name="calendar" type="xsd:boolean"/>
+      <xsd:element name="contacts" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdEmail" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdEmail" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdEmail" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailcreateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailcreateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:emailcreateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailcreateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailcreateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:createRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailcreateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailcreateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:emailStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:emailcreateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailcreateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailcreateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:createResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emaildeleteRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emaildeleteRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:emaildeleteRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emaildeleteRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emaildeleteRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:deleteRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emaildeleteResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emaildeleteResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:emailStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:emaildeleteResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emaildeleteResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emaildeleteResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:deleteResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailhijackRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailhijackRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:emailhijackRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailhijackRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailhijackRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:hijackRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailhijackResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailhijackResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:emailStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:emailhijackResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailhijackResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailhijackResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:hijackResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailprequalRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailprequalRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:emailprequalRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailprequalRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailprequalRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:prequalRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailprequalResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailprequalResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:emailStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:emailprequalResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailprequalResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailprequalResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:prequalResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailreadRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailreadRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:emailreadRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailreadRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailreadRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:readRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailreadResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailreadResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:emailStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:emailreadResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailreadResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailreadResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:readResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailupdateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailupdateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:emailupdateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailupdateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailupdateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:updateRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailupdateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailupdateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:emailStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:emailupdateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  emailupdateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="emailupdateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:updateResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  hijackRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="hijackRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdEmail" type="xsd:string"/>
+      <xsd:element name="userPrincipalNameSource" type="xsd:string"/>
+      <xsd:element name="passwordSource" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  hijackResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="hijackResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdEmail" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="numberOfMovedItems" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="numberOfFailedItems" type="xsd:int"/>
+      <xsd:element minOccurs="0" name="sourceMailboxDeleted" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  prequalRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="prequalRequest">
+    <xsd:sequence>
+      <xsd:element name="emailAddress" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  prequalResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="prequalResponse">
+    <xsd:sequence>
+      <xsd:element name="userPrincipalName" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  readRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="readRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdEmail" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  readResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="readResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdEmail" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="emailName" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="size" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="spamFilter" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="virusScan" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="pop3Access" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="smtpAccess" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="imapAccess" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="webmailAccess" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="pushEmail" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="fullOutlookAccess" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="tasks" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="notes" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="calendar" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="contacts" type="xsd:boolean"/>
+      <xsd:element maxOccurs="5" minOccurs="0" name="alias" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="forwardingEnabled" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="forwardingEmailAddress" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="forwardingLocalCopy" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="autoReplyEnabled" type="xsd:boolean"/>
+      <xsd:element maxOccurs="unbounded" name="autoReplyText" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  updateRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="updateRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdEmail" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="emailName" type="xsd:string"/>
+      <xsd:element maxOccurs="5" minOccurs="0" name="alias" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="forwardingEnabled" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="forwardingEmailAddress" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="forwardingLocalCopy" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="autoReplyEnabled" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="autoReplyText" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="spamFilter" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="virusScan" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  updateResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="updateResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdEmail" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+</wsdl:types>
+<wsdl:message name="readStatusUpdateRequest">
+<wsdl:part element="prd:emailreadResponse" name="emailreadStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="hijackRequest">
+<wsdl:part element="prd:emailhijackRequest" name="emailhijackRequest"/>
+</wsdl:message>
+<wsdl:message name="hijackStatusUpdateRequest">
+<wsdl:part element="prd:emailhijackResponse" name="emailhijackStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="prequalStatusUpdateRequest">
+<wsdl:part element="prd:emailprequalResponse" name="emailprequalStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="createRequest">
+<wsdl:part element="prd:emailcreateRequest" name="emailcreateRequest"/>
+</wsdl:message>
+<wsdl:message name="readRequest">
+<wsdl:part element="prd:emailreadRequest" name="emailreadRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteRequest">
+<wsdl:part element="prd:emaildeleteRequest" name="emaildeleteRequest"/>
+</wsdl:message>
+<wsdl:message name="updateRequest">
+<wsdl:part element="prd:emailupdateRequest" name="emailupdateRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteStatusUpdateRequest">
+<wsdl:part element="prd:emaildeleteResponse" name="emaildeleteStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="prequalRequest">
+<wsdl:part element="prd:emailprequalRequest" name="emailprequalRequest"/>
+</wsdl:message>
+<wsdl:message name="Error">
+<wsdl:part name="Error" type="ord:Error"/>
+</wsdl:message>
+<wsdl:message name="createStatusUpdateRequest">
+<wsdl:part element="prd:emailcreateResponse" name="emailcreateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="updateStatusUpdateRequest">
+<wsdl:part element="prd:emailupdateResponse" name="emailupdateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:portType name="emailServices">
+<wsdl:operation name="create">
+<wsdl:input message="tns:createRequest" name="createRequest"/>
+</wsdl:operation>
+<wsdl:operation name="update">
+<wsdl:input message="tns:updateRequest" name="updateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="hijack">
+<wsdl:input message="tns:hijackRequest" name="hijackRequest"/>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<wsdl:input message="tns:deleteRequest" name="deleteRequest"/>
+</wsdl:operation>
+<wsdl:operation name="prequal">
+<wsdl:input message="tns:prequalRequest" name="prequalRequest"/>
+</wsdl:operation>
+<wsdl:operation name="read">
+<wsdl:input message="tns:readRequest" name="readRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:portType name="emailCallbackServices">
+<wsdl:operation name="prequalStatusUpdate">
+<wsdl:input message="tns:prequalStatusUpdateRequest" name="prequalStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="createStatusUpdate">
+<wsdl:input message="tns:createStatusUpdateRequest" name="createStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="readStatusUpdate">
+<wsdl:input message="tns:readStatusUpdateRequest" name="readStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<wsdl:input message="tns:deleteStatusUpdateRequest" name="deleteStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="updateStatusUpdate">
+<wsdl:input message="tns:updateStatusUpdateRequest" name="updateStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="hijackStatusUpdate">
+<wsdl:input message="tns:hijackStatusUpdateRequest" name="hijackStatusUpdateRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="emailBindingSOAP" type="tns:emailServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="create">
+<soap:operation soapAction="SNI-FA_email_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="update">
+<soap:operation soapAction="SNI-FA_email_1.0_update_Asynchronous" style="document"/>
+<wsdl:input name="updateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="hijack">
+<soap:operation soapAction="SNI-FA_email_1.0_hijack_Asynchronous" style="document"/>
+<wsdl:input name="hijackRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<soap:operation soapAction="SNI-FA_email_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="prequal">
+<soap:operation soapAction="SNI-FA_email_1.0_prequal_Asynchronous" style="document"/>
+<wsdl:input name="prequalRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="read">
+<soap:operation soapAction="SNI-FA_email_1.0_read_Asynchronous" style="document"/>
+<wsdl:input name="readRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:binding name="emailCallbackBindingSOAP" type="tns:emailCallbackServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="prequalStatusUpdate">
+<soap:operation soapAction="SNI-FA_email_1.0_prequal_Asynchronous" style="document"/>
+<wsdl:input name="prequalStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="createStatusUpdate">
+<soap:operation soapAction="SNI-FA_email_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="readStatusUpdate">
+<soap:operation soapAction="SNI-FA_email_1.0_read_Asynchronous" style="document"/>
+<wsdl:input name="readStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<soap:operation soapAction="SNI-FA_email_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="updateStatusUpdate">
+<soap:operation soapAction="SNI-FA_email_1.0_update_Asynchronous" style="document"/>
+<wsdl:input name="updateStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="hijackStatusUpdate">
+<soap:operation soapAction="SNI-FA_email_1.0_hijack_Asynchronous" style="document"/>
+<wsdl:input name="hijackStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="email">
+<wsdl:port binding="tns:emailCallbackBindingSOAP" name="emailCallbackServices">
+<soap:address location="http://localhost:8080/path/emailCallbackServices"/>
+</wsdl:port>
+<wsdl:port binding="tns:emailBindingSOAP" name="emailServices">
+<soap:address location="http://localhost:8080/path/emailServices"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

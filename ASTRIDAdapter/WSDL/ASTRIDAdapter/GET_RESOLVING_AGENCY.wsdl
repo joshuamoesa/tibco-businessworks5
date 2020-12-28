@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_RESOLVING_AGENCY" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_RESOLVING_AGENCY">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_RESOLVING_AGENCY">
+			<xsd:element name="GetResolvingAgencyRequest" type="s:KSD_GetResolvingAgency"/>
+			<xsd:complexType name="KSD_GetResolvingAgency">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="DutchPostcodeNumbers" nillable="true" type="xsd:string"/>
+					<xsd:element name="DutchPostcodeLetters" nillable="true" type="xsd:string"/>
+					<xsd:element name="HouseNumber" nillable="true" type="xsd:string"/>
+					<xsd:element name="HouseNumberExtension" nillable="true" type="xsd:string"/>
+					<xsd:element name="MM007_ProductTypeId" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetResolvingAgencyResponse" type="s:KSD_ResolvingAgency"/>
+			<xsd:complexType name="KSD_ResolvingAgency">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="ResolvingAgencies" nillable="true" type="s:ResolvingAgency"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ResolvingAgency">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="ResolvingAgency" type="s:ResolvingAgencyType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ResolvingAgencyType">
+				<xsd:sequence>
+					<xsd:element name="ResearchDeptCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="ResearchEmployeeCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="ResearchAgencyCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="AppointRequired" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="GetResolvingAgencyRequestMsg">
+		<part name="parameters" element="s:GetResolvingAgencyRequest"/>
+	</message>
+	<message name="GetResolvingAgencyResponseMsg">
+		<part name="parameters" element="s:GetResolvingAgencyResponse"/>
+	</message>
+	<portType name="GET_RESOLVING_AGENCYPortType">
+		<operation name="GetResolvingAgencyRequest">
+			<input message="s:GetResolvingAgencyRequestMsg"/>
+			<output message="s:GetResolvingAgencyResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="GET_RESOLVING_AGENCYSoapBinding" type="s:GET_RESOLVING_AGENCYPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="GetResolvingAgencyRequest">
+			<soap:operation soapAction="urn:GET_RESOLVING_AGENCY/GetResolvingAgency" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="GET_RESOLVING_AGENCY_SERVICE">
+		<wsdl:documentation>versie 2.0</wsdl:documentation>
+		<port name="GET_RESOLVING_AGENCYSoap" binding="s:GET_RESOLVING_AGENCYSoapBinding">
+			<soap:address location="http://localhost:9190/ExpertDeskAdapter"/>
+		</port>
+	</service>
+</wsdl:definitions>

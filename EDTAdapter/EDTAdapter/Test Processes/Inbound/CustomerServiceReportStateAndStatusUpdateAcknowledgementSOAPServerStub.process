@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://wsdlns.kpn.com/fixed/B2BAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://xmlns.kpn.com/b2b/public/XDFAccess" xmlns:pfx2="http://wsdlns.kpn.com/fixed/MOMSAdapter" xmlns:pfx3="urn:CustomerServiceRequest" xmlns:pfx4="urn:CustomerServiceReportStateAndStatusUpdateAcknowledgement" xmlns:pfx5="urn:B2B_CustomerServiceRequest_SSUA">
+    <wsdl:import namespace="http://wsdlns.kpn.com/fixed/B2BAdapter" location="/WSDL/xDFAccessAdapter/XDFOrderMessage.wsdl"/>
+    <wsdl:import namespace="urn:CustomerServiceRequest" location="/WSDL/EDTAdapter/840-CustomerServiceRequest.wsdl"/>
+    <wsdl:import namespace="urn:CustomerServiceReportStateAndStatusUpdateAcknowledgement" location="/WSDL/EDTAdapter/844 - CustomerServiceReportStateAndStatusUpdateAcknowledgement.wsdl"/>
+    <wsdl:import namespace="urn:B2B_CustomerServiceRequest_SSUA" location="/WSDL/EDTAdapter/B2B_CustomerServiceRequest_SSUA.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/Inbound/CustomerServiceReportStateAndStatusUpdateAcknowledgementSOAPServerStub.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>59</pd:x>
+        <pd:y>50</pd:y>
+        <config>
+            <service>pfx5:B2B_CustomerServiceRequest_SSUAPortType</service>
+            <wsdlNamespaceRoot>urn:B2B_CustomerServiceRequest_SSUA/CreateImpl</wsdlNamespaceRoot>
+            <operation>Create</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>urn:B2B_CustomerServiceRequest_SSUA/Create</soapAction>
+            <sharedChannel>/EDTAdapter/Test Resources/Test HTTP Connection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <sharedChannels>
+                <httpChannel>
+                    <useBasicAuthentication>false</useBasicAuthentication>
+                </httpChannel>
+            </sharedChannels>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>368</pd:endX>
+    <pd:endY>56</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>220</pd:x>
+        <pd:y>57</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx5:CreateResponse>
+                    <pfx5:GUID>
+                        <xsl:value-of select="&quot;guid&quot;"/>
+                    </pfx5:GUID>
+                    <pfx5:STATUS>
+                        <xsl:value-of select="0"/>
+                    </pfx5:STATUS>
+                    <pfx5:MSG_CODE>
+                        <xsl:value-of select="&quot;msg_code&quot;"/>
+                    </pfx5:MSG_CODE>
+                    <pfx5:ERROR_CODE>
+                        <xsl:value-of select="&quot;err_code&quot;"/>
+                    </pfx5:ERROR_CODE>
+                    <pfx5:ERROR_DESCRIPTION>
+                        <xsl:value-of select="&quot;err_desc&quot;"/>
+                    </pfx5:ERROR_DESCRIPTION>
+                </pfx5:CreateResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

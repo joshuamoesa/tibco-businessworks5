@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:CleverUtils="java://Clever.CleverUtils" xmlns:ns="com/tibco/pe/commands" xmlns:ns3="http://www.tibco.com/CLEver/ExtraTypes" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/pe/DeployedVarsType">
+    <pd:name>Processes/BackendServices/Configuration/RuleEngine/Implementation/LoadVersion.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>48</pd:startX>
+    <pd:startY>154</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>541</pd:endX>
+    <pd:endY>148</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1283180627955</pd:targetNamespace>
+    <pd:activity name="LoadRuleXSLT">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>331</pd:x>
+        <pd:y>83</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Exception/LoadRuleXSLT.process</processName>
+            <processNameXPath/>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ID>
+                    <xsl:value-of select="$Get-Current-Active-Version/root/Version"/>
+                </ID>
+                <ns3:Security>
+                    <ns3:UserName>
+                        <xsl:value-of select="''"/>
+                    </ns3:UserName>
+                    <ns3:Password>
+                        <xsl:value-of select="''"/>
+                    </ns3:Password>
+                </ns3:Security>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LoadStore">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>334</pd:x>
+        <pd:y>218</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/LoadStore.process</processName>
+            <processNameXPath/>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ID>
+                    <xsl:value-of select="$Get-Current-Active-Version/root/Version"/>
+                </ID>
+                <ns3:Security>
+                    <ns3:UserName>
+                        <xsl:value-of select="''"/>
+                    </ns3:UserName>
+                    <ns3:Password>
+                        <xsl:value-of select="''"/>
+                    </ns3:Password>
+                </ns3:Security>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Get Current Active Version">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>189</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/RuleGeneration/General/GetCurrentActiveVersion.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/RuleGeneration/General/GetCurrentActiveVersion.process'</processNameXPath>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>466</pd:x>
+        <pd:y>149</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat('Version ',$Get-Current-Active-Version/root/Version,' loaded')"/>
+                </message>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Get Current Active Version</pd:from>
+        <pd:to>LoadRuleXSLT</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Current Active Version</pd:from>
+        <pd:to>LoadStore</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LoadRuleXSLT</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LoadStore</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Get Current Active Version</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

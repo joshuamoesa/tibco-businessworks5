@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx4="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:pfx5="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/2.0/GetBusinessSegmentInstalledBase.xsd" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0364_GetBusinessSegmentInstalledBase/2.0/Request" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/2.0/GetBusinessSegmentInstalledBase.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Request/GetBusinessSegmentInstalledBase.2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0364_GetBusinessSegmentInstalledBase/2.0/Request" schemaLocation="/XSDSchemas/SiebelZMAdapter/Imported/0364_GetBusinessSegmentInstalledBase_2.0_Request_EAI_BUS_SIDE.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0364.GetBusinessSegmentInstalledBase.2.InputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:Input"/>
+    <pd:startX>157</pd:startX>
+    <pd:startY>164</pd:startY>
+    <pd:returnBindings>
+        <pfx5:Output>
+            <pfx5:Destination>
+                <xsl:value-of select="$Map-Data/pfx6:GetBusinessSegmentInstalledBase/ns2:CMH/ns2:TO/@ns2:DESTINATION"/>
+            </pfx5:Destination>
+            <pfx5:BodyContainer>
+                <xsl:copy-of select="$Map-Data/pfx6:GetBusinessSegmentInstalledBase"/>
+            </pfx5:BodyContainer>
+        </pfx5:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx5:Output"/>
+    <pd:endX>517</pd:endX>
+    <pd:endY>168</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>322</pd:x>
+        <pd:y>168</pd:y>
+        <config>
+            <element ref="pfx6:GetBusinessSegmentInstalledBase"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx4:Input/pfx4:BodyContainer/*" element="ns6:BODY"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx6:GetBusinessSegmentInstalledBase>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="&quot;1032&quot;"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="&quot;GetBusinessSegmentInstalledBase&quot;"/>
+                    </ns2:NAME>
+                    <ns2:MID>
+                        <xsl:value-of select="&quot;1032.10&quot;"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="&quot;InstalledBase&quot;"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="&quot;2.0&quot;"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.CRM.SiebelZMAdapter.Request.GetBusinessSegmentInstalledBase.2&quot;)"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx4:Input/pfx4:TrackingId"/>
+                        </ns2:MESSAGE_ID>
+                        <ns2:ITEM>
+                            <xsl:attribute name="ns2:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentId, '/', $_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentVersion)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns2:EVENT">
+                                <xsl:value-of select="&quot;GetBusinessSegmentInstalledBase&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns2:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns2:ITEM>
+                    </ns2:TRACKING>
+                </ns2:CMH>
+                <xsl:copy-of select="$Start/pfx4:Input/pfx4:BodyContainer/ns6:BODY"/>
+            </pfx6:GetBusinessSegmentInstalledBase>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Load Build xsd into the Mapper</pd:description>
+        <pd:x>315</pd:x>
+        <pd:y>103</pd:y>
+        <pd:width>128</pd:width>
+        <pd:height>38</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

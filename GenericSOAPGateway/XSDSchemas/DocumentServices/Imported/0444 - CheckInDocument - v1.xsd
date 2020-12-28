@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
+<xsd:schema xmlns="http://xmlns.kpn.com/EAI/fixed/0444_CheckInDocument/1.0/Request" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0444_CheckInDocument/1.0/Request" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="REQUEST_BODY" type="requestMessage_type">
+    <xsd:annotation>
+      <xsd:documentation>This is the BODY object for KPN EAI service number 0444 - CheckInDocument version 1.0 Request message.
+#### VERSION 1.0#1 ####</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="RESPONSE_BODY" type="responseMessage_Type">
+    <xsd:annotation>
+      <xsd:documentation>This is the BODY object for KPN EAI service number 0444 - CheckInDocument version 1.0 Response message.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="responseMessage_Type">
+    <xsd:annotation>
+      <xsd:documentation>#####################################################</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="ARCHIVE_INSTANCE_SELECTION" type="ArchiveInstanceSelection_type" />
+      <xsd:element minOccurs="0" name="RESULT">
+        <xsd:annotation>
+          <xsd:documentation>Check in result.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" name="DOCUMENT">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element maxOccurs="unbounded" name="DOCUMENT_PROPERTIES">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="PROPERTY_NAME" type="xsd:string">
+                          <xsd:annotation>
+                            <xsd:documentation>Name of additional information field characterising the reference. The contents of this field are derived from the value as indicated in the 'mapping instruction column' of the request message. The value is constructed based on the names in the request message and if not found, then the name used by the backend service. For example: 
+if the request provided the value "BILLING" for .../ADDRESS/ROLE and a value for .../ADDRESS/STREET_NAME, then when the backend service returns the value of this field (if associated with the found documents) in the name-value pair where the name is set to "BILLING/STREET_NAME". Addtional properties for which no canonical mapping is available will be used in non-canonical format and are front-end and/or back-end specific.
+</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element name="VALUE" type="xsd:string" />
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="ARCHIVE_INSTANCE" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>Name of the Archive instance that processed the checkin.
+The Archive instance module response will only contain a single RESULT element for this connected archive. 
+</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="ERROR_CODE" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>Error code as return by the document archive.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="ERROR_DESCRIPTION" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>Status description as returned by the document archive.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="requestMessage_type">
+    <xsd:sequence>
+      <xsd:element name="REQUESTOR" type="Requestor_type">
+        <xsd:annotation>
+          <xsd:documentation>Information about the requestor (user) of this service. Some backend systems require valid credentials in order to process the request.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ARCHIVE_INSTANCE_SELECTION" type="ArchiveInstanceSelection_type">
+        <xsd:annotation>
+          <xsd:documentation>Selection criteria to address the appropriate archives.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DOCUMENT_SPECIFICATION" type="DocumentSpecification_type">
+        <xsd:annotation>
+          <xsd:documentation>Document specification entry.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Requestor_type">
+    <xsd:annotation>
+      <xsd:documentation>#####################################################</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="APPLICATION_ID" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Identifier for application posting the request on behalf of a user.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="USERNAME" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>User that triggers the service request.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="ROLE" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Role for the user that triggers the request as understood by the DocsDB instances that will be addressed.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="PASSWORD" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Optional password. Password is used when no certification is available.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ArchiveInstanceSelection_type">
+    <xsd:sequence>
+      <xsd:element name="DOCUMENT_TYPE" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Secify document types. Document types are CustomerOrder, Letter, Contract, Invoice, </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="MARKET_SEGMENT" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Specify pertaining market segment.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="DOMAIN" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Specify pertaining business domain.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="PRODUCT_GROUP" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Specify pertaining product.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="ROUTING_PROPERTY">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="NAME" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>Specified an arbitrary property name used for selecting the appropriate backend systems.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="VALUE" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>Specified an arbitrary property value used for selecting the appropriate backend systems.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DocumentSpecification_type">
+    <xsd:sequence>
+      <xsd:element name="DOCUMENT_PROPERTIES">
+        <xsd:annotation>
+          <xsd:documentation>This structure contains all known selectable fields and a container for back-end specific fields that are not part of the common meta data structure or CDM</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:annotation>
+            <xsd:documentation>Customer information.</xsd:documentation>
+          </xsd:annotation>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="ADDRESS">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" name="FORMATTED_ADDRESS">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element minOccurs="0" name="STREET_NAME" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>Streetname in the address</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="HOUSE_NUMBER" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>House number in the address</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="HOUSE_NUMBER_EXTENSION" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>HOUSE_NUMBER_EXTENSION in the address</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="POST_CODE" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>POST_CODE in the address</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="CITY" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>CITY in the address</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="COUNTRY" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>COUNTRY in the address</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="UNFORMATTED_ADDRESS">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element minOccurs="0" name="COMPLETE_ADDRESS" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>Whole or a part of an unformatted address. In case of more than one unformatted parts of an address, each part wil have an ascending sequencenumber as attibute.</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="ROLE" type="xsd:string" />
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="CUSTOM_FIELD">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="NAME" type="xsd:string">
+                    <xsd:annotation>
+                      <xsd:documentation>Document property not included in CDM.</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="VALUE" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Document property value not included in CDM.</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="PARTY">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="FORMATTED_NAME">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element minOccurs="0" maxOccurs="unbounded" name="UNFORMATTED_NAME">
+                          <xsd:complexType>
+                            <xsd:sequence>
+                              <xsd:element minOccurs="0" name="COMPLETE_NAME" type="stringParameter_type">
+                                <xsd:annotation>
+                                  <xsd:documentation>An unformatted name of a person or Organisation. i.e. "De Heer A.B.C. de Boer"</xsd:documentation>
+                                </xsd:annotation>
+                              </xsd:element>
+                            </xsd:sequence>
+                          </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="ARISTOCRATIC_TITLE" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>The Aristocratic title of a person</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="ACADEMIC_TITLE" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>The ACADEMIC_TITLE title of a person</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="INITIALS" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>The Initials of a person</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="FAMILY_NAME_PREFIX" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>The Prefix in a family name of a person</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="FAMILY_NAME" type="stringParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>The Family name of a person</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                  <xsd:choice minOccurs="0">
+                    <xsd:element name="KPN_RELATION_ID" type="stringParameter_type">
+                      <xsd:annotation>
+                        <xsd:documentation>The unique ID of a customer in UCM</xsd:documentation>
+                      </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="CKR_ID" type="stringParameter_type">
+                      <xsd:annotation>
+                        <xsd:documentation>The unique ID of a customer in CKR</xsd:documentation>
+                      </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="MCCS_ID" type="stringParameter_type">
+                      <xsd:annotation>
+                        <xsd:documentation>The unique ID of a customer in MCCS</xsd:documentation>
+                      </xsd:annotation>
+                    </xsd:element>
+                  </xsd:choice>
+                  <xsd:element name="ROLE" type="xsd:string">
+                    <xsd:annotation>
+                      <xsd:documentation>Role of the party as used in this structure</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="ORGANISATON_NAME" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Name of an Organisation</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="ID" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>ID of a Party in an application of KPN</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="KVK_NUMBER" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>KVK_Number is the "Kamer van Koophandel" Number of a Company</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="INTERACTION_ID" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Specific CRM ID of a certain interaction with a customer</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="DOCUMENT">
+              <xsd:annotation>
+                <xsd:documentation>Document information.</xsd:documentation>
+              </xsd:annotation>
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="DATE">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="ROLE" type="xsd:string">
+                          <xsd:annotation>
+                            <xsd:documentation>Role of the date belonging to a document</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="DATE" type="dateTimeParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>Date of the document belonging to the role</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="TYPE" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Type of a Document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="ID" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>unique ID of a document in the Archive instance</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="NAME" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Name of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="FILE_NAME" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>FILE_NAME of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="FILE_SIZE" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>FILE_SIZE of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="FILE_EXTENSION" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>FILE_EXTENSION of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="SECURITY_GROUP" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>SECURITY_GROUP of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="CREATOR" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Creator or Author of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="SUBJECT" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>SUBJECT of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="REVISION" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Number of the Revision of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="REVISION_CLASS" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Revision class for the document revision.</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="REVISION_LABEL" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Label for the document revision.</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="DIRECTION" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Shows or a document was received from or was send to a customer</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="URL" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>The unique url to indentify a document in an Archive instance. It also can be use to retrieve a document directly from the Archive</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="PRODUCT">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" name="ID" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Unique ID of a Product</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="NAME" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Name of a Product</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="CATEGORY" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Category of a Product</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="BRAND" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Brand in the market to which a product belongs</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="MARKET">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" name="BRAND" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Brand in the Market to specify a certain product range like Hi, KPN, Telfort</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="SEGMENT" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>A Segment to specify a part of the Market like Business an Consumer</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="GROUP" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>A Group specifies a group of Organisations in the market like Banking or Care </xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="ORDER">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="DATE">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="ROLE" type="xsd:string">
+                          <xsd:annotation>
+                            <xsd:documentation>Specifies the role of the date of an order</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="DATE" type="dateTimeParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>Date of the order belonging to the role</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="ID" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>ID of an order in an application of KPN</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="TYPE" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Type of an Order</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="EXTERNAL_REFERENCE" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>The order reference of the external party</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="INVOICE">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="DATE">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="ROLE" type="xsd:string">
+                          <xsd:annotation>
+                            <xsd:documentation>Specifies the role of the date of an invoice</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element minOccurs="0" name="DATE" type="dateTimeParameter_type">
+                          <xsd:annotation>
+                            <xsd:documentation>Date of the invoice belonging to the role</xsd:documentation>
+                          </xsd:annotation>
+                        </xsd:element>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="NUMBER" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Unique number of an invoice</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="BILLING_CHAIN" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Name of the Billing Chain which created the invoice</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="CURRENCY" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>The currency of an invoice</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="AMOUNT" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>The total amount of an invoice</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="PAPER" type="booleanParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Indicates or an invoice is sended as paper by POST to the customer</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="EMAIL" type="booleanParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Indicates or an invoice is sended by email to the customer</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="KPN_ORGANISATION">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" name="BUSINESS_UNIT" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Indicates the internal KPN Business Unit</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="ORGANIZATIONAL_UNIT" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Indicates an internal Organisational Unit of KPN</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="ORGANIZATIONAL_SUBUNIT" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Indicates an internal Department of an Organisational Unit of KPN</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="CENTER_CODE" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Unique financial organisation code of a Department internal KPN</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="BUSINESS_PROCESS" type="booleanParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Indicated a business process internal KPN</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="DOMAIN" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Indicates or an invoice is sended by email to the customer</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="OTHERS">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element minOccurs="0" name="BANK_ACCOUNT" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Bank Account registered in the metadata of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="PHONE_NUMBER" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Phone number registered in the metadata of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="EMAIL_ADDRESS" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Email address registered in the metadata of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="SMS_NOTIFY_PHONE_NUMBER" type="stringParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Phone number for sending annotations registered in the metadata of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element minOccurs="0" name="COMMENT" type="booleanParameter_type">
+                    <xsd:annotation>
+                      <xsd:documentation>Comment registered in the metadata of a document</xsd:documentation>
+                    </xsd:annotation>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="stringParameter_type">
+    <xsd:annotation>
+      <xsd:documentation>#####################################################</xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string" />
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="IntegerParameter_type">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string" />
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="dateTimeParameter_type">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string" />
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="booleanParameter_type">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string" />
+    </xsd:simpleContent>
+  </xsd:complexType>
+</xsd:schema>

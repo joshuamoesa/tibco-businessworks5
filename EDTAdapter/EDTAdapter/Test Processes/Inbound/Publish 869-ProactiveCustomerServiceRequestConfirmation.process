@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/KIWI/Publish/BroadbandAccessOrder.xsd" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0335_BroadbandAccessOrder/1.0/Publish" xmlns:ns3="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx2="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" xmlns:eai1="java://com.kpn.eai.tools.Tools" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/KIWI/Publish/BroadbandAccessOrder.xsd" schemaLocation="/XSDSchemas/KIWIAdapter/BroadbandAccessOrder.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerInteractionNotification.xsd"/>
+    <pd:name>EDTAdapter/Test Processes/Inbound/Publish 869-ProactiveCustomerServiceRequestConfirmation.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>167</pd:startX>
+    <pd:startY>71</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>461</pd:endX>
+    <pd:endY>68</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>258</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <element ref="pfx2:CustomerInteractionNotification"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:CustomerInteractionNotification>
+                <ns3:CMH>
+                    <ns3:ID>
+                        <xsl:value-of select="&quot;869&quot;"/>
+                    </ns3:ID>
+                    <ns3:NAME>
+                        <xsl:value-of select="&quot;ProactiveCustomerServiceRequestConfirmation&quot;"/>
+                    </ns3:NAME>
+                    <ns3:FID>
+                        <xsl:value-of select="concat(&quot;71&quot;,tib:create-dateTime(2001,09, 11,09,43,30))"/>
+                    </ns3:FID>
+                    <ns3:MID>
+                        <xsl:value-of select="&quot;869.30&quot;"/>
+                    </ns3:MID>
+                    <ns3:PARADIGM>
+                        <xsl:value-of select="&quot;Subscribe&quot;"/>
+                    </ns3:PARADIGM>
+                    <ns3:OBJECT>
+                        <xsl:value-of select="&quot;ProactiveCustomerServiceRequestConfirmation&quot;"/>
+                    </ns3:OBJECT>
+                    <ns3:VERSION>
+                        <xsl:value-of select="&quot;1.0.0&quot;"/>
+                    </ns3:VERSION>
+                    <ns3:FROM>
+                        <xsl:attribute name="ns3:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EDTAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns3:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EDTAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns3:FROM>
+                    <ns3:TO>
+                        <xsl:attribute name="ns3:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env,&quot;.FIXED.Operations.EDTAdapter.Subscribe.CustomerInteractionNotification.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns3:TO>
+                    <ns3:TRACKING>
+                        <ns3:MESSAGE_ID>
+                            <xsl:value-of select="eai1:createGUID()"/>
+                        </ns3:MESSAGE_ID>
+                    </ns3:TRACKING>
+                    <ns3:ATTRIBUTE>
+                        <xsl:attribute name="ns3:NAME">
+                            <xsl:value-of select="&quot;MESSAGE_CREATION_TIME&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns3:VALUE">
+                            <xsl:value-of select="&quot;1999-05-31T13:20:00-05:00&quot;"/>
+                        </xsl:attribute>
+                    </ns3:ATTRIBUTE>
+                </ns3:CMH>
+                <ns4:BODY>
+                    <CUSTOMER_INTERACTION_NOTIFICATION>
+                        <ATTACHMENT>
+                            <ATTACHMENT_ID>
+                                <xsl:value-of select="&quot;ATT_ID&quot;"/>
+                            </ATTACHMENT_ID>
+                        </ATTACHMENT>
+                        <INTERACTION_STATUS>
+                            <ERROR_CODE>
+                                <xsl:value-of select="&quot;ERROR_CODE&quot;"/>
+                            </ERROR_CODE>
+                            <ERROR_DESCRIPTION>
+                                <xsl:value-of select="&quot;ERROR_DESCRIPTION&quot;"/>
+                            </ERROR_DESCRIPTION>
+                        </INTERACTION_STATUS>
+                        <BUSINESS_INTERACTION_TYPE>
+                            <xsl:value-of select="&quot;CONFIRMATION&quot;"/>
+                        </BUSINESS_INTERACTION_TYPE>
+                        <INTERACTION_ID>
+                            <xsl:value-of select="&quot;INTR_ID&quot;"/>
+                        </INTERACTION_ID>
+                        <EXTERNAL_ID>
+                            <xsl:value-of select="&quot;EXT_ID&quot;"/>
+                        </EXTERNAL_ID>
+                        <EXTERNAL_SUB_ID>
+                            <xsl:value-of select="&quot;EXT_SUB_ID&quot;"/>
+                        </EXTERNAL_SUB_ID>
+                        <DESCRIPTION>
+                            <xsl:value-of select="&quot;Description&quot;"/>
+                        </DESCRIPTION>
+                    </CUSTOMER_INTERACTION_NOTIFICATION>
+                </ns4:BODY>
+            </pfx2:CustomerInteractionNotification>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>361</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.Operations.EDTAdapter.Subscribe.CustomerInteractionNotification.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx2:CustomerInteractionNotification,false(),true())"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

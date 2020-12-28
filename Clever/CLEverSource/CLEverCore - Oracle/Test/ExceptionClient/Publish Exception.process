@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://www.tibco.com/CLEver/ExtraTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <pd:name>Test/ExceptionClient/Publish Exception.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>87</pd:startX>
+    <pd:startY>114</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>725</pd:endX>
+    <pd:endY>111</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Iterator>
+            <xsd:element name="Value" type="xsd:int"/>
+        </Iterator>
+    </pd:processVariables>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>393</pd:x>
+        <pd:y>10</pd:y>
+        <pd:width>273</pd:width>
+        <pd:height>190</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>while</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:whileCondition>$Iterator/Value &gt; 0</pd:whileCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Publish Exception</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Decrease</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Publish Exception</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Publish Exception</pd:from>
+            <pd:to>Decrease</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Publish Exception">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>472</pd:x>
+            <pd:y>111</pd:y>
+            <config>
+                <PermittedMessageType>XML Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>%%Naming/Environment%%.%%Naming/Organisation%%.%%Naming/FunctionalDomain%%.%%Naming/Application%%.%%Connections/JMS/EventBus/ExceptionQueue%%</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/Shared Resources/Connections/JMS/JMS.sharedjmscon</ConnectionReference>
+                <InDataxsdString ref="pfx:Exception"/>
+            </config>
+            <pd:inputBindings>
+                <ns2:ActivityInput>
+                    <Body>
+                        <pfx:Exception>
+                            <pfx2:ProcessContext>
+                                <pfx2:BusinessDomain>
+                                    <xsl:value-of select="concat(&quot;BD_&quot; , $Generate-Random/randomNo)"/>
+                                </pfx2:BusinessDomain>
+                                <pfx2:TechnicalDomain>
+                                    <xsl:value-of select="concat(&quot;TD_&quot; , $Generate-Random/randomNo)"/>
+                                </pfx2:TechnicalDomain>
+                                <pfx2:BusinessConcept>
+                                    <xsl:value-of select="concat(&quot;BC_&quot; , $Generate-Random/randomNo)"/>
+                                </pfx2:BusinessConcept>
+                                <pfx2:BusinessOperation>
+                                    <xsl:value-of select="concat(&quot;BO_&quot; , $Generate-Random/randomNo)"/>
+                                </pfx2:BusinessOperation>
+                                <pfx2:BusinessRefs>
+                                    <pfx2:Parameter>
+                                        <pfx2:Name>
+                                            <xsl:value-of select="&quot;Param 1&quot;"/>
+                                        </pfx2:Name>
+                                        <pfx2:Value>
+                                            <xsl:value-of select="&quot;Value 1&quot;"/>
+                                        </pfx2:Value>
+                                    </pfx2:Parameter>
+                                    <pfx2:Parameter>
+                                        <pfx2:Name>
+                                            <xsl:value-of select="&quot;Param 2&quot;"/>
+                                        </pfx2:Name>
+                                        <pfx2:Value>
+                                            <xsl:value-of select="&quot;value 2&quot;"/>
+                                        </pfx2:Value>
+                                    </pfx2:Parameter>
+                                    <pfx2:Parameter>
+                                        <pfx2:Name>
+                                            <xsl:value-of select="&quot;Param 3&quot;"/>
+                                        </pfx2:Name>
+                                        <pfx2:Value>
+                                            <xsl:value-of select="&quot;Value 3&quot;"/>
+                                        </pfx2:Value>
+                                    </pfx2:Parameter>
+                                </pfx2:BusinessRefs>
+                                <pfx2:TransactionID>
+                                    <xsl:value-of select="concat($_processContext/ns:ProcessContext/ProcessId , current-dateTime())"/>
+                                </pfx2:TransactionID>
+                                <pfx2:ServiceName>
+                                    <xsl:value-of select="&quot;Test Client&quot;"/>
+                                </pfx2:ServiceName>
+                                <pfx2:ProcessName>
+                                    <xsl:value-of select="&quot;Publish Exception&quot;"/>
+                                </pfx2:ProcessName>
+                                <pfx2:ComponentName>
+                                    <xsl:value-of select="&quot;Component 1&quot;"/>
+                                </pfx2:ComponentName>
+                                <pfx2:HostName>
+                                    <xsl:value-of select="&quot;KADRY&quot;"/>
+                                </pfx2:HostName>
+                                <pfx2:DateTime>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx2:DateTime>
+                            </pfx2:ProcessContext>
+                            <pfx:ExceptionDetail>
+                                <pfx:ExceptionCategory>
+                                    <xsl:value-of select="concat(&quot;CAT_&quot; , $Generate-Random/randomNo)"/>
+                                </pfx:ExceptionCategory>
+                                <pfx:ExceptionSeverity>
+                                    <xsl:value-of select="concat(&quot;SEV_&quot; , $Generate-Random/randomNo)"/>
+                                </pfx:ExceptionSeverity>
+                                <pfx:ExceptionType>
+                                    <xsl:value-of select="concat(&quot;TYP_&quot; , $Generate-Random/randomNo)"/>
+                                </pfx:ExceptionType>
+                                <pfx:ExceptionCode>
+                                    <xsl:value-of select="&quot;TST&quot;"/>
+                                </pfx:ExceptionCode>
+                                <pfx:Message>
+                                    <xsl:value-of select="&quot;Currently we are testing exception storage&quot;"/>
+                                </pfx:Message>
+                                <pfx:ReplyDestination>
+                                    <xsl:value-of select="concat(&quot;Reply Destination_&quot;, $Generate-Random/randomNo)"/>
+                                </pfx:ReplyDestination>
+                            </pfx:ExceptionDetail>
+                        </pfx:Exception>
+                    </Body>
+                </ns2:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Decrease">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>583</pd:x>
+            <pd:y>109</pd:y>
+            <config>
+                <variableName>Iterator</variableName>
+            </config>
+            <pd:inputBindings>
+                <Value>
+                    <xsl:value-of select="$Iterator/Value - 1"/>
+                </Value>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Set Iterations">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>192</pd:x>
+        <pd:y>117</pd:y>
+        <config>
+            <variableName>Iterator</variableName>
+        </config>
+        <pd:inputBindings>
+            <Value>
+                <xsl:value-of select="1"/>
+            </Value>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Random">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>307</pd:x>
+        <pd:y>116</pd:y>
+        <config>
+            <element>
+                <xsd:element name="randomNo" type="xsd:long"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <randomNo>
+                <xsl:value-of select="((tib:get-year-from-dateTime(current-dateTime())*10000)+(tib:get-month-from-dateTime(current-dateTime())*100)+ tib:get-day-from-dateTime(current-dateTime()) * 100) + tib:get-minutes-from-dateTime(current-dateTime())"/>
+            </randomNo>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Set Iterations</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Set Iterations</pd:from>
+        <pd:to>Generate Random</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Generate Random</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

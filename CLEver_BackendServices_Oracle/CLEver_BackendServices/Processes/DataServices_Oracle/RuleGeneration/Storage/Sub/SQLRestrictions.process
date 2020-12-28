@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/BusinessDomain" xmlns:ns5="http://www.tibco.com/CLEver/Policy" xmlns:ns6="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://www.tibco.com/CLEver/Rule" xmlns:ns7="http://www.tibco.com/CLEver/ExceptionCode" xmlns:ns8="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns1="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:ns4="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns3="http://www.tibco.com/CLEver/ExceptionType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/CLEver/HistoryRetain">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Rule" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Rule.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/HistoryRetain" schemaLocation="/Shared Resources/Schema Definitions/CLEver/HistoryRetain.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/RuleGeneration/Storage/Sub/SQLRestrictions.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="BusinessDomain" type="xsd:string"/>
+                    <xsd:element name="TechnicalDomain" type="xsd:string"/>
+                    <xsd:element name="Service" type="xsd:string"/>
+                    <xsd:element name="Component" type="xsd:string"/>
+                    <xsd:element name="Log" type="xsd:int"/>
+                    <xsd:element name="Exception" type="xsd:int"/>
+                    <xsd:element name="Attachements" type="xsd:boolean"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>51</pd:startX>
+    <pd:startY>137</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <Statement>
+                <xsl:value-of select="concat('DELETE  FROM tda_logging WHERE ',tib:concat-sequence-format($Map-Log/root/Where, ' AND ', true()))"/>
+            </Statement>
+            <Statement>
+                <xsl:value-of select="concat('DELETE  FROM tda_exception WHERE ',tib:concat-sequence-format($Map-Exception/root/Where, ' AND ', true()))"/>
+            </Statement>
+            <xsl:if test="$Start/Input/Attachements='false'">
+                <Statement>
+                    <xsl:value-of select="concat('DELETE  FROM tda_logginglargetext where id in (select id  from tda_logging WHERE ',tib:concat-sequence-format($Map-Exception/root/Where, ' AND ', true()),')')"/>
+                </Statement>
+            </xsl:if>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Statement" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>639</pd:endX>
+    <pd:endY>122</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1296753702372</pd:targetNamespace>
+    <pd:activity name="TechnicalDomain">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>269</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/SQLRestrictionHelper.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <SubTable>
+                    <xsl:value-of select="'tda_technicaldomain'"/>
+                </SubTable>
+                <Restriction>
+                    <xsl:value-of select="$Start/Input/TechnicalDomain"/>
+                </Restriction>
+                <JoinColumn>
+                    <xsl:value-of select="'technicaldomain'"/>
+                </JoinColumn>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="BusinessDomain">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>273</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/SQLRestrictionHelper.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <SubTable>
+                    <xsl:value-of select="'tda_businessdomain'"/>
+                </SubTable>
+                <Restriction>
+                    <xsl:value-of select="$Start/Input/BusinessDomain"/>
+                </Restriction>
+                <JoinColumn>
+                    <xsl:value-of select="'businessdomain'"/>
+                </JoinColumn>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Service">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>277</pd:x>
+        <pd:y>244</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/SQLRestrictionHelper.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <SubTable>
+                    <xsl:value-of select="'tda_service'"/>
+                </SubTable>
+                <Restriction>
+                    <xsl:value-of select="$Start/Input/Service"/>
+                </Restriction>
+                <JoinColumn>
+                    <xsl:value-of select="'service'"/>
+                </JoinColumn>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Component">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>277</pd:x>
+        <pd:y>195</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/SQLRestrictionHelper.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <SubTable>
+                    <xsl:value-of select="'tda_component'"/>
+                </SubTable>
+                <Restriction>
+                    <xsl:value-of select="$Start/Input/Component"/>
+                </Restriction>
+                <JoinColumn>
+                    <xsl:value-of select="'component'"/>
+                </JoinColumn>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>436</pd:x>
+        <pd:y>127</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Where" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Where>
+                    <xsl:value-of select="$BusinessDomain/Output/Where"/>
+                </Where>
+                <Where>
+                    <xsl:value-of select="$Component/Output/Where"/>
+                </Where>
+                <Where>
+                    <xsl:value-of select="$Service/Output/Where"/>
+                </Where>
+                <Where>
+                    <xsl:value-of select="$TechnicalDomain/Output/Where"/>
+                </Where>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Log">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>540</pd:x>
+        <pd:y>125</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Where" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$Map-Data/root/Where">
+                    <Where>
+                        <xsl:value-of select="."/>
+                    </Where>
+                </xsl:for-each>
+                <Where>
+                    <xsl:value-of select="concat(&quot;sysdate> (datetime+NUMTODSINTERVAL(&quot;,$Start/Input/Log,&quot;,'Day'))&quot;)"/>
+                </Where>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Exception">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>546</pd:x>
+        <pd:y>195</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Where" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$Map-Data/root/Where">
+                    <Where>
+                        <xsl:value-of select="."/>
+                    </Where>
+                </xsl:for-each>
+                <Where>
+                    <xsl:value-of select="concat(&quot;sysdate> (datetime+NUMTODSINTERVAL(&quot;,$Start/Input/Exception,&quot;,'Day'))&quot;)"/>
+                </Where>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>TechnicalDomain</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>BusinessDomain</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BusinessDomain</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TechnicalDomain</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Component</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Service</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Component</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Service</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Map Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Map Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Log</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

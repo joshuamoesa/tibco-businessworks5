@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://kpn.com/eai/genericorder" xmlns:ns="http://kpn.com/eai/product/generic" xmlns:pfx3="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" xmlns:pfx4="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx6="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" xmlns:pfx7="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" xmlns:pfx8="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx9="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns1="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CDM/Product/Product_Type.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns4="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns5="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" xmlns:pfx91="http://kpn.com/eai/generic/order" xmlns:ns6="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:pfx10="http://xmlns.kpn.com/eai/common/errors" xmlns:ns7="http://www.tibco.com/pe/EngineTypes">
+    <xsd:import namespace="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" schemaLocation="/Schema/WMP/kpn.wod.w9.input.003.wsdl"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" schemaLocation="/Validation/ValidationService.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/genericorder" schemaLocation="/Schemas/cdm xsd's/CDM Order/GenericOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Request/ValidateMessageRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Response/ValidateMessageResponse.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://schemas.xmlsoap.org/soap/envelope/" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/WSDL/SOAP1.1.xsd"/>
+    <pd:name>GenericOrderGateway/Processes/Outbound/SubmitHTTPOrder.process</pd:name>
+    <pd:startName>HTTP Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="HTTP Receiver">
+        <pd:type>com.tibco.plugin.http.HTTPEventSource</pd:type>
+        <pd:resourceType>httppalette.httpEventSource</pd:resourceType>
+        <pd:x>47</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <outputMode>String</outputMode>
+            <defaultEncoding>ISO8859_1</defaultEncoding>
+            <inputOutputVersion>5.3.0</inputOutputVersion>
+            <newMimeSupport>true</newMimeSupport>
+            <sharedChannel>/GenericOrderGateway/Shared Resources/HTTP Connection-Strong.sharedhttp</sharedChannel>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="soapAction" type="xsd:string"/>
+                            <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Connection" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>630</pd:endX>
+    <pd:endY>139</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send HTTP Response">
+        <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+        <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+        <pd:x>486</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <closeConnection>true</closeConnection>
+            <eventSource>HTTP Receiver</eventSource>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings>
+            <ResponseActivityInput>
+                <xsl:choose>
+                    <xsl:when test="string-length($HTTP-Receiver/ProcessStarterOutput/Headers/soapAction)=0">
+                        <asciiContent>
+                            <xsl:value-of select="$Map-Empty-SoapAction/pfx:Envelope/pfx:Body/*[1]"/>
+                        </asciiContent>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$SubmitOrder/ServiceOut/Body">
+                            <asciiContent>
+                                <xsl:value-of select="$SubmitOrder/ServiceOut/Body"/>
+                            </asciiContent>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <Headers>
+                    <StatusLine>
+                        <xsl:value-of select="&quot;HTTP 200 OK&quot;"/>
+                    </StatusLine>
+                    <Content-Type>
+                        <xsl:value-of select="'text/xml'"/>
+                    </Content-Type>
+                </Headers>
+            </ResponseActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SubmitOrder">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>247</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <processName>/GenericOrderGateway/Processes/Outbound/Sub/SubmitOrder.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <Body>
+                    <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                </Body>
+                <SoapAction>
+                    <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/Headers/soapAction"/>
+                </SoapAction>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log HTTP Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>166</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GOG-04006&quot;"/>
+                </MsgCode>
+                <xsl:if test="$HTTP-Receiver/ProcessStarterOutput/Headers/soapAction">
+                    <additionalLogID>
+                        <xsl:value-of select="concat('SoapAction=',$HTTP-Receiver/ProcessStarterOutput/Headers/soapAction)"/>
+                    </additionalLogID>
+                </xsl:if>
+                <xsl:if test="$HTTP-Receiver/ProcessStarterOutput/PostData">
+                    <Parameter>
+                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                    </Parameter>
+                </xsl:if>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log HTTP Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>395</pd:x>
+        <pd:y>56</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GOG-04008&quot;"/>
+                </MsgCode>
+                <xsl:if test="$SubmitOrder/ServiceOut/Body">
+                    <Parameter>
+                        <xsl:value-of select="$SubmitOrder/ServiceOut/Body"/>
+                    </Parameter>
+                </xsl:if>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>484</pd:x>
+        <pd:y>269</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <pfx9:ActivityInput>
+                <message>
+                    <xsl:value-of select="$Map-Empty-SoapAction/pfx:Envelope/pfx:Body/*[1]"/>
+                </message>
+            </pfx9:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Empty SoapAction">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>250</pd:x>
+        <pd:y>279</pd:y>
+        <config>
+            <element ref="pfx:Envelope"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:Envelope>
+                <pfx:Body>
+                    <Fault>
+                        <faultcode>
+                            <xsl:value-of select="&quot;soap:server&quot;"/>
+                        </faultcode>
+                        <faultstring>
+                            <xsl:value-of select="&quot;EAI Error&quot;"/>
+                        </faultstring>
+                        <detail>
+                            <faultmessage>
+                                <xsl:value-of select="&quot;Invalid request: HTTP Header does not contain a soapAction attribute&quot;"/>
+                            </faultmessage>
+                            <errorcode>
+                                <xsl:value-of select="&quot;EAI-1001&quot;"/>
+                            </errorcode>
+                        </detail>
+                    </Fault>
+                </pfx:Body>
+            </pfx:Envelope>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Send HTTP Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SubmitOrder</pd:from>
+        <pd:to>Send HTTP Response</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>HTTP Receiver</pd:from>
+        <pd:to>SubmitOrder</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>HTTP Receiver</pd:from>
+        <pd:to>Log HTTP Request</pd:to>
+        <pd:xpathDescription>TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GOG-04008")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log HTTP Request</pd:from>
+        <pd:to>SubmitOrder</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SubmitOrder</pd:from>
+        <pd:to>Log HTTP Response</pd:to>
+        <pd:xpathDescription>TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GOG-04008")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log HTTP Response</pd:from>
+        <pd:to>Send HTTP Response</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SubmitOrder</pd:from>
+        <pd:to>Map Empty SoapAction</pd:to>
+        <pd:xpathDescription>NO SOAPACTION</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>string-length($HTTP-Receiver/ProcessStarterOutput/Headers/soapAction)=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Send HTTP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Empty SoapAction</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

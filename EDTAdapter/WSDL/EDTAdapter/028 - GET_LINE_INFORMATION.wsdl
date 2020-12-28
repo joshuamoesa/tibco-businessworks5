@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_LINE_INFORMATION" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_LINE_INFORMATION">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_LINE_INFORMATION">
+			<xsd:element name="GetLineInformation" type="s:KSD_GetLineInformationRequest"/>
+			<xsd:complexType name="KSD_GetLineInformationRequest">
+				<xsd:sequence>
+					<xsd:element name="GUID" type="xsd:string"/>
+					<xsd:element name="SERVICE_ID" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+					<xsd:element name="NETNUMMER" type="xsd:string"/>
+					<xsd:element name="ABONNEENUMMER" type="xsd:string"/>
+					<xsd:element name="ENDUSER_NAME" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetLineInformationResponse" type="s:KSD_GetLineInformationResponse"/>
+			<xsd:complexType name="KSD_GetLineInformationResponse">
+				<xsd:sequence>
+					<xsd:element name="STATUS_CODE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="MESSAGE_CODE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ERROR_CODE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ERROR_DESCRIPTION" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="GUID" type="xsd:string"/>
+					<xsd:element name="SOORT_DIENST" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ISDN_CATEGORIE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="NETNUMMER_HOOFD_ROEP_NR" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ABONNEENUMMER_HOOFD_ROEP_NR" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="CENTRALE_EENHEID_NAAM_HOST" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="CENTRALE_EENHEID_NAAM_AANSL" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="CENTRALE_EENHEID_TYPE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="STATUS_PORTERING" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="CGB_NUMMER" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="STATUS_GEBRUIK" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="STATUS_GEBRUIK_TOEV" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="POSTCODE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="HUISNUMMER" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="HUISNUMMER_TOEVOEGING" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="SERVICE_ID" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="TELCO_NAAM_VERKORT" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="KWALITEITS_CATEGORIE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="NETLIJN_DIENST" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="STATUS_GEBRUIK_NETLIJN_DIENST" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="INFRAPROVIDER" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="TELEFONIE_DIENST_TYPE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="NUMBER_OF_FACILITIES" type="xsd:integer" minOccurs="0"/>
+					<xsd:element name="FACILITIES" type="s:KSD_Facilities" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="KSD_Facilities">
+				<xsd:sequence>
+					<xsd:element name="FACILITY" type="s:KSD_Facility" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="KSD_Facility">
+				<xsd:sequence>
+					<xsd:element name="FACILITEIT_CODE" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="FACILITEIT_OMSCHRIJVING" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="FACILITEIT_STATUS" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="GetLineInformationRequestMsg">
+		<part name="parameters" element="s:GetLineInformation"/>
+	</message>
+	<message name="GetLineInformationResponseMsg">
+		<part name="parameters" element="s:GetLineInformationResponse"/>
+	</message>
+	<portType name="GET_LINE_INFORMATIONPortType">
+		<operation name="GetLineInformation">
+			<input message="s:GetLineInformationRequestMsg"/>
+			<output message="s:GetLineInformationResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="GET_LINE_INFORMATIONSoapBinding" type="s:GET_LINE_INFORMATIONPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="GetLineInformation">
+			<soap:operation soapAction="urn:GET_LINE_INFORMATION/GetLineInformation" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="GET_LINE_INFORMATION_SERVICE">
+		<port name="GET_LINE_INFORMATIONSoap" binding="s:GET_LINE_INFORMATIONSoapBinding">
+			<soap:address location="http://localhost:48093/EDTAdapter/Processes/GetLineInformation"/>
+		</port>
+	</service>
+</wsdl:definitions>

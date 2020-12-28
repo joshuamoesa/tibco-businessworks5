@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1168876013400" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1168879614243" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/servicescanneradapter/request/PerformQualityOfServiceScan.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/servicescanneradapter/response/PerformQualityOfServiceScan.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/annetadapter/request/PerformQualityOfServiceScan.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/annetadapter/response/PerformQualityOfServiceScan.xsd" xmlns:pfx7="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/GetBusinessSegmentInstalledBase.xsd" xmlns:pfx8="http://xmlns.kpn.com/fixed/SeibelZMAdapter/Request/GetBusinessSegmentInstalledBase.xsd" xmlns:pfx9="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/GetBusinessSegmentOrdersRequest.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/SeibelZMAdapter/Response/GetBusinessSegmentOrders.xsd" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/1.0/Request" xmlns:pfx11="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Response/GetBusinessSegmentOrders.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1168879614243" schemaLocation="/ServiceScannerAdapter/XSDSchemas/ServiceScannerAdapter/Response/PerformQualityOfServiceScanResponse.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/servicescanneradapter/request/PerformQualityOfServiceScan.xsd" schemaLocation="/XSDSchemas/ServiceScannerAdapter/Request/PerformQualityOfServiceScan.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/servicescanneradapter/response/PerformQualityOfServiceScan.xsd" schemaLocation="/XSDSchemas/ServiceScannerAdapter/Response/PerformQualityOfServiceScan.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/annetadapter/request/PerformQualityOfServiceScan.xsd" schemaLocation="/XSDSchemas/AnnetAdapter/Request/PerformQualityOfServiceScan.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/annetadapter/response/PerformQualityOfServiceScan.xsd" schemaLocation="/XSDSchemas/AnnetAdapter/Response/PerformQualityOfServiceScan.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/GetBusinessSegmentInstalledBase.xsd" schemaLocation="/XSDSchemas/ContactManagementAdapter/Request/GetBusinessSegmentInstalledBase.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SeibelZMAdapter/Request/GetBusinessSegmentInstalledBase.xsd" schemaLocation="/XSDSchemas/ContactManagementAdapter/Response/GetBusinessSegmentInstalledBase.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SeibelZMAdapter/Response/GetBusinessSegmentOrders.xsd" schemaLocation="/XSDSchemas/ContactManagementAdapter/Response/GetBusinessSegmentOrders.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/GetBusinessSegmentOrdersRequest.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Request/GetBusinessSegmentOrders.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Response/GetBusinessSegmentOrders.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Response/GetBusinessSegmentOrders.xsd"/>
+    <pd:name>SiebelZMAdapter/Test Processes/ContactManagementAdapter/GetBusinessSegmentOrders_Driver.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>27</pd:startX>
+    <pd:startY>35</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>238</pd:endX>
+    <pd:endY>35</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVRequestActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVRequestActivity</pd:resourceType>
+        <pd:x>128</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsXMLCompliantFieldNamesOutput>false</wantsXMLCompliantFieldNamesOutput>
+            <sharedChannel>/Common/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <subject>%%Env%%.FIXED.Operations.%%SiebelZMAdapter/ComponentId%%.Request.GetBusinessSegmentOrders.1</subject>
+            <xmlEncoding>true</xmlEncoding>
+            <inputXsdString ref="pfx9:GetBusinessSegmentOrders"/>
+            <outputXsdString ref="pfx11:GetBusinessSegmentOrders"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="1"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="2"/>
+                        </ns1:NAME>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="45345"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="444"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="444"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="44"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="444"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                    </ns1:CMH>
+                    <ns2:BODY>
+                        <CUSTOMER_ID>
+                            <ID_CKR>
+                                <xsl:value-of select="&quot;AB100007&quot;"/>
+                            </ID_CKR>
+                        </CUSTOMER_ID>
+                    </ns2:BODY>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

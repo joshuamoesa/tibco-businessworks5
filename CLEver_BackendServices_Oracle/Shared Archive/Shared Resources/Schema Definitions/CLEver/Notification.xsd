@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.tibco.com/CLEver/Notification"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.tibco.com/CLEver/ExtraTypes"
+	 xmlns:ns1="http://www.tibco.com/CLEver/Channel"
+	 targetNamespace="http://www.tibco.com/CLEver/Notification"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="ExtraTypes.xsd"/>
+	<xsd:import namespace="http://www.tibco.com/CLEver/Channel" schemaLocation="Channel.xsd"/>
+	<xsd:element name="Notification">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ID" type="xsd:integer" minOccurs="0"/>
+				<xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="Description" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ChannelID" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="Version" type="xsd:string" minOccurs="0"/>
+				<xsd:element ref="ns0:Parameters"/>
+				<xsd:element ref="ns0:SecurityInfo" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="NotificationFull">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Name" type="xsd:string"/>
+				<xsd:element name="Description" type="xsd:string" minOccurs="0"/>
+				<xsd:element ref="ns1:Channel"/>
+				<xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+				<xsd:element ref="ns0:Parameters"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="NotificationsFull">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="NotificationFull" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Notifications">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Notification" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

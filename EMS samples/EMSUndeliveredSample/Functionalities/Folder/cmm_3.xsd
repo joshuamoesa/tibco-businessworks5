@@ -1,0 +1,367 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+   targetNamespace="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0"
+   xmlns:bi="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0">
+  <xs:element name="Fault">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="header" type="bi:HeaderType"/>
+        <xs:element name="error" type="bi:ErrorType"/>
+        <xs:element name="errorStack" type="bi:ErrorStackType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="AttributeType">
+    <xs:sequence>
+      <xs:element name="key">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="value">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AttributesType">
+    <xs:sequence>
+      <xs:element name="attribute" type="bi:AttributeType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AuditContextType">
+    <xs:annotation>
+      <xs:documentation>The audit context block offers a means to add additional information to the message such as performance metrics and special remarks.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="receivedTimestamp" type="xs:dateTime" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Identifies the date and time that this message has been picked up.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="responseTimestamp" type="xs:dateTime" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Identifies the date and time that this message has been processed.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="processingTime" type="xs:decimal" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The duration of the processing of the initial message in seconds with at least millisecond accuracy.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ErrorStackType">
+    <xs:sequence>
+      <xs:element name="error" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="bi:ErrorType">
+              <xs:sequence>
+                <xs:element name="sequence" type="xs:positiveInteger">
+                  <xs:annotation>
+                    <xs:documentation>Identifies in what order the errors occurred.</xs:documentation>
+                  </xs:annotation>
+                </xs:element>
+              </xs:sequence>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ErrorType">
+    <xs:sequence>
+      <xs:element name="classification">
+        <xs:annotation>
+          <xs:documentation>Used to shed light on what a consumer can do with this error. Previously known as Functional vs Technical error type.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="FUNCTIONAL"/>
+            <xs:enumeration value="TECHNICAL"/>
+            <xs:enumeration value="UNDETERMINED"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="category" type="xs:nonNegativeInteger">
+        <xs:annotation>
+          <xs:documentation>Defines the category to which this error belongs. Previously named 'errorCode'. Described in detail in Ziggo ICC Error handling documentation. Current values are:
+0. Not-specified (e.g. there is no category)
+1. Insufficient Data
+2. Invalid Data
+3. Business Rule Violation
+4. Object Not Found
+5. Duplicate Object
+6. Insufficient Rights
+7. Stale Data
+8. Service Unavailable
+9. Un-attributable Error
+10. Undetermined Result</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="code">
+        <xs:annotation>
+          <xs:documentation>The combination 'category' and 'code' is used to identify an unique error scenario for this operation.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="message" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The actual error message that was generated.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="source" type="bi:SourceContextType">
+        <xs:annotation>
+          <xs:documentation>Describes what the source is of this error.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="payload" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Contains the specific data that was used in the conditional expression. Only used when throwing a non-retryable error.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="stackTrace" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Classig, unparsed stacktrace.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="HeaderType">
+    <xs:annotation>
+      <xs:documentation>The generic header of every request, response and fault message. Note that securityContext is mainly used in a request, auditContext in the response. Also note that notifications do not make use of this header structure.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="cmmVersion" type="xs:positiveInteger" fixed="3">
+        <xs:annotation>
+          <xs:documentation>Version of this Canonical Message Model</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="messageContext" type="bi:MessageContextType">
+        <xs:annotation>
+          <xs:documentation>The message context structure contains information on how the message should be handled when in flight. It specifies among other things the priority and expiration time of the message.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sourceContext" type="bi:SourceContextType">
+        <xs:annotation>
+          <xs:documentation>Source context describes where a message or an error came from. The source context is forwarded with every message on the bus for logging purposes.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="securityContext" type="bi:SecurityContextType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>This context can be used to pass through tokens or other identifiers to secure authenticity of a user or system.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="messageControl" type="bi:MessageControlType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The message control structure contains information on how the message should be handled when in flight. It specifies among other things the priority and expiration time of the message.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="auditContext" type="bi:AuditContextType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The audit context returns basic performance information of the message.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="attributes" type="bi:AttributesType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Optional attributes type that can be used for future extensions and additions.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MessageContextType">
+    <xs:annotation>
+      <xs:documentation>The message context structure contains information on how the message should be handled when in flight. It specifies among other things the priority and expiration time of the message.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="businessTransactionID">
+        <xs:annotation>
+          <xs:documentation>Unique string used to identify the message chain through the business.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="externalCorrelationID">
+        <xs:annotation>
+          <xs:documentation>This correlation key is used to associate the request with an (asynchronous) response for a consumer outside ESB.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="sentTimestamp" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>Indicates when the message has been sent. Example for usage in The Nederlands: 2013-01-18T21:32:52+01:00 (winter) or 2013-07-12T21:32:52+02:00 (summer).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="messageID" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Unique message ID, generated on the ESB.
+</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:length value="36"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="correlationID" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Generated correlation key used for asynchronous communication by ESB services.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:length value="36"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="conversationID" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>A business transaction is a chain identifier with multiple flows through ESB. The conversation ID is a unique identifier for 1 flow through the ESB.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:length value="36"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MessageControlType">
+    <xs:annotation>
+      <xs:documentation>The message control structure contains information on how the message should be handled when in flight. It specifies among other things the priority and expiration time of the message.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="expiration" type="xs:dateTime" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The expiration specifies the moment after which the message can safely be discarded. By default the expiration is not set which means that the messages will never expire. If a value is provided, then each component must copy the value similar to the businessTransactionID. If possible the component should abort further processing of the message after the point of expiration. The value of the expiration field must be copied to all subsequent messages, similar to the businessTransactionID.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="replyTo" default="false" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>This field must be set for asynchronous requests; i.e. it identifies the JMS queue where the response must be sent.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RequestType">
+    <xs:annotation>
+      <xs:documentation>Base type of a CMM Request. Every operation must use this type as base and is allowed to extend this with a 'body' element.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="header" type="bi:HeaderType">
+        <xs:annotation>
+          <xs:documentation>The generic CMM header. Used in every request. In a default SOAP request, a consumer only has to fill in the mandatory fields.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ResponseType">
+    <xs:annotation>
+      <xs:documentation>Base type of a CMM Response. Every operation must use this type as base and is allowed to extend this with a 'body' element.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="header" type="bi:HeaderType">
+        <xs:annotation>
+          <xs:documentation>The generic CMM header. Used in every response.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SecurityAttributeType">
+    <xs:annotation>
+      <xs:documentation>This context can be used to pass through tokens or other identifiers to secure authenticity of a user or system.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="key">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="value">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SecurityContextType">
+    <xs:annotation>
+      <xs:documentation>This context can be used to pass through tokens or other identifiers to secure authenticity of a user or system.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="securityAttribute" type="bi:SecurityAttributeType"
+         maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>This context can be used to pass through tokens or other identifiers to secure authenticity of a user or system.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SourceContextType">
+    <xs:annotation>
+      <xs:documentation>Source context describes where a message or an error came from. The source context is forwarded with every message on the bus for logging purposes.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="host">
+        <xs:annotation>
+          <xs:documentation>The IP address or hostname of the machine. Used for logging.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="application">
+        <xs:annotation>
+          <xs:documentation>The name of the application/system. Within the ESB this element contains the Component name (e.g. Deployment)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="operation" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Specifies the operation from which the message originated. The operation may also have a version which must be concatenated to the operation. Within the ESB the operation contains the {service} '_' {version}.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="user" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Identification of the user using this application.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

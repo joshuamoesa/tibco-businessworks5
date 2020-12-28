@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://www.tibco.com/CLEver/namespace/Custom" xmlns:pfx2="http://www.tibco.com/CLEver/Version" xmlns:pfx3="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns3="http://www.tibco.com/CLEver/Exception" xmlns:ns4="http://www.tibco.com/CLEver/InternalException" xmlns:pfx4="http://www.tibco.com/CLEver/ExceptionType" xmlns:ns5="http://www.tibco.com/CLEver/Channel" xmlns:ns6="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns7="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns9="http://www.tibco.com/CLEver/Notification" xmlns:ns10="http://www.tibco.com/CLEver/Policy" xmlns:ns11="http://www.tibco.com/CLEver/Resolution" xmlns:ns12="http://www.tibco.com/CLEver/Rule" xmlns:ns13="http://www.tibco.com/CLEver/Schedule" xmlns:ns14="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:pfx5="http://www.tibco.com/CLEver/ExceptionCode">
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExceptionType" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExceptionType.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Version" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Version.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExceptionCode" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExceptionCode.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/Configuration/Version/Import/ExceptionCode.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:Export"/>
+                    <xsd:element ref="pfx3:Security"/>
+                    <xsd:element name="Version" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>91</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <xsl:for-each select="$ExceptionTypeID/AccumulatedOutput/IDTransformations">
+                <IDTransformations>
+                    <Type>
+                        <xsl:value-of select="'ExceptionCode'"/>
+                    </Type>
+                    <New>
+                        <xsl:value-of select="new"/>
+                    </New>
+                    <Old>
+                        <xsl:value-of select="old"/>
+                    </Old>
+                </IDTransformations>
+            </xsl:for-each>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="IDTransformations" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Type" type="xsd:string"/>
+                                <xsd:element name="New" type="xsd:string"/>
+                                <xsd:element name="Old" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>662</pd:endX>
+    <pd:endY>88</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Group1">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>114</pd:x>
+        <pd:y>17</pd:y>
+        <pd:width>452</pd:width>
+        <pd:height>129</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/Input/pfx2:Export/pfx2:ConfigurationType[pfx2:Name='ExceptionCode']/pfx2:ConfigurationObject</pd:over>
+            <pd:iterationElementSlot>ExceptionCodes</pd:iterationElementSlot>
+            <pd:indexSlot>ExceptionTypeIterator</pd:indexSlot>
+            <pd:outSlot>ExceptionTypeID</pd:outSlot>
+            <pd:activityOutputName>Map ExceptionCode ID</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map ExceptionCode</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map ExceptionCode ID</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map ExceptionCode</pd:from>
+            <pd:to>Create</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Create</pd:from>
+            <pd:to>Map ExceptionCode ID</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Create">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>329</pd:x>
+            <pd:y>83</pd:y>
+            <config>
+                <processName>/Processes/DataServices_Oracle/Configuration/ExceptionCode/Create.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <xsl:for-each select="$Map-ExceptionCode/pfx5:ExceptionCode">
+                        <pfx5:ExceptionCode>
+                            <pfx5:ID>
+                                <xsl:value-of select="pfx5:ID"/>
+                            </pfx5:ID>
+                            <pfx5:Name>
+                                <xsl:value-of select="pfx5:Name"/>
+                            </pfx5:Name>
+                            <pfx5:Description>
+                                <xsl:value-of select="pfx5:Description"/>
+                            </pfx5:Description>
+                            <pfx5:Version>
+                                <xsl:value-of select="$Start/Input/Version"/>
+                            </pfx5:Version>
+                            <xsl:for-each select="pfx3:Parameters">
+                                <pfx3:Parameters>
+                                    <xsl:for-each select="pfx3:Parameter">
+                                        <pfx3:Parameter>
+                                            <pfx3:Name>
+                                                <xsl:value-of select="pfx3:Name"/>
+                                            </pfx3:Name>
+                                            <pfx3:Value>
+                                                <xsl:value-of select="pfx3:Value"/>
+                                            </pfx3:Value>
+                                        </pfx3:Parameter>
+                                    </xsl:for-each>
+                                </pfx3:Parameters>
+                            </xsl:for-each>
+                            <xsl:for-each select="pfx3:SecurityInfo">
+                                <pfx3:SecurityInfo>
+                                    <pfx3:isCreatable>
+                                        <xsl:value-of select="pfx3:isCreatable"/>
+                                    </pfx3:isCreatable>
+                                    <pfx3:isReadable>
+                                        <xsl:value-of select="pfx3:isReadable"/>
+                                    </pfx3:isReadable>
+                                    <pfx3:isUpdatable>
+                                        <xsl:value-of select="pfx3:isUpdatable"/>
+                                    </pfx3:isUpdatable>
+                                    <pfx3:isDeletable>
+                                        <xsl:value-of select="pfx3:isDeletable"/>
+                                    </pfx3:isDeletable>
+                                </pfx3:SecurityInfo>
+                            </xsl:for-each>
+                        </pfx5:ExceptionCode>
+                    </xsl:for-each>
+                    <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map ExceptionCode ID">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>475</pd:x>
+            <pd:y>90</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="IDTransformations">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="new" type="xsd:string"/>
+                                <xsd:element name="old" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <IDTransformations>
+                    <new>
+                        <xsl:value-of select="$Create/pfx3:ID"/>
+                    </new>
+                    <old>
+                        <xsl:value-of select="$Map-ExceptionCode/pfx5:ExceptionCode/pfx5:ID"/>
+                    </old>
+                </IDTransformations>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map ExceptionCode">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>199</pd:x>
+            <pd:y>83</pd:y>
+            <config>
+                <element ref="pfx5:ExceptionCode"/>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$ExceptionCodes/pfx2:ConfigurationObject/*" element="pfx5:ExceptionCode"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <xsl:copy-of select="$ExceptionCodes/pfx2:ConfigurationObject/pfx5:ExceptionCode"/>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

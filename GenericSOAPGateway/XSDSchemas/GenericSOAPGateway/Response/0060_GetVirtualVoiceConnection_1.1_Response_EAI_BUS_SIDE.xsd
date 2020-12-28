@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0060_GetVirtualVoiceConnection/1.1/Response" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0060_GetVirtualVoiceConnection/1.1/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="nodeName_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="50" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="portId_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="11" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="virtualPathIdentifier_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,4}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="vcIdentifier_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{0,5}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="serviceTypeCode_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="3" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="phoneNumberSubscriberNumber_type">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse" />
+      <xs:minLength value="1" />
+      <xs:maxLength value="15" />
+      <xs:pattern value="\d+" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="phoneNumberAreaCode_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+      <xs:pattern value="\d*" />
+      <xs:whiteSpace value="collapse" />
+      <xs:minLength value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="serviceId_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BODY">
+    <xs:annotation>
+      <xs:documentation>KPN EAI message body class.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" maxOccurs="2" name="NODE">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="4" name="PORT">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="8" name="PHONE_NUMBER_SET">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="CURRENT">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="MAIN_OR_CALL_NUMBER" type="tns:phoneNumberSubscriberNumber_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="SUBSCRIBER_NUMBER" type="tns:phoneNumberSubscriberNumber_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="AREA_CODE" type="tns:phoneNumberAreaCode_type" />
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_TYPE" type="tns:serviceTypeCode_type">
+                                  <xs:annotation>
+                                    <xs:documentation>EP - Single PSTN
+MP - Multiple PSTN
+EI - Single ISDN
+MI - Multiple ISDN</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="USAGE_TYPE" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>0 = reserved for connection
+1 = in use
+2 = reserved for cancellation</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="USAGE_TYPE_EXTENSION" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>01 = reserved for inport
+02 = reserved for uitport
+03 = reserved for port change
+04 = reserved for phonenumber change
+06 = reserved for change sub number
+08 = reserved for technical porting</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="PORTING_STATUS" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>0 = porteervlag gereserveerd aanleg
+1 = porteervlag geschakeld
+2 = porteervlag gereserveerd opheffing</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="NODE_NAME" type="tns:nodeName_type" />
+                                <xs:element minOccurs="0" maxOccurs="1" name="FACILITY_AVAILABLE_FLAG" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="FUTURE">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="AREA_CODE" type="tns:phoneNumberAreaCode_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="MAIN_OR_CALL_NUMBER" type="tns:phoneNumberSubscriberNumber_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="SUBSCRIBER_NUMBER" type="tns:phoneNumberSubscriberNumber_type" />
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_TYPE" type="tns:serviceTypeCode_type">
+                                  <xs:annotation>
+                                    <xs:documentation>EP - Single PSTN
+MP - Multiple PSTN
+EI - Single ISDN
+MI - Multiple ISDN</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="USAGE_TYPE" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>0 = reserved for connection
+1 = in use
+2 = reserved for cancellation</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="USAGE_TYPE_EXTENSION" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>01 = reserved for inport
+02 = reserved for uitport
+03 = reserved for port change
+04 = reserved for phonenumber change
+06 = reserved for change sub number
+08 = reserved for technical porting</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="PORTING_STATUS" type="xs:string">
+                                  <xs:annotation>
+                                    <xs:documentation>0 = porteervlag gereserveerd aanleg
+1 = porteervlag geschakeld
+2 = porteervlag gereserveerd opheffing</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="NODE_NAME" type="tns:nodeName_type" />
+                                <xs:element minOccurs="0" maxOccurs="1" name="FACILITY_AVAILABLE_FLAG" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="INDEX" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="EQUIPMENT_TYPE" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="EQUIPMENT_CODE" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="PORT_ID" type="tns:portId_type" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="VOICE_SERVICE_TYPE" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>VD - Voice over DSL</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="PROVISIONING_STATUS" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>0 = reserved for programming of the voice gateway
+1 = voice gateway programmed
+2 = reserved for removal of programming of the voice gateway</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="USERPORT_NUMBER" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="WHOLESALE_ACCESS_POINT_ID" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="VPI" type="tns:virtualPathIdentifier_type" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="VCI" type="tns:vcIdentifier_type" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="2" name="SERVICE">
+                <xs:annotation>
+                  <xs:documentation>Only used for NODE_TYPE = "VOICE_GATEWAY"
+This structure is new to Kanvas SDF access release, and will only be populated after that release of Kanvas and related EAI services are in place. Until then may be considered a placeholder.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_ID" type="tns:serviceId_type" />
+                    <xs:element minOccurs="0" maxOccurs="1" default="MA" name="SERVICE_TYPE" type="tns:serviceTypeCode_type">
+                      <xs:annotation>
+                        <xs:documentation>MA = MDF Access
+SA = SDF Access</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_INSTANCE" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="CENTRAL_UNIT_CONNECTION" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="NODE_NAME" type="tns:nodeName_type" />
+              <xs:element minOccurs="0" maxOccurs="1" default="&quot;VOICE_GATEWAY&quot;" name="NODE_TYPE" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>NODE[1] = "VOICE_GATEWAY"
+NODE[2] = "VOICE_SWITCH"</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="DIRECT_DIAL_BLOCK_AVAILABLE_FLAG" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="INDEX" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/namespace/Custom" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/CLEver/InternalException" xmlns:ns3="http://www.tibco.com/CLEver/Exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pfx2="http://www.tibco.com/CLEver/Channel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Channel" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Channel.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/Configuration/Channel/RetrieveMechanismNotificationParams.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ChannelID" type="xsd:int" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>32</pd:startX>
+    <pd:startY>114</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <xsl:for-each select="tib:tokenize($_globalVariables/ns1:GlobalVariables/StaticVariables/ConfigurationObjects/Channel/Mechanism/*[local-name()=$Retrieve-Channel/resultSet/Record/TRANSPORTMECHANISM]/NotificationParameters, &quot;,&quot;)">
+                <Parameters>
+                    <xsl:value-of select="."/>
+                </Parameters>
+            </xsl:for-each>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Parameters" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>242</pd:endX>
+    <pd:endY>117</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Retrieve Channel">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>140</pd:x>
+        <pd:y>184</pd:y>
+        <config>
+            <timeout>%%Connections/DB/Oracle/MainStorage/ExecutionTimeOut%%</timeout>
+            <commit>false</commit>
+            <maxRows>0</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>Select  TRANSPORTMECHANISM From  CFG_Channel Where ID=?</statement>
+            <jdbcSharedConfig>/Shared Resources/Connections/DB/Oracle/MainStorage.sharedjdbc</jdbcSharedConfig>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>ID</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <QueryOutputCachedSchemaColumns>TRANSPORTMECHANISM</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <ID>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/Input/ChannelID)">
+                            <xsl:value-of select="$Start/Input/ChannelID"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ID>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Retrieve Channel</pd:to>
+        <pd:xpathDescription>ChannelID provided</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>string-length($Start/Input/ChannelID)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Retrieve Channel</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

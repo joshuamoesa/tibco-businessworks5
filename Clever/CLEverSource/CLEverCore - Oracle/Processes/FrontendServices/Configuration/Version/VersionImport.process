@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://www.tibco.com/CLEver/Configuration/Version" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://www.tibco.com/CLEver/FrontendServices/Configuration/Version/VersionInterfaceSpecs" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns3="http://www.tibco.com/CLEver/Version" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/CLEver/namespace/Custom" xmlns:ns5="http://www.tibco.com/CLEver/Exception" xmlns:ns6="http://www.tibco.com/CLEver/InternalException" xmlns:ns22="http://www.tibco.com/CLEver/Configuration/BusinessDomain" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema">
+    <wsdl:import namespace="http://www.tibco.com/CLEver/Configuration/Version" location="/Processes/FrontendServices/Configuration/Version/Version.wsdl"/>
+    <pd:name>Processes/FrontendServices/Configuration/Version/VersionImport.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:Import_Version_Input"/>
+    <pd:startX>145</pd:startX>
+    <pd:startY>179</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:Import_Version_Output>
+            <part1>
+                <ns:Import_Version_Output>
+                    <ns2:ReturnValue>
+                        <xsl:value-of select="$Import-Version/ID"/>
+                    </ns2:ReturnValue>
+                </ns:Import_Version_Output>
+            </part1>
+        </wsdlPfx:Import_Version_Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:Import_Version_Output"/>
+    <pd:endX>443</pd:endX>
+    <pd:endY>182</pd:endY>
+    <pd:errorSchemas>
+        <Fault wsMsgRef="wsdlPfx:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Import Version">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>293</pd:x>
+        <pd:y>178</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Version/Import.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Version/Import.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$Start/wsdlPfx:Import_Version_Input/part1/ns:Import_Version_Input/ns3:Version"/>
+                <import>
+                    <xsl:value-of select="$Start/wsdlPfx:Import_Version_Input/part1/ns:Import_Version_Input/ns:Import"/>
+                </import>
+                <xsl:copy-of select="$Start/wsdlPfx:Import_Version_Input/part1/ns:Import_Version_Input/ns2:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>57</pd:x>
+        <pd:y>304</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>312</pd:x>
+        <pd:y>312</pd:y>
+        <config>
+            <faultName>Fault</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <data>
+                    <wsdlPfx:Exception>
+                        <part1>
+                            <ns6:ExceptionEnvelope>
+                                <ns6:Exception>
+                                    <Service>
+                                        <xsl:value-of select="substring-after(substring-before($_error/ns4:ErrorReport/ProcessStack, '.'), 'FrontendServices/')"/>
+                                    </Service>
+                                    <ErrorMessage>
+                                        <xsl:value-of select="$FormatError/Output/ErrorMessage"/>
+                                    </ErrorMessage>
+                                    <xsl:if test="$_error/ns4:ErrorReport/MsgCode">
+                                        <ErrorCode>
+                                            <xsl:value-of select="$_error/ns4:ErrorReport/MsgCode"/>
+                                        </ErrorCode>
+                                    </xsl:if>
+                                    <ns6:Error>
+                                        <ns6:ErrorReport>
+                                            <xsl:copy-of select="$_error/ns4:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error/ns4:ErrorReport/@*"/>
+                                            <xsl:copy-of select="$_error/ns4:ErrorReport/node()"/>
+                                        </ns6:ErrorReport>
+                                    </ns6:Error>
+                                </ns6:Exception>
+                            </ns6:ExceptionEnvelope>
+                        </part1>
+                    </wsdlPfx:Exception>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FormatError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>185</pd:x>
+        <pd:y>320</pd:y>
+        <config>
+            <processName>/Processes/InternalServices/Exception Handler/FormatErrorHumanReadable.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ns6:Exception>
+                    <Service>
+                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionSeverity/Name,'.',$_globalVariables/ns1:GlobalVariables/StaticVariables/Operations/Create)"/>
+                    </Service>
+                    <ErrorMessage>
+                        <xsl:value-of select="$_error/ns4:ErrorReport/Msg"/>
+                    </ErrorMessage>
+                    <ErrorCode>
+                        <xsl:value-of select="$_error/ns4:ErrorReport/MsgCode"/>
+                    </ErrorCode>
+                    <ns6:Error>
+                        <ns6:ErrorReport>
+                            <xsl:copy-of select="$_error/ns4:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns4:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns4:ErrorReport/node()"/>
+                        </ns6:ErrorReport>
+                    </ns6:Error>
+                </ns6:Exception>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Import Version</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Import Version</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>FormatError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FormatError</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

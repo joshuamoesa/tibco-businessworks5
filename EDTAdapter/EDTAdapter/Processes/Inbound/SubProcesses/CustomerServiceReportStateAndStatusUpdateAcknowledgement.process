@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:eai="java://com.kpn.eai.tools.Tools" xmlns:ns41="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1168876013400" xmlns:pfx5="http://xmlns.example.com/unique/default/namespace/1169120057621" xmlns:pfx6="http://xmlns.example.com/unique/default/namespace/1168879614243" xmlns:pfx7="http://engine.servicescanner.edgetech.nl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx8="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx9="http://xmlns.kpn.com/fixed/servicescanneradapter/request/PerformQualityOfServiceScan.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/servicescanneradapter/response/PerformQualityOfServiceScan.xsd" xmlns:pfx11="http://xmlns.kpn.com/fixed/servicescanneradapter/request/PerformQualityOfServiceScan_SOAPRequest.xsd" xmlns:pfx12="http://xmlns.kpn.com/fixed/annetadapter/request/PerformQualityOfServiceScan.xsd" xmlns:pfx13="http://xmlns.kpn.com/fixed/annetadapter/request/PerformQualityOfServiceScan_SOAPRequest.xsd" xmlns:pfx14="http://xmlns.kpn.com/fixed/annetadapter/response/PerformQualityOfServiceScan.xsd" xmlns:pfx15="http://xmlns.kpn.com/fixed/wbaadapter/publish/Order.xsd" xmlns:pfx16="http://xmlns.kpn.com/b2b/public/XDFAccess" xmlns:pfx17="http://wsdlns.kpn.com/fixed/B2BAdapter" xmlns:ns0="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:pfx18="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" xmlns:pfx19="urn:CustomerServiceRequest" xmlns:ns7="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish" xmlns:ns8="http://xmlns.tibco.com/encodings/mime" xmlns:pfx20="urn:CustomerServiceReportStateAndStatusUpdateAcknowledgement" xmlns:pfx21="urn:ProactiveCustomerServiceRequestConfirmation" xmlns:pfx22="http://tempuri.org" xmlns:pfx23="urn:B2B_CustomerServiceRequest_SSUA">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Request/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Response/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/wbaadapter/publish/Order.xsd" schemaLocation="/XSDSchemas/xDFAdapter/ORDER.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/b2b/public/XDFAccess" schemaLocation="/WSDL/xDFAccessAdapter/XDFOrderMessage.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerInteractionNotification.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="urn:CustomerServiceRequest" schemaLocation="/WSDL/EDTAdapter/840-CustomerServiceRequest.wsdl"/>
+    <xsd:import namespace="urn:CustomerServiceReportStateAndStatusUpdateAcknowledgement" schemaLocation="/WSDL/EDTAdapter/844 - CustomerServiceReportStateAndStatusUpdateAcknowledgement.wsdl"/>
+    <xsd:import namespace="http://tempuri.org" schemaLocation="/WSDL/EDTAdapter/B2B_CustomerServiceRequest_SSUA.wsdl"/>
+    <wsdl:import namespace="http://engine.servicescanner.edgetech.nl" location="/WSDL/ANNETAdapter/ServiceScanExecutionEngine.wsdl"/>
+    <wsdl:import namespace="http://wsdlns.kpn.com/fixed/B2BAdapter" location="/WSDL/xDFAccessAdapter/XDFOrderMessage.wsdl"/>
+    <wsdl:import namespace="urn:CustomerServiceRequest" location="/WSDL/EDTAdapter/840-CustomerServiceRequest.wsdl"/>
+    <wsdl:import namespace="urn:CustomerServiceReportStateAndStatusUpdateAcknowledgement" location="/WSDL/EDTAdapter/844 - CustomerServiceReportStateAndStatusUpdateAcknowledgement.wsdl"/>
+    <wsdl:import namespace="urn:B2B_CustomerServiceRequest_SSUA" location="/WSDL/EDTAdapter/B2B_CustomerServiceRequest_SSUA.wsdl"/>
+    <pd:name>EDTAdapter/Processes/Inbound/SubProcesses/CustomerServiceReportStateAndStatusUpdateAcknowledgement.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx18:CustomerInteractionNotification"/>
+    <pd:startX>27</pd:startX>
+    <pd:startY>168</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Map-SOAP-Response/pfx14:PerformQualityOfServiceScan"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>799</pd:endX>
+    <pd:endY>171</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <MapData>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="operationType" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </MapData>
+    </pd:processVariables>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>97</pd:x>
+        <pd:y>332</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Mapping-Error)">
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03004&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/@*"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/node()"/>
+                                </pfx2:ActivityError>
+                            </pfx2:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Generate-Error)">
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03002&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/@*"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/node()"/>
+                                </pfx2:ActivityError>
+                            </pfx2:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_SOAPRequestReply)">
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03002&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/node()"/>
+                                </pfx2:ActivityError>
+                            </pfx2:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03003&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                            </pfx2:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>172</pd:x>
+        <pd:y>13</pd:y>
+        <pd:width>516</pd:width>
+        <pd:height>325</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map to SOAP Request</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SOAP Response</pd:from>
+            <pd:to>end</pd:to>
+            <pd:xpathDescription>No Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$SOAPRequestReply/outputMessage/pfx23:CreateResponse/pfx23:STATUS=0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map to SOAP Request</pd:from>
+            <pd:to>Log SOAP Request</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SOAP Request</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>Log SOAP Response</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SOAP Response</pd:from>
+            <pd:to>Generate Error</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map to SOAP Request</pd:from>
+            <pd:to>Mapping Error</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Map to SOAP Request">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>236</pd:x>
+            <pd:y>175</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="SOAPInput">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Message" type="pfx22:Message"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <SOAPInput>
+                    <Message>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID)">
+                            <pfx22:GUID>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx22:GUID>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE)">
+                            <pfx22:managed_object_class>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx22:managed_object_class>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_ORIGINATION_IT_DOMAIN']/@ns1:VALUE)">
+                            <pfx22:message_origination_it_domain>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_ORIGINATION_IT_DOMAIN']/@ns1:VALUE"/>
+                            </pfx22:message_origination_it_domain>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_DESTINATION_IT_DOMAIN']/@ns1:VALUE)">
+                            <pfx22:message_destination_it_domain>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_DESTINATION_IT_DOMAIN']/@ns1:VALUE"/>
+                            </pfx22:message_destination_it_domain>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_CREATION_TIME']/@ns1:VALUE)">
+                            <pfx22:message_creation_time>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_CREATION_TIME']/@ns1:VALUE"/>
+                            </pfx22:message_creation_time>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_ID)">
+                            <pfx22:customer_service_request_reference_number>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_ID)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx22:customer_service_request_reference_number>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_SUB_ID)">
+                            <pfx22:customer_service_request_identifier>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_SUB_ID)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_SUB_ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx22:customer_service_request_identifier>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_ID)">
+                            <pfx22:customer_service_request_number>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_ID)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx22:customer_service_request_number>
+                        </xsl:if>
+                    </Message>
+                </SOAPInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log SOAP Request">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>402</pd:x>
+            <pd:y>78</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EDT-04001&quot;"/>
+                    </MsgCode>
+                    <MsgId>
+                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                    </MsgId>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($Map-to-SOAP-Request/SOAPInput, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log SOAP Response">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>563</pd:x>
+            <pd:y>78</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EDT-04002&quot;"/>
+                    </MsgCode>
+                    <MsgId>
+                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                    </MsgId>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($SOAPRequestReply/outputMessage/pfx23:CreateResponse, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPRequestReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>407</pd:x>
+            <pd:y>161</pd:y>
+            <config>
+                <timeout>%%EDTAdapter/Inbound/SOAP/Timeout%%</timeout>
+                <service>pfx23:B2B_CustomerServiceRequest_SSUAService</service>
+                <servicePort>B2B_CustomerServiceRequest_SSUASoap</servicePort>
+                <operation>Create</operation>
+                <soapAction>urn:B2B_CustomerServiceRequest_SSUA/Create</soapAction>
+                <endpointURL>%%EDTAdapter/Inbound/SOAP/EndpointUrls/EnpointPath%%%%EDTAdapter/Inbound/SOAP/EndpointUrls/CustomerServiceReportStateAndStatusUpdateAcknowledgement%%</endpointURL>
+                <requireBasicAuth>false</requireBasicAuth>
+                <basicHttpAuthIdentity/>
+                <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                    <ns0:strongCipherSuitesOnly>false</ns0:strongCipherSuitesOnly>
+                    <ns0:verifyHostName>false</ns0:verifyHostName>
+                    <ns0:cert isRef="true"/>
+                </ns0:ssl>
+                <useProxy>false</useProxy>
+                <proxyName/>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx23:Create>
+                        <xsl:copy-of select="$Map-to-SOAP-Request/SOAPInput/Message/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Map-to-SOAP-Request/SOAPInput/Message/@*"/>
+                        <xsl:copy-of select="$Map-to-SOAP-Request/SOAPInput/Message/node()"/>
+                    </pfx23:Create>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Generate Error">
+            <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+            <pd:resourceType>ae.activities.throw</pd:resourceType>
+            <pd:x>568</pd:x>
+            <pd:y>168</pd:y>
+            <config>
+                <faultName>Exception</faultName>
+            </config>
+            <pd:inputBindings>
+                <ns4:ActivityInput>
+                    <data>
+                        <pfx2:Error>
+                            <xsl:if test="$SOAPRequestReply/outputMessage/pfx23:CreateResponse/pfx23:MSG_CODE">
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx23:CreateResponse/pfx23:MSG_CODE"/>
+                                </pfx2:MsgCode>
+                            </xsl:if>
+                            <pfx2:Message>
+                                <xsl:value-of select="concat(&quot;SOAP response returned error code &quot;,$SOAPRequestReply/outputMessage/pfx23:CreateResponse/pfx23:STATUS)"/>
+                            </pfx2:Message>
+                            <pfx2:ErrorReport>
+                                <xsl:value-of select="concat($SOAPRequestReply/outputMessage/pfx23:CreateResponse/pfx23:ERROR_CODE,$SOAPRequestReply/outputMessage/pfx23:CreateResponse/pfx23:ERROR_DESCRIPTION)"/>
+                            </pfx2:ErrorReport>
+                        </pfx2:Error>
+                    </data>
+                </ns4:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Mapping Error">
+            <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+            <pd:resourceType>ae.activities.throw</pd:resourceType>
+            <pd:x>241</pd:x>
+            <pd:y>284</pd:y>
+            <config>
+                <faultName>Exception</faultName>
+            </config>
+            <pd:inputBindings>
+                <ns4:ActivityInput>
+                    <data>
+                        <pfx2:Error>
+                            <pfx2:MsgCode>
+                                <xsl:value-of select="&quot;EDT-03004&quot;"/>
+                            </pfx2:MsgCode>
+                            <pfx2:ErrorReport>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                            </pfx2:ErrorReport>
+                        </pfx2:Error>
+                    </data>
+                </ns4:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

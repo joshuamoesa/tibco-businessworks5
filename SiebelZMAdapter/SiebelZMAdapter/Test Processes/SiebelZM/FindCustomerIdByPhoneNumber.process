@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://siebel.com/FindCustomerIdByPhoneNumberImpl/FindCustomerIdByPhoneNumberImpl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://www.siebel.com/xml/KZM%20CKRNumber%20Response" xmlns:pfx2="http://siebel.com/FindCustomerIdByPhoneNumberImpl/FindCustomerIdByPhoneNumberImpl/FindCustomerIdByPhoneNumberImpl" xmlns:pfx3="http://siebel.com/GetCKRNumber" xmlns:ns2="http://www.siebel.com/xml/KZM%20CKRNumber%20and%20NAW%20Response">
+    <wsdl:import namespace="http://siebel.com/GetCKRNumber" location="/WSDL/SiebelZMAdapter/FindCustomerIdByPhoneNumber_GetCKRNumber.wsdl"/>
+    <pd:name>SiebelZMAdapter/Test Processes/SiebelZM/FindCustomerIdByPhoneNumber.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>174</pd:x>
+        <pd:y>109</pd:y>
+        <config>
+            <service>pfx3:KZM_spcSearch_spcCKRNumber</service>
+            <wsdlNamespaceRoot>http://siebel.com/GetCKRNumber/KZM_spcSearch_spcCKRNumberImpl</wsdlNamespaceRoot>
+            <operation>KZM_spcSearch_spcCKRNumber</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>/SiebelZMAdapter/Test Processes/SiebelZM/FindCustomerIdByPhoneNumber</soapAction>
+            <sharedChannel>/SiebelZMAdapter/Test Resources/HTTP Connection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>470</pd:endX>
+    <pd:endY>111</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>330</pd:x>
+        <pd:y>110</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx3:KZM_spcSearch_spcCKRNumber_Output>
+                    <ns2:Account>
+                        <ns2:CKRNumber>
+                            <xsl:value-of select="&quot;CBBQ2377&quot;"/>
+                        </ns2:CKRNumber>
+                        <ns2:PhoneNumber>
+                            <xsl:value-of select="&quot;030-450000&quot;"/>
+                        </ns2:PhoneNumber>
+                        <ns2:ResultCode>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </ns2:ResultCode>
+                        <ns2:Description>
+                            <xsl:value-of select="&quot;No Error&quot;"/>
+                        </ns2:Description>
+                    </ns2:Account>
+                </pfx3:KZM_spcSearch_spcCKRNumber_Output>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

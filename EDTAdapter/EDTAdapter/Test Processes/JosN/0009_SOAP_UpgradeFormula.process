@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:pfx2="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx3="urn:GET_CUSTOMER_DETAILS" xmlns:pfx4="urn:GET_CUSTOMER_CONTRACTS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="urn:GET_WORKORDERS" xmlns:pfx6="urn:UPGRADE_FORMULA" xmlns:pfx7="urn:GET_FORMULA">
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_DETAILS" location="/WSDL/EDTAdapter/002 - GET_CUSTOMER_DETAILS.wsdl"/>
+    <wsdl:import namespace="urn:GET_WORKORDERS" location="/WSDL/EDTAdapter/003 - GET_WORKORDERS.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_CONTRACTS" location="/WSDL/EDTAdapter/004 - GET_CUSTOMER_CONTRACTS.wsdl"/>
+    <wsdl:import namespace="urn:UPGRADE_FORMULA" location="/WSDL/EDTAdapter/009 - UPGRADE_FORMULA.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/0009_SOAP_UpgradeFormula.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>278</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <timeout>30</timeout>
+            <endpointURL>http://localhost:%%EDTAdapter/Outbound/SOAP/ServerPort%%/EDTAdapter/Processes/UpgradeFormula</endpointURL>
+            <service>pfx6:UPGRADE_FORMULA_SERVICE</service>
+            <servicePort>UPGRADE_FORMULASoap</servicePort>
+            <operation>UpgradeFormula</operation>
+            <soapAction>urn:UPGRADE_FORMULA/UpgradeFormula</soapAction>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx6:UpgradeFormula>
+                    <pfx6:GUID>
+                        <xsl:value-of select="&quot;1234643&quot;"/>
+                    </pfx6:GUID>
+                    <pfx6:troubleReportDetectionTime>
+                        <xsl:value-of select="&quot;2004-07-07T16:00:00&quot;"/>
+                    </pfx6:troubleReportDetectionTime>
+                    <pfx6:formulaId>
+                        <xsl:value-of select="&quot;BASI&quot;"/>
+                    </pfx6:formulaId>
+                    <pfx6:expectedResolutionDateTime>
+                        <xsl:value-of select="&quot;2005-07-07T16:00:00&quot;"/>
+                    </pfx6:expectedResolutionDateTime>
+                    <pfx6:deadlineDateTime>
+                        <xsl:value-of select="&quot;2005-07-07T16:00:00&quot;"/>
+                    </pfx6:deadlineDateTime>
+                </pfx6:UpgradeFormula>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

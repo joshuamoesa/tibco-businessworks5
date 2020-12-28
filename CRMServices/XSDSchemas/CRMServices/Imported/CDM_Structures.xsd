@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by NLBSZSF2J (KPN Telecom) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--############################################-->
+	<xsd:complexType name="PropertyAddress_Type">
+		<xsd:annotation>
+			<xsd:documentation>custom property address for OCRM BR2</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="OVERRIDE_VALIDATION" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A flag indicating that any validation errors of the address should be ignored.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VALIDATION_WARNING_COUNT" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The numbor of validation warnings related to the address.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VALIDATION_ERROR_COUNT" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The number of validation errors related to the address.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="STREET_NAME" type="StreetName_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The STREETNAME contains the localized name of the street-part of the address. There are several standards involved which may be specified using the attribute 'naming_standard'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="HOUSE_NUMBER" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The housenumber contains common part of the address although the housenumber does not exist on all addresses in every country. Some have may use house names or even  other indicators.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="HOUSE_NUMBER_EXTENSION" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The house number extension is a detailed part of the house number which further specifies an property address.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="POSTCODE" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The POSTCODE is a logical description of the an area issued by some authoritive entity.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CITY_NAME" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The name of the city (aka town or place) of the address. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COUNTRY" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The name of the country of the address in the language specified in address element.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COUNTRY_CODE" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A code for the country (which should make translation easier)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ADDRESS_TYPE" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A designator clarifying the type of the address. This field may be role related (e.g. private, work, etc.) but also class related (e.g. pobox, regular, etc.)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LOCATION_DESCRIPTION" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Provides additional informaiton to the excact location of the address. This may use references to realworld objects such as 'In front of the old oak'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="UNFORMATTED_ADDRESS" type="PropertyAddressUnformatAddress_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Provides a the address information in an unseparated (unformatted) way. The address information is concatenated into a single line. The manner of concatenation is country dependent, therefore this information is not easily parsable.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RUNTIME_PARAMETERS" type="PropertyAddressRuntimeParameters_Type" minOccurs="0"/>
+			<xsd:element name="VALIDITY" type="PropertyAddressValidity_Type" minOccurs="0"/>
+			<xsd:element name="VALIDATION_RESULT" type="PropertyAddressValidationResult_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="language" type="xsd:language" use="optional" default="NL">
+			<xsd:annotation>
+				<xsd:documentation>Property addresses may be formatted/specified in a specific language. (E.g. the city name 'Den Haag' differs from the English 'The Hague') When the language differs from Dutch, then it must be specified here.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="PropertyAddressValidity_Type">
+		<xsd:sequence>
+			<xsd:element name="ADDRESS_STATUS" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALID_FROM_DATE" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="VALID_UNTIL_DATE" type="xsd:date" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PropertyAddressRuntimeParameters_Type">
+		<xsd:sequence>
+			<xsd:element name="SPECIAL_DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="POSTCODE_SUFFIX" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="IS_FUTURE_PRIMARY_ADDRESS" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="IS_PRIMARY_LOGICAL_ADDRESS" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="IS_PRIMARY_MULTI_VALUE_GROUP" type="xsd:boolean" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PropertyAddressValidationResult_Type">
+		<xsd:sequence>
+			<xsd:element name="SEVERITY" type="xsd:string"/>
+			<xsd:element name="CODE" type="xsd:string"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PropertyAddressUnformatAddress_Type">
+		<xsd:annotation>
+			<xsd:documentation>The FreeFormatAddress_Type contains an address including the format (order) of the separate elements of the address and can be printed out directly.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ADDRESS_LINE" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The ADDRESS_LINE contians a formatted piece of text of the entire address that can be used directly to print out. The separate elements of an address are contained within this text, but can't be parsed out easily.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:string">
+							<xsd:attribute name="sequenceNumber" type="xsd:positiveInteger" use="required">
+								<xsd:annotation>
+									<xsd:documentation>The sequence_number is required to make sure that when mapping to and from the sequence of ADDRESS_LINE elements the order may be modified unintentionally. Please note that parsers do not always respect the order of elements in sequences.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--############################################-->
+	<xsd:complexType name="ContactPerson_Type">
+		<xsd:sequence>
+			<xsd:element name="OVERRIDE_VALIDATION" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A flag indicating that any validation errors relating to the contact person should be ignored.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VALIDATION_WARNING_COUNT" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The numbor of validation warnings related to the contact person.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VALIDATION_ERROR_COUNT" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The number of validation errors related to the contact person</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VALIDATION_TOTAL_WARNING_COUNT" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The number of warnings related to the contact person and related objects (e.g. addresses)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VALIDATION_TOTAL_ERROR_COUNT" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The number of errors related to the contact person and related objects (e.g. addresses)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CONTACT_PERSON_ID" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A globally unique id referring to the contact person. This id should ideally be used anywhere in all systems.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="INITIALS" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The initials of the contact person e.g. R.J.J. (Note that actual format is unknown, maybe no periods are allowed)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FAMILY_NAME_PREFIX" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The prefix to the familiy name such as 'van' and 'van der'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FAMILY_NAME" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The core part of the family name. Notice that this excludes particles such as 'van', 'van 't', etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FAMILY_NAME_POSTFIX" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Any post fix particles to the name of the contact person such as Jr. II etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PREFERRED_NAME" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Any preferred name (Note that the values for this field are undetermined, may be the first name (calling name) or something else entirely)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATE_OF_BIRTH" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The date of birth for the contact person. Obviously this must be in the recent past, but not too recent.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ACADEMIC_TITLE" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Any earned titles (e.g. Dr. Ir.). It is not known if inherited titles will also be included in this field (e.g. baron)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CONTACT_MEDIUM" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Media through which the contact person can be reaced.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ContactPersonContactMedium_Type"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="VALIDATION_RESULT" type="ContactPersonValidationResult_Type" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Results of validating the above information of the contact person. This excludes any address validation which is has its own validation result tag.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ADDRESS" type="PropertyAddress_Type" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The address at which the contact person resides usually. This may be private or professional.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SIEBEL_ACCOUNT_REFERENCE" type="ContactPersonSiebelAccountReference_Type" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Any account that references this contact person.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RUNTIME_PARAMETERS" type="ContactPersonRuntimeParameters_Type" minOccurs="0"/>
+			<xsd:element name="CROSS_REFERENCE" type="ContactPersonCrossReference_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContactPersonContactMedium_Type">
+		<xsd:sequence>
+			<xsd:element name="TELEPHONE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="FAX" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="EMAIL_ADDRESS" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="USAGE" type="ContactPersonContactMediumUsage_Type" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContactPersonContactMediumUsage_Type">
+		<xsd:sequence>
+			<xsd:element name="SUPPRESS_ALL_EMAILS" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A flag indicating whether or not the email address provided may be used for other purposes than communicating about the orders and products of a contact person. (E.g. commercial notifications or thrird party messages)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContactPersonValidationResult_Type">
+		<xsd:sequence>
+			<xsd:element name="SEVERITY" type="xsd:string"/>
+			<xsd:element name="CODE" type="xsd:string"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContactPersonRuntimeParameters_Type">
+		<xsd:sequence>
+			<xsd:element name="IS_PRIMARY_MULTI_VALUE_GROUP" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="INTEGRATION_ID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="UCM_ROW_ID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ID" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContactPersonSiebelAccountReference_Type">
+		<xsd:sequence>
+			<xsd:element name="SIEBEL_ACCOUNT_ID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="UCM_ROW_ID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="INTEGRATION_ID" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContactPersonCrossReference_Type">
+		<xsd:sequence>
+			<xsd:element name="CONTACT_ID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CIF_SYSTEM_ID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="EXTERNAL_ID1" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="SYSTEM_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="SYSTEM_NUMBER" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--############################################-->
+	<xsd:complexType name="StreetName_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="streetName_Type">
+				<xsd:attribute name="namingConvention" type="streetNameNamingStandard_Enum" use="optional" default="NONE">
+					<xsd:annotation>
+						<xsd:documentation>If a standard naming convention is used for the street name it can be specified here. The naming convention may influence the way names are expanded or perceived by the receiving systems.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="streetName_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="24"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="streetNameNamingStandard_Enum">
+		<xsd:annotation>
+			<xsd:documentation>A List of possible standards used for naming a street. See values for more information</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="NONE">
+				<xsd:annotation>
+					<xsd:documentation>No naming standard has been used.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NEN_COMPLETE">
+				<xsd:annotation>
+					<xsd:documentation>The full, unabreviated steetname as assigned by the Dutch normalisation and standardasation agency</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NEN_SHORT">
+				<xsd:annotation>
+					<xsd:documentation>The abreviated steetname as assigned by the Dutch normalisation and standardasation agency</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MUNICIPALITY">
+				<xsd:annotation>
+					<xsd:documentation>The local municipality defined the name of the street. (Authoritive)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PTT">
+				<xsd:annotation>
+					<xsd:documentation>The (formar) dutch postal agency.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PROPRIETARY">
+				<xsd:annotation>
+					<xsd:documentation>Some internal naming standard</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.FindAccount" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FindAccount" targetNamespace="urn:IKKAdapter.FindAccount">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.FindAccount">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/FindAccount.xsd"/>
+            <xsd:element name="FindAccountRequest" type="ikk:FindAccountRequest"/>
+            <xsd:element name="FindAccountResponse" type="ikk:FindAccountResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="FindAccountRequest">
+        <part element="ikk:FindAccountRequest" name="parameters"/>
+    </message>
+    <message name="FindAccountResponse">
+        <part element="ikk:FindAccountResponse" name="parameters"/>
+    </message>
+    <portType name="FindAccountPortType">
+        <operation name="FindAccount">
+            <input message="ikk:FindAccountRequest"/>
+            <output message="ikk:FindAccountResponse"/>
+        </operation>
+    </portType>
+    <binding name="FindAccountSoapBinding" type="ikk:FindAccountPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="FindAccount">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="FindAccountService">
+        <port binding="ikk:FindAccountSoapBinding" name="FindAccountSoap">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/FindAccount"/>
+        </port>
+    </service>
+</definitions>

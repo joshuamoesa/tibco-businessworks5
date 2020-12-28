@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by M. Claus (KPN Telecom) -->
+<!-- version 4, 12-02-2008 -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="Product_Type.xsd"/>
+	<xsd:complexType name="type_PRODUCT">
+		<xsd:group ref="ProductGroup_Fiber_Sni"/>
+	</xsd:complexType>
+	<xsd:group name="ProductGroup_Fiber_Sni">
+		<xsd:choice>
+			<xsd:element name="GENERIC_PRODUCT" type="ProductBase_Type">
+				<xsd:annotation>
+					<xsd:documentation>The generic product is used in situations where products types are not known in advance such as a query on an order.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ACCESS_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>A physical access to the network, the access is initially without services such as Internet or Telephony.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCOUNT_PRODUCT" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Refers to the user account  to whom this access product will be associated.</xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType>
+										<xsd:complexContent>
+											<xsd:extension base="ProductBase_Type"/>
+										</xsd:complexContent>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="ACCESS_LOCATION" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="DUTCH_POSTCODE" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="HOUSE_NUMBER" type="xsd:int" minOccurs="0"/>
+											<xsd:element name="HOUSE_NUMBER_EXTENSION" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="CARRIER_TYPE" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="ISRA_POINT_ID" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="REFERENCE_PHONE_NUMBER" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="APPOINTMENT_ID" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+								<xsd:element name="ORDER_SCENARIO" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="ADMIN_CHECK" type="xsd:boolean" minOccurs="0"/>
+								<xsd:element name="RESOURCES" minOccurs="0">
+									<xsd:complexType>
+										<xsd:choice maxOccurs="unbounded">
+											<xsd:element name="CUSTOMER_PREMISES_EQUIPMENT">
+												<xsd:complexType>
+													<xsd:sequence>
+														<xsd:element name="MANUFACTURER" type="xsd:string" minOccurs="0"/>
+														<xsd:element name="MODEL_NAME" type="xsd:string" minOccurs="0"/>
+													</xsd:sequence>
+												</xsd:complexType>
+											</xsd:element>
+										</xsd:choice>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="CONTACT_DETAILS" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="PHONE_NUMBER" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="INDIVIDUAL" minOccurs="0">
+												<xsd:complexType>
+													<xsd:sequence>
+														<xsd:element name="FIRST_NAME" type="xsd:string" minOccurs="0"/>
+														<xsd:element name="MIDDLE_NAME" type="xsd:string" minOccurs="0"/>
+														<xsd:element name="LAST_NAME" type="xsd:string" minOccurs="0"/>
+														<xsd:element name="INITIALS" type="xsd:string" minOccurs="0"/>
+														<xsd:element name="GENDER" type="xsd:string" minOccurs="0"/>
+														<xsd:element name="DATE_OF_BIRTH" type="xsd:date" minOccurs="0"/>
+														<xsd:element name="COMPLETE_NAME" type="xsd:string" minOccurs="0"/>
+													</xsd:sequence>
+												</xsd:complexType>
+											</xsd:element>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="IPTV_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>The IPTV product is a subscription to television broadcasts over IP. </xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCESS_PRODUCT" type="ProductBase_Type" minOccurs="0"/>
+								<xsd:element name="USAGE_KEY" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="CONCURRENT_SD_STREAMS" type="xsd:int" minOccurs="0"/>
+								<xsd:element name="ACCOUNT_NUMBER" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="PIN_CODE" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="ADD_CHANNEL" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+								<xsd:element name="REMOVE_CHANNEL" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BROADBAND_ACCESS_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>An data access to another network, the broadband access is 'stacked' ontop of an access product which must be present/ordered.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCESS_PRODUCT" type="ProductBase_Type" minOccurs="0"/>
+								<xsd:element name="BANDWIDTH" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="BANDWIDTH_UP" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="BANDWIDTH_DOWN" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PC_SECURITY_PRODUCT">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCOUNT_PRODUCT" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>The account associated with this product.</xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType>
+										<xsd:complexContent>
+											<xsd:extension base="ProductBase_Type"/>
+										</xsd:complexContent>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="LICENCE_KEY" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="EMAILBOX_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>The emailbox product is a subscription to receive and send email at a certain account and domain. There are various features involved such as aliases, spam filtering etc.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCOUNT_PRODUCT" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Refers to the user account  to which this email product will be associated.</xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType>
+										<xsd:complexContent>
+											<xsd:extension base="ProductBase_Type"/>
+										</xsd:complexContent>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="SIZE" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="ACCESS_PARAMETERS" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="POP3" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="SMTP" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="IMAP" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="WEB_MAIL" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="FULL_OUTLOOK" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="PUSH_EMAIL" type="xsd:boolean" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="ACCOUNT" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="USER_NAME" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="PASSWORD" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="MAILBOX_OPTIONS" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="VIRUS_SCAN" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="SPAM_FILTER" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="NEW_PASSWORD" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="FORWARDING_ENABLED" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="FORWARDING_EMAIL_ADDRESS" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="FORWARDING_LOCAL_COPY" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="AUTO_REPLY_ENABLED" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="AUTO_REPLY_TEXT" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="MAILBOX_ADDITIONS" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="TASKS" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="NOTES" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="CALENDAR" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="CONTACTS" type="xsd:boolean" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="MAILBOX_ITEMS" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="NUMBER_OF_MOVED_ITEMS" type="xsd:int" minOccurs="0"/>
+											<xsd:element name="NUMBER_OF_FAILED_ITEMS" type="xsd:int" minOccurs="0"/>
+											<xsd:element name="SOURCE_MAILBOX_DELETED" type="xsd:boolean" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="MAX_NUMBER_OF_ALIASES" type="xsd:int" minOccurs="0"/>
+								<xsd:element name="ALIAS" minOccurs="0" maxOccurs="unbounded">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="ALIAS_NAME" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PHONE_NUMBER_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>The phone number product represents the allocation of the phonenumber to a the requestor.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="PHONE_NUMBER" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="NUMBER_TYPE" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="LOCATION" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="DUTCH_POSTCODE" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="HOUSE_NUMBER" type="xsd:int" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="PORTING_DETAILS" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="TELECOM_COMPANY" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="PORTING_DATE_TIME" type="xsd:dateTime" minOccurs="0"/>
+											<xsd:element name="CONTRACTOR" minOccurs="0">
+												<xsd:complexType>
+													<xsd:sequence>
+														<xsd:element name="INDIVIDUAL" minOccurs="0">
+															<xsd:complexType>
+																<xsd:sequence>
+																	<xsd:element name="INDIVIDUAL_NAME" type="xsd:string" minOccurs="0"/>
+																</xsd:sequence>
+															</xsd:complexType>
+														</xsd:element>
+														<xsd:element name="PROPERTY_ADDRESS" minOccurs="0">
+															<xsd:complexType>
+																<xsd:sequence>
+																	<xsd:element name="DUTCH_POSTCODE" type="xsd:string" minOccurs="0"/>
+																	<xsd:element name="STREET_NAME" type="xsd:string" minOccurs="0"/>
+																	<xsd:element name="HOUSE_NUMBER" type="xsd:int" minOccurs="0"/>
+																	<xsd:element name="HOUSE_NUMBER_EXTENSION" type="xsd:string" minOccurs="0"/>
+																	<xsd:element name="CITY_NAME" type="xsd:string" minOccurs="0"/>
+																</xsd:sequence>
+															</xsd:complexType>
+														</xsd:element>
+													</xsd:sequence>
+												</xsd:complexType>
+											</xsd:element>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="VOIP_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>This product represents the capability of voice over ip which is associated with an access product and phone number product</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCESS_PRODUCT" minOccurs="0">
+									<xsd:complexType>
+										<xsd:complexContent>
+											<xsd:extension base="ProductBase_Type">
+												<xsd:sequence>
+													<xsd:element name="LOCATION" minOccurs="0">
+														<xsd:complexType>
+															<xsd:sequence>
+																<xsd:element name="DUTCH_POSTCODE" type="xsd:string" minOccurs="0"/>
+																<xsd:element name="HOUSE_NUMBER" type="xsd:int" minOccurs="0"/>
+																<xsd:element name="HOUSE_NUMBER_EXTENSION" type="xsd:string" minOccurs="0"/>
+															</xsd:sequence>
+														</xsd:complexType>
+													</xsd:element>
+													<xsd:element name="USAGE_KEY" type="xsd:string" minOccurs="0"/>
+													<xsd:element name="RESIDENTIAL_GATEWAY_PORT" type="xsd:nonNegativeInteger" minOccurs="0"/>
+												</xsd:sequence>
+											</xsd:extension>
+										</xsd:complexContent>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="PHONE_NUMBER_PRODUCT" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>The phonenumber product associated with this voice product. Notice that porting may be required for this number.</xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType>
+										<xsd:complexContent>
+											<xsd:extension base="ProductBase_Type">
+												<xsd:sequence>
+													<xsd:element name="PHONE_NUMBER" type="xsd:string" minOccurs="0"/>
+													<xsd:element name="NUMBER_TYPE" type="xsd:string" minOccurs="0"/>
+													<xsd:element name="PORTING_DETAILS" minOccurs="0">
+														<xsd:complexType>
+															<xsd:sequence>
+																<xsd:element name="TELECOM_COMPANY" type="xsd:string" minOccurs="0"/>
+																<xsd:element name="PORTING_DATE_TIME" type="xsd:dateTime" minOccurs="0"/>
+																<xsd:element name="CONTRACTOR" minOccurs="0">
+																	<xsd:complexType>
+																		<xsd:sequence>
+																			<xsd:element name="INDIVIDUAL" minOccurs="0">
+																				<xsd:complexType>
+																					<xsd:sequence>
+																						<xsd:element name="INDIVIDUAL_NAME" type="xsd:string" minOccurs="0"/>
+																					</xsd:sequence>
+																				</xsd:complexType>
+																			</xsd:element>
+																			<xsd:element name="PROPERTY_ADDRESS" minOccurs="0">
+																				<xsd:complexType>
+																					<xsd:sequence>
+																						<xsd:element name="DUTCH_POSTCODE" type="xsd:string" minOccurs="0"/>
+																						<xsd:element name="STREET_NAME" type="xsd:string" minOccurs="0"/>
+																						<xsd:element name="HOUSE_NUMBER" type="xsd:int" minOccurs="0"/>
+																						<xsd:element name="HOUSE_NUMBER_EXTENSION" type="xsd:string" minOccurs="0"/>
+																						<xsd:element name="CITY_NAME" type="xsd:string" minOccurs="0"/>
+																					</xsd:sequence>
+																				</xsd:complexType>
+																			</xsd:element>
+																		</xsd:sequence>
+																	</xsd:complexType>
+																</xsd:element>
+															</xsd:sequence>
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:extension>
+										</xsd:complexContent>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="LINE_FACILITIES" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="VOICE_MAIL" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="CALLING_LINE_IDENTIFICATION" minOccurs="0">
+												<xsd:complexType>
+													<xsd:sequence>
+														<xsd:element name="ACTIVE" type="xsd:boolean" minOccurs="0"/>
+														<xsd:element name="PRESENTATION" type="xsd:boolean" minOccurs="0"/>
+														<xsd:element name="RESTRICTION" type="xsd:boolean" minOccurs="0"/>
+													</xsd:sequence>
+												</xsd:complexType>
+											</xsd:element>
+											<xsd:element name="CALL_BARRING" minOccurs="0">
+												<xsd:complexType>
+													<xsd:sequence>
+														<xsd:element name="INTERNATIONAL_NUMBERS" type="xsd:boolean" minOccurs="0"/>
+														<xsd:element name="MOBILE_NUMBERS" type="xsd:boolean" minOccurs="0"/>
+														<xsd:element name="SERVICE_NUMBERS" type="xsd:string" minOccurs="0"/>
+														<xsd:element name="BAD_PAYER" type="xsd:boolean" minOccurs="0"/>
+													</xsd:sequence>
+												</xsd:complexType>
+											</xsd:element>
+											<xsd:element name="CALL_FORWARDING" minOccurs="0">
+												<xsd:complexType>
+													<xsd:sequence>
+														<xsd:element name="BUSY" minOccurs="0">
+															<xsd:complexType>
+																<xsd:sequence>
+																	<xsd:element name="ACTIVE" type="xsd:boolean" minOccurs="0"/>
+																	<xsd:element name="PHONE_NUMBER" type="xsd:string" minOccurs="0">
+																		<xsd:annotation>
+																			<xsd:documentation>Telephone number to forward the call to</xsd:documentation>
+																		</xsd:annotation>
+																	</xsd:element>
+																</xsd:sequence>
+															</xsd:complexType>
+														</xsd:element>
+														<xsd:element name="NO_REPLY" minOccurs="0">
+															<xsd:complexType>
+																<xsd:sequence>
+																	<xsd:element name="ACTIVE" type="xsd:boolean" minOccurs="0"/>
+																	<xsd:element name="PHONE_NUMBER" type="xsd:string" minOccurs="0">
+																		<xsd:annotation>
+																			<xsd:documentation>Telephone number to forward the call to</xsd:documentation>
+																		</xsd:annotation>
+																	</xsd:element>
+																	<xsd:element name="NUMBER_OF_RINGS" type="xsd:int" minOccurs="0"/>
+																</xsd:sequence>
+															</xsd:complexType>
+														</xsd:element>
+														<xsd:element name="UNCONDITIONAL" minOccurs="0">
+															<xsd:complexType>
+																<xsd:sequence>
+																	<xsd:element name="ACTIVE" type="xsd:boolean" minOccurs="0"/>
+																	<xsd:element name="PHONE_NUMBER" type="xsd:string" minOccurs="0">
+																		<xsd:annotation>
+																			<xsd:documentation>Telephone number to forward the call to</xsd:documentation>
+																		</xsd:annotation>
+																	</xsd:element>
+																</xsd:sequence>
+															</xsd:complexType>
+														</xsd:element>
+													</xsd:sequence>
+												</xsd:complexType>
+											</xsd:element>
+											<xsd:element name="B_NUMBER_PROTECTION" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="CALL_BARRING_LEVEL" type="xsd:int" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ISP_ACCOUNT_PRODUCT">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="USER_NAME" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="PASSWORD" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ANALOGUE_TV_PRODUCT">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCESS_PRODUCT" type="ProductBase_Type" minOccurs="0"/>
+								<xsd:element name="ACCOUNT" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="SMART_CARD_NUMBER" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="LOCATION" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="DUTCH_POSTCODE" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="HOUSE_NUMBER" type="xsd:int" minOccurs="0"/>
+											<xsd:element name="HOUSE_NUMBER_EXTENSION" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="DVBT_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>A DVBT (Digital Video Broadcasting – Terrestrial) product represents a subscription to digital television broadcasts which are sent through 'the ether'.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCOUNT" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="ACCOUNT_NUMBER" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="SMART_CARD_NUMBER" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="HOMEPAGE_PRODUCT">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCOUNT_PRODUCT" type="ProductBase_Type" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>The account associated with this product</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="ACCOUNT" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="USER_NAME" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="PASSWORD" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="HOMEPAGE_ITEMS" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="HOMEPAGE_CREATED" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="DOCUMENT_CREATED" type="xsd:boolean" minOccurs="0"/>
+											<xsd:element name="DESTINATION_FOLDER" type="xsd:string" minOccurs="0"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="SIZE" minOccurs="0">
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:int">
+											<xsd:minInclusive value="0"/>
+											<xsd:maxInclusive value="9"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="HTTP_ACCESS" type="xsd:boolean" minOccurs="0"/>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AOIP_PRODUCT">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="ProductBase_Type">
+							<xsd:sequence>
+								<xsd:element name="ACCESS_PRODUCT" type="ProductBase_Type" minOccurs="0"/>
+								<xsd:element name="BROADBAND_ACCESS" type="ProductBase_Type" minOccurs="0"/>
+							</xsd:sequence>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:complexType name="ProductBase_TypeX">
+		<xsd:sequence>
+			<xsd:element name="PRODUCT_ID" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>An id for the product assigned by the delivering party.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SERVICE_ID" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>An id for the product assigned by the requesting party. Note that this value may not be unique. This is because the the delivering party may have multiple ordering parties which each assigne their own id's.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

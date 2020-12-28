@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsGetAvailableAppointmentSlots/1/Schema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ZiggoCustom="java://com.tibco.psg.bwutils.BWCustomFunctions" xmlns:pfx="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsGetAvailableAppointmentSlots/1/jms">
+    <wsdl:import namespace="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsGetAvailableAppointmentSlots/1/jms" location="/UnitTests/EbsGetAvailableAppointmentSlots_1/Drivers/Interface/GetAvailableAppointmentSlots_1_jms_MANUAL.wsdl"/>
+    <pd:name>UnitTests/EbsGetAvailableAppointmentSlots_1/Drivers/Interface/OK_EbsGetAvailableAppointmentSlots_1_OT1.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>65</pd:startX>
+    <pd:startY>69</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>520</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1387355500932</pd:targetNamespace>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>276</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx:EbsGetAvailableAppointmentSlots_1</service>
+            <servicePort>EbsGetAvailableAppointmentSlots_1.Endpoint</servicePort>
+            <operation>EbsGetAvailableAppointmentSlots_1</operation>
+            <soapAction>EbsGetAvailableAppointmentSlots_1</soapAction>
+            <sharedChannels>
+                <jmsChannel>
+                    <NamingURL>tibjmsnaming://esb-ems-wov01:7220</NamingURL>
+                    <NamingInitialContextFactory>com.tibco.tibjms.naming.TibjmsInitialContextFactory</NamingInitialContextFactory>
+                    <NamingPrincipal>admin</NamingPrincipal>
+                    <NamingCredential>#!Dw4xl2nNAB3RrASfo94+dNXgkh/Z+J0M</NamingCredential>
+                    <ConnectionFactory>QueueConnectionFactory</ConnectionFactory>
+                    <JMSTo>icc.adpebs.ebsgetavailableappointmentslots.1.queue</JMSTo>
+                    <JMSMessageType>Text</JMSMessageType>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSPriority>4</JMSPriority>
+                    <JMSTimeToLive>0</JMSTimeToLive>
+                    <JMSUserName>admin</JMSUserName>
+                    <JMSPassword>#!lslNtc8uTvGm91GYV8Q1bKAR4zt+H6ex</JMSPassword>
+                    <NamingProperties/>
+                </jmsChannel>
+            </sharedChannels>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns:Request>
+                    <ns2:header>
+                        <ns2:cmmVersion>
+                            <xsl:value-of select="'3'"/>
+                        </ns2:cmmVersion>
+                        <ns2:messageContext>
+                            <ns2:businessTransactionID>
+                                <xsl:value-of select="'4a538da9-ab5d-424e-8ae7-307619e358ed'"/>
+                            </ns2:businessTransactionID>
+                            <ns2:externalCorrelationID>
+                                <xsl:value-of select="'8d57ecf6-103b-4baf-bd46-ba0592ed770f'"/>
+                            </ns2:externalCorrelationID>
+                            <ns2:sentTimestamp>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns2:sentTimestamp>
+                            <ns2:messageID>
+                                <xsl:value-of select="ZiggoCustom:newUUID()"/>
+                            </ns2:messageID>
+                            <ns2:correlationID>
+                                <xsl:value-of select="ZiggoCustom:newUUID()"/>
+                            </ns2:correlationID>
+                            <ns2:conversationID>
+                                <xsl:value-of select="ZiggoCustom:newUUID()"/>
+                            </ns2:conversationID>
+                        </ns2:messageContext>
+                        <ns2:sourceContext>
+                            <ns2:host>
+                                <xsl:value-of select="BW:getHostName()"/>
+                            </ns2:host>
+                            <ns2:application>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/adpEbs/Common/ServiceInvocation/Application"/>
+                            </ns2:application>
+                            <ns2:operation>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/adpEbs/Common/ServiceInvocation/EbsGetAvailableAppointmentSlots_1/operationName"/>
+                            </ns2:operation>
+                        </ns2:sourceContext>
+                    </ns2:header>
+                    <ns:body>
+                        <ns:serviceRequest>
+                            <ns:ID>
+                                <xsl:attribute name="keyField">
+                                    <xsl:value-of select="'cdm:serviceRequestID'"/>
+                                </xsl:attribute>
+                                <xsl:value-of select="'20000000'"/>
+                            </ns:ID>
+                        </ns:serviceRequest>
+                    </ns:body>
+                </ns:Request>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

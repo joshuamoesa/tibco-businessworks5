@@ -1,0 +1,834 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://kpn.com/eai/genericorder" xmlns:ns="http://kpn.com/eai/product/generic" xmlns:pfx3="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" xmlns:pfx4="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx5="http://www.tibco.com/schemas/ORDER_WSDL/Processes/Schema.xsd" xmlns:pfx6="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx7="http://kpn.com/eai/generic/order" xmlns:pfx8="http://kpn.com/eai/generic/order/weak/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx9="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" xmlns:ns22="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx11="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns23="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns1="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CDM/Product/Product_Type.xsd" xmlns:ns3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:pfx12="http://xmlns.kpn.com/eai/common/errors" xmlns:ns5="http://schemas.tibco.com/bw/plugins/soap/5.0/SoapPluginExceptions" xmlns:pfx13="http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl" xmlns:ns12="http://www.tibco.com/pe/WriteToLogActivitySchema">
+    <xsd:import namespace="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" schemaLocation="/Schema/WMP/kpn.wod.w9.input.003.wsdl"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/ORDER_WSDL/Processes/Schema.xsd" schemaLocation="/Processes/Message.xsd"/>
+    <xsd:import namespace="http://schemas.xmlsoap.org/soap/envelope/" schemaLocation="/Processes/GenericOrderGateway/Schemas/SOAP1.1.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/genericorder" schemaLocation="/Schemas/cdm xsd's/CDM Order/GenericOrder.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" schemaLocation="/Processes/UtilityServices/Schemas/ValidationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Response/ValidateMessageResponse.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Request/ValidateMessageRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/generic/order" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/WSDL/WeakOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <wsdl:import namespace="http://kpn.com/eai/generic/order/weak/wsdl"/>
+    <wsdl:import namespace="http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl" location="/WSDL/GenericOrderGateway/WeakOrder.wsdl"/>
+    <pd:name>GenericOrderGateway/Processes/Outbound/SubmitWeakOrder.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <pfx8:SubmitWeakOrderAck>
+            <SubmitWeakOrderAck>
+                <pfx7:WeakOrderResponse>
+                    <pfx7:OrderAcknowledgementParameters>
+                        <xsl:copy-of select="$ack/acknowledgement/pfx7:Parameter"/>
+                    </pfx7:OrderAcknowledgementParameters>
+                </pfx7:WeakOrderResponse>
+            </SubmitWeakOrderAck>
+        </pfx8:SubmitWeakOrderAck>
+    </pd:returnBindings>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>58</pd:x>
+        <pd:y>189</pd:y>
+        <config>
+            <service>pfx13:WeakOrderServices</service>
+            <wsdlNamespaceRoot>http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl/SubmitWeakOrderImpl</wsdlNamespaceRoot>
+            <operation>SubmitWeakOrder</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>%%GenericOrderGateway/SOAP/Outbound/SoapAction%%</soapAction>
+            <sharedChannel>/GenericOrderGateway/Shared Resources/HTTP Server Connection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <inputAttachmentBindings/>
+            <useBasicAuthentication>%%GenericOrderGateway/SOAP/Outbound/useAuthentication%%</useBasicAuthentication>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>975</pd:endX>
+    <pd:endY>190</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx12:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Create SubmitOrder">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>573</pd:x>
+        <pd:y>190</pd:y>
+        <config>
+            <element ref="pfx11:SubmitOrder"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:variable name="order" select="$Map-Weak-to-Strong/Request/*"/>
+            <xsl:variable name="orderItem" select="$order/*[local-name()=&quot;OrderItem&quot;]"/>
+            <pfx11:SubmitOrder>
+                <ns22:CMH>
+                    <ns22:ID>
+                        <xsl:value-of select="'435'"/>
+                    </ns22:ID>
+                    <ns22:NAME>
+                        <xsl:value-of select="'SubmitOrder'"/>
+                    </ns22:NAME>
+                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:customerOrderId">
+                        <ns22:FID>
+                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:customerOrderId"/>
+                        </ns22:FID>
+                    </xsl:if>
+                    <ns22:MID>
+                        <xsl:value-of select="'1080.10'"/>
+                    </ns22:MID>
+                    <ns22:PARADIGM>
+                        <xsl:value-of select="'PUBLISH'"/>
+                    </ns22:PARADIGM>
+                    <ns22:OBJECT>
+                        <xsl:value-of select="'Order'"/>
+                    </ns22:OBJECT>
+                    <ns22:VERSION>
+                        <xsl:value-of select="'1.0'"/>
+                    </ns22:VERSION>
+                    <ns22:FROM>
+                        <xsl:attribute name="ns22:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns22:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns22:FROM>
+                    <ns22:TO>
+                        <xsl:attribute name="ns22:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/pfx6:GlobalVariables/Env, '.FIXED.', $_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/ComponentDomain, '.', $_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/ComponentId, '.Publish.SubmitOrder.1')"/>
+                        </xsl:attribute>
+                    </ns22:TO>
+                    <ns22:TRACKING>
+                        <ns22:MESSAGE_ID>
+                            <xsl:value-of select="$ID/messageId/GUID"/>
+                        </ns22:MESSAGE_ID>
+                        <ns22:ITEM>
+                            <xsl:attribute name="ns22:APPINFO">
+                                <xsl:value-of select="concat($_processContext/ns4:ProcessContext/ProjectName, '.', $_processContext/ns4:ProcessContext/EngineName)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns22:EVENT">
+                                <xsl:value-of select="'PUBLISH'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns22:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns22:ITEM>
+                    </ns22:TRACKING>
+                </ns22:CMH>
+                <ns23:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="'EXECUTE'"/>
+                            </ORDER_TYPE>
+                            <COMMERCIAL_PRODUCT_CATEGORY>
+                                <xsl:value-of select="$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitWeakOrder/customerName"/>
+                            </COMMERCIAL_PRODUCT_CATEGORY>
+                            <EXTERNAL_REFERENCE>
+                                <xsl:value-of select="$order/*[local-name()=&quot;customerOrderId&quot;]"/>
+                            </EXTERNAL_REFERENCE>
+                            <CREATION_DATE>
+                                <xsl:value-of select="$order/*[local-name()=&quot;orderDateTime&quot;]"/>
+                            </CREATION_DATE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="upper-case(concat($SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Name, '_', $SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Action/pfx7:Name))"/>
+                                </ORDER_ITEM_TYPE>
+                                <ORDER_ITEM_ACTION>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Action/pfx7:Name"/>
+                                </ORDER_ITEM_ACTION>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Group"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT xsi:type="ns3:Product_Type">
+                                <GENERIC_ORDER_PRODUCT>
+                                    <PRODUCT_NAME>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Name"/>
+                                    </PRODUCT_NAME>
+                                    <PRODUCT_ID>
+                                        <xsl:value-of select="$orderItem/*[local-name()=&quot;productId&quot;]"/>
+                                    </PRODUCT_ID>
+                                    <PRODUCT_VERSION>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Version"/>
+                                    </PRODUCT_VERSION>
+                                    <ACTION_PARADIGM>
+                                        <xsl:value-of select="&quot;Asynchronous&quot;"/>
+                                    </ACTION_PARADIGM>
+                                    <CUSTOM_ORDER_PARAMETERS>
+                                        <xsl:for-each select="$order/*[local-name()=&quot;OrderParameters&quot;]/*">
+                                            <xsl:copy-of select="." copy-namespaces="no"/>
+                                        </xsl:for-each>
+                                    </CUSTOM_ORDER_PARAMETERS>
+                                    <CUSTOM_ITEM_PARAMETERS>
+                                        <xsl:for-each select="$orderItem/*[not(local-name()=&quot;Parameters&quot;)]">
+                                            <xsl:copy-of select="." copy-namespaces="no"/>
+                                        </xsl:for-each>
+                                    </CUSTOM_ITEM_PARAMETERS>
+                                    <ACTION_PARAMETERS>
+                                        <xsl:for-each select="$orderItem/*[local-name()=&quot;Parameters&quot;]/*">
+                                            <xsl:copy-of select="." copy-namespaces="no"/>
+                                        </xsl:for-each>
+                                    </ACTION_PARAMETERS>
+                                </GENERIC_ORDER_PRODUCT>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns23:BODY>
+            </pfx11:SubmitOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Weak to Strong">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>190</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Request">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:any processContents="skip"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Request>
+                <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="product" select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Name"/>
+                <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="action" select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Action/pfx7:Name"/>
+                <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="nsPrefix" select="$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitWeakOrder/namespacePrefix"/>
+                <xsl:variable name="version" select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Version"/>
+                <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="orderNamespace" select="$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitWeakOrder/orderNamespace"/>
+                <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="groupNamespace" select="concat($nsPrefix,$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Group)"/>
+                <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="productNamespace" select="concat($groupNamespace,&quot;/&quot;,$product,&quot;/data/v&quot;, $version)"/>
+                <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="request" select="concat($product, $action,&quot;Request&quot;)"/>
+                <xsl:element namespace="{$productNamespace}" name="{$request}">
+                    <xsl:element namespace="{$orderNamespace}" name="customerOrderId">
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:customerOrderId"/>
+                    </xsl:element>
+                    <xsl:element namespace="{$orderNamespace}" name="orderDateTime">
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:orderDateTime"/>
+                    </xsl:element>
+                    <xsl:if test="string-length($SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderParameters)!=0">
+                        <xsl:element namespace="{$productNamespace}" name="OrderParameters">
+                            <xsl:for-each select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderParameters/pfx7:Parameter">
+                                <xsl:element namespace="{$groupNamespace}" name="{pfx7:Name}">
+                                    <xsl:value-of select="pfx7:Value"/>
+                                </xsl:element>
+                            </xsl:for-each>
+                        </xsl:element>
+                    </xsl:if>
+                    <xsl:if test="string-length($SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem)!=0">
+                        <xsl:element namespace="{$productNamespace}" name="OrderItem">
+                            <xsl:for-each select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:OrderItemParameters/pfx7:Parameter">
+                                <xsl:element namespace="{$groupNamespace}" name="{pfx7:Name}">
+                                    <xsl:value-of select="pfx7:Value"/>
+                                </xsl:element>
+                            </xsl:for-each>
+                            <xsl:if test="string-length($SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Action/pfx7:Parameters)!=0">
+                                <xsl:element namespace="{$productNamespace}" name="Parameters">
+                                    <xsl:for-each select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:OrderItem/pfx7:Product/pfx7:Action/pfx7:Parameters/pfx7:Parameter">
+                                        <xsl:element namespace="{$productNamespace}" name="{pfx7:Name}">
+                                            <xsl:value-of select="pfx7:Value"/>
+                                        </xsl:element>
+                                    </xsl:for-each>
+                                </xsl:element>
+                            </xsl:if>
+                        </xsl:element>
+                    </xsl:if>
+                </xsl:element>
+            </Request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Publish SubmitOrder">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>710</pd:x>
+        <pd:y>198</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Publisher.process</processName>
+        </config>
+        <pd:inputBindings>
+            <PublisherIn>
+                <Destination>
+                    <xsl:value-of select="$Create-SubmitOrder/pfx11:SubmitOrder/ns22:CMH/ns22:TO/@ns22:DESTINATION"/>
+                </Destination>
+                <xsl:if test="$Create-SubmitOrder/pfx11:SubmitOrder/ns22:CMH/ns22:TRACKING/ns22:MESSAGE_ID">
+                    <MessageId>
+                        <xsl:value-of select="$Create-SubmitOrder/pfx11:SubmitOrder/ns22:CMH/ns22:TRACKING/ns22:MESSAGE_ID"/>
+                    </MessageId>
+                </xsl:if>
+                <Body>
+                    <xsl:copy-of select="$Create-SubmitOrder/pfx11:SubmitOrder"/>
+                </Body>
+                <JMS>
+                    <xsl:if test="string-length($_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitWeakOrder/selector)!=0">
+                        <Selector>
+                            <xsl:value-of select="$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitWeakOrder/selector"/>
+                        </Selector>
+                    </xsl:if>
+                </JMS>
+            </PublisherIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Validate message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>360</pd:x>
+        <pd:y>355</pd:y>
+        <config>
+            <processName>/GenericOrderGateway/Processes/Sub/ValidateMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <GUID>
+                    <xsl:value-of select="$ID/messageId/GUID"/>
+                </GUID>
+                <namespace>
+                    <xsl:value-of select="namespace-uri($Map-Weak-to-Strong/Request/*)"/>
+                </namespace>
+                <xmlMessage>
+                    <xsl:value-of select="tib:render-xml($Map-Weak-to-Strong/Request/*, false(), false())"/>
+                </xmlMessage>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Validation error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>475</pd:x>
+        <pd:y>480</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:concat-sequence($Validate-message/output/validationError)"/>
+                </message>
+                <data>
+                    <pfx12:Error>
+                        <pfx12:MsgCode>
+                            <xsl:value-of select="&quot;GOG-03003&quot;"/>
+                        </pfx12:MsgCode>
+                        <xsl:if test="$Validate-message/output/isValid">
+                            <pfx12:Params>
+                                <xsl:value-of select="concat('message Validation:',$Validate-message/output/isValid,tib:concat-sequence($Validate-message/output/validationError))"/>
+                            </pfx12:Params>
+                        </xsl:if>
+                        <pfx12:MsgId>
+                            <xsl:value-of select="$ID/messageId/GUID"/>
+                        </pfx12:MsgId>
+                    </pfx12:Error>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Strong message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>478</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GOG-04001&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$ID/messageId/GUID"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="concat(&quot;MULTIPASS:&quot;,tib:render-xml($Map-Weak-to-Strong/Request,false(),true()))"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ID">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>261</pd:x>
+        <pd:y>189</pd:y>
+        <config>
+            <element>
+                <xsd:element name="messageId">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="GUID" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <messageId>
+                <GUID>
+                    <xsl:value-of select="eai:createGUID()"/>
+                </GUID>
+            </messageId>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>851</pd:x>
+        <pd:y>191</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>708</pd:x>
+        <pd:y>375</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Publish-SubmitOrder)">
+                            <xsl:copy-of select="$_error_Publish-SubmitOrder/pfx12:Error"/>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_SOAPSendReply)">
+                            <pfx12:Error>
+                                <pfx12:MsgCode>
+                                    <xsl:value-of select="&quot;GOG-03002&quot;"/>
+                                </pfx12:MsgCode>
+                                <pfx12:Params>
+                                    <xsl:value-of select="$_error_SOAPSendReply/ns5:ServerException/msg"/>
+                                </pfx12:Params>
+                                <pfx12:MsgId>
+                                    <xsl:value-of select="$ID/messageId/GUID"/>
+                                </pfx12:MsgId>
+                                <xsl:copy-of select="$_error/ns4:ErrorReport"/>
+                            </pfx12:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx12:Error>
+                                <pfx12:MsgCode>
+                                    <xsl:value-of select="&quot;GOG-03202&quot;"/>
+                                </pfx12:MsgCode>
+                                <pfx12:Params>
+                                    <xsl:value-of select="&quot;Mapping Error in SubmitWeakOrder&quot;"/>
+                                </pfx12:Params>
+                                <pfx12:MsgId>
+                                    <xsl:value-of select="$ID/messageId/GUID"/>
+                                </pfx12:MsgId>
+                                <xsl:copy-of select="$_error/ns4:ErrorReport"/>
+                            </pfx12:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Validation Process Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>363</pd:x>
+        <pd:y>489</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <data>
+                    <xsl:copy-of select="$_error_Validate-message/pfx12:Error"/>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>580</pd:x>
+        <pd:y>492</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>false</catchAll>
+            <fault>localname=Error namespace=http://xmlns.kpn.com/eai/common/errors</fault>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SOAP Event Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>60</pd:x>
+        <pd:y>352</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <data>
+                    <pfx12:Error>
+                        <pfx12:MsgCode>
+                            <xsl:value-of select="&quot;GOG-03001&quot;"/>
+                        </pfx12:MsgCode>
+                        <pfx12:Params>
+                            <xsl:value-of select="&quot;Invalid SoapWeakOrder Request&quot;"/>
+                        </pfx12:Params>
+                        <xsl:copy-of select="$_error/ns4:ErrorReport"/>
+                        <pfx12:ActivityError>
+                            <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/@*"/>
+                            <xsl:copy-of select="$_error_SOAPEventSource/ActivityErrors/node()"/>
+                        </pfx12:ActivityError>
+                    </pfx12:Error>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log WeakOrder Soap Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>182</pd:x>
+        <pd:y>89</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GOG-04002&quot;"/>
+                </MsgCode>
+                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:customerOrderId">
+                    <MsgId>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:WeakOrder/pfx7:customerOrderId"/>
+                    </MsgId>
+                </xsl:if>
+                <additionalLogID>
+                    <xsl:value-of select="concat($_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/SOAP/Outbound/Server,$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/SOAP/Outbound/ServerPort)"/>
+                </additionalLogID>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($SOAPEventSource/inputMessage,false(),true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Panic Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>812</pd:x>
+        <pd:y>626</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat('Fatal: ', $_error/ns4:ErrorReport/Msg, ' in ', $_error/ns4:ErrorReport/ProcessStack)"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'EAI-03000'"/>
+                </msgCode>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>651</pd:x>
+        <pd:y>412</pd:y>
+        <pd:width>311</pd:width>
+        <pd:height>141</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Log All Exceptions</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPSendFault</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log All Exceptions</pd:from>
+            <pd:to>SOAPSendFault</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="SOAPSendFault">
+            <pd:type>com.tibco.plugin.soap.SOAPSendFaultActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendFaultUI</pd:resourceType>
+            <pd:x>870</pd:x>
+            <pd:y>489</pd:y>
+            <config>
+                <faultMessage>SubmitWeakOrderFault</faultMessage>
+                <eventSource>SOAPEventSource</eventSource>
+            </config>
+            <pd:inputBindings>
+                <xsl:choose>
+                    <xsl:when test="$Catch/pfx12:Error/pfx12:MsgCode=&quot;GOG-03003&quot;">
+                        <FaultMessage>
+                            <faultcode>
+                                <xsl:value-of select="&quot;soap:client&quot;"/>
+                            </faultcode>
+                            <faultstring>
+                                <xsl:value-of select="&quot;Validation Error&quot;"/>
+                            </faultstring>
+                            <detail>
+                                <pfx7:WeakOrderFault>
+                                    <pfx7:errorMessage>
+                                        <xsl:value-of select="$Catch/pfx12:Error/pfx12:Params[1]"/>
+                                    </pfx7:errorMessage>
+                                    <pfx7:errorCode>
+                                        <xsl:value-of select="&quot;500- Internal Server Error&quot;"/>
+                                    </pfx7:errorCode>
+                                    <xsl:for-each select="$_error_Validation-error/pfx12:Error/pfx12:Params">
+                                        <pfx7:detail>
+                                            <xsl:value-of select="."/>
+                                        </pfx7:detail>
+                                    </xsl:for-each>
+                                </pfx7:WeakOrderFault>
+                            </detail>
+                        </FaultMessage>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <FaultMessage>
+                            <faultcode>
+                                <xsl:value-of select="&quot;soap:server&quot;"/>
+                            </faultcode>
+                            <faultstring>
+                                <xsl:value-of select="&quot;EAI Error&quot;"/>
+                            </faultstring>
+                            <detail>
+                                <pfx7:WeakOrderFault>
+                                    <pfx7:errorMessage>
+                                        <xsl:value-of select="$Catch/pfx12:Error/pfx12:Params[1]"/>
+                                    </pfx7:errorMessage>
+                                    <pfx7:errorCode>
+                                        <xsl:value-of select="&quot;server error&quot;"/>
+                                    </pfx7:errorCode>
+                                </pfx7:WeakOrderFault>
+                            </detail>
+                        </FaultMessage>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log All Exceptions">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>741</pd:x>
+            <pd:y>489</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ErrorTraceIn>
+                    <pfx12:Errors>
+                        <xsl:copy-of select="$Catch/pfx12:Error"/>
+                    </pfx12:Errors>
+                </ErrorTraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Map Weak to Strong</pd:from>
+        <pd:to>Validate message</pd:to>
+        <pd:xpathDescription>VALIDATE</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitWeakOrder/validation="true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Weak to Strong</pd:from>
+        <pd:to>Create SubmitOrder</pd:to>
+        <pd:xpathDescription>MULTIPASS</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Validate message</pd:from>
+        <pd:to>Create SubmitOrder</pd:to>
+        <pd:xpathDescription>VALID</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Validate-message/output/isValid="true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create SubmitOrder</pd:from>
+        <pd:to>Publish SubmitOrder</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Validate message</pd:from>
+        <pd:to>Validation error</pd:to>
+        <pd:xpathDescription>INVALID</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Weak to Strong</pd:from>
+        <pd:to>Log Strong message</pd:to>
+        <pd:xpathDescription>TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GOG-04001")
+and
+$_globalVariables/pfx6:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitWeakOrder/validation="false"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Strong message</pd:from>
+        <pd:to>Create SubmitOrder</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>ID</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ID</pd:from>
+        <pd:to>Map Weak to Strong</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish SubmitOrder</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish SubmitOrder</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create SubmitOrder</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Validate message</pd:from>
+        <pd:to>Validation Process Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAP Event Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>Log WeakOrder Soap Request</pd:to>
+        <pd:xpathDescription>TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GOG-04002")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log WeakOrder Soap Request</pd:from>
+        <pd:to>ID</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Panic Log</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Panic Log</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

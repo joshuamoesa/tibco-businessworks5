@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/JMSSubscribers/0082_TroubleProgressReport_SOAP [EDM].process</pd:name>
+    <pd:description>Purpose:
+Act as ASTRID wanting to publish.</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>77</pd:startX>
+    <pd:startY>57</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>314</pd:endX>
+    <pd:endY>57</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>191</pd:x>
+        <pd:y>56</pd:y>
+        <config>
+            <timeout>%%ASTRIDAdapter/Test/Timeout%%</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>%%ASTRIDAdapter/Test/Endpoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:GenericMessage>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="&quot;0082-TroubleProgressReport&quot;"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="&quot;Ticket Progress Entry&quot;"/>
+                        </ns:managed_object_class>
+                        <ns:managed_object_class_version>
+                            <xsl:value-of select="&quot;managed_object_class_version&quot;"/>
+                        </ns:managed_object_class_version>
+                        <ns:message_origination_it_domain>
+                            <xsl:value-of select="&quot;message_origination_it_domain&quot;"/>
+                        </ns:message_origination_it_domain>
+                        <ns:message_instance>
+                            <xsl:value-of select="&quot;Message_Instance&quot;"/>
+                        </ns:message_instance>
+                        <ns:message_creation_time>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:message_creation_time>
+                        <ns:message_destination_it_domain>
+                            <xsl:value-of select="&quot;EDM&quot;"/>
+                        </ns:message_destination_it_domain>
+                    </ns:Header>
+                    <ns:General>
+                        <ns:customer_service_incident_report_initiation>
+                            <xsl:value-of select="&quot;customer_service_incident_report_initiation&quot;"/>
+                        </ns:customer_service_incident_report_initiation>
+                        <ns:trouble_report_identifier>
+                            <xsl:value-of select="&quot;Trouble_Report_identifier&quot;"/>
+                        </ns:trouble_report_identifier>
+                        <ns:trouble_description_short>
+                            <xsl:value-of select="&quot;trouble_description_short&quot;"/>
+                        </ns:trouble_description_short>
+                        <ns:trouble_description_long>
+                            <xsl:value-of select="&quot;trouble_description_long&quot;"/>
+                        </ns:trouble_description_long>
+                        <ns:end_user_name>
+                            <xsl:value-of select="&quot;end_user_name&quot;"/>
+                        </ns:end_user_name>
+                    </ns:General>
+                    <ns:Customer_info>
+                        <ns:customer_organization>
+                            <xsl:value-of select="&quot;customer_organization&quot;"/>
+                        </ns:customer_organization>
+                    </ns:Customer_info>
+                    <ns:Managed_object_in_trouble_info>
+                        <ns:moit_ssl_country>
+                            <xsl:value-of select="&quot;moit_ssl_country&quot;"/>
+                        </ns:moit_ssl_country>
+                    </ns:Managed_object_in_trouble_info>
+                </pfx:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/EDTAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JMSSubscribers/0086_CustomerIncidentStatusUpdateReport_SOAP.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>77</pd:startX>
+    <pd:startY>57</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>391</pd:endX>
+    <pd:endY>58</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>230</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <timeout>%%EDTAdapter/Test/SOAP/Timeout%%</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>http://%%EDTAdapter/Test/SOAP/EndPoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:GenericMessage>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="&quot;0086_CustomerIncidentStatusUpdateReport&quot;"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="&quot;Customer Incident Report State and Status Update Notification ASTRID&quot;"/>
+                        </ns:managed_object_class>
+                        <ns:managed_object_class_extension>
+                            <xsl:value-of select="&quot;managed_object_class_extension&quot;"/>
+                        </ns:managed_object_class_extension>
+                        <ns:managed_object_class_version>
+                            <xsl:value-of select="&quot;managed_object_class_version&quot;"/>
+                        </ns:managed_object_class_version>
+                        <ns:message_origination_it_domain>
+                            <xsl:value-of select="&quot;message_origination_it_domain&quot;"/>
+                        </ns:message_origination_it_domain>
+                        <ns:message_instance>
+                            <xsl:value-of select="&quot;message_instance&quot;"/>
+                        </ns:message_instance>
+                        <ns:message_creation_time>
+                            <xsl:value-of select="&quot;2005-01-01T10:00:00&quot;"/>
+                        </ns:message_creation_time>
+                        <ns:message_destination_it_domain>
+                            <xsl:value-of select="&quot;message_destination_it_domain&quot;"/>
+                        </ns:message_destination_it_domain>
+                    </ns:Header>
+                    <ns:General>
+                        <ns:customer_service_incident_report_identifier>
+                            <xsl:value-of select="&quot;Customer_service_incident_report_identifier&quot;"/>
+                        </ns:customer_service_incident_report_identifier>
+                        <ns:trouble_report_identifier>
+                            <xsl:value-of select="&quot;trouble_report_identifier&quot;"/>
+                        </ns:trouble_report_identifier>
+                        <ns:service_provider_trouble_report_identifier>
+                            <xsl:value-of select="&quot;sptri&quot;"/>
+                        </ns:service_provider_trouble_report_identifier>
+                        <ns:event_time>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:event_time>
+                        <ns:analysis_information>
+                            <xsl:value-of select="&quot;ai&quot;"/>
+                        </ns:analysis_information>
+                        <ns:closure_service_type>
+                            <xsl:value-of select="&quot;closure_service_type&quot;"/>
+                        </ns:closure_service_type>
+                        <ns:trouble_description_short>
+                            <xsl:value-of select="&quot;tds&quot;"/>
+                        </ns:trouble_description_short>
+                        <ns:trouble_description_long>
+                            <xsl:value-of select="&quot;tdl&quot;"/>
+                        </ns:trouble_description_long>
+                        <ns:trouble_found>
+                            <xsl:value-of select="&quot;trouble_found&quot;"/>
+                        </ns:trouble_found>
+                        <ns:trouble_report_state>
+                            <xsl:value-of select="&quot;trouble_report_state&quot;"/>
+                        </ns:trouble_report_state>
+                    </ns:General>
+                    <ns:Customer_info>
+                        <ns:manager_contact_person>
+                            <xsl:value-of select="&quot;mcp&quot;"/>
+                        </ns:manager_contact_person>
+                    </ns:Customer_info>
+                    <ns:Attachments/>
+                </pfx:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

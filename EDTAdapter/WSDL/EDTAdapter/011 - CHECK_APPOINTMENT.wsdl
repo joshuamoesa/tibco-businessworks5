@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:CHECK_APPOINTMENT" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:CHECK_APPOINTMENT">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:CHECK_APPOINTMENT">
+            <xsd:element name="CheckAppointment" type="s:KSD_CheckAppointment"/>
+            <xsd:complexType name="KSD_CheckAppointment">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/><!-- EAI00001243 form dateTime to string -->
+                    <xsd:element name="systemDate" type="xsd:string"/>
+                    <xsd:element name="formulaId" type="xsd:string"/><!-- EAI00001243 form dateTime to string -->
+                    <xsd:element name="repairDeadline" type="xsd:string"/><!-- EAI00001243 form dateTime to string -->
+                    <xsd:element name="expectedTime" type="xsd:string"/>
+                    <xsd:element name="researchDepartmentCode" type="xsd:string"/>
+                    <xsd:element name="researchEmployeeCode" type="xsd:string"/><!-- EAI00001243 form date to string -->
+                    <xsd:element name="appointmentDate" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="CheckAppointmentResponse" type="s:KSD_Appointment"/>
+            <xsd:complexType name="KSD_Appointment">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="appointmentWithinNorm" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="CheckAppointmentRequestMsg">
+        <part name="parameters" element="s:CheckAppointment"/>
+    </message>
+    <message name="CheckAppointmentResponseMsg">
+        <part name="parameters" element="s:CheckAppointmentResponse"/>
+    </message>
+    <portType name="CHECK_APPOINTMENTPortType">
+        <operation name="CheckAppointment">
+            <input message="s:CheckAppointmentRequestMsg"/>
+            <output message="s:CheckAppointmentResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="CHECK_APPOINTMENTSoapBinding" type="s:CHECK_APPOINTMENTPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="CheckAppointment">
+            <soap:operation soapAction="urn:CHECK_APPOINTMENT/CheckAppointment" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="CHECK_APPOINTMENT_SERVICE">
+        <port name="CHECK_APPOINTMENTSoap" binding="s:CHECK_APPOINTMENTSoapBinding">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/CheckAppointment"/>
+        </port>
+    </service>
+</definitions>

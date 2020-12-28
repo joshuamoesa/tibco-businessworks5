@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:ns="http://tempuri.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://tempuri.org/GenericRequest" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/WSDL/ASTRID/GenericMessageRequest.wsdl" xmlns:pfx4="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" xmlns:pfx5="urn:NotifyNumberInportingComplete" xmlns:ns0="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/EDTAdapter/Response/UpsertTroubleReport.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/portingservices/publish/NotifyNumberInportingComplete" xmlns:ns4="http://xmlns.kpn.com/fixed/EDTAdapter/common/CustomerIncidentReport.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/EDTAdapter/common/EDTResponse.xsd" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns7="http://www.tibco.com/pe/EngineTypes" xmlns:pfx7="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns8="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns9="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Response/UpsertCustomerIncidentReport.xsd" xmlns:ns10="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/TroubleReport.xsd" xmlns:ns11="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/ASTRIDResponse.xsd" xmlns:ns12="http://schemas.tibco.com/bw/plugins/soap/5.0/SoapPluginExceptions" xmlns:ns13="http://xmlns.kpn.com/fixed/ASTRIDAdapter/../WSDL/ASTRIDAdapter/GenericMessageRequest.xsd" xmlns:ns14="http://xmlns.kpn.com/fixed/common/internal/InitialError.xsd" xmlns:pfx8="urn:FIND_CUSTOMER" xmlns:pfx9="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" xmlns:pfx11="urn:GET_LINE_MEASUREMENT" xmlns:ns15="http://xmlns.kpn.com/fixed/ckradapter/common/Customer.xsd" xmlns:ns16="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd" xmlns:ns17="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:ns18="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:ns19="http://xmlns.tibco.com/encodings/mime" xmlns:eai="java://com.kpn.eai.tools.Tools">
+    <xsd:import namespace="http://tempuri.org/GenericRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericRequest.xsd"/>
+    <xsd:import namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/EDTAdapter/GenericMessageRequest.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="" schemaLocation=""/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/FindCustomer.xsd"/>
+    <xsd:import namespace="urn:GET_LINE_MEASUREMENT" schemaLocation="/WSDL/EDTAdapter/006 - GET_LINE_MEASUREMENT.wsdl"/>
+    <xsd:import namespace="urn:FIND_CUSTOMER" schemaLocation="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" schemaLocation="/XSDSchemas/Common/ErrorMessage.xsd"/>
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/EDTAdapter/GenericMessageRequest.wsdl"/>
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <pd:name>EDTAdapter/Processes/FindCustomer.process</pd:name>
+    <pd:description>FindCustomer process that handles outbound FindCustomer SAOP call from EDT, directed towards the EAI bus.
+It deals with client request-reply.
+Reply should come from CKR.</pd:description>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>84</pd:x>
+        <pd:y>68</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <service>pfx8:FIND_CUSTOMERPortType</service>
+            <operation>FindCustomer</operation>
+            <attachmentStyle>none</attachmentStyle>
+            <wsdlNamespaceRoot>urn:FIND_CUSTOMER/FindCustomerImpl</wsdlNamespaceRoot>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>urn:FIND_CUSTOMER/FindCustomer</soapAction>
+            <sharedChannel>/EDTAdapter/Shared Resources/HTTP Server Connection.sharedhttp</sharedChannel>
+            <sharedChannels>
+                <httpChannel>
+                    <useBasicAuthentication>false</useBasicAuthentication>
+                </httpChannel>
+            </sharedChannels>
+            <useBasicAuthentication>false</useBasicAuthentication>
+            <portAddressPrefix/>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>834</pd:endX>
+    <pd:endY>297</pd:endY>
+    <pd:errorSchemas>
+        <InternalError ref="pfx:GenericMessage"/>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <ErrorStatus>
+            <xsd:element name="ResultStatus" type="ns6:ResultStatus"/>
+        </ErrorStatus>
+    </pd:processVariables>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>374</pd:x>
+        <pd:y>299</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <LogError_In>
+                <xsl:choose>
+                    <xsl:when test="exists($SoapEventError)">
+                        <MsgCode>
+                            <xsl:value-of select="&quot;EDT-03005&quot;"/>
+                        </MsgCode>
+                    </xsl:when>
+                    <xsl:when test="(exists($Send-Rendezvous-Request)) and ($Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:STATUS !=&quot;0&quot;)">
+                        <MsgCode>
+                            <xsl:value-of select="$Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:MSG_CODE"/>
+                        </MsgCode>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_SOAPSendReply)">
+                        <MsgCode>
+                            <xsl:value-of select="&quot;EDT-03006&quot;"/>
+                        </MsgCode>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <MsgCode>
+                            <xsl:value-of select="&quot;EDT-03003&quot;"/>
+                        </MsgCode>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="exists($SoapEventError)">
+                        <Message>
+                            <xsl:value-of select="&quot;Error while receiving SOAP request&quot;"/>
+                        </Message>
+                    </xsl:when>
+                    <xsl:when test="(exists($Send-Rendezvous-Request)) and ($Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:STATUS !=&quot;0&quot;)">
+                        <xsl:if test="$Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:ERROR_DESCRIPTION">
+                            <Message>
+                                <xsl:value-of select="$Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:ERROR_DESCRIPTION"/>
+                            </Message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="exists($Send-Rendezvous-Request)">
+                        <xsl:if test="$_error/ns7:ErrorReport/Msg">
+                            <Message>
+                                <xsl:value-of select="$_error/ns7:ErrorReport/Msg"/>
+                            </Message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_SOAPSendReply)">
+                        <Message>
+                            <xsl:value-of select="&quot;Error while sending SOAP reply&quot;"/>
+                        </Message>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <Message>
+                            <xsl:value-of select="&quot;General Error&quot;"/>
+                        </Message>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="exists($_error)">
+                        <ns14:InitialError>
+                            <ns14:StackTrace>
+                                <xsl:value-of select="$_error/ns7:ErrorReport/StackTrace"/>
+                            </ns14:StackTrace>
+                            <ns14:Msg>
+                                <xsl:value-of select="$_error/ns7:ErrorReport/Msg"/>
+                            </ns14:Msg>
+                            <ns14:FullClass>
+                                <xsl:value-of select="$_error/ns7:ErrorReport/FullClass"/>
+                            </ns14:FullClass>
+                            <ns14:Class>
+                                <xsl:value-of select="$_error/ns7:ErrorReport/Class"/>
+                            </ns14:Class>
+                            <ns14:ProcessStack>
+                                <xsl:value-of select="$_error/ns7:ErrorReport/ProcessStack"/>
+                            </ns14:ProcessStack>
+                            <xsl:if test="$_error/ns7:ErrorReport/MsgCode">
+                                <ns14:MsgCode>
+                                    <xsl:value-of select="$_error/ns7:ErrorReport/MsgCode"/>
+                                </ns14:MsgCode>
+                            </xsl:if>
+                            <xsl:if test="exists($_error/ns7:ErrorReport/Data)">
+                                <ns14:Data>
+                                    <xsl:copy-of select="$_error/ns7:ErrorReport/Data/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns7:ErrorReport/Data/@*"/>
+                                    <xsl:copy-of select="$_error/ns7:ErrorReport/Data/node()"/>
+                                </ns14:Data>
+                            </xsl:if>
+                        </ns14:InitialError>
+                    </xsl:when>
+                </xsl:choose>
+                <ExistingCMH>
+                    <COMPONENT-ID>
+                        <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/EDTAdapter/ComponentId"/>
+                    </COMPONENT-ID>
+                    <COMPONENT-VERSION>
+                        <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/EDTAdapter/ComponentVersion"/>
+                    </COMPONENT-VERSION>
+                    <COPY_ATTRIBUTES>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </COPY_ATTRIBUTES>
+                    <EXTENT_TRACKING>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </EXTENT_TRACKING>
+                    <xsl:for-each select="$FillCMH/CMH">
+                        <CMH>
+                            <ns1:ID>
+                                <xsl:value-of select="ns1:ID"/>
+                            </ns1:ID>
+                            <ns1:NAME>
+                                <xsl:value-of select="ns1:NAME"/>
+                            </ns1:NAME>
+                            <xsl:if test="ns1:FID">
+                                <ns1:FID>
+                                    <xsl:value-of select="ns1:FID"/>
+                                </ns1:FID>
+                            </xsl:if>
+                            <xsl:if test="ns1:MID">
+                                <ns1:MID>
+                                    <xsl:value-of select="ns1:MID"/>
+                                </ns1:MID>
+                            </xsl:if>
+                            <ns1:PARADIGM>
+                                <xsl:value-of select="ns1:PARADIGM"/>
+                            </ns1:PARADIGM>
+                            <ns1:OBJECT>
+                                <xsl:value-of select="ns1:OBJECT"/>
+                            </ns1:OBJECT>
+                            <ns1:VERSION>
+                                <xsl:value-of select="ns1:VERSION"/>
+                            </ns1:VERSION>
+                            <xsl:for-each select="ns1:FROM">
+                                <ns1:FROM>
+                                    <xsl:attribute name="ns1:COMPONENT_ID">
+                                        <xsl:value-of select="@ns1:COMPONENT_ID"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="@ns1:COMPONENT_VERSION">
+                                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                            <xsl:value-of select="@ns1:COMPONENT_VERSION"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="@ns1:END_USER_INFO">
+                                        <xsl:attribute name="ns1:END_USER_INFO">
+                                            <xsl:value-of select="@ns1:END_USER_INFO"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="@ns1:SOURCE_ADDRESS">
+                                        <xsl:attribute name="ns1:SOURCE_ADDRESS">
+                                            <xsl:value-of select="@ns1:SOURCE_ADDRESS"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </ns1:FROM>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns1:TO">
+                                <ns1:TO>
+                                    <xsl:attribute name="ns1:DESTINATION">
+                                        <xsl:value-of select="concat(&quot;ErrorLog.&quot;,@ns1:DESTINATION)"/>
+                                    </xsl:attribute>
+                                </ns1:TO>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns1:TRACKING">
+                                <ns1:TRACKING>
+                                    <ns1:MESSAGE_ID>
+                                        <xsl:value-of select="ns1:MESSAGE_ID"/>
+                                    </ns1:MESSAGE_ID>
+                                    <xsl:if test="ns1:EXTERNAL_REF">
+                                        <ns1:EXTERNAL_REF>
+                                            <xsl:value-of select="ns1:EXTERNAL_REF"/>
+                                        </ns1:EXTERNAL_REF>
+                                    </xsl:if>
+                                    <xsl:for-each select="ns1:ITEM">
+                                        <ns1:ITEM>
+                                            <xsl:attribute name="ns1:APPINFO">
+                                                <xsl:value-of select="@ns1:APPINFO"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:EVENT">
+                                                <xsl:value-of select="@ns1:EVENT"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:TIMESTAMP">
+                                                <xsl:value-of select="@ns1:TIMESTAMP"/>
+                                            </xsl:attribute>
+                                        </ns1:ITEM>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:SEQUENCE_NO">
+                                        <ns1:SEQUENCE_NO>
+                                            <xsl:value-of select="."/>
+                                        </ns1:SEQUENCE_NO>
+                                    </xsl:for-each>
+                                </ns1:TRACKING>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns1:ATTRIBUTE">
+                                <ns1:ATTRIBUTE>
+                                    <xsl:attribute name="ns1:NAME">
+                                        <xsl:value-of select="@ns1:NAME"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns1:VALUE">
+                                        <xsl:value-of select="@ns1:VALUE"/>
+                                    </xsl:attribute>
+                                </ns1:ATTRIBUTE>
+                            </xsl:for-each>
+                        </CMH>
+                    </xsl:for-each>
+                </ExistingCMH>
+                <xsl:choose>
+                    <xsl:when test="exists($SoapEventError)">
+                        <StatusCode>
+                            <xsl:value-of select="&quot;3&quot;"/>
+                        </StatusCode>
+                    </xsl:when>
+                    <xsl:when test="(exists($Send-Rendezvous-Request)) and ($Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:STATUS !=&quot;0&quot;)">
+                        <StatusCode>
+                            <xsl:value-of select="$Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:STATUS"/>
+                        </StatusCode>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_SOAPSendReply)">
+                        <StatusCode>
+                            <xsl:value-of select="&quot;2&quot;"/>
+                        </StatusCode>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <StatusCode>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </StatusCode>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </LogError_In>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>237</pd:x>
+        <pd:y>298</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogSOAPRequest">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>307</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <LogMessage_In>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04004&quot;"/>
+                </MsgCode>
+                <Message>
+                    <xsl:value-of select="concat(&quot;Received SOAP request on port &quot;,$_globalVariables/ns8:GlobalVariables/EDTAdapter/Outbound/SOAP/ServerPort)"/>
+                </Message>
+                <ExtraInfo>
+                    <xsl:copy-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer"/>
+                </ExtraInfo>
+            </LogMessage_In>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>833</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <xsl:copy-of select="$MapSoapReply/pfx8:FindCustomerResponse"/>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogSOAPReply">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>707</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <LogMessage_In>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04005&quot;"/>
+                </MsgCode>
+                <Message>
+                    <xsl:value-of select="concat(&quot;Sending SOAP response for port &quot;,$_globalVariables/ns8:GlobalVariables/EDTAdapter/Outbound/SOAP/ServerPort)"/>
+                </Message>
+                <ExtraInfo>
+                    <xsl:copy-of select="$MapSoapReply/pfx8:FindCustomerResponse"/>
+                </ExtraInfo>
+            </LogMessage_In>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapSoapReply">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>588</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <element ref="pfx8:FindCustomerResponse"/>
+        </config>
+        <pd:inputBindings>
+            <pfx8:FindCustomerResponse>
+                <pfx8:GUID>
+                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:GUID"/>
+                </pfx8:GUID>
+                <pfx8:CustomerList>
+                    <xsl:for-each select="$Send-Rendezvous-Request/ActivityOutput/body/pfx10:CUSTOMER">
+                        <pfx8:Customer>
+                            <xsl:if test="ns15:PARTY/PARTY_ID">
+                                <pfx8:TINCode>
+                                    <xsl:value-of select="ns15:PARTY/PARTY_ID"/>
+                                </pfx8:TINCode>
+                            </xsl:if>
+                            <pfx8:CKRNummer>
+                                <xsl:value-of select="ns15:CENTRAL_CUSTOMER_ID"/>
+                            </pfx8:CKRNummer>
+                            <pfx8:Straat>
+                                <xsl:value-of select="ns15:PROPERTY_ADDRESS/ns17:STREET_NAME"/>
+                            </pfx8:Straat>
+                            <pfx8:Huisnr>
+                                <xsl:value-of select="ns15:PROPERTY_ADDRESS/ns17:HOUSE_NUMBER"/>
+                            </pfx8:Huisnr>
+                            <pfx8:Huisnr_Toev>
+                                <xsl:value-of select="ns15:PROPERTY_ADDRESS/ns17:HOUSE_NUMBER_EXTENSION"/>
+                            </pfx8:Huisnr_Toev>
+                            <pfx8:Pstcodcyf>
+                                <xsl:value-of select="ns15:PROPERTY_ADDRESS/ns17:DUTCH_POSTCODE_NUMBERS"/>
+                            </pfx8:Pstcodcyf>
+                            <pfx8:Pstcodlet>
+                                <xsl:value-of select="ns15:PROPERTY_ADDRESS/ns17:DUTCH_POSTCODE_LETTERS"/>
+                            </pfx8:Pstcodlet>
+                            <pfx8:Plaats>
+                                <xsl:value-of select="ns15:PROPERTY_ADDRESS/ns17:CITY_NAME"/>
+                            </pfx8:Plaats>
+                            <pfx8:codwpl>
+                                <xsl:value-of select="ns15:PROPERTY_ADDRESS/ns17:CITY_CODE"/>
+                            </pfx8:codwpl>
+                            <pfx8:codrvx>
+                                <xsl:value-of select="ns15:PARTY/LEGAL_FORM_CODE"/>
+                            </pfx8:codrvx>
+                            <pfx8:datgeb>
+                                <xsl:value-of select="ns15:PARTY/DATE_OF_BIRTH"/>
+                            </pfx8:datgeb>
+                            <pfx8:namrsx>
+                                <xsl:value-of select="ns15:PARTY/PARTY_NAME"/>
+                            </pfx8:namrsx>
+                        </pfx8:Customer>
+                    </xsl:for-each>
+                </pfx8:CustomerList>
+            </pfx8:FindCustomerResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FillCMH">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>181</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_FillCMH.process</processName>
+        </config>
+        <pd:inputBindings>
+            <CMH-IN>
+                <ExistingCMH>
+                    <COMPONENT-ID>
+                        <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/EDTAdapter/ComponentId"/>
+                    </COMPONENT-ID>
+                    <COMPONENT-VERSION>
+                        <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/EDTAdapter/ComponentVersion"/>
+                    </COMPONENT-VERSION>
+                    <COPY_ATTRIBUTES>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </COPY_ATTRIBUTES>
+                    <EXTENT_TRACKING>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </EXTENT_TRACKING>
+                    <CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="&quot;001&quot;"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="&quot;FindCustomer&quot;"/>
+                        </ns1:NAME>
+                        <ns1:FID>
+                            <xsl:value-of select="concat($SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Organisatie, '-', $SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Straat, '-',$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Huisnr, '-',$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Pstcodcyf, '-',$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Pstcodlet , '-',$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Plaats , '-',$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Telefoonnummer)"/>
+                        </ns1:FID>
+                        <ns1:MID>
+                            <xsl:value-of select="&quot;001.10&quot;"/>
+                        </ns1:MID>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;REQUEST&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="&quot;CO_FindCustomer&quot;"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/EDTAdapter/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/EDTAdapter/ComponentVersion"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="concat($_globalVariables/ns8:GlobalVariables/Env, '.FIXED.Order.CKRAdapter.Request.FindCustomer.2')"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                        <ns1:TRACKING>
+                            <ns1:MESSAGE_ID>
+                                <xsl:value-of select="eai:createGUID()"/>
+                            </ns1:MESSAGE_ID>
+                            <ns1:ITEM>
+                                <xsl:attribute name="ns1:APPINFO">
+                                    <xsl:value-of select="concat($_globalVariables/ns8:GlobalVariables/EDTAdapter/ComponentDomain,&quot;.&quot;,$_globalVariables/ns8:GlobalVariables/EDTAdapter/ComponentId)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns1:EVENT">
+                                    <xsl:value-of select="&quot;FindCustomer&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns1:TIMESTAMP">
+                                    <xsl:value-of select="ns0:timestamp()"/>
+                                </xsl:attribute>
+                            </ns1:ITEM>
+                        </ns1:TRACKING>
+                    </CMH>
+                </ExistingCMH>
+            </CMH-IN>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogSOAPErrReply">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>613</pd:x>
+        <pd:y>301</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <LogMessage_In>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04005&quot;"/>
+                </MsgCode>
+                <Message>
+                    <xsl:value-of select="concat(&quot;Sending SOAP response for port &quot;,$_globalVariables/ns8:GlobalVariables/EDTAdapter/Outbound/SOAP/ServerPort)"/>
+                </Message>
+                <ExtraInfo>
+                    <xsl:copy-of select="$MapSoapErrReply/pfx4:ErrorMessage"/>
+                </ExtraInfo>
+            </LogMessage_In>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapSoapErrReply">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>496</pd:x>
+        <pd:y>301</pd:y>
+        <config>
+            <element ref="pfx4:ErrorMessage"/>
+        </config>
+        <pd:inputBindings>
+            <pfx4:ErrorMessage>
+                <xsl:choose>
+                    <xsl:when test="exists($Send-Rendezvous-Request)">
+                        <xsl:copy-of select="$Send-Rendezvous-Request/ActivityOutput/body/ns1:CMH"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ns1:CMH>
+                            <xsl:copy-of select="$FillCMH/CMH/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$FillCMH/CMH/@*"/>
+                            <xsl:copy-of select="$FillCMH/CMH/node()"/>
+                        </ns1:CMH>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <pfx4:RESULT_STATUS>
+                    <xsl:copy-of select="$Log-Error/ResultStatus/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Log-Error/ResultStatus/@*"/>
+                    <xsl:copy-of select="$Log-Error/ResultStatus/node()"/>
+                </pfx4:RESULT_STATUS>
+            </pfx4:ErrorMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SoapEventError">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>87</pd:x>
+        <pd:y>197</pd:y>
+        <config>
+            <element>
+                <xsd:element name="DUMMY">
+                    <xsd:complexType>
+                        <xsd:sequence/>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <DUMMY/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVRequestActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVRequestActivity</pd:resourceType>
+        <pd:x>438</pd:x>
+        <pd:y>82</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsXMLCompliantFieldNamesOutput>false</wantsXMLCompliantFieldNamesOutput>
+            <sharedChannel>/EDTAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <subject>%%Env%%.FIXED.Order.CKRAdapter.Request.FindCustomer.2</subject>
+            <operationTimeout>60000</operationTimeout>
+            <xmlEncoding>true</xmlEncoding>
+            <inputXsdString ref="pfx9:FindCustomer"/>
+            <outputXsdString ref="pfx10:FindCustomer"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns1:CMH>
+                        <xsl:copy-of select="$FillCMH/CMH/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$FillCMH/CMH/@*"/>
+                        <xsl:copy-of select="$FillCMH/CMH/node()"/>
+                    </ns1:CMH>
+                    <APPLICATION_ID>
+                        <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/EDTAdapter/CKRAdapter/ApplicationID"/>
+                    </APPLICATION_ID>
+                    <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Organisatie">
+                        <PARTY_NAME>
+                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Organisatie"/>
+                        </PARTY_NAME>
+                    </xsl:if>
+                    <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:TINCode">
+                        <PARTY_ID>
+                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:TINCode"/>
+                        </PARTY_ID>
+                    </xsl:if>
+                    <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Telefoonnummer">
+                        <PHONE_NUMBER>
+                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Telefoonnummer"/>
+                        </PHONE_NUMBER>
+                    </xsl:if>
+                    <IS_INTERNATIONAL>
+                        <xsl:value-of select="&quot;N&quot;"/>
+                    </IS_INTERNATIONAL>
+                    <IS_ACTIVE>
+                        <xsl:value-of select="&quot;J&quot;"/>
+                    </IS_ACTIVE>
+                    <PROPERTY_ADDRESS>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Straat">
+                            <ns17:STREET_NAME>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Straat"/>
+                            </ns17:STREET_NAME>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Huisnr">
+                            <ns17:HOUSE_NUMBER>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Huisnr"/>
+                            </ns17:HOUSE_NUMBER>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Huisnr_Toev">
+                            <ns17:HOUSE_NUMBER_EXTENSION>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Huisnr_Toev"/>
+                            </ns17:HOUSE_NUMBER_EXTENSION>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Plaats">
+                            <ns17:CITY_NAME>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Plaats"/>
+                            </ns17:CITY_NAME>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Pstcodlet">
+                            <ns17:DUTCH_POSTCODE_LETTERS>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Pstcodlet"/>
+                            </ns17:DUTCH_POSTCODE_LETTERS>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Pstcodcyf">
+                            <ns17:DUTCH_POSTCODE_NUMBERS>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx8:FindCustomer/pfx8:Pstcodcyf"/>
+                            </ns17:DUTCH_POSTCODE_NUMBERS>
+                        </xsl:if>
+                    </PROPERTY_ADDRESS>
+                    <ADDRESS_TYPE>
+                        <xsl:value-of select="&quot;H&quot;"/>
+                    </ADDRESS_TYPE>
+                    <ROLE_TYPE>
+                        <xsl:value-of select="&quot;*&quot;"/>
+                    </ROLE_TYPE>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPSendFault">
+        <pd:type>com.tibco.plugin.soap.SOAPSendFaultActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendFaultUI</pd:resourceType>
+        <pd:x>727</pd:x>
+        <pd:y>298</pd:y>
+        <config>
+            <faultMessage>&lt;Default&gt;</faultMessage>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <defaultFaultElement>
+                <faultcode>
+                    <xsl:value-of select="$MapSoapErrReply/pfx4:ErrorMessage/pfx4:RESULT_STATUS/@ns6:ERROR_CODE"/>
+                </faultcode>
+                <faultstring>
+                    <xsl:value-of select="$MapSoapErrReply/pfx4:ErrorMessage/pfx4:RESULT_STATUS/@ns6:ERROR_DESCRIPTION"/>
+                </faultstring>
+            </defaultFaultElement>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>FillCMH</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SoapEventError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>MapSoapErrReply</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FillCMH</pd:from>
+        <pd:to>LogSOAPRequest</pd:to>
+        <pd:xpathDescription>otherwise</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>not(exists($SoapEventError))</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FillCMH</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:xpathDescription>SoapEventError</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($SoapEventError)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapSoapErrReply</pd:from>
+        <pd:to>LogSOAPErrReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapSoapReply</pd:from>
+        <pd:to>LogSOAPReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPReply</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapSoapReply</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapEventError</pd:from>
+        <pd:to>FillCMH</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPRequest</pd:from>
+        <pd:to>Send Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous Request</pd:from>
+        <pd:to>MapSoapReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:STATUS ="0"
+or
+$Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:STATUS ="30"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous Request</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPErrReply</pd:from>
+        <pd:to>SOAPSendFault</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendFault</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous Request</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:xpathDescription>Status</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:STATUS !="0"
+and 
+$Send-Rendezvous-Request/ActivityOutput/body/ns16:RESULT_STATUS/@ns6:STATUS !="30"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

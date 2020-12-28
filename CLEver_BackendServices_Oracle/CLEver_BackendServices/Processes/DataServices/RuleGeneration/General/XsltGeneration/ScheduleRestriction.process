@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/CLEver/Schedule">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Schedule" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Schedule.xsd"/>
+    <pd:name>Processes/DataServices/RuleGeneration/General/XsltGeneration/ScheduleRestriction.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="XpathVariable_Day" type="xsd:string"/>
+                    <xsd:element name="XpathVariable_Date" type="xsd:string"/>
+                    <xsd:element ref="pfx:Schedule"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>57</pd:startX>
+    <pd:startY>140</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <Test>
+                <xsl:value-of select="if (string-length(tib:concat-sequence-format($TimeSerieTest/AccumulatedOutput/TimeSerie/Test, '', true()))>0) then&#xA;concat('(',tib:concat-sequence-format($TimeSerieTest/AccumulatedOutput/TimeSerie/Test, ') or (', true()),')')&#xA;else&#xA;''"/>
+            </Test>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Test" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>626</pd:endX>
+    <pd:endY>140</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>195</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>302</pd:width>
+        <pd:height>260</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/Input/pfx:Schedule/pfx:TimeSeries/pfx:TimeSerie</pd:over>
+            <pd:iterationElementSlot>TimeSerie</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:outSlot>TimeSerieTest</pd:outSlot>
+            <pd:activityOutputName>CombineRestrictions</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>XPathTestTime</pd:to>
+            <pd:xpathDescription>TimeRestriction</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>string-length($TimeSerie/pfx:TimeSerie/pfx:StartTime)&gt;0 and string-length($TimeSerie/pfx:TimeSerie/pfx:EndTime)&gt;0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>XPathTestDate</pd:to>
+            <pd:xpathDescription>DateRestriction</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>string-length($TimeSerie/pfx:TimeSerie/pfx:StartDate)&gt;0 and string-length($TimeSerie/pfx:TimeSerie/pfx:EndDate)&gt;0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>XPathTestWeekDay</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CombineRestrictions</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>XPathTestDate</pd:from>
+            <pd:to>CombineRestrictions</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>XPathTestTime</pd:from>
+            <pd:to>CombineRestrictions</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>XPathTestWeekDay</pd:from>
+            <pd:to>CombineRestrictions</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="XPathTestDate">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>295</pd:x>
+            <pd:y>53</pd:y>
+            <config>
+                <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/Sub/XPathTestDate.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <DateStart>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:StartDate"/>
+                    </DateStart>
+                    <DateEnd>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:EndDate"/>
+                    </DateEnd>
+                    <XPathVariable_Date>
+                        <xsl:value-of select="concat('Exception/',$Start/Input/XpathVariable_Date)"/>
+                    </XPathVariable_Date>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="XPathTestTime">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>304</pd:x>
+            <pd:y>137</pd:y>
+            <config>
+                <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/Sub/XPathTestTime.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <TimeStart>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:StartTime"/>
+                    </TimeStart>
+                    <TimeEnd>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:EndTime"/>
+                    </TimeEnd>
+                    <XPathVariable_Hours>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns:GlobalVariables/StaticVariables/ConfigurationObjects/Schedule/XPathHours)"/>
+                    </XPathVariable_Hours>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="XPathTestWeekDay">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>302</pd:x>
+            <pd:y>206</pd:y>
+            <config>
+                <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/Sub/XPathTestWeekDay.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <Monday>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:Monday"/>
+                    </Monday>
+                    <Tuesday>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:Tuesday"/>
+                    </Tuesday>
+                    <Wednesday>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:Wednesday"/>
+                    </Wednesday>
+                    <Thursday>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:Thursday"/>
+                    </Thursday>
+                    <Friday>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:Friday"/>
+                    </Friday>
+                    <Saturday>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:Saturday"/>
+                    </Saturday>
+                    <Sunday>
+                        <xsl:value-of select="$TimeSerie/pfx:TimeSerie/pfx:Sunday"/>
+                    </Sunday>
+                    <XPathVariable_Day>
+                        <xsl:value-of select="concat('Exception/',$Start/Input/XpathVariable_Day)"/>
+                    </XPathVariable_Day>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CombineRestrictions">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>421</pd:x>
+            <pd:y>141</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="TimeSerie">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Test" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <TimeSerie>
+                    <xsl:variable name="var" select="tib:tokenize(concat($XPathTestWeekDay/Output/Test,'|',$XPathTestDate/Output/Test,'|',$XPathTestTime/Output/Test),'|')"/>
+                    <Test>
+                        <xsl:value-of select="if (count($var)>0) then&#xA;&#x9;tib:concat-sequence-format($var, ' and ' , true())&#xA;else&#xA;&#x9;''"/>
+                    </Test>
+                </TimeSerie>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

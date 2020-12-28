@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/ns/ax/bc/SOAP/2002/10/aeschema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>GenericOrderGateway/Processes/Outbound/ResponsderAck.process</pd:name>
+    <pd:startName>ReceiveMiscMsg</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ReceiveMiscMsg">
+        <pd:type>com.tibco.plugin.ax.bc.B2BReceiveMiscMsgEventSource</pd:type>
+        <pd:resourceType>ae.eventsources.ReceiveMiscMsg</pd:resourceType>
+        <pd:x>95</pd:x>
+        <pd:y>68</pd:y>
+        <config>
+            <parsePayload>true</parsePayload>
+            <eventSmartidOK>true</eventSmartidOK>
+            <eventSmartidShared>true</eventSmartidShared>
+            <eventSmartid>WMP</eventSmartid>
+            <sharedB2BConfig>/GenericOrderGateway/Shared Resources/BCServerConfig.bcsc</sharedB2BConfig>
+            <miscMsgName>ResponderAck</miscMsgName>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>307</pd:endX>
+    <pd:endY>67</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>200</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <ConfirmEvent>ReceiveMiscMsg</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveMiscMsg</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

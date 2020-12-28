@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx8="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:ns="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.kpn.com/eai/common/errors" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://java.sun.com/products/oss/xml/ServiceActivation" xmlns:ns4="http://xmlns.kpn.com/imported/ordermessage_Site_Enterprise.xsd" xmlns:ns5="http://java.sun.com/products/oss/xml/Common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns6="http://Enterprise.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" xmlns:ns7="http://Site.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://java.sun.com/products/oss/xml/ServiceActivation" schemaLocation="/XSDSchemas/xAuthority/AllTypes.xsd"/>
+    <xsd:import namespace="http://Enterprise.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" schemaLocation="/XSDSchemas/xAuthority/BVoIPEnterpriseDataServiceValue.xsd"/>
+    <xsd:import namespace="http://Site.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" schemaLocation="/XSDSchemas/xAuthority/BVoIPSiteDataServiceValue.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Subscribe/UpdateOrderStatus.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Outbound/0337-NotifyMultimediaRegistrationStatus.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:getOrdeByKeyrResponse" minOccurs="0"/>
+                    <xsd:element name="ErrorDescription" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="ErrorCode" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="FID" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="OrderType" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="StatusCode" type="xsd:string"/>
+                    <xsd:element name="Product_Category" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="External-Reference" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>73</pd:startX>
+    <pd:startY>149</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>572</pd:endX>
+    <pd:endY>147</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Map NotifyMultimediaRegistrationStatusRequest">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>351</pd:x>
+        <pd:y>147</pd:y>
+        <config>
+            <element ref="pfx8:UpdateOrderStatus"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Map-Data-for-BVoIPSiteDataServiceValue/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:services/pfx2:item" type="ns7:BVoIPSiteDataServiceValue"/>
+            <pd:coercion xpath="$Map-Data-for-BVoIPEnterpriseDataServiceValue/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:services/pfx2:item" type="ns6:BVoIPEnterpriseDataServiceValue"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx8:UpdateOrderStatus>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;793&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;NotifyMultiMediaRegistrationStatus&quot;"/>
+                    </ns1:NAME>
+                    <xsl:choose>
+                        <xsl:when test="contains(tib:render-xml($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:services/*[1]),&quot;BVoIPSiteDataServiceValue&quot;) or contains(tib:render-xml($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:services/*[1]),&quot;BVoIPEnterpriseDataServiceValue&quot;)">
+                            <ns1:FID>
+                                <xsl:value-of select="$Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:orderKey/pfx2:primaryKey"/>
+                            </ns1:FID>
+                        </xsl:when>
+                        <xsl:otherwise/>
+                    </xsl:choose>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;793.10&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;Order&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/xAuthorityAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/xAuthorityAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/Env,&quot;.&quot;,&quot;FIXED&quot;,&quot;.&quot;, $_globalVariables/ns2:GlobalVariables/xAuthorityAdapter/ComponentDomain,&quot;.&quot;,$_globalVariables/ns2:GlobalVariables/xAuthorityAdapter/ComponentId,&quot;.&quot;,&quot;Publish.NotifyMultiMediaRegistrationStatus.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="eai:createGUID()"/>
+                        </ns1:MESSAGE_ID>
+                        <ns1:ITEM>
+                            <xsl:attribute name="ns1:APPINFO">
+                                <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/xAuthorityAdapter/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:EVENT">
+                                <xsl:value-of select="&quot;NotifyMultimediaRegistrationStatus&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns1:ITEM>
+                    </ns1:TRACKING>
+                </ns1:CMH>
+                <xsl:choose>
+                    <xsl:when test="contains(tib:render-xml($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:services/*[1]),&quot;BVoIPEnterpriseDataServiceValue&quot;) or contains(tib:render-xml($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:services/*[1]),&quot;BVoIPSiteDataServiceValue&quot;)">
+                        <ns:BODY>
+                            <ORDER>
+                                <ORDER_HEADER>
+                                    <ORDER_TYPE>
+                                        <xsl:value-of select="$Start/root/OrderType"/>
+                                    </ORDER_TYPE>
+                                    <ORDER_ID>
+                                        <xsl:value-of select="$Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:orderKey/pfx2:primaryKey"/>
+                                    </ORDER_ID>
+                                    <xsl:if test="exists($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:purchaseOrder)">
+                                        <xsl:if test="not(($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:purchaseOrder/@xsi:nil=(&quot;true&quot;)) or ($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:purchaseOrder/@xsi:nil=(&quot;1&quot;)))">
+                                            <EXTERNAL_REFERENCE>
+                                                <xsl:value-of select="$Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:purchaseOrder"/>
+                                            </EXTERNAL_REFERENCE>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <ORDER_STATUS>
+                                        <ORDER_STATUS>
+                                            <xsl:value-of select="$Start/root/StatusCode"/>
+                                        </ORDER_STATUS>
+                                        <xsl:if test="$Start/root/ErrorCode">
+                                            <ERROR_CODE>
+                                                <xsl:value-of select="$Start/root/ErrorCode"/>
+                                            </ERROR_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/root/ErrorDescription">
+                                            <ERROR_DESCRIPTION>
+                                                <xsl:value-of select="$Start/root/ErrorDescription"/>
+                                            </ERROR_DESCRIPTION>
+                                        </xsl:if>
+                                    </ORDER_STATUS>
+                                    <CREATION_DATE>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </CREATION_DATE>
+                                </ORDER_HEADER>
+                                <ORDER_ITEM>
+                                    <ORDER_ITEM_HEADER>
+                                        <ORDER_ITEM_TYPE>
+                                            <xsl:value-of select="&quot;PRODUCT&quot;"/>
+                                        </ORDER_ITEM_TYPE>
+                                    </ORDER_ITEM_HEADER>
+                                    <PRODUCT_CATEGORY>
+                                        <xsl:value-of select="$Start/root/Product_Category"/>
+                                    </PRODUCT_CATEGORY>
+                                </ORDER_ITEM>
+                            </ORDER>
+                        </ns:BODY>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ns:BODY>
+                            <ORDER>
+                                <ORDER_HEADER>
+                                    <ORDER_TYPE>
+                                        <xsl:value-of select="$Start/root/OrderType"/>
+                                    </ORDER_TYPE>
+                                    <EXTERNAL_REFERENCE>
+                                        <xsl:value-of select="$Start/root/External-Reference"/>
+                                    </EXTERNAL_REFERENCE>
+                                    <ORDER_STATUS>
+                                        <ORDER_STATUS>
+                                            <xsl:value-of select="$Start/root/StatusCode"/>
+                                        </ORDER_STATUS>
+                                        <xsl:if test="$Start/root/ErrorCode">
+                                            <ERROR_CODE>
+                                                <xsl:value-of select="$Start/root/ErrorCode"/>
+                                            </ERROR_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/root/ErrorDescription">
+                                            <ERROR_DESCRIPTION>
+                                                <xsl:value-of select="$Start/root/ErrorDescription"/>
+                                            </ERROR_DESCRIPTION>
+                                        </xsl:if>
+                                    </ORDER_STATUS>
+                                    <CREATION_DATE>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </CREATION_DATE>
+                                </ORDER_HEADER>
+                                <ORDER_ITEM>
+                                    <ORDER_ITEM_HEADER>
+                                        <ORDER_ITEM_TYPE>
+                                            <xsl:value-of select="&quot;PRODUCT&quot;"/>
+                                        </ORDER_ITEM_TYPE>
+                                    </ORDER_ITEM_HEADER>
+                                    <PRODUCT_CATEGORY>
+                                        <xsl:value-of select="$Start/root/Product_Category"/>
+                                    </PRODUCT_CATEGORY>
+                                </ORDER_ITEM>
+                            </ORDER>
+                        </ns:BODY>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </pfx8:UpdateOrderStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Notify">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>474</pd:x>
+        <pd:y>148</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Outbound/SubProcesses/Sub_PublisherJMS_PUBLIC.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TransportPubIn>
+                <Destination>
+                    <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/Env,&quot;.FIXED.&quot;,$_globalVariables/ns2:GlobalVariables/xAuthorityAdapter/ComponentDomain,&quot;.&quot;,$_globalVariables/ns2:GlobalVariables/xAuthorityAdapter/ComponentId,&quot;.Publish.NotifyMultiMediaRegistrationStatus.1&quot;)"/>
+                </Destination>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-NotifyMultimediaRegistrationStatusRequest/pfx8:UpdateOrderStatus, false(), true())"/>
+                </Body>
+                <MessageId>
+                    <xsl:value-of select="$Map-NotifyMultimediaRegistrationStatusRequest/pfx8:UpdateOrderStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                </MessageId>
+            </TransportPubIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>371</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <data>
+                    <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                        <xsl:when test="exists($_error_Call-Notify)">
+                            <xsl:copy-of select="$_error_Call-Notify/pfx:Error"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx:Error>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                            </pfx:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data for BVoIPSiteDataServiceValue">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>211</pd:x>
+        <pd:y>50</pd:y>
+        <config>
+            <element ref="pfx2:getOrdeByKeyrResponse"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:getOrdeByKeyrResponse>
+                <xsl:copy-of select="$Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue"/>
+            </pfx2:getOrdeByKeyrResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data for BVoIPEnterpriseDataServiceValue">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>214</pd:x>
+        <pd:y>155</pd:y>
+        <config>
+            <element ref="pfx2:getOrdeByKeyrResponse"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:getOrdeByKeyrResponse>
+                <xsl:copy-of select="$Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue"/>
+            </pfx2:getOrdeByKeyrResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>133</pd:x>
+        <pd:y>299</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data for BVoIPSiteDataServiceValue</pd:to>
+        <pd:xpathDescription>BVoIPSiteDataServiceValue</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains(tib:render-xml($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:services/*[1]),"BVoIPSiteDataServiceValue")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map NotifyMultimediaRegistrationStatusRequest</pd:from>
+        <pd:to>Call Notify</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Notify</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map NotifyMultimediaRegistrationStatusRequest</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Notify</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data for BVoIPSiteDataServiceValue</pd:from>
+        <pd:to>Map NotifyMultimediaRegistrationStatusRequest</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data for BVoIPEnterpriseDataServiceValue</pd:to>
+        <pd:xpathDescription>BVoIPEnterpriseDataServiceValue</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains(tib:render-xml($Start/root/pfx2:getOrdeByKeyrResponse/pfx2:orderValue/pfx2:services/*[1]),"BVoIPEnterpriseDataServiceValue")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data for BVoIPEnterpriseDataServiceValue</pd:from>
+        <pd:to>Map NotifyMultimediaRegistrationStatusRequest</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Map NotifyMultimediaRegistrationStatusRequest</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data for BVoIPEnterpriseDataServiceValue</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Processes/DataServices_Oracle/RuleGeneration/General/XsltGeneration/Sub/XPathTestWeekDay.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Monday" type="xsd:boolean"/>
+                    <xsd:element name="Tuesday" type="xsd:boolean"/>
+                    <xsd:element name="Wednesday" type="xsd:boolean"/>
+                    <xsd:element name="Thursday" type="xsd:boolean"/>
+                    <xsd:element name="Friday" type="xsd:boolean"/>
+                    <xsd:element name="Saturday" type="xsd:boolean"/>
+                    <xsd:element name="Sunday" type="xsd:boolean"/>
+                    <xsd:element name="XPathVariable_Day" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>62</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <xsl:choose>
+                <xsl:when test="count($GenerateTest/root/Test)>0">
+                    <Test>
+                        <xsl:value-of select="concat('(',tib:concat-sequence-format($GenerateTest/root/Test,' or ', true()),')')"/>
+                    </Test>
+                </xsl:when>
+                <xsl:otherwise>
+                    <Test>
+                        <xsl:value-of select="''"/>
+                    </Test>
+                </xsl:otherwise>
+            </xsl:choose>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Test" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>414</pd:endX>
+    <pd:endY>67</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <SubSelection>
+            <xsd:element name="SubSelection" type="xsd:string"/>
+        </SubSelection>
+    </pd:processVariables>
+    <pd:activity name="FormatTimes">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>141</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Monday" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Tuesday" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Wednesday" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Thursday" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Friday" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Saturday" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Sunday" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="XPathVariable_String" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Monday>
+                    <xsl:value-of select="tib:format-date(&quot;E&quot;,tib:create-date(2007, 09, 03))"/>
+                </Monday>
+                <Tuesday>
+                    <xsl:value-of select="tib:format-date(&quot;E&quot;,tib:create-date(2007, 09, 04))"/>
+                </Tuesday>
+                <Wednesday>
+                    <xsl:value-of select="tib:format-date(&quot;E&quot;,tib:create-date(2007, 09, 05))"/>
+                </Wednesday>
+                <Thursday>
+                    <xsl:value-of select="tib:format-date(&quot;E&quot;,tib:create-date(2007, 09, 06))"/>
+                </Thursday>
+                <Friday>
+                    <xsl:value-of select="tib:format-date(&quot;E&quot;,tib:create-date(2007, 09, 07))"/>
+                </Friday>
+                <Saturday>
+                    <xsl:value-of select="tib:format-date(&quot;E&quot;,tib:create-date(2007, 09, 08))"/>
+                </Saturday>
+                <Sunday>
+                    <xsl:value-of select="tib:format-date(&quot;E&quot;,tib:create-date(2007, 09, 09))"/>
+                </Sunday>
+                <XPathVariable_String>
+                    <xsl:value-of select="$Start/Input/XPathVariable_Day"/>
+                </XPathVariable_String>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GenerateTest">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>278</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Test" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="$Start/Input/Monday='false'">
+                    <Test>
+                        <xsl:value-of select="concat(&quot;(&quot;,$FormatTimes/root/XPathVariable_String,&quot;!='&quot;,$FormatTimes/root/Monday,&quot;')&quot;)"/>
+                    </Test>
+                </xsl:if>
+                <xsl:if test="$Start/Input/Tuesday='false'">
+                    <Test>
+                        <xsl:value-of select="concat(&quot;(&quot;,$FormatTimes/root/XPathVariable_String,&quot;!='&quot;,$FormatTimes/root/Tuesday,&quot;')&quot;)"/>
+                    </Test>
+                </xsl:if>
+                <xsl:if test="$Start/Input/Wednesday='false'">
+                    <Test>
+                        <xsl:value-of select="concat(&quot;(&quot;,$FormatTimes/root/XPathVariable_String,&quot;!='&quot;,$FormatTimes/root/Wednesday,&quot;')&quot;)"/>
+                    </Test>
+                </xsl:if>
+                <xsl:if test="$Start/Input/Thursday='false'">
+                    <Test>
+                        <xsl:value-of select="concat(&quot;(&quot;,$FormatTimes/root/XPathVariable_String,&quot;!='&quot;,$FormatTimes/root/Thursday,&quot;')&quot;)"/>
+                    </Test>
+                </xsl:if>
+                <xsl:if test="$Start/Input/Friday='false'">
+                    <Test>
+                        <xsl:value-of select="concat(&quot;(&quot;,$FormatTimes/root/XPathVariable_String,&quot;!='&quot;,$FormatTimes/root/Friday,&quot;')&quot;)"/>
+                    </Test>
+                </xsl:if>
+                <xsl:if test="$Start/Input/Saturday='false'">
+                    <Test>
+                        <xsl:value-of select="concat(&quot;(&quot;,$FormatTimes/root/XPathVariable_String,&quot;!='&quot;,$FormatTimes/root/Saturday,&quot;')&quot;)"/>
+                    </Test>
+                </xsl:if>
+                <xsl:if test="$Start/Input/Sunday='false'">
+                    <Test>
+                        <xsl:value-of select="concat(&quot;(&quot;,$FormatTimes/root/XPathVariable_String,&quot;!='&quot;,$FormatTimes/root/Sunday,&quot;')&quot;)"/>
+                    </Test>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>FormatTimes</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FormatTimes</pd:from>
+        <pd:to>GenerateTest</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GenerateTest</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

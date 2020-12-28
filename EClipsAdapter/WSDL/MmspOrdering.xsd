@@ -1,0 +1,495 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Gerrit (Atos Origin Nederland B.V.) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Gerrit Smink (Atos Origin) -->
+<!--version 0.2.6.1 (levering aan EAI tbv ZIPB) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gl="Global" xmlns:mmspxs="MmspXsd_V0.2" targetNamespace="MmspXsd_V0.2" elementFormDefault="qualified">
+	<xsd:import namespace="Global" schemaLocation="MmspGlobal.xsd"/>
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">To be defined</xsd:documentation>
+	</xsd:annotation>
+	<!-- === DEFINITION OF THE SUB STRUCTUREs ================================== -->
+	<xsd:element name="MmspErrorResponseStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ErrorCode" type="gl:AN1-6"/>
+				<xsd:element name="ErrorDescription" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ErrorDetails" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="MmspOrderFeedbackStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="StatusCode" type="gl:StatusCodeEnum"/>
+				<xsd:element name="StatusDescription" type="gl:StatusDescriptionEnum"/>
+				<xsd:element name="OrderSituationCode" type="gl:AN1-6"/>
+				<xsd:element name="OrderSituationDescription" type="gl:AN1-30"/>
+				<xsd:element name="AdditionalSituationInfo" type="gl:AN1-200" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="FeatureParameterStruct">
+		<xsd:sequence>
+			<xsd:element name="FeatureParameterName" type="gl:AN1-30"/>
+			<xsd:element name="FeatureParameterValue" type="gl:AN1-20"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FeatureInputStruct">
+		<xsd:sequence>
+			<xsd:element name="FeatureCode" type="gl:AN1-6"/>
+			<xsd:element name="FeatureAction" type="gl:FeatureActionEnum"/>
+			<xsd:element name="FeatureState" type="gl:FeatureStateEnum"/>
+			<xsd:element name="FeatureParameterListItem" type="mmspxs:FeatureParameterStruct" minOccurs="0" maxOccurs="100"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FeatureOutputStruct">
+		<xsd:sequence>
+			<xsd:element name="FeatureCode" type="gl:AN1-6"/>
+			<xsd:element name="FeatureState" type="gl:FeatureStateEnum"/>
+			<xsd:element name="FeatureParameterListItem" type="mmspxs:FeatureParameterStruct" minOccurs="0" maxOccurs="100"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FeatureInputList">
+		<xsd:sequence>
+			<xsd:element name="FeatureInputListItem" type="mmspxs:FeatureInputStruct" maxOccurs="100"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FeatureOutputList">
+		<xsd:sequence>
+			<xsd:element name="FeatureOutputListItem" type="mmspxs:FeatureOutputStruct" minOccurs="0" maxOccurs="100"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FeatureSettingStruct">
+		<xsd:sequence>
+			<xsd:element name="FeatureCode" type="gl:AN1-6"/>
+			<xsd:element name="FeatureState" type="gl:FeatureStateEnum"/>
+			<xsd:element name="FeatureParameterListItem" type="mmspxs:FeatureParameterStruct" minOccurs="0" maxOccurs="100"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MMAccountNrDeleteList">
+		<xsd:sequence>
+			<xsd:element name="MMAccountNr" type="gl:AN1-20" maxOccurs="250"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MMAccountNrDeleteRespItemStruct">
+		<xsd:sequence>
+			<xsd:element name="MMAccountNr" type="gl:AN1-20" minOccurs="0"/>
+			<xsd:element ref="mmspxs:MmspOrderFeedbackStruct"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MMAccountNrDeleteRespList">
+		<xsd:sequence>
+			<xsd:element name="MMAccountNrDeleteRespListItem" type="mmspxs:MMAccountNrDeleteRespItemStruct" maxOccurs="250"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- Request structure for New MM Account (response structure is "Standard Response") -->
+	<xsd:element name="NewMMAccountReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="TelcoCode" type="gl:AN1-6"/>
+				<xsd:element name="ServicePackageCode" type="gl:AN1-6"/>
+				<xsd:element name="TcaCodeType" type="gl:AN1-6"/>
+				<xsd:element name="TelecommunicationAddress" type="gl:AN1-50"/>
+				<xsd:element name="PostalCodeConnectionAddress" type="gl:ValidPostalCode"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="LoginUsername" type="gl:ValidLoginChars"/>
+				<xsd:element name="LoginPassword" type="gl:ValidLoginChars"/>
+				<xsd:element name="InitialFeatures" type="mmspxs:FeatureInputList" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for Update MM Account (response structure is "Standard Response") -->
+	<xsd:element name="UpdateMMAccountReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="UpdatedFeatures" type="mmspxs:FeatureInputList"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure for Delete MM Account(s) (response structure is "Standard Response") -->
+	<xsd:element name="DeleteMMAccountReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<!-- next field added for ZIPB-->
+				<xsd:element name="ReleaseTelnrYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element name="MMAccountNrs" type="mmspxs:MMAccountNrDeleteList"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request and synchonical response structures voor Read MM account  -->
+	<xsd:element name="ReadMMAccountReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ReadMMAccountRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspErrorResponseStruct"/>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<!-- Start change E-CLIPS 0.7.1 -->
+				<xsd:element name="SIPSubscriberYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element name="SIPServer" type="gl:AN1-30" minOccurs="0"/>
+				<xsd:element name="SubscriberState" type="gl:SubscriberStateEnum" minOccurs="0"/>
+				<xsd:element name="VoicemailUsedYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element name="IPUnityProfileID" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ESGProfileID" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ESGEntryYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element name="LRI" type="gl:AN1-24" minOccurs="0"/>
+				<!-- End change E-CLIPS 0.7.1 -->
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30" minOccurs="0"/>
+				<xsd:element name="OrderId" type="xsd:integer" minOccurs="0"/>
+				<xsd:element ref="mmspxs:MmspOrderFeedbackStruct" minOccurs="0"/>
+				<xsd:element name="CurrentOrderYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element name="ReturnedFeatures" type="mmspxs:FeatureOutputList" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request and synchonical response structures voor Read TCA Available  -->
+	<xsd:element name="ReadTcaAvailableReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TcaCodeType" type="gl:AN1-6"/>
+				<xsd:element name="TelecommunicationAddress" type="gl:AN1-50"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ReadTcaAvailableRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspErrorResponseStruct"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30" minOccurs="0"/>
+				<xsd:element name="OrderId" type="xsd:integer" minOccurs="0"/>
+				<xsd:element ref="mmspxs:MmspOrderFeedbackStruct" minOccurs="0"/>
+				<xsd:element name="TelecommunicationAddress" type="gl:AN1-50" minOccurs="0"/>
+				<xsd:element name="MMAccountExistsYN" type="gl:ValidYN" minOccurs="0"/>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20" minOccurs="0"/>
+				<xsd:element name="CurrentOrderYN" type="gl:ValidYN" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request and synchonical response structures voor update MM account Feature Setting -->
+	<xsd:element name="UpdateMMAccountFeatureSettingReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="FeatureSetting" type="mmspxs:FeatureSettingStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="UpdateMMAccountFeatureSettingRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element ref="mmspxs:MmspOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request and synchonical response structures voor update MM account Password -->
+	<xsd:element name="UpdateMMAccountPasswordReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="Password" type="gl:ValidLoginChars"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="UpdateMMAccountPasswordRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element ref="mmspxs:MmspOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request and synchonical response structures voor Instellen VoIP entry -->
+	<xsd:element name="SetVoIPEntryReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TcaCodeType" type="gl:AN1-6"/>
+				<xsd:element name="TelecommunicationAddress" type="gl:AN1-50"/>
+				<xsd:element name="LRI" type="gl:AN1-24" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="SetVoIPEntryRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element name="TelecommunicationAddress" type="gl:AN1-50"/>
+				<xsd:element ref="mmspxs:MmspOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request and synchonical response structures voor Iverwijder VoIP entry -->
+	<xsd:element name="DeleteVoIPEntryReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="RequesterPackagerCode" type="gl:AN1-6" minOccurs="0"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="TcaCodeType" type="gl:AN1-6"/>
+				<xsd:element name="TelecommunicationAddress" type="gl:AN1-50"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="DeleteVoIPEntryRespStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element name="TelecommunicationAddress" type="gl:AN1-50"/>
+				<xsd:element ref="mmspxs:MmspOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure voor asynchrone terugkoppeling van New MM Account (response hiervan is "Standard Response" -->
+	<xsd:element name="ResultNewMMAccountReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20" minOccurs="0"/>
+				<xsd:element name="TelecommunicationAddress" type="gl:AN1-50"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element name="SIPServer" type="gl:AN1-30" minOccurs="0"/>
+				<xsd:element ref="mmspxs:MmspOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure voor asynchrone terugkoppeling van Update MM Account (response hiervan is "Standard Response" -->
+	<xsd:element name="ResultUpdateMMAccountReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="MMAccountNr" type="gl:AN1-20"/>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element ref="mmspxs:MmspOrderFeedbackStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- Request structure voor asynchrone terugkoppeling van Delete MM Account (response hiervan is "Standard Response" -->
+	<xsd:element name="ResultDeleteMMAccountReqStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PackagerCode" type="gl:AN1-6"/>
+				<xsd:element name="PackagerOrderId" type="gl:AN1-30"/>
+				<xsd:element name="OrderId" type="xsd:integer"/>
+				<xsd:element name="MMAccountNrs" type="mmspxs:MMAccountNrDeleteRespList"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!--============= DEFINITION OF THE MAIN STRUCTURES ================================== -->
+	<!-- xsd definition: MmspHeaderStruct -->
+	<xsd:element name="MmspHeaderStruct">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Sender" type="xsd:string"/>
+				<xsd:element name="Receiver" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- ========= DEFINITION OF THE MMSP MESSAGES ===============================-->
+	<!-- For New MM account operation (asynchronic result by calling a packager operation)   -->
+	<xsd:element name="MmspNewMMAccount">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:NewMMAccountReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Update MM account operation (asynchronic result by calling a packager operation)   -->
+	<xsd:element name="MmspUpdateMMAccount">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:UpdateMMAccountReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For Delete MM account(s) operation (asynchronic result by calling a packager operation)   -->
+	<xsd:element name="MmspDeleteMMAccount">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:DeleteMMAccountReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For synchronical read operation -->
+	<xsd:element name="MmspReadMMAccountReq">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:ReadMMAccountReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="MmspReadMMAccountResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:ReadMMAccountRespStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For synchronical read Tca Available operation -->
+	<xsd:element name="MmspReadTcaAvailableReq">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:ReadTcaAvailableReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="MmspReadTcaAvailableResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:ReadTcaAvailableRespStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For synchronical change password operation -->
+	<xsd:element name="MmspUpdateMMAccountPasswordReq">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:UpdateMMAccountPasswordReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="MmspUpdateMMAccountPasswordResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspErrorResponseStruct"/>
+				<xsd:element ref="mmspxs:UpdateMMAccountPasswordRespStruct" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For synchronical update feature setting operation -->
+	<xsd:element name="MmspUpdateMMAccountFeatureSettingReq">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:UpdateMMAccountFeatureSettingReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="MmspUpdateMMAccountFeatureSettingResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspErrorResponseStruct"/>
+				<xsd:element ref="mmspxs:UpdateMMAccountFeatureSettingRespStruct" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For synchronical set VoIP entry operation -->
+	<xsd:element name="MmspSetVoIPEntryReq">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:SetVoIPEntryReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="MmspSetVoIPEntryResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspErrorResponseStruct"/>
+				<xsd:element ref="mmspxs:SetVoIPEntryRespStruct" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For synchronical delete VoIP entry operation -->
+	<xsd:element name="MmspDeleteVoIPEntryReq">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:DeleteVoIPEntryReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="MmspDeleteVoIPEntryResp">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspErrorResponseStruct"/>
+				<xsd:element ref="mmspxs:DeleteVoIPEntryRespStruct" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For asynchronic reply to packager of the new MM account operation-->
+	<xsd:element name="MmspResultNewMMAccount">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:ResultNewMMAccountReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For asynchronic reply to packager of the update MM account operation-->
+	<xsd:element name="MmspResultUpdateMMAccount">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:ResultUpdateMMAccountReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- For asynchronic reply to packager of the delete MM account operation-->
+	<xsd:element name="MmspResultDeleteMMAccount">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mmspxs:MmspHeaderStruct"/>
+				<xsd:element ref="mmspxs:ResultDeleteMMAccountReqStruct"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- xsd definition: MmspStandardResponse MUST BE DEFINED IN MORE DETAIL-->
+	<xsd:element name="MmspStandardResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ErrorCode" type="gl:AN1-6"/>
+				<xsd:element name="ErrorDescription" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ErrorDetails" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

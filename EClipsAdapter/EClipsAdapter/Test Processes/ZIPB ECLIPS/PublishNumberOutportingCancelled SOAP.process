@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://webservices.kpn-lls.com/V0.2/MmspOrdering.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl" xmlns:ns="MmspXsd_V0.2" xmlns:pfx3="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns2="EcnsXsd_V0.2" xmlns:pfx4="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" xmlns:pfx5="http://xmlns.kpn.com/eai/common/errors">
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/MmspOrdering.wsdl" location="/WSDL/MmspOrdering.wsdl"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl" location="/WSDL/EcnsOrdering.wsdl"/>
+    <pd:name>EClipsAdapter/Test Processes/ZIPB ECLIPS/PublishNumberOutportingCancelled SOAP.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>72</pd:startX>
+    <pd:startY>99</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>92</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>252</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx2:EcnsOrderingService</service>
+            <servicePort>InportTelnrsHttpPort</servicePort>
+            <operation>ResultOutportRefusedOperation</operation>
+            <soapAction>""</soapAction>
+            <endpointURL>http://localhost:6070/EClipsAdapter/Processes/Outbound/PublishNumberOutportingCancelled</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns2:EcnsResultOutportRefused>
+                    <ns2:EcnsHeaderStruct>
+                        <ns2:Sender>
+                            <xsl:value-of select="&quot;Sender&quot;"/>
+                        </ns2:Sender>
+                        <ns2:Receiver>
+                            <xsl:value-of select="&quot;Receiver&quot;"/>
+                        </ns2:Receiver>
+                    </ns2:EcnsHeaderStruct>
+                    <ns2:ResultOutportRefusedReqStruct>
+                        <ns2:PortingId>
+                            <xsl:value-of select="&quot;123&quot;"/>
+                        </ns2:PortingId>
+                        <ns2:BlockingYN>
+                            <xsl:value-of select="'Y'"/>
+                        </ns2:BlockingYN>
+                        <ns2:BlockingCode>
+                            <xsl:value-of select="&quot;02&quot;"/>
+                        </ns2:BlockingCode>
+                        <ns2:Note>
+                            <xsl:value-of select="&quot;note&quot;"/>
+                        </ns2:Note>
+                    </ns2:ResultOutportRefusedReqStruct>
+                </ns2:EcnsResultOutportRefused>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

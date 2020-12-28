@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMHNew.xsd" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMHExisted.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMHNew.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/CMHNew.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMHExisted.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/CMHExisted.xsd"/>
+    <pd:name>IKKAdapter/Test Processes/Sub Processes Tester/Test Sub_FillCMH.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>81</pd:startX>
+    <pd:startY>86</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>634</pd:endX>
+    <pd:endY>86</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <LocCMHs>
+            <xsd:element name="CMH">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="NewCMH" type="pfx2:NewCMH"/>
+                        <xsd:element name="ExistingCMH" type="pfx3:ExistedCMH"/>
+                        <xsd:element name="HasNewCMH" type="xsd:boolean"/>
+                        <xsd:element name="HasExistingCMH" type="xsd:boolean"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </LocCMHs>
+    </pd:processVariables>
+    <pd:activity name="Call Sub_FillCMH">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>500</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <processName>/IKKAdapter/Sub Processes/Sub_FillCMH.process</processName>
+        </config>
+        <pd:inputBindings>
+            <CMH-IN>
+                <NewCMH>
+                    <ID>
+                        <xsl:value-of select="$LocCMHs/CMH/NewCMH/ID"/>
+                    </ID>
+                    <NAME>
+                        <xsl:value-of select="$LocCMHs/CMH/NewCMH/NAME"/>
+                    </NAME>
+                    <xsl:if test="$LocCMHs/CMH/NewCMH/FID">
+                        <FID>
+                            <xsl:value-of select="$LocCMHs/CMH/NewCMH/FID"/>
+                        </FID>
+                    </xsl:if>
+                    <MID>
+                        <xsl:value-of select="$LocCMHs/CMH/NewCMH/MID"/>
+                    </MID>
+                    <PARADIGM>
+                        <xsl:value-of select="$LocCMHs/CMH/NewCMH/PARADIGM"/>
+                    </PARADIGM>
+                    <xsl:if test="$LocCMHs/CMH/NewCMH/OBJECT">
+                        <OBJECT>
+                            <xsl:value-of select="$LocCMHs/CMH/NewCMH/OBJECT"/>
+                        </OBJECT>
+                    </xsl:if>
+                    <VERSION>
+                        <xsl:value-of select="$LocCMHs/CMH/NewCMH/VERSION"/>
+                    </VERSION>
+                    <COMPONENT-ID>
+                        <xsl:value-of select="$LocCMHs/CMH/NewCMH/FROM/@COMPONENT_ID"/>
+                    </COMPONENT-ID>
+                    <COMPONENT-VERSION>
+                        <xsl:value-of select="$LocCMHs/CMH/NewCMH/FROM/@COMPONENT_VERSION"/>
+                    </COMPONENT-VERSION>
+                    <DESTINATION>
+                        <xsl:value-of select="$LocCMHs/CMH/NewCMH/TO/@DESTINATION"/>
+                    </DESTINATION>
+                </NewCMH>
+                <ExistingCMH>
+                    <COMPONENT-ID>
+                        <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/FROM/@COMPONENT_ID"/>
+                    </COMPONENT-ID>
+                    <COMPONENT-VERSION>
+                        <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/FROM/@COMPONENT_VERSION"/>
+                    </COMPONENT-VERSION>
+                    <xsl:if test="$LocCMHs/CMH/ExistingCMH/PARADIGM">
+                        <PARADIGM>
+                            <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/PARADIGM"/>
+                        </PARADIGM>
+                    </xsl:if>
+                    <xsl:if test="$LocCMHs/CMH/ExistingCMH/FID">
+                        <FID>
+                            <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/FID"/>
+                        </FID>
+                    </xsl:if>
+                    <xsl:if test="$LocCMHs/CMH/ExistingCMH/MID">
+                        <MID>
+                            <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/MID"/>
+                        </MID>
+                    </xsl:if>
+                    <COPY_ATTRIBUTES>
+                        <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/COPY_ATTRIBUTE"/>
+                    </COPY_ATTRIBUTES>
+                    <EXTENT_TRACKING>
+                        <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/EXTEND_TRACKING"/>
+                    </EXTENT_TRACKING>
+                    <CMH>
+                        <pfx:ID>
+                            <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/ID"/>
+                        </pfx:ID>
+                        <pfx:NAME>
+                            <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/NAME"/>
+                        </pfx:NAME>
+                        <xsl:if test="$LocCMHs/CMH/ExistingCMH/CMH/FID">
+                            <pfx:FID>
+                                <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/FID"/>
+                            </pfx:FID>
+                        </xsl:if>
+                        <xsl:if test="$LocCMHs/CMH/ExistingCMH/CMH/MID">
+                            <pfx:MID>
+                                <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/MID"/>
+                            </pfx:MID>
+                        </xsl:if>
+                        <pfx:PARADIGM>
+                            <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/PARADIGM"/>
+                        </pfx:PARADIGM>
+                        <pfx:OBJECT>
+                            <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/OBJECT"/>
+                        </pfx:OBJECT>
+                        <pfx:VERSION>
+                            <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/VERSION"/>
+                        </pfx:VERSION>
+                        <pfx:FROM>
+                            <xsl:attribute name="pfx:COMPONENT_ID">
+                                <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/FROM/@COMPONENT_ID"/>
+                            </xsl:attribute>
+                            <xsl:if test="$LocCMHs/CMH/ExistingCMH/CMH/FROM/@COMPONENT_VERSION">
+                                <xsl:attribute name="pfx:COMPONENT_VERSION">
+                                    <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/FROM/@COMPONENT_VERSION"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$LocCMHs/CMH/ExistingCMH/CMH/FROM/@END_USER_INFO">
+                                <xsl:attribute name="pfx:END_USER_INFO">
+                                    <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/FROM/@END_USER_INFO"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$LocCMHs/CMH/ExistingCMH/CMH/FROM/@SOURCE_ADDRESS">
+                                <xsl:attribute name="pfx:SOURCE_ADDRESS">
+                                    <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/FROM/@SOURCE_ADDRESS"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </pfx:FROM>
+                        <pfx:TO>
+                            <xsl:attribute name="pfx:DESTINATION">
+                                <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/TO/@DESTINATION"/>
+                            </xsl:attribute>
+                        </pfx:TO>
+                        <pfx:TRACKING>
+                            <pfx:MESSAGE_ID>
+                                <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/TRACKING/MESSAGE_ID"/>
+                            </pfx:MESSAGE_ID>
+                            <xsl:if test="$LocCMHs/CMH/ExistingCMH/CMH/TRACKING/EXTERNAL_REF">
+                                <pfx:EXTERNAL_REF>
+                                    <xsl:value-of select="$LocCMHs/CMH/ExistingCMH/CMH/TRACKING/EXTERNAL_REF"/>
+                                </pfx:EXTERNAL_REF>
+                            </xsl:if>
+                        </pfx:TRACKING>
+                    </CMH>
+                </ExistingCMH>
+            </CMH-IN>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Init NewCMH">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>221</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <variableName>LocCMHs</variableName>
+        </config>
+        <pd:inputBindings>
+            <CMH>
+                <NewCMH>
+                    <ID>
+                        <xsl:value-of select="&quot;id&quot;"/>
+                    </ID>
+                    <NAME>
+                        <xsl:value-of select="&quot;name&quot;"/>
+                    </NAME>
+                    <VERSION>
+                        <xsl:value-of select="&quot;version&quot;"/>
+                    </VERSION>
+                    <OBJECT>
+                        <xsl:value-of select="&quot;object&quot;"/>
+                    </OBJECT>
+                    <PARADIGM>
+                        <xsl:value-of select="&quot;paradigm&quot;"/>
+                    </PARADIGM>
+                    <FID>
+                        <xsl:value-of select="&quot;fid&quot;"/>
+                    </FID>
+                    <MID>
+                        <xsl:value-of select="&quot;mid&quot;"/>
+                    </MID>
+                </NewCMH>
+                <ExistingCMH>
+                    <ID>
+                        <xsl:value-of select="&quot;Id&quot;"/>
+                    </ID>
+                </ExistingCMH>
+                <HasNewCMH>
+                    <xsl:value-of select="0"/>
+                </HasNewCMH>
+                <HasExistingCMH>
+                    <xsl:value-of select="0"/>
+                </HasExistingCMH>
+            </CMH>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="set switch">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <variableName>LocCMHs</variableName>
+        </config>
+        <pd:inputBindings>
+            <CMH>
+                <xsl:copy-of select="$LocCMHs/CMH/NewCMH"/>
+                <xsl:copy-of select="$LocCMHs/CMH/ExistingCMH"/>
+                <HasNewCMH>
+                    <xsl:value-of select="0"/>
+                </HasNewCMH>
+                <HasExistingCMH>
+                    <xsl:value-of select="0"/>
+                </HasExistingCMH>
+            </CMH>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Init NewCMH</pd:from>
+        <pd:to>set switch</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>set switch</pd:from>
+        <pd:to>Call Sub_FillCMH</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Sub_FillCMH</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Init NewCMH</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

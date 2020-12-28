@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0391_ValidateNumber/1.0/Request" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0391_ValidateNumber/1.0/Request" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SUBSCRIPTION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="PHONE_NUMBER">
+								<xs:complexType>
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="UNFORMATTED" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="26"/>
+													<xs:pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="DETAILED" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="COUNTRY_CODE" type="xs:string" default="31" minOccurs="0"/>
+													<xs:element name="AREA_CODE">
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="0"/>
+																<xs:maxLength value="5"/>
+																<xs:whiteSpace value="collapse"/>
+																<xs:pattern value="\d*"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="SUBSCRIBER_NUMBER">
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="15"/>
+																<xs:whiteSpace value="collapse"/>
+																<xs:pattern value="\d+"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="LOCATION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DUTCH_POSTCODE">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:length value="6"/>
+										<xs:pattern value="\d{4}[a-zA-Z]{2}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="HOUSE_NUMBER">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="5"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="HOUSE_NUMBER_EXTENSION" minOccurs="0">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="0"/>
+										<xs:maxLength value="6"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx="urn:ASTRIDAdapter.GetDslamInfo" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="urn:GenericMessageRequest" xmlns:pfx3="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:pfx4="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns2="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns5="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx6="urn:NotifyNumberInportingComplete" xmlns:ns6="http://xmlns.kpn.com/eai/common/errors">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="urn:ASTRIDAdapter.GetDslamInfo" schemaLocation="/WSDL/ASTRIDAdapter/GetDslamInfo.wsdl"/>
+    <xsd:import namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <wsdl:import namespace="urn:ASTRIDAdapter.GetDslamInfo" location="/WSDL/ASTRIDAdapter/GetDslamInfo.wsdl"/>
+    <pd:name>ASTRIDAdapter/Processes/Sub_getDslamInfoReport.process</pd:name>
+    <pd:startName>JMS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <GUID>
+            <xsl:value-of select="$Start/PublishGenericMessage/pfx2:GenericMessage/ns1:Header/ns1:GUID"/>
+        </GUID>
+    </pd:returnBindings>
+    <pd:starter name="JMS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>72</pd:x>
+        <pd:y>160</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.%%ASTRIDAdapter/ComponentDomain%%.%%ASTRIDAdapter/ComponentId%%.Subscribe.getDslamInfoTroubleReport.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1123</pd:endX>
+    <pd:endY>161</pd:endY>
+    <pd:errorSchemas>
+        <Exception>
+            <xsd:element name="group">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ResultStatus" type="pfx3:ResultStatus"/>
+                        <xsd:element name="CHM" type="pfx4:CMHInfo"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </Exception>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>929</pd:x>
+        <pd:y>158</pd:y>
+        <config>
+            <processName>/ASTRIDAdapter/Processes/Sub_Main_getDslamInfoReport.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <GUID>
+                    <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:GUID"/>
+                </GUID>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($SOAPRequestReply/outputMessage/pfx:GetDslamInfoResponse,false(),true())"/>
+                </Body>
+                <Trouble_Report_Identifier>
+                    <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:General/ns1:trouble_report_identifier"/>
+                </Trouble_Report_Identifier>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>675</pd:x>
+        <pd:y>161</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx:GetDslamInfoService</service>
+            <servicePort>GetDslamInfoSoap</servicePort>
+            <operation>GetDslamInfo</operation>
+            <soapAction>""</soapAction>
+            <endpointURL>http://%%ASTRIDAdapter/Outbound/SOAP/Host%%:%%ASTRIDAdapter/Outbound/SOAP/ServerPort%%//ASTRIDAdapter/Processes/GetDslamInfo</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$Map-SOAP-Request/pfx:GetDslamInfoRequest"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log SOAP Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>556</pd:x>
+        <pd:y>157</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns2:AnyXMLMessage>
+                    <xsl:copy-of select="$Map-SOAP-Request/pfx:GetDslamInfoRequest"/>
+                </ns2:AnyXMLMessage>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-01501&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="&quot;Sending SOAP Request to getDslamInfo service&quot;"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log SOAP Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>802</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns2:AnyXMLMessage>
+                    <xsl:copy-of select="$SOAPRequestReply/outputMessage/pfx:GetDslamInfoResponse"/>
+                </ns2:AnyXMLMessage>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-04001&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="&quot;Received SOAP Response from getDslamInfo service&quot;"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map SOAP Request">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>436</pd:x>
+        <pd:y>158</pd:y>
+        <config>
+            <element ref="pfx:GetDslamInfoRequest"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:GetDslamInfoRequest>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:managed_object_class/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:managed_object_class>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:managed_object_class"/>
+                    </pfx:managed_object_class>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:managed_object_class_extension/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:managed_object_class_extension>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:managed_object_class_extension"/>
+                    </pfx:managed_object_class_extension>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:managed_object_class_version/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:managed_object_class_version>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:managed_object_class_version"/>
+                    </pfx:managed_object_class_version>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:message_origination_it_domain/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:message_origination_it_domain>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:message_origination_it_domain"/>
+                    </pfx:message_origination_it_domain>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:message_instance/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:message_instance>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:message_instance"/>
+                    </pfx:message_instance>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:message_creation_time/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:message_creation_time>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:message_creation_time"/>
+                    </pfx:message_creation_time>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:message_destination_it_domain/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:message_destination_it_domain>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:message_destination_it_domain"/>
+                    </pfx:message_destination_it_domain>
+                </xsl:if>
+                <pfx:request_type>
+                    <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:General/ns1:request_type"/>
+                </pfx:request_type>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Managed_Object_Info/ns1:managed_object_instance/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:managed_object_instance>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Managed_Object_Info/ns1:managed_object_instance"/>
+                    </pfx:managed_object_instance>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Managed_object_in_trouble_info/ns1:moit_managed_object_class/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:moit_managed_object_class>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Managed_object_in_trouble_info/ns1:moit_managed_object_class"/>
+                    </pfx:moit_managed_object_class>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Managed_object_in_trouble_info/ns1:moit_managed_object_instance/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:moit_managed_object_instance>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Managed_object_in_trouble_info/ns1:moit_managed_object_instance"/>
+                    </pfx:moit_managed_object_instance>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Managed_object_in_trouble_info/ns1:moit_supported_service_instance/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:moit_supported_service_instance>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Managed_object_in_trouble_info/ns1:moit_supported_service_instance"/>
+                    </pfx:moit_supported_service_instance>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:General/ns1:creation_type/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:creation_type>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:General/ns1:creation_type"/>
+                    </pfx:creation_type>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Managed_Object_Info/ns1:mo_managed_object_instance/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:mo_managed_object_instance>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Managed_Object_Info/ns1:mo_managed_object_instance"/>
+                    </pfx:mo_managed_object_instance>
+                </xsl:if>
+                <xsl:if test="not($Parse-XML/pfx2:GenericMessage/ns1:Managed_Object_Info/ns1:mo_supported_service_instance/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                    <pfx:mo_supported_service_instance>
+                        <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Managed_Object_Info/ns1:mo_supported_service_instance"/>
+                    </pfx:mo_supported_service_instance>
+                </xsl:if>
+            </pfx:GetDslamInfoRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>185</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx2:GenericMessage"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Queue-Receiver/ns5:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>348</pd:x>
+        <pd:y>363</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ThrowException.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ThrowExceptionIn>
+                <ComponentId>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                </ComponentId>
+                <ComponentVersion>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                </ComponentVersion>
+                <ns6:Errors>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Parse-XML)">
+                            <ns6:Error>
+                                <ns6:MsgCode>
+                                    <xsl:value-of select="&quot;ASTRID-BW-03020&quot;"/>
+                                </ns6:MsgCode>
+                                <ns6:Message>
+                                    <xsl:value-of select="&quot;Failed to parse the Message&quot;"/>
+                                </ns6:Message>
+                                <ns6:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </ns6:ErrorReport>
+                                <ns6:ActivityError>
+                                    <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/node()"/>
+                                </ns6:ActivityError>
+                            </ns6:Error>
+                        </xsl:when>
+                        <xsl:when test="exists( $_error_SOAPRequestReply)">
+                            <ns6:Error>
+                                <ns6:MsgCode>
+                                    <xsl:value-of select="&quot;ASTRID-BW-03021&quot;"/>
+                                </ns6:MsgCode>
+                                <ns6:Message>
+                                    <xsl:value-of select="&quot;Error Occured with getDslamInfo Service &quot;"/>
+                                </ns6:Message>
+                                <ns6:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </ns6:ErrorReport>
+                                <ns6:ActivityError>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/node()"/>
+                                </ns6:ActivityError>
+                            </ns6:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Call-Process)">
+                            <xsl:copy-of select="$_error_Call-Process/ns6:Errors/ns6:Error"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns6:Error>
+                                <ns6:MsgCode>
+                                    <xsl:value-of select="&quot;ASTRID-BW-03022&quot;"/>
+                                </ns6:MsgCode>
+                                <ns6:Message>
+                                    <xsl:value-of select="&quot;General Error&quot;"/>
+                                </ns6:Message>
+                                <ns6:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </ns6:ErrorReport>
+                            </ns6:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns6:Errors>
+            </ThrowExceptionIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>1020</pd:x>
+        <pd:y>248</pd:y>
+        <config>
+            <ConfirmEvent>JMS Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>889</pd:x>
+        <pd:y>364</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log JMS Message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>307</pd:x>
+        <pd:y>160</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04052&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:GUID"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="concat(&quot;Queue: &quot;, $_globalVariables/ns4:GlobalVariables/Env&#xA;, &quot;.FIXED.&quot;, $_globalVariables/ns4:GlobalVariables/ASTRIDAdapter/ComponentDomain&#xA;, &quot;.&quot;, $_globalVariables/ns4:GlobalVariables/ASTRIDAdapter/ComponentId&#xA;, &quot;.Subscribe.getDslamInfoTroubleReport.1&quot;)"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="concat(&quot;For a log of the message, see the previously received SOAP request with GUID=&quot;, $Parse-XML/pfx2:GenericMessage/ns1:Header/ns1:GUID)"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log SOAP Request</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Log SOAP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log SOAP Response</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map SOAP Request</pd:from>
+        <pd:to>Log SOAP Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map SOAP Request</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Throw Exception</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Throw Exception</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Message</pd:from>
+        <pd:to>Map SOAP Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Message</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Log JMS Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

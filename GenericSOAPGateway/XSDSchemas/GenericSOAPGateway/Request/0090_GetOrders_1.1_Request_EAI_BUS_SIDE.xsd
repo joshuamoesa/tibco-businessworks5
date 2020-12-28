@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0090_GetOrders/1.1/Request" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0090_GetOrders/1.1/Request" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="portfolioDomain_type">
+    <xs:annotation>
+      <xs:documentation>Allowed values are:
+- "ISDNx" for ISDN 15/20/30 product portfolio
+- "ADSL" for ADSL product portfolio
+- "VPN" for the Virtual Private Network product portfolio</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITION:
+The portfolio domain is a name is usually technically related to the products that are considered to be part of the portfolio.
+
+TYPE:
+Enumerated String(20) 
+
+VALUES:
+"ADSL"
+"ISDNx"</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>1000 length string limitation added by KPN EAI defaults.Increase size in Rose if required.</xs:documentation>
+      </xs:annotation>
+      <xs:enumeration value="ADSL" />
+      <xs:enumeration value="ISDNx" />
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="centralCustomerId_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z,0-9]{8}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="partyId_type">
+    <xs:annotation>
+      <xs:documentation>Attribute is not used at this moment.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dutchPostcodeNumbers_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dutchPostcodeLetters_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-zA-Z]{2}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="houseNumber_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="houseNumberExtension_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="6" />
+      <xs:minLength value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BODY">
+    <xs:annotation>
+      <xs:documentation>This is the BODY object for KPN EAI service number 0090 - GetOrders version 1.1 Request message.</xs:documentation>
+      <xs:documentation>Automatically generated schema for service:'GetOrders', version:'1.1'</xs:documentation>
+      <xs:documentation>Generated on 2007-04-19 12:24:14Z</xs:documentation>
+      <xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+      <xs:documentation>Service ID is:'0090'</xs:documentation>
+      <xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+      <xs:documentation>KPN EAI message body class.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" maxOccurs="1" name="CUSTOMER">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="1" name="CENTRAL_CUSTOMER_ID" type="tns:centralCustomerId_type" />
+              <xs:element minOccurs="0" maxOccurs="1" name="PARTY_ID" type="tns:partyId_type">
+                <xs:annotation>
+                  <xs:documentation>Attribute is not used at this moment.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="PROPERTY_ADDRESS">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="1" name="POSTCODE_NUMBERS" type="tns:dutchPostcodeNumbers_type" />
+              <xs:element minOccurs="0" maxOccurs="1" name="POSTCODE_LETTERS" type="tns:dutchPostcodeLetters_type" />
+              <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER" type="tns:houseNumber_type" />
+              <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="ORDER">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="1" name="ORDER_CREATED_AFTER_DATE" type="xs:date" />
+              <xs:element minOccurs="1" maxOccurs="1" name="ORDER_STATE_FILTER" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>Specifies which order states are returned
+"A" - all orders are returned regardless the state.
+"O" - only orders whose state is not "Complete" (thus open) are returned, also orders whose state could not be determined fall into this catagory
+"C" - only orders whose state is "Complete" order states</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="RESULT_SET">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="1" name="RESULT_SET_OFFSET" type="xs:positiveInteger">
+                <xs:annotation>
+                  <xs:documentation>When not specified, the value defaults to 1. The list of results is considered to be 1-based, so 1 means the first item in the list of results.
+</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="RESULT_SET_SIZE" type="xs:positiveInteger">
+                <xs:annotation>
+                  <xs:documentation>When not specified, the value defaults to 30.
+</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="RESULT_SET_TIMESTAMP" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>The result set is 'timestamped' so the underlying system can handle changes that occur inbetween subsequent requests to the database properly. Note that this timestamp should be treated as an identifier. It should never be interpreted by the end user.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="PORTFOLIO_DOMAIN" type="tns:portfolioDomain_type">
+          <xs:annotation>
+            <xs:documentation>Allowed values are:
+- "ISDNx" for ISDN 15/20/30 product portfolio
+- "ADSL" for ADSL product portfolio
+- "VPN" for the Virtual Private Network product portfolio</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

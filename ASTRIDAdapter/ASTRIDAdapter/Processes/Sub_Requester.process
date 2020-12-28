@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx2="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://xmlns.kpn.com/eai/common/errors" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions">
+    <xsd:import namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>ASTRIDAdapter/Processes/Sub_Requester.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="RequesterIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Destination" type="xsd:string"/>
+                    <xsd:element name="ReplyToDestination" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="Timeout" type="xsd:long" minOccurs="0"/>
+                    <xsd:element name="Body">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:any/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="JMS" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Selector" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Expiration" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="Priority" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="CorrelationId" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupSeq" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Trace" minOccurs="0">
+                                    <xsd:complexType>
+                                        <xsd:choice>
+                                            <xsd:element name="header" type="xsd:anyType"/>
+                                            <xsd:element name="full" type="xsd:anyType"/>
+                                        </xsd:choice>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>52</pd:startX>
+    <pd:startY>102</pd:startY>
+    <pd:returnBindings>
+        <RequesterOut>
+            <Body>
+                <xsl:value-of select="$Send-Request/TransportReqOut/Body"/>
+            </Body>
+        </RequesterOut>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="RequesterOut">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>661</pd:endX>
+    <pd:endY>100</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx3:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:group name="TryCatch">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>156</pd:x>
+        <pd:y>11</pd:y>
+        <pd:width>398</pd:width>
+        <pd:height>165</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map Data</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send Request</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>Send Request</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Map Data">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>269</pd:x>
+            <pd:y>100</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Body" type="xsd:string"/>
+                                <xsd:element name="MessageId" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <Body>
+                        <xsl:value-of select="tib:render-xml($Start/RequesterIn/Body/*, false(), true())"/>
+                    </Body>
+                    <MessageId>
+                        <xsl:value-of select="$Start/RequesterIn/Body/*/*[local-name()='CMH']/*[local-name()='TRACKING']/*[local-name()='MESSAGE_ID']"/>
+                    </MessageId>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Send Request">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>433</pd:x>
+            <pd:y>100</pd:y>
+            <config>
+                <processName>/ASTRIDAdapter/Processes/Sub_RequesterRV.process</processName>
+                <processNameXPath/>
+            </config>
+            <pd:inputBindings>
+                <TransportReqIn>
+                    <Destination>
+                        <xsl:value-of select="$Start/RequesterIn/Destination"/>
+                    </Destination>
+                    <xsl:if test="$Start/RequesterIn/ReplyToDestination">
+                        <ReplyToDestination>
+                            <xsl:value-of select="$Start/RequesterIn/ReplyToDestination"/>
+                        </ReplyToDestination>
+                    </xsl:if>
+                    <xsl:if test="$Start/RequesterIn/Timeout">
+                        <Timeout>
+                            <xsl:value-of select="$Start/RequesterIn/Timeout"/>
+                        </Timeout>
+                    </xsl:if>
+                    <Body>
+                        <xsl:value-of select="$Map-Data/root/Body"/>
+                    </Body>
+                    <MessageId>
+                        <xsl:value-of select="$Map-Data/root/MessageId"/>
+                    </MessageId>
+                    <xsl:if test="$Start/RequesterIn/JMS">
+                        <xsl:copy-of select="$Start/RequesterIn/JMS"/>
+                    </xsl:if>
+                </TransportReqIn>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>165</pd:x>
+        <pd:y>289</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <xsl:variable name="varMsgCode" select="if (exists($_error_Send-Request))&#xA;then $_error_Send-Request/pfx3:Error/pfx3:MsgCode&#xA;else &quot;EAI-03002&quot;"/>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;EAI-03001&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$varMsgCode"/>
+                </messageCode>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="$_error_Send-Request">
+                            <xsl:copy-of select="$_error_Send-Request/pfx3:Error"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx3:Error>
+                                <xsl:if test="$_error/ns1:ErrorReport/MsgCode">
+                                    <pfx3:MsgCode>
+                                        <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                                    </pfx3:MsgCode>
+                                </xsl:if>
+                                <pfx3:Message>
+                                    <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                                </pfx3:Message>
+                            </pfx3:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>TryCatch</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TryCatch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TryCatch</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

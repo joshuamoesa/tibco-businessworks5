@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <pd:name>TestSqlDateIssue.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>84</pd:startX>
+    <pd:startY>143</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>542</pd:endX>
+    <pd:endY>155</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1397463862329</pd:targetNamespace>
+    <pd:activity name="JDBC Call Procedure oracle">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>227</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/JDBC Connection oracle.sharedjdbc</jdbcSharedConfig>
+            <schema>CRAMERTEST</schema>
+            <catalog>PKGB2CNUMNETWINV</catalog>
+            <ProcedureName>CREATEB2CNUMNETWINV_1</ProcedureName>
+            <oraObjects>
+                <CRAMERTEST.O_FULFILL_NRNW_C_IN_SERV>
+                    <NUMBERSTATUSENDDATE>
+                        <attributeType>91</attributeType>
+                        <attributeName>NUMBERSTATUSENDDATE</attributeName>
+                    </NUMBERSTATUSENDDATE>
+                </CRAMERTEST.O_FULFILL_NRNW_C_IN_SERV>
+            </oraObjects>
+            <oraTables/>
+            <parameterTypes>
+                <parameter>
+                    <colName>I_SERVICE</colName>
+                    <colType>1</colType>
+                    <dataType>-37</dataType>
+                    <typeName>O_FULFILL_NRNW_C_IN_SERV</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <I_SERVICE>
+                        <NUMBERSTATUSENDDATE>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </NUMBERSTATUSENDDATE>
+                    </I_SERVICE>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JDBC Call Procedure tibcosoftwareinc">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>223</pd:x>
+        <pd:y>226</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/JDBC Connection oracle.sharedjdbc</jdbcSharedConfig>
+            <schema>CRAMERTEST</schema>
+            <catalog>PKGB2CNUMNETWINV</catalog>
+            <ProcedureName>CREATEB2CNUMNETWINV_1</ProcedureName>
+            <oraObjects>
+                <CRAMERTEST.O_FULFILL_NRNW_C_IN_SERV>
+                    <NUMBERSTATUSENDDATE>
+                        <attributeType>91</attributeType>
+                        <attributeName>NUMBERSTATUSENDDATE</attributeName>
+                    </NUMBERSTATUSENDDATE>
+                </CRAMERTEST.O_FULFILL_NRNW_C_IN_SERV>
+            </oraObjects>
+            <oraTables/>
+            <parameterTypes>
+                <parameter>
+                    <colName>I_SERVICE</colName>
+                    <colType>1</colType>
+                    <dataType>-37</dataType>
+                    <typeName>O_FULFILL_NRNW_C_IN_SERV</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <I_SERVICE>
+                        <NUMBERSTATUSENDDATE>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </NUMBERSTATUSENDDATE>
+                    </I_SERVICE>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JDBC Query">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>381</pd:x>
+        <pd:y>153</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>SELECT * FROM CRAMERTEST.INPUTTABLE</statement>
+            <jdbcSharedConfig>/JDBC Connection oracle.sharedjdbc</jdbcSharedConfig>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>NUMBERSTATUSENDDATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Call Procedure oracle</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure oracle</pd:from>
+        <pd:to>JDBC Query</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Call Procedure tibcosoftwareinc</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure tibcosoftwareinc</pd:from>
+        <pd:to>JDBC Query</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

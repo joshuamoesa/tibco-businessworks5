@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Common/Shared Resources/TIBCOAeErrors.xsd" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="http://schemas.tibco.com/bw/plugins/java/5.0/javaExceptions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Common/Shared Resources/TIBCOAeErrors.xsd" schemaLocation="/Common/Shared Resources/TIBCOAeErrors.xsd"/>
+    <pd:name>Common/Sub Processes/Sub_AddTraceMsgs.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="AddTraceMsgIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="MessageFileRef" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>41</pd:startX>
+    <pd:startY>188</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>734</pd:endX>
+    <pd:endY>188</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:group name="Add Message Files">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>105</pd:x>
+        <pd:y>62</pd:y>
+        <pd:width>534</pd:width>
+        <pd:height>235</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:over>$Start/AddTraceMsgIn/MessageFileRef</pd:over>
+            <pd:indexSlot>msgfile</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Read Message File</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Add Messages</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Read Message File</pd:from>
+            <pd:to>Parse Message File</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Parse Message File</pd:from>
+            <pd:to>Add Messages</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Read Message File">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:description>Note: the usage of both this mapper and the XML Parse activity is needed
+because Designer will otherwise give a validation error. Since this process
+is normally only used at startup, the double render and parse processing
+can be neglected.</pd:description>
+            <pd:x>195</pd:x>
+            <pd:y>187</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="MessageFile" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <MessageFile>
+                        <xsl:value-of select="tib:render-xml(document(concat('tibcr://', $Start/AddTraceMsgIn/MessageFileRef[$msgfile])))"/>
+                    </MessageFile>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="Add Messages">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>387</pd:x>
+            <pd:y>102</pd:y>
+            <pd:width>208</pd:width>
+            <pd:height>158</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:over>$Parse-Message-File/TIBCOAeErrors/message</pd:over>
+                <pd:indexSlot>msg</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>Add Message</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Add Message</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="Add Message">
+                <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+                <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+                <pd:x>481</pd:x>
+                <pd:y>188</pd:y>
+                <config>
+                    <fileName>Sub_AddTraceMsgsAddMessage</fileName>
+                    <packageName>Common.SubProcesses.Sub_AddTraceMsgs</packageName>
+                    <fullsource>package Common.SubProcesses.Sub_AddTraceMsgs;
+import java.util.*;
+import java.io.*;
+import com.tibco.share.util.Trace;
+import com.tibco.sdk.MMessageBundle;
+
+public class Sub_AddTraceMsgsAddMessage{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String msgCode = "";
+	protected String role = "";
+	protected String category = "";
+	protected String message = "";
+	public String getmsgCode() {
+		return msgCode;
+	}
+	public void setmsgCode(String val) {
+		msgCode = val;
+	}
+	public String getrole() {
+		return role;
+	}
+	public void setrole(String val) {
+		role = val;
+	}
+	public String getcategory() {
+		return category;
+	}
+	public void setcategory(String val) {
+		category = val;
+	}
+	public String getmessage() {
+		return message;
+	}
+	public void setmessage(String val) {
+		message = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public Sub_AddTraceMsgsAddMessage() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String msgCode
+	In  : String role
+	In  : String category
+	In  : String message
+* Available Variables: DO NOT MODIFY *****/
+
+MMessageBundle.addMessage(msgCode, role, category, message);
+}
+}
+</fullsource>
+                    <inputData>
+                        <row>
+                            <fieldName>msgCode</fieldName>
+                            <fieldType>string</fieldType>
+                            <fieldRequired>required</fieldRequired>
+                        </row>
+                        <row>
+                            <fieldName>role</fieldName>
+                            <fieldType>string</fieldType>
+                            <fieldRequired>required</fieldRequired>
+                        </row>
+                        <row>
+                            <fieldName>category</fieldName>
+                            <fieldType>string</fieldType>
+                            <fieldRequired>required</fieldRequired>
+                        </row>
+                        <row>
+                            <fieldName>message</fieldName>
+                            <fieldType>string</fieldType>
+                            <fieldRequired>required</fieldRequired>
+                        </row>
+                    </inputData>
+                    <byteCode>
+                        <class>
+                            <name>Sub_AddTraceMsgsAddMessage</name>
+                            <byteCode>yv66vgAAAC4AMAkACAAiCQAIACMJAAgAJAkACAAlCgAJACYIACcKACgAKQcAKgcAKwEAB21zZ0NvZGUBABJMamF2YS9sYW5nL1N0cmluZzsBAARyb2xlAQAIY2F0ZWdvcnkBAAdtZXNzYWdlAQAKZ2V0bXNnQ29kZQEAFCgpTGphdmEvbGFuZy9TdHJpbmc7AQAEQ29kZQEAD0xpbmVOdW1iZXJUYWJsZQEACnNldG1zZ0NvZGUBABUoTGphdmEvbGFuZy9TdHJpbmc7KVYBAAdnZXRyb2xlAQAHc2V0cm9sZQEAC2dldGNhdGVnb3J5AQALc2V0Y2F0ZWdvcnkBAApnZXRtZXNzYWdlAQAKc2V0bWVzc2FnZQEABjxpbml0PgEAAygpVgEABmludm9rZQEACkV4Y2VwdGlvbnMHACwBAApTb3VyY2VGaWxlAQAfU3ViX0FkZFRyYWNlTXNnc0FkZE1lc3NhZ2UuamF2YQwACgALDAAMAAsMAA0ACwwADgALDAAbABwBAAAHAC0MAC4ALwEAP0NvbW1vbi9TdWJQcm9jZXNzZXMvU3ViX0FkZFRyYWNlTXNncy9TdWJfQWRkVHJhY2VNc2dzQWRkTWVzc2FnZQEAEGphdmEvbGFuZy9PYmplY3QBABNqYXZhL2xhbmcvRXhjZXB0aW9uAQAcY29tL3RpYmNvL3Nkay9NTWVzc2FnZUJ1bmRsZQEACmFkZE1lc3NhZ2UBAEsoTGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7KVYAIQAIAAkAAAAEAAQACgALAAAABAAMAAsAAAAEAA0ACwAAAAQADgALAAAACgABAA8AEAABABEAAAAdAAEAAQAAAAUqtAABsAAAAAEAEgAAAAYAAQAAAA4AAQATABQAAQARAAAAIgACAAIAAAAGKiu1AAGxAAAAAQASAAAACgACAAAAEQAFABIAAQAVABAAAQARAAAAHQABAAEAAAAFKrQAArAAAAABABIAAAAGAAEAAAAUAAEAFgAUAAEAEQAAACIAAgACAAAABiortQACsQAAAAEAEgAAAAoAAgAAABcABQAYAAEAFwAQAAEAEQAAAB0AAQABAAAABSq0AAOwAAAAAQASAAAABgABAAAAGgABABgAFAABABEAAAAiAAIAAgAAAAYqK7UAA7EAAAABABIAAAAKAAIAAAAdAAUAHgABABkAEAABABEAAAAdAAEAAQAAAAUqtAAEsAAAAAEAEgAAAAYAAQAAACAAAQAaABQAAQARAAAAIgACAAIAAAAGKiu1AASxAAAAAQASAAAACgACAAAAIwAFACQAAQAbABwAAQARAAAASQACAAEAAAAdKrcABSoSBrUAASoSBrUAAioSBrUAAyoSBrUABLEAAAABABIAAAAaAAYAAAAmAAQACQAKAAoAEAALABYADAAcACcAAQAdABwAAgARAAAAMAAEAAEAAAAUKrQAASq0AAIqtAADKrQABLgAB7EAAAABABIAAAAKAAIAAAAwABMAMQAeAAAABAABAB8AAQAgAAAAAgAh</byteCode>
+                        </class>
+                    </byteCode>
+                </config>
+                <pd:inputBindings>
+                    <javaCodeActivityInput>
+                        <msgCode>
+                            <xsl:value-of select="$Parse-Message-File/TIBCOAeErrors/message[$msg]/messageCode"/>
+                        </msgCode>
+                        <role>
+                            <xsl:value-of select="$Parse-Message-File/TIBCOAeErrors/message[$msg]/role"/>
+                        </role>
+                        <category>
+                            <xsl:value-of select="$Parse-Message-File/TIBCOAeErrors/message[$msg]/category"/>
+                        </category>
+                        <message>
+                            <xsl:value-of select="$Parse-Message-File/TIBCOAeErrors/message[$msg]/description"/>
+                        </message>
+                    </javaCodeActivityInput>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="Parse Message File">
+            <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+            <pd:x>317</pd:x>
+            <pd:y>187</pd:y>
+            <config>
+                <inputStyle>text</inputStyle>
+                <xsdVersion>default</xsdVersion>
+                <validateOutput>true</validateOutput>
+                <term ref="pfx:TIBCOAeErrors"/>
+            </config>
+            <pd:inputBindings>
+                <xmlString>
+                    <xsl:value-of select="$Read-Message-File/root/MessageFile"/>
+                </xmlString>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>174</pd:x>
+        <pd:y>419</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="eai:getMessageText(&quot;EAI-03510&quot;)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;EAI-03510&quot;"/>
+                </messageCode>
+                <data>
+                    <pfx2:Error>
+                        <pfx2:MsgCode>
+                            <xsl:value-of select="&quot;EAI-03510&quot;"/>
+                        </pfx2:MsgCode>
+                        <pfx2:Params>
+                            <xsl:value-of select="$Start/AddTraceMsgIn/MessageFileRef[$msgfile]"/>
+                        </pfx2:Params>
+                        <ns:ErrorReport>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/node()"/>
+                        </ns:ErrorReport>
+                        <xsl:if test="exists($_error_Add-Message)">
+                            <pfx2:ActivityError>
+                                <xsl:copy-of select="$_error_Add-Message/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$_error_Add-Message/@*"/>
+                                <xsl:copy-of select="$_error_Add-Message/node()"/>
+                            </pfx2:ActivityError>
+                        </xsl:if>
+                    </pfx2:Error>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Add Message Files</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Add Message Files</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Add Message Files</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

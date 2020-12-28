@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Response/0001_FindCustomer_2.2_Response_EAI_BUS_SIDE.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns1="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/ckradapter/common/Customer.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:ns6="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:ns7="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx3="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns8="http://schemas.tibco.com/bw/plugins/xml/5.0/xmlExceptions" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns9="http://www.tibco.com/pe/EngineTypes" xmlns:ns10="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Response_EAI_BUS_SIDE.xsd" xmlns:ns11="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Response/0001_FindCustomer_2.2_Response_EAI_BUS_SIDE.xsd" xmlns:pfx5="http://xmlns.kpn.com/EAI/fixed/0001_FindCustomer/2.2/Response" xmlns:pfx6="http://xmlns.kpn.com/EAI/fixed/0058_GetPhoneNumbersConnection/1.0/Response" xmlns:ns12="http://xmlns.example.com/unique/default/namespace/1125415949109" xmlns:ns13="http://xmlns.kpn.com/fixed/kanvascontractadapter/common/KanvasResponse.xsd" xmlns:pfx7="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" xmlns:pfx8="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0001_FindCustomer/2.2/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0001_FindCustomer_2.2_Response_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/FindCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0058_GetPhoneNumbersConnection/1.0/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0058_GetPhoneNumbersConnection_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1125415949109" schemaLocation="/XSDSchemas/KanvasContractAdapter/Response/GetPhoneNumbersConnection.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0058.GetPhoneNumbersConnection.1.OutputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx7:BodyContainer"/>
+    <pd:startX>106</pd:startX>
+    <pd:startY>111</pd:startY>
+    <pd:returnBindings>
+        <pfx8:BodyContainer>
+            <xsl:copy-of select="$MapData/Output/pfx6:BODY"/>
+        </pfx8:BodyContainer>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx8:BodyContainer"/>
+    <pd:endX>425</pd:endX>
+    <pd:endY>108</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="MapData">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>262</pd:x>
+        <pd:y>111</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Output">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx6:BODY" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx7:BodyContainer/*" element="ns12:GetPhoneNumbersConnection"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <Output>
+                <pfx6:BODY>
+                    <xsl:for-each select="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:SUBSCRIBER_NUMBER">
+                        <SUBSCRIBERNUMBER>
+                            <xsl:if test="ns12:SUBSCRIBER_NUMBER">
+                                <SUBSCRIBER_NUMBER>
+                                    <xsl:value-of select="ns12:SUBSCRIBER_NUMBER"/>
+                                </SUBSCRIBER_NUMBER>
+                            </xsl:if>
+                            <xsl:if test="ns12:MAIN_NUMBER">
+                                <MAIN_NUMBER>
+                                    <xsl:value-of select="ns12:MAIN_NUMBER"/>
+                                </MAIN_NUMBER>
+                            </xsl:if>
+                            <xsl:if test="ns12:USAGE_STATUS">
+                                <USAGE_STATUS>
+                                    <xsl:value-of select="ns12:USAGE_STATUS"/>
+                                </USAGE_STATUS>
+                            </xsl:if>
+                            <xsl:if test="ns12:SUBSCRIBER_NUMBER_TYPE">
+                                <SUBSCRIBER_NUMBER_TYPE>
+                                    <xsl:value-of select="ns12:SUBSCRIBER_NUMBER_TYPE"/>
+                                </SUBSCRIBER_NUMBER_TYPE>
+                            </xsl:if>
+                        </SUBSCRIBERNUMBER>
+                    </xsl:for-each>
+                    <xsl:if test="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:AREA_CODE">
+                        <AREA_CODE>
+                            <xsl:value-of select="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:AREA_CODE"/>
+                        </AREA_CODE>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:SERVICE_TYPE_EXTENSION">
+                        <SERVICE_TYPE_EXTENSION>
+                            <xsl:value-of select="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:SERVICE_TYPE_EXTENSION"/>
+                        </SERVICE_TYPE_EXTENSION>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:ROUTING_TYPE">
+                        <ROUTING_TYPE>
+                            <xsl:value-of select="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:ROUTING_TYPE"/>
+                        </ROUTING_TYPE>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:NUMBER_OF_SUBSCRIBER_NUMBER">
+                        <AMOUNT_OF_SUBSCRIBER_NUMBERS>
+                            <xsl:value-of select="$Start/pfx7:BodyContainer/ns12:GetPhoneNumbersConnection/ns12:NUMBER_OF_SUBSCRIBER_NUMBER"/>
+                        </AMOUNT_OF_SUBSCRIBER_NUMBERS>
+                    </xsl:if>
+                </pfx6:BODY>
+            </Output>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>MapData</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MapData</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

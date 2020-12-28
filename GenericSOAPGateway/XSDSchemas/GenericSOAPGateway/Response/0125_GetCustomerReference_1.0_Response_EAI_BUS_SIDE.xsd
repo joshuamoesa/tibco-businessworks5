@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0125_GetCustomerReference/1.0/Response" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0125_GetCustomerReference/1.0/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="centralCustomerId_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z,0-9]{8}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ckrApplicationid_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="3" />
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="customerRole_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITIONS:
+The Customer Role further specifies the role of a customer. There is a limited number of possible roles for a customer.
+
+TYPE:
+String(2) enumeration
+
+VALUES:
+- "??" for payment agent
+- "??" for contract owner
+- "??" for user
+- "??" for ???
+
+
+NOTES:
+- Valid values need to be added to this definition.</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="02" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="externalCustomerReference_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BODY">
+    <xs:annotation>
+      <xs:documentation>This is the BODY object for KPN EAI service number 0125 - GetCustomerReference version 1.0 Response message.</xs:documentation>
+      <xs:documentation>Automatically generated schema for service:'GetCustomerReference', version:'1.0'</xs:documentation>
+      <xs:documentation>Generated on 2007-03-29 17:17:19Z</xs:documentation>
+      <xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+      <xs:documentation>Service ID is:'0125'</xs:documentation>
+      <xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+      <xs:documentation>KPN EAI message body class.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="CUSTOMER_REFERENCE">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="1" maxOccurs="1" name="EXTERNAL_CUSTOMER_REFERENCE">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="REF_NAME" type="tns:externalCustomerReference_type" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="APPLICATION_ID" type="tns:ckrApplicationid_type" />
+              <xs:element minOccurs="0" maxOccurs="1" name="ROLE" type="tns:customerRole_type" />
+              <xs:element minOccurs="0" maxOccurs="1" name="IS_UNLISTED" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="REPLACEMENT_CENTRAL_CUSTOMER_ID" type="tns:centralCustomerId_type" />
+        <xs:element minOccurs="0" maxOccurs="1" name="NUMBER_OF_RECORDS" type="xs:integer" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

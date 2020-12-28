@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx8="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns22="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://kpn.com/eai/generic/order" xmlns:pfx2="http://kpn.com/products/WMP/accessIntranet/data/v1.0" xmlns:ns1="http://kpn.com/eai/generic/order/1.0" xmlns:pfx3="http://kpn.com/products/ZM-SNI-Products" xmlns:pfx4="http://kpn.com/products/ZM-SNI-Products/phoneNumberBlock/v1" xmlns:ns3="http://kpn.com/products/ZM-SNI-Products/phoneNumberBlock/data/v1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pfx21="http://kpn.com/eai/genericorder" xmlns:ns4="http://kpn.com/eai/product/generic" xmlns:pfx31="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" xmlns:pfx41="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" xmlns:ns21="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx6="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" xmlns:pfx7="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" xmlns:ns11="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CDM/Product/Product_Type.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns5="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" xmlns:ns6="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:pfx10="http://xmlns.kpn.com/eai/common/errors">
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/generic/order" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/WSDL/Order.xsd"/>
+    <xsd:import namespace="http://kpn.com/products/WMP/accessIntranet/data/v1.0" schemaLocation="/WSDL/WMP/WMP_accessIntranet_v1.0.wsdl"/>
+    <xsd:import namespace="http://kpn.com/products/ZM-SNI-Products" schemaLocation="/WSDL/COM/ZM-SNI-Products_phoneNumberBlock_v1.0.wsdl"/>
+    <xsd:import namespace="http://kpn.com/eai/genericorder" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Order/GenericOrder.xsd"/>
+    <xsd:import namespace="http://schemas.xmlsoap.org/soap/envelope/" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/WSDL/SOAP1.1.xsd"/>
+    <wsdl:import namespace="http://kpn.com/products/ZM-SNI-Products/phoneNumberBlock/v1" location="/WSDL/COM/ZM-SNI-Products_phoneNumberBlock_v1.0.wsdl"/>
+    <pd:name>GenericOrderGateway/Test Processes/Process Definition.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx5:Envelope"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>468</pd:endX>
+    <pd:endY>71</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1237465150781</pd:targetNamespace>
+    <pd:activity name="Create SubmitOrder">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>297</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <element ref="pfx8:SubmitOrder"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="order" select="$Start/pfx5:Envelope/pfx5:Body"/>
+            <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="orderItem" select="$order/*[local-name()=&quot;OrderItem&quot;]"/>
+            <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="PRODUCT_NAME" select="'productname'"/>
+            <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ACTION_NAME" select="'actionname'"/>
+            <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="CUSTOMER_NAME" select="'customername'"/>
+            <pfx8:SubmitOrder>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="'435'"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="'SubmitGenericProductOrder'"/>
+                    </ns2:NAME>
+                    <ns2:FID>
+                        <xsl:value-of select="$order/*[local-name()=&quot;customerOrderId&quot;]"/>
+                    </ns2:FID>
+                    <ns2:MID>
+                        <xsl:value-of select="'1080.10'"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="'PUBLISH'"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="'Order'"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="'1.0'"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="'1'"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="'destination'"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="'messageid'"/>
+                        </ns2:MESSAGE_ID>
+                        <ns2:ITEM>
+                            <xsl:attribute name="ns2:APPINFO">
+                                <xsl:value-of select="'1'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns2:EVENT">
+                                <xsl:value-of select="'1'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns2:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns2:ITEM>
+                    </ns2:TRACKING>
+                </ns2:CMH>
+                <ns22:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="'EXECUTE'"/>
+                            </ORDER_TYPE>
+                            <COMMERCIAL_PRODUCT_CATEGORY>
+                                <xsl:value-of select="$CUSTOMER_NAME"/>
+                            </COMMERCIAL_PRODUCT_CATEGORY>
+                            <EXTERNAL_REFERENCE>
+                                <xsl:value-of select="$order/*[local-name()=&quot;customerOrderId&quot;]"/>
+                            </EXTERNAL_REFERENCE>
+                            <CREATION_DATE>
+                                <xsl:value-of select="$order/*[local-name()=&quot;orderDateTime&quot;]"/>
+                            </CREATION_DATE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="'orderitemtype'"/>
+                                </ORDER_ITEM_TYPE>
+                                <ORDER_ITEM_ACTION>
+                                    <xsl:value-of select="$ACTION_NAME"/>
+                                </ORDER_ITEM_ACTION>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="'productcat'"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT xsi:type="Product_Type">
+                                <GENERIC_ORDER_PRODUCT>
+                                    <PRODUCT_NAME>
+                                        <xsl:value-of select="$PRODUCT_NAME"/>
+                                    </PRODUCT_NAME>
+                                    <PRODUCT_VERSION>
+                                        <xsl:value-of select="'1.0'"/>
+                                    </PRODUCT_VERSION>
+                                    <ACTION_PARADIGM>
+                                        <xsl:value-of select="'pubsub'"/>
+                                    </ACTION_PARADIGM>
+                                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$order/*[local-name()=&quot;OrderParameters&quot;]">
+                                        <CUSTOM_ORDER_PARAMETERS>
+                                            <xsl:for-each select="$order/*[local-name()=&quot;OrderParameters&quot;]/*">
+                                                <xsl:copy-of select="."/>
+                                            </xsl:for-each>
+                                        </CUSTOM_ORDER_PARAMETERS>
+                                    </xsl:if>
+                                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$orderItem/*[not(local-name()=&quot;Parameters&quot;)]">
+                                        <CUSTOM_ITEM_PARAMETERS>
+                                            <xsl:for-each select="$orderItem/*[not(local-name()=&quot;Parameters&quot;)]">
+                                                <xsl:copy-of select="."/>
+                                            </xsl:for-each>
+                                        </CUSTOM_ITEM_PARAMETERS>
+                                    </xsl:if>
+                                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$orderItem/*[local-name()=&quot;Parameters&quot;]">
+                                        <ACTION_PARAMETERS>
+                                            <xsl:for-each select="$orderItem/*[local-name()=&quot;Parameters&quot;]/*">
+                                                <xsl:copy-of select="."/>
+                                            </xsl:for-each>
+                                        </ACTION_PARAMETERS>
+                                    </xsl:if>
+                                </GENERIC_ORDER_PRODUCT>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns22:BODY>
+            </pfx8:SubmitOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Create SubmitOrder</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create SubmitOrder</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

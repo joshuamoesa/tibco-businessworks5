@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/SFAAdapter/Response/UpserAccount.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/SFAAdapter/Request/UpserAccount.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns1X="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3X="http://xmlns.kpn.com/EAI/fixed/0421_UpserAccount/1.0/Response" xmlns:ns1="http://xmlns.kpn.com/EAI/fixed/0421_UpserAccount/1.0/Request">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Request/UpserAccount.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Request/UpsertAccount.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Response/UpserAccount.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Response/UpsertAccount.xsd"/>
+    <pd:name>CRMServices/Test Processes/UpsertAccountwithReferences/WithFiltering/STUB_UpsertAccount_FullyFilled.process</pd:name>
+    <pd:startName>Rendezvous Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Rendezvous Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>173</pd:x>
+        <pd:y>212</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsRawRVObjectForOutput>false</wantsRawRVObjectForOutput>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/Common/Shared Resources/RVCMQ Transport.rvtransport</sharedChannel>
+            <subject>%%Env%%.FIXED.CRM.SFAAdapter.Request.UpsertAccount.1</subject>
+            <xsdString ref="pfx2:UpserAccountRequest"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>391</pd:x>
+        <pd:y>233</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>Rendezvous Subscriber</eventSource>
+            <xsdString ref="pfx:UpserAccountResponse"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <xsl:copy-of select="$Map-Data/pfx:UpserAccountResponse/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Map-Data/pfx:UpserAccountResponse/@*"/>
+                    <xsl:copy-of select="$Map-Data/pfx:UpserAccountResponse/node()"/>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>284</pd:x>
+        <pd:y>212</pd:y>
+        <config>
+            <element ref="pfx:UpserAccountResponse"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:UpserAccountResponse>
+                <ns1X:CMH>
+                    <ns1X:ID>ID</ns1X:ID>
+                    <ns1X:NAME>NAME</ns1X:NAME>
+                    <ns1X:FID>FID</ns1X:FID>
+                    <ns1X:MID>MID</ns1X:MID>
+                    <ns1X:PARADIGM>PARADIGM</ns1X:PARADIGM>
+                    <ns1X:OBJECT>OBJECT</ns1X:OBJECT>
+                    <ns1X:VERSION>VERSION</ns1X:VERSION>
+                    <ns1X:FROM ns1X:COMPONENT_ID="COMPONENT_ID" ns1X:COMPONENT_VERSION="COMPONENT_VERSION" ns1X:END_USER_INFO="END_USER_INFO" ns1X:SOURCE_ADDRESS="SOURCE_ADDRESS"/>
+                    <ns1X:TO ns1X:DESTINATION="DESTINATION"/>
+                    <ns1X:TRACKING>
+                        <ns1X:MESSAGE_ID>MESSAGE_ID</ns1X:MESSAGE_ID>
+                        <ns1X:EXTERNAL_REF>EXTERNAL_REF</ns1X:EXTERNAL_REF>
+                        <ns1X:ITEM ns1X:APPINFO="APPINFO" ns1X:EVENT="EVENT" ns1X:TIMESTAMP="-8592132702579986713"/>
+                        <ns1X:SEQUENCE_NO>SEQUENCE_NO</ns1X:SEQUENCE_NO>
+                    </ns1X:TRACKING>
+                    <ns1X:ATTRIBUTE ns1X:NAME="NAME" ns1X:VALUE="VALUE"/>
+                </ns1X:CMH>
+                <pfx:STATUS_RESULT ns:ERROR_CODE="ERROR_CODE" ns:ERROR_DESCRIPTION="ERROR_DESCRIPTION" ns:MSG_CODE="MSG_CODE" ns:STATUS="0"/>
+                <ns3X:BODY>
+                    <ns3X:SiebelAccount>
+                        <ns3X:AccountHierarchyLevel>AccountHierarchyLevel</ns3X:AccountHierarchyLevel>
+                        <ns3X:AccountTypeCode>
+                            <xsl:value-of select="&quot;ACCOUNTTYPECODE&quot;"/>
+                        </ns3X:AccountTypeCode>
+                        <ns3X:OCRMOperation>_Create</ns3X:OCRMOperation>
+                        <ns3X:Type>Type</ns3X:Type>
+                        <ns3X:UCMRowId>UCMRowId</ns3X:UCMRowId>
+                        <ns3X:UUID>UUID</ns3X:UUID>
+                        <ns3X:Contact>
+                            <ns3X:CifContactReference>
+                                <ns3X:AccountId>AccountId</ns3X:AccountId>
+                                <ns3X:CIFSystemId>CIFSystemId</ns3X:CIFSystemId>
+                                <ns3X:ExternalId1>ExternalId1</ns3X:ExternalId1>
+                                <ns3X:SystemName>SystemName</ns3X:SystemName>
+                                <ns3X:SystemNumber>SystemNumber</ns3X:SystemNumber>
+                            </ns3X:CifContactReference>
+                            <ns3X:Error>
+                                <ns3X:Code>Code</ns3X:Code>
+                                <ns3X:Description>Description</ns3X:Description>
+                                <ns3X:Type>Type</ns3X:Type>
+                            </ns3X:Error>
+                        </ns3X:Contact>
+                        <ns3X:BusinessAddress IsPrimaryMVG="IsPrimaryMVG">
+                            <ns3X:StreetNumberExtension>StreetNumberExtension</ns3X:StreetNumberExtension>
+                            <ns3X:Error>
+                                <ns3X:Code>Code</ns3X:Code>
+                                <ns3X:Description>Description</ns3X:Description>
+                                <ns3X:Type>Type</ns3X:Type>
+                            </ns3X:Error>
+                        </ns3X:BusinessAddress>
+                        <xsl:for-each select="$Rendezvous-Subscriber/ActivityOutput/body/ns1:BODY/ns1:SiebelAccount/ns1:CifAccountReference">
+                            <ns3X:CifAccountReference>
+                                <ns3X:AccountId>
+                                    <xsl:value-of select="ns1:AccountId"/>
+                                </ns3X:AccountId>
+                                <ns3X:CIFSystemId>
+                                    <xsl:value-of select="ns1:CIFSystemId"/>
+                                </ns3X:CIFSystemId>
+                                <ns3X:ExternalId1>
+                                    <xsl:value-of select="ns1:ExternalId1"/>
+                                </ns3X:ExternalId1>
+                                <ns3X:SystemName>
+                                    <xsl:value-of select="ns1:SystemName"/>
+                                </ns3X:SystemName>
+                                <ns3X:SystemNumber>
+                                    <xsl:value-of select="ns1:SystemNumber"/>
+                                </ns3X:SystemNumber>
+                            </ns3X:CifAccountReference>
+                        </xsl:for-each>
+                    </ns3X:SiebelAccount>
+                </ns3X:BODY>
+            </pfx:UpserAccountResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Rendezvous Subscriber</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Reply to Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

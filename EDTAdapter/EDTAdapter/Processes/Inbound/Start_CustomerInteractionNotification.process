@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish" xmlns:pfx3="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish" schemaLocation="/XSDSchemas/0355_CustomerInteractionNotification_1.0_Publish_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerInteractionNotification.xsd"/>
+    <pd:name>EDTAdapter/Processes/Inbound/Start_CustomerInteractionNotification.process</pd:name>
+    <pd:startName>Receive JMS Publicationz</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive JMS Publicationz">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>74</pd:x>
+        <pd:y>135</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>%%Common/JMS/JmsMaxSessions%%</maxSessions>
+                <destination>%%Env%%.FIXED.Operations.EDTAdapter.Subscribe.CustomerInteractionNotification.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>695</pd:endX>
+    <pd:endY>127</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ServiceName>
+            <xsd:element name="CustomerInteractionNotification">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="MessageType" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceName>
+    </pd:processVariables>
+    <pd:activity name="Confirm JMS Publication">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>522</pd:x>
+        <pd:y>136</pd:y>
+        <config>
+            <ConfirmEvent>Receive JMS Publicationz</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>333</pd:x>
+        <pd:y>287</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ThrowException.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ThrowExceptionIn>
+                <ComponentId>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EDTAdapter/ComponentId"/>
+                </ComponentId>
+                <ComponentVersion>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EDTAdapter/ComponentVersion"/>
+                </ComponentVersion>
+                <ns4:Errors>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Process-Publication)">
+                            <xsl:copy-of select="$_error_Process-Publication/ns4:Error"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns4:Error>
+                                <ns4:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </ns4:ErrorReport>
+                            </ns4:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns4:Errors>
+                <xsl:if test="$Receive-JMS-Publicationz/ns2:ActivityOutput/Body">
+                    <TextBody>
+                        <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/Body"/>
+                    </TextBody>
+                </xsl:if>
+                <JMS>
+                    <JMSHeaders>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/node()"/>
+                    </JMSHeaders>
+                    <JMSProperties>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSProperties/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSProperties/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSProperties/node()"/>
+                    </JMSProperties>
+                    <OtherProperties>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/OtherProperties/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/OtherProperties/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/OtherProperties/node()"/>
+                    </OtherProperties>
+                </JMS>
+            </ThrowExceptionIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log JMS Publication">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>207</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04052&quot;"/>
+                </MsgCode>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSDestination"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="concat(tib:render-xml($Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders, true(), true()),'&#xA;', tib:render-xml($Receive-JMS-Publicationz/ns2:ActivityOutput/JMSProperties, true(), true()),'&#xA;', tib:render-xml($Receive-JMS-Publicationz/ns2:ActivityOutput/OtherProperties, true(), true()),$Receive-JMS-Publicationz/ns2:ActivityOutput/Body)"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Process Publication">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>329</pd:x>
+        <pd:y>137</pd:y>
+        <config>
+            <processNameXPath/>
+            <processName>/EDTAdapter/Processes/Inbound/SubProcesses/CustomerInteractionNotification.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <Body>
+                    <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/Body"/>
+                </Body>
+                <JMS>
+                    <xsl:choose>
+                        <xsl:when test="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSExpiration = 0">
+                            <xsl:if test="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSExpiration">
+                                <Expiration>
+                                    <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSExpiration"/>
+                                </Expiration>
+                            </xsl:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <Expiration>
+                                <xsl:value-of select="round($Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSExpiration - tib:timestamp())"/>
+                            </Expiration>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if test="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSPriority">
+                        <Priority>
+                            <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSPriority"/>
+                        </Priority>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSCorrelationID">
+                        <CorrelationId>
+                            <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSCorrelationID"/>
+                        </CorrelationId>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSType">
+                        <Type>
+                            <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSHeaders/ns2:JMSType"/>
+                        </Type>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupID">
+                        <XGroupID>
+                            <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupID"/>
+                        </XGroupID>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupSeq">
+                        <XGroupSeq>
+                            <xsl:value-of select="$Receive-JMS-Publicationz/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupSeq"/>
+                        </XGroupSeq>
+                    </xsl:if>
+                </JMS>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm JMS Publication</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Throw Exception</pd:from>
+        <pd:to>Confirm JMS Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Publicationz</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Publicationz</pd:from>
+        <pd:to>Log JMS Publication</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process Publication</pd:from>
+        <pd:to>Confirm JMS Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process Publication</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Publication</pd:from>
+        <pd:to>Process Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

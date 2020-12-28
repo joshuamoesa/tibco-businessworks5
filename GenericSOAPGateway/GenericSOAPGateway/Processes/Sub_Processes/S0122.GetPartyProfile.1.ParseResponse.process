@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" xmlns:pfx2="http://xmlns.kpn.com/EAI/fixed/0001_FindCustomer/2.2/Response" xmlns:pfx3="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/fixed/ckradapter/common/Customer.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/response/ChangeDateOfBirth.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/ckradapter/response/UpdateKVKNumber.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/ckradapter/response/GetPartyProfile.xsd" xmlns:pfx7="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_input.xsd" xmlns:pfx8="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_output.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/FindCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0001_FindCustomer/2.2/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0001_FindCustomer_2.2_Response_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/ChangeDateOfBirth.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/ChangeDateOfBirth.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/UpdateKVKNumber.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/UpdateKVKNumber.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/GetPartyProfile.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/GetPartyProfile.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_ParseResponse_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_ParseResponse_output.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0122.GetPartyProfile.1.ParseResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx7:Input"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <pfx8:Output>
+            <pfx8:CMH>
+                <xsl:copy-of select="$Parse-XML/pfx6:GetPartyProfile/ns1:CMH/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$Parse-XML/pfx6:GetPartyProfile/ns1:CMH/@*"/>
+                <xsl:copy-of select="$Parse-XML/pfx6:GetPartyProfile/ns1:CMH/node()"/>
+            </pfx8:CMH>
+            <pfx8:RESULT_STATUS>
+                <xsl:copy-of select="$Parse-XML/pfx6:GetPartyProfile/ns:RESULT_STATUS/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$Parse-XML/pfx6:GetPartyProfile/ns:RESULT_STATUS/@*"/>
+                <xsl:copy-of select="$Parse-XML/pfx6:GetPartyProfile/ns:RESULT_STATUS/node()"/>
+            </pfx8:RESULT_STATUS>
+            <pfx8:CompleteBody>
+                <xsl:copy-of select="$Parse-XML/pfx6:GetPartyProfile"/>
+            </pfx8:CompleteBody>
+        </pfx8:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx8:Output"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>290</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx6:GetPartyProfile"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/pfx7:Input/pfx7:ResultString"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

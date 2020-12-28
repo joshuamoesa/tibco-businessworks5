@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>GetExchangeRateECB.process</pd:name>
+    <pd:startName>ReceiveExchangeRateRequest</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ReceiveExchangeRateRequest">
+        <pd:type>com.tibco.plugin.http.HTTPEventSource</pd:type>
+        <pd:resourceType>httppalette.httpEventSource</pd:resourceType>
+        <pd:x>131</pd:x>
+        <pd:y>136</pd:y>
+        <config>
+            <outputMode>String</outputMode>
+            <defaultEncoding>ISO8859_1</defaultEncoding>
+            <inputOutputVersion>5.3.0</inputOutputVersion>
+            <newMimeSupport>true</newMimeSupport>
+            <sharedChannel>/ExchangeRateConnection.sharedhttp</sharedChannel>
+            <parsePostData>true</parsePostData>
+            <customField>
+                <row>
+                    <attribute>CURRENCY</attribute>
+                    <attributeType>string</attributeType>
+                    <attributeCard>required</attributeCard>
+                </row>
+                <row>
+                    <attribute>VOLUME</attribute>
+                    <attributeType>string</attributeType>
+                    <attributeCard>required</attributeCard>
+                </row>
+            </customField>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Connection" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1232</pd:endX>
+    <pd:endY>128</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1225883448593</pd:targetNamespace>
+    <pd:group name="IterateAndFindMatch">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>432</pd:x>
+        <pd:y>49</pd:y>
+        <pd:width>227</pd:width>
+        <pd:height>161</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>($i &gt; count($ParseExchangeRateData/Output/Rows/root)) or (substring($ParseExchangeRateData/Output/Rows/root[$i]/currency, 1, 3) = $ReceiveExchangeRateRequest/ProcessStarterOutput/parameters/CURRENCY)</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SelectExchangeRate</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SelectExchangeRate</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="SelectExchangeRate">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>552</pd:x>
+            <pd:y>134</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="MapResultToResponse">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>870</pd:x>
+        <pd:y>127</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="description" type="xsd:string"/>
+                            <xsd:element name="rate" type="xsd:decimal"/>
+                            <xsd:element name="currency" type="xsd:string"/>
+                            <xsd:element name="amount-" type="xsd:decimal"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <description>
+                    <xsl:value-of select="$ParseExchangeRateData/Output/Rows/root[$i]/description"/>
+                </description>
+                <rate>
+                    <xsl:value-of select="$ParseExchangeRateData/Output/Rows/root[$i]/rate"/>
+                </rate>
+                <currency>
+                    <xsl:value-of select="$ParseExchangeRateData/Output/Rows/root[$i]/currency"/>
+                </currency>
+                <amount->
+                    <xsl:value-of select="$ReceiveExchangeRateRequest/ProcessStarterOutput/ parameters/VOLUME * $ParseExchangeRateData/Output /Rows/root[$i]/rate"/>
+                </amount->
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ReplyWithExchangeRate">
+        <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+        <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+        <pd:x>1047</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <closeConnection>true</closeConnection>
+            <eventSource>ReceiveExchangeRateRequest</eventSource>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings>
+            <ResponseActivityInput>
+                <asciiContent>
+                    <xsl:value-of select="concat(&quot;&lt;html> &lt;head>&lt;title>TMNS BW-101 Currency Converter&lt;/title> &lt;STYLE TYPE=text/css>&quot;,&#xA;&quot; H1 {color: black;} BODY {background: #80B0F0; font-family: helvetica} table {border: 1px solid black;}&quot;,&#xA;&quot; th {border: 1px solid black;} td {border: 1px solid black;} &lt;/STYLE>&quot;,&#xA;&quot;&lt;/head> &lt;/body>&lt;table cellspacing=0 cellpadding=2> &lt;th colspan=2>Result&lt;/th>&quot;,&#xA;&quot;&lt;tr>&lt;td>Source Currency:&lt;/td>&lt;td align=right>Euro (EUR)&lt;/td>&lt;/tr>&quot;,&#xA;&quot;&lt;tr>&lt;td>Target Currency:&lt;/td>&lt;td align=right>&quot;,$MapResultToResponse/root/description,&quot; (&quot;,$MapResultToResponse/root/currency,&quot;)&lt;/td>&lt;/tr>&quot;,&#xA;&quot;&lt;tr>&lt;td>Exchange Rate:&lt;/td>&lt;td align=right>&quot;,$MapResultToResponse/root/rate,&quot;&lt;/td>&lt;/tr>&quot;,&#xA;&quot;&lt;tr>&lt;td>Amount:&lt;/td>&lt;td align=right>&quot;,$MapResultToResponse/root/amount-,&quot;&lt;/td>&lt;/tr>&quot;,&#xA;&quot;&lt;/table>  &lt;/h3> &lt;/body> &lt;/html>&quot;)"/>
+                </asciiContent>
+            </ResponseActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>301</pd:x>
+        <pd:y>135</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>IterateAndFindMatch</pd:from>
+        <pd:to>MapResultToResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapResultToResponse</pd:from>
+        <pd:to>ReplyWithExchangeRate</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReplyWithExchangeRate</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveExchangeRateRequest</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>IterateAndFindMatch</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/EAI/fixed/0419_GetAccountHierarchy/1.0/Response" xmlns:pfx2="http://xmlns.kpn.com/EAI/fixed/0420_UpsertAccountWithReferencing/1.0/Publish">
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0419_GetAccountHierarchy/1.0/Response" schemaLocation="/XSDSchemas/UCMAdapter/Imported/0419_GetAccountHierarchy_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0420_UpsertAccountWithReferencing/1.0/Publish" schemaLocation="/XSDSchemas/CRMServices/Imported/0420_UpsertAccountWithReferencing_1.0_Publish_EAI_BUS_SIDE.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/RecursiveMappers/SiebelAccountMapper.1.process</pd:name>
+    <pd:description>This process perform recursive mapping from a tree structure A to another tree strucure B.
+It achives this by calling itself (self call) n number of times, 'n' being number of direct children which 
+have recursive structure.
+In every self call made, a child is passed as an argument.
+Deciding output of this process is a custom operation.
+It depends on requrement described functional specifications.
+
+
+Self Call:
+	As tibco bw process cannot call itself. We create a psuedo process with same input and output
+	as main process. From psuedo process, main process is called and output from main 
+	process is copied as output of pseudo process.</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="SiebelAccount" type="pfx:TSiebelAccount"/>
+    </pd:startType>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <SiebelAccount>
+            <xsl:if test="$Start/SiebelAccount/pfx:AccountHierarchyLevel">
+                <pfx2:AccountHierarchyLevel>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:AccountHierarchyLevel"/>
+                </pfx2:AccountHierarchyLevel>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:AccountStatus">
+                <pfx2:AccountStatus>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:AccountStatus"/>
+                </pfx2:AccountStatus>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:AccountTypeCode">
+                <pfx2:AccountTypeCode>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:AccountTypeCode"/>
+                </pfx2:AccountTypeCode>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:Alias">
+                <pfx2:Alias>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:Alias"/>
+                </pfx2:Alias>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:CAUpdateFlag">
+                <pfx2:CAUpdateFlag>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:CAUpdateFlag"/>
+                </pfx2:CAUpdateFlag>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:CAUpdateType">
+                <pfx2:CAUpdateType>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:CAUpdateType"/>
+                </pfx2:CAUpdateType>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:CSN">
+                <pfx2:CSN>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:CSN"/>
+                </pfx2:CSN>
+            </xsl:if>
+            <pfx2:DisableMailings>
+                <xsl:value-of select="$Start/SiebelAccount/pfx:DisableMailings"/>
+            </pfx2:DisableMailings>
+            <xsl:if test="$Start/SiebelAccount/pfx:DontCall">
+                <pfx2:DontCall>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:DontCall"/>
+                </pfx2:DontCall>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:DontShare">
+                <pfx2:DontShare>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:DontShare"/>
+                </pfx2:DontShare>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:HomePage">
+                <pfx2:HomePage>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:HomePage"/>
+                </pfx2:HomePage>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:Id">
+                <pfx2:Id>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:Id"/>
+                </pfx2:Id>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:IntegrationId">
+                <pfx2:IntegrationId>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:IntegrationId"/>
+                </pfx2:IntegrationId>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNBlockedTelephone">
+                <pfx2:KPNBlockedTelephone>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNBlockedTelephone"/>
+                </pfx2:KPNBlockedTelephone>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNBranchCode">
+                <pfx2:KPNBranchCode>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNBranchCode"/>
+                </pfx2:KPNBranchCode>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNBranchFlag">
+                <pfx2:KPNBranchFlag>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNBranchFlag"/>
+                </pfx2:KPNBranchFlag>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNCOCNR">
+                <pfx2:KPNCOCNR>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNCOCNR"/>
+                </pfx2:KPNCOCNR>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNCODRV">
+                <pfx2:KPNCODRV>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNCODRV"/>
+                </pfx2:KPNCODRV>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNFinancialStatus">
+                <pfx2:KPNFinancialStatus>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNFinancialStatus"/>
+                </pfx2:KPNFinancialStatus>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNFraudIndicator">
+                <pfx2:KPNFraudIndicator>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNFraudIndicator"/>
+                </pfx2:KPNFraudIndicator>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNMoveCKRnrOld">
+                <pfx2:KPNMoveCKRnrOld>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNMoveCKRnrOld"/>
+                </pfx2:KPNMoveCKRnrOld>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNMoveIndicator">
+                <pfx2:KPNMoveIndicator>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNMoveIndicator"/>
+                </pfx2:KPNMoveIndicator>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNRELNUM">
+                <pfx2:KPNRELNUM>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNRELNUM"/>
+                </pfx2:KPNRELNUM>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:KPNSalesDistrictCode">
+                <pfx2:KPNSalesDistrictCode>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:KPNSalesDistrictCode"/>
+                </pfx2:KPNSalesDistrictCode>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:Location">
+                <pfx2:Location>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:Location"/>
+                </pfx2:Location>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:MainEmailAddress">
+                <pfx2:MainEmailAddress>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:MainEmailAddress"/>
+                </pfx2:MainEmailAddress>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:MainFaxNumber">
+                <pfx2:MainFaxNumber>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:MainFaxNumber"/>
+                </pfx2:MainFaxNumber>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:MainPhoneNumber">
+                <pfx2:MainPhoneNumber>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:MainPhoneNumber"/>
+                </pfx2:MainPhoneNumber>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:MarketClass">
+                <pfx2:MarketClass>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:MarketClass"/>
+                </pfx2:MarketClass>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:MarketType">
+                <pfx2:MarketType>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:MarketType"/>
+                </pfx2:MarketType>
+            </xsl:if>
+            <pfx2:MasterAccountIntegrationId>
+                <xsl:value-of select="$Start/SiebelAccount/pfx:MasterAccountIntegrationId"/>
+            </pfx2:MasterAccountIntegrationId>
+            <xsl:if test="$Start/SiebelAccount/pfx:Name">
+                <pfx2:Name>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:Name"/>
+                </pfx2:Name>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:ParentAccountId">
+                <pfx2:ParentAccountId>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:ParentAccountId"/>
+                </pfx2:ParentAccountId>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:ParentAccountIntegrationId">
+                <pfx2:ParentAccountIntegrationId>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:ParentAccountIntegrationId"/>
+                </pfx2:ParentAccountIntegrationId>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:PrimaryContactUCMRowId">
+                <pfx2:PrimaryContactUCMRowId>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:PrimaryContactUCMRowId"/>
+                </pfx2:PrimaryContactUCMRowId>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:Type">
+                <pfx2:Type>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:Type"/>
+                </pfx2:Type>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:UCMRowId">
+                <pfx2:UCMRowId>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:UCMRowId"/>
+                </pfx2:UCMRowId>
+            </xsl:if>
+            <xsl:if test="$Start/SiebelAccount/pfx:UUID">
+                <pfx2:UUID>
+                    <xsl:value-of select="$Start/SiebelAccount/pfx:UUID"/>
+                </pfx2:UUID>
+            </xsl:if>
+            <xsl:for-each select="$Start/SiebelAccount/pfx:Account_Affiliation">
+                <pfx2:Account_Affiliation>
+                    <pfx2:AffiliationId>
+                        <xsl:value-of select="pfx:AffiliationId"/>
+                    </pfx2:AffiliationId>
+                    <pfx2:AffiliationIntegrationId>
+                        <xsl:value-of select="pfx:AffiliationIntegrationId"/>
+                    </pfx2:AffiliationIntegrationId>
+                    <pfx2:AffiliationType>
+                        <xsl:value-of select="pfx:AffiliationType"/>
+                    </pfx2:AffiliationType>
+                    <pfx2:AffiliationUUID>
+                        <xsl:value-of select="pfx:AffiliationUUID"/>
+                    </pfx2:AffiliationUUID>
+                </pfx2:Account_Affiliation>
+            </xsl:for-each>
+            <xsl:for-each select="$Start/SiebelAccount/pfx:Contact">
+                <pfx2:Contact>
+                    <pfx2:BirthDate>
+                        <xsl:value-of select="pfx:BirthDate"/>
+                    </pfx2:BirthDate>
+                    <pfx2:EmailAddress>
+                        <xsl:value-of select="pfx:EmailAddress"/>
+                    </pfx2:EmailAddress>
+                    <pfx2:FaxPhone>
+                        <xsl:value-of select="pfx:FaxPhone"/>
+                    </pfx2:FaxPhone>
+                    <pfx2:FirstName>
+                        <xsl:value-of select="pfx:FirstName"/>
+                    </pfx2:FirstName>
+                    <pfx2:IntegrationId>
+                        <xsl:value-of select="pfx:IntegrationId"/>
+                    </pfx2:IntegrationId>
+                    <pfx2:KPNAcademicTitle>
+                        <xsl:value-of select="pfx:KPNAcademicTitle"/>
+                    </pfx2:KPNAcademicTitle>
+                    <pfx2:LastName>
+                        <xsl:value-of select="pfx:LastName"/>
+                    </pfx2:LastName>
+                    <pfx2:MiddleName>
+                        <xsl:value-of select="pfx:MiddleName"/>
+                    </pfx2:MiddleName>
+                    <pfx2:PrefferedName>
+                        <xsl:value-of select="pfx:PrefferedName"/>
+                    </pfx2:PrefferedName>
+                    <pfx2:Suffix>
+                        <xsl:value-of select="pfx:Suffix"/>
+                    </pfx2:Suffix>
+                    <pfx2:SuppressAllEmails>
+                        <xsl:value-of select="pfx:SuppressAllEmails"/>
+                    </pfx2:SuppressAllEmails>
+                    <pfx2:UCMRowId>
+                        <xsl:value-of select="pfx:UCMRowId"/>
+                    </pfx2:UCMRowId>
+                    <pfx2:UUID>
+                        <xsl:value-of select="pfx:UUID"/>
+                    </pfx2:UUID>
+                    <pfx2:WorkPhone>
+                        <xsl:value-of select="pfx:WorkPhone"/>
+                    </pfx2:WorkPhone>
+                </pfx2:Contact>
+            </xsl:for-each>
+            <xsl:for-each select="$Start/SiebelAccount/pfx:BusinessAddress">
+                <pfx2:BusinessAddress>
+                    <xsl:if test="@IsPrimaryMVG">
+                        <xsl:attribute name="IsPrimaryMVG">
+                            <xsl:value-of select="@IsPrimaryMVG"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <pfx2:AddressDescription>
+                        <xsl:value-of select="pfx:AddressDescription"/>
+                    </pfx2:AddressDescription>
+                    <pfx2:AddressName>
+                        <xsl:value-of select="pfx:AddressName"/>
+                    </pfx2:AddressName>
+                    <pfx2:AddressType>
+                        <xsl:value-of select="pfx:AddressType"/>
+                    </pfx2:AddressType>
+                    <pfx2:City>
+                        <xsl:value-of select="pfx:City"/>
+                    </pfx2:City>
+                    <pfx2:Country>
+                        <xsl:value-of select="pfx:Country"/>
+                    </pfx2:Country>
+                    <pfx2:FuturePrimaryFlg>
+                        <xsl:value-of select="pfx:FuturePrimaryFlg"/>
+                    </pfx2:FuturePrimaryFlg>
+                    <pfx2:KPNEndDate>
+                        <xsl:value-of select="pfx:KPNEndDate"/>
+                    </pfx2:KPNEndDate>
+                    <pfx2:KPNPrimaryPOBoxFlag>
+                        <xsl:value-of select="pfx:KPNPrimaryPOBoxFlag"/>
+                    </pfx2:KPNPrimaryPOBoxFlag>
+                    <pfx2:KPNSpecialAddrDescription>
+                        <xsl:value-of select="pfx:KPNSpecialAddrDescription"/>
+                    </pfx2:KPNSpecialAddrDescription>
+                    <pfx2:KPNStartDate>
+                        <xsl:value-of select="pfx:KPNStartDate"/>
+                    </pfx2:KPNStartDate>
+                    <pfx2:KPNZipcodeSuffix>
+                        <xsl:value-of select="pfx:KPNZipcodeSuffix"/>
+                    </pfx2:KPNZipcodeSuffix>
+                    <pfx2:PostalCode>
+                        <xsl:value-of select="pfx:PostalCode"/>
+                    </pfx2:PostalCode>
+                    <pfx2:State>
+                        <xsl:value-of select="pfx:State"/>
+                    </pfx2:State>
+                    <pfx2:Status>
+                        <xsl:value-of select="pfx:Status"/>
+                    </pfx2:Status>
+                    <pfx2:StreetAddress>
+                        <xsl:value-of select="pfx:StreetAddress"/>
+                    </pfx2:StreetAddress>
+                    <pfx2:StreetNumber>
+                        <xsl:value-of select="pfx:StreetNumber"/>
+                    </pfx2:StreetNumber>
+                    <pfx2:StreetNumberExtension>
+                        <xsl:value-of select="pfx:StreetNumberExtension"/>
+                    </pfx2:StreetNumberExtension>
+                </pfx2:BusinessAddress>
+            </xsl:for-each>
+            <xsl:for-each select="$SumAccounts/AccumulatedOutput/SiebelAccount">
+                <pfx2:SiebelAccount>
+                    <xsl:copy-of select="./ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="./@*"/>
+                    <xsl:copy-of select="./node()"/>
+                </pfx2:SiebelAccount>
+            </xsl:for-each>
+        </SiebelAccount>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="SiebelAccount" type="pfx2:Type_SiebelAccountHierarchy"/>
+    </pd:endType>
+    <pd:endX>450</pd:endX>
+    <pd:endY>62</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>236</pd:x>
+        <pd:y>0</pd:y>
+        <pd:width>145</pd:width>
+        <pd:height>140</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/SiebelAccount/pfx:SiebelAccount</pd:over>
+            <pd:iterationElementSlot>Account</pd:iterationElementSlot>
+            <pd:indexSlot>I</pd:indexSlot>
+            <pd:outSlot>SumAccounts</pd:outSlot>
+            <pd:activityOutputName>CallPartner</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallPartner</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallPartner</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallPartner">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>298</pd:x>
+            <pd:y>64</pd:y>
+            <config>
+                <processName>/CRMServices/Processes/SubProcesses/RecursiveMappers/SiebelAccountMapper.2.process</processName>
+            </config>
+            <pd:inputBindings>
+                <SiebelAccount>
+                    <xsl:copy-of select="$Account/pfx:SiebelAccount/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Account/pfx:SiebelAccount/@*"/>
+                    <xsl:copy-of select="$Account/pfx:SiebelAccount/node()"/>
+                </SiebelAccount>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/2.0/Response"
+	 xmlns:l="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/LegalFormCode.xsd"
+	 xmlns:c="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/CurrencyCode.xsd"
+	 targetNamespace="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/2.0/Response"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/LegalFormCode.xsd" schemaLocation="../Common/LegalFormCode.xsd"/>
+	<xs:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/CurrencyCode.xsd" schemaLocation="../Common/CurrencyCode.xsd"/>
+	<xs:element name="BODY">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ORDER" type="ORDER" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ORDER">
+		<xs:sequence>
+			<xs:element name="ORDER_HEADER">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ORDER_TYPE" type="xs:string"/>
+						<xs:element name="ORDER_ID" type="xs:string" minOccurs="0"/>
+						<xs:element name="ORDER_DATE" type="xs:string" minOccurs="0"/>
+						<xs:element name="CUSTOMER_ID" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ID_CKR" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:pattern value="[A-Z,0-9]{8}"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="ORDER_STATUS" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ORDER_STATUS" type="xs:string" minOccurs="0"/>
+									<xs:element name="ORDER_SUB_STATUS" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="CUSTOMER_ACCOUNT" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ACCOUNT_NAME" type="xs:string" minOccurs="0"/>
+									<xs:element name="ACCOUNT_ID" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ORDER_ITEM" type="ORDER_ITEM" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ORDER_ITEM">
+		<xs:sequence>
+			<xs:element name="PRODUCT_CATEGORY" type="xs:string" default="ZIPB/ZIZB IP"/>
+			<xs:element name="ORDER_ITEM_HEADER">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ORDER_ITEM_TYPE" type="xs:string" default="ZIPB/ZIZB IP"/>
+						<xs:element name="ORDER_ITEM_ID" type="xs:string" minOccurs="0"/>
+						<xs:element name="ORDER_ITEM_STATUS" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ORDER_ITEM_STATUS" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PRODUCT" type="type_ProductV2" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="type_ProductV2">
+		<xs:sequence>
+			<xs:element name="QUANTITY" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="EXTENDED_QUANTITY" type="xs:string" minOccurs="0"/>
+			<xs:element name="PRODUCT_NAME" type="xs:string" minOccurs="0"/>
+			<xs:element name="PRODUCT_INSTANCE_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="PRODUCT_CLASS" type="xs:string" minOccurs="0"/>
+			<xs:element name="SERVICE_ID" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SUPPLIER_SERVICE_ID" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SUPPLIER" type="xs:string" minOccurs="0"/>
+			<xs:element name="MONTHLY_RECURRING_CHARGE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AMOUNT" type="xs:decimal"/>
+						<xs:element name="CURRENCY_CODE" type="c:type_CurrencyCode" default="EUR"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ONE_TIME_CHARGE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AMOUNT" type="xs:decimal"/>
+						<xs:element name="CURRENCY_CODE" type="c:type_CurrencyCode" default="EUR"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PRODUCT_STATUS" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="STATUS" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PRODUCT_PARAMETER" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NAME" type="xs:string"/>
+						<xs:element name="VALUE" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RELATED_PRODUCT" type="type_ProductV2" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PARTY_ROLE_PRODUCT_INVOLVEMENT" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PRODUCT_INVOLVEMENT_ROLE">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Contractor"/>
+									<xs:enumeration value="Billing Agent"/>
+									<xs:enumeration value="User"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="CURRENCY_CODE" type="xs:string"/>
+						<xs:element name="GROUP_TYPE_CODE" type="xs:string"/>
+						<xs:element name="TYPE" type="xs:string"/>
+						<xs:element name="PARTY_ROLE">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PRIVACY_SETTING" type="xs:string" minOccurs="0"/>
+									<xs:element name="PARTY_ROLE_ID" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ID_CKR" minOccurs="0">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:pattern value="[A-Z,0-9]{8}"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="PARTY">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="FULL_PARTY_NAME" minOccurs="0">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:maxLength value="100"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="PARTY_ID" minOccurs="0">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:maxLength value="100"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="PARTY_TYPE" type="xs:string" minOccurs="0"/>
+												<xs:element name="LEGAL_FORM_CODE" type="l:type_LegalFormCode" default="VG" minOccurs="0"/>
+												<xs:element name="IS_INTERNAL" type="xs:boolean" minOccurs="0"/>
+												<xs:element name="PRICE_LIST" type="xs:string" minOccurs="0"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="CONTACT_PERSON" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="LAST_NAME" type="xs:string" minOccurs="0"/>
+												<xs:element name="FIRST_NAME" type="xs:string" minOccurs="0"/>
+												<xs:element name="MIDDLE_NAME" type="xs:string" minOccurs="0"/>
+												<xs:element name="CONTACT_ROLE" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+												<xs:element name="GENDER" type="xs:string" minOccurs="0"/>
+												<xs:element name="TITLE" type="xs:string" minOccurs="0"/>
+												<xs:element name="EMAIL_ADDRESS" minOccurs="0">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:pattern value="([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(([a-zA-Z0-9_-])*\.([a-zA-Z0-9_-])+)+"/>
+															<xs:maxLength value="320"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="VALIDITY_PERIOD" minOccurs="0">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="FROM" type="xs:dateTime"/>
+															<xs:element name="UNTIL" type="xs:dateTime" minOccurs="0"/>
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="WORK_NUMBER" minOccurs="0">
+													<xs:complexType>
+														<xs:choice>
+															<xs:element name="UNFORMATTED">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="25"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+														</xs:choice>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="FAX_NUMBER" minOccurs="0">
+													<xs:complexType>
+														<xs:choice>
+															<xs:element name="UNFORMATTED">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="25"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+														</xs:choice>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="MOBILE_NUMBER" minOccurs="0">
+													<xs:complexType>
+														<xs:choice>
+															<xs:element name="UNFORMATTED">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="25"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+														</xs:choice>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="LOCATION" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="PROPERTY_ADDRESS" minOccurs="0">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ADDRESS_ID" type="xs:string" minOccurs="0"/>
+															<xs:element name="ADDRESS_TYPE" minOccurs="0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="30"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+															<xs:element name="COUNTRY" minOccurs="0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="50"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+															<xs:element name="CITY_NAME" minOccurs="0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="50"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+															<xs:element name="DUTCH_POSTCODE" minOccurs="0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="30"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+															<xs:element name="STREET_NAME" minOccurs="0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="30"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+															<xs:element name="HOUSE_NUMBER" minOccurs="0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="30"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+															<xs:element name="HOUSE_NUMBER_EXTENSION" minOccurs="0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="30"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="LOGICAL_ADDRESS" minOccurs="0">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="POBOX" minOccurs="0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="30"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

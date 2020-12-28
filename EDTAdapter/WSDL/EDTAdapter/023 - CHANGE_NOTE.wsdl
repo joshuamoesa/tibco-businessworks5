@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:Kladblok" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Kladblok">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:Kladblok">
+			<xsd:element name="ChangeNote" type="s:KSD_ChangeNoteRequest"/>
+			<xsd:complexType name="KSD_ChangeNoteRequest">
+				<xsd:sequence>
+					<xsd:element name="GUID" type="xsd:string"/>
+					<xsd:element name="ACTION" type="xsd:string"/>
+					<xsd:element name="NUMBER_OF_NOTES" type="xsd:integer"/>
+					<xsd:element name="NOTES" type="s:KSD_Notes"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="KSD_Notes">
+				<xsd:sequence>
+					<xsd:element name="NOTE" type="s:KSD_Note" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="KSD_Note">
+				<xsd:sequence>
+					<xsd:element name="INDEX" type="xsd:integer"/>
+					<xsd:element name="NOTEPAD_ID" type="xsd:string"/>
+					<xsd:element name="NOTEPAD_KEY_TYPE" type="xsd:integer"/>
+					<xsd:element name="CREATION_DATETIME" type="xsd:dateTime" minOccurs="0"/>
+					<xsd:element name="DELETION_DATETIME" type="xsd:dateTime" minOccurs="0"/>
+					<xsd:element name="PHONE_NUMBER" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="MM007_PRODUCT_ID" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="STREET_NAME" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="CITY_NAME" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="DUTCH_POSTCODE_NUMBERS" type="xsd:integer" minOccurs="0"/>
+					<xsd:element name="DUTCH_POSTCODE_LETTERS" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="PHONE_NUMBER_RANGE_START" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="PHONE_NUMBER_RANGE_END" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="NOTEPAD_TEXT_1" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="NOTEPAD_TEXT_2" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="NOTEPAD_TEXT_3" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="NOTEPAD_TEXT_4" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="EMPLOYEE_LOGIN_NAME" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ChangeNoteResponse" type="s:KSD_ChangeNoteResponse"/>
+			<xsd:complexType name="KSD_ChangeNoteResponse">
+				<xsd:sequence>
+					<xsd:element name="GUID" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="ChangeNoteRequestMsg">
+		<part name="parameters" element="s:ChangeNote"/>
+	</message>
+	<message name="ChangeNoteResponseMsg">
+		<part name="parameters" element="s:ChangeNoteResponse"/>
+	</message>
+	<portType name="CHANGE_NOTEPortType">
+		<operation name="ChangeNote">
+			<input message="s:ChangeNoteRequestMsg"/>
+			<output message="s:ChangeNoteResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="CHANGE_NOTESoapBinding" type="s:CHANGE_NOTEPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="ChangeNote">
+			<soap:operation soapAction="urn:CHANGE_NOTE/ChangeNote" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="CHANGE_NOTE_SERVICE">
+		<port name="CHANGE_NOTESoap" binding="s:CHANGE_NOTESoapBinding">
+			<soap:address location="http://localhost:48093/EDTAdapter/Processes/ChangeNote"/>
+		</port>
+	</service>
+</wsdl:definitions>

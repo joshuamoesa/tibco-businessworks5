@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by NLBSZSF2J (KPN Telecom) -->
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Atos Origin (Atos Origin) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--#######################################################################################-->
+	<xsd:complexType name="ValidityPeriod_Type">
+		<xsd:annotation>
+			<xsd:documentation>Generic Structure to indicate validity of an item</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FROM" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The FROM field of a VALIDITY PERIOD marks the start point of a period in which information is considered valid. Before the FROM dateTime, information is considered to be not yet valid. When FROM has not been specified the validity period is considered to be valid from 'the beginning of time'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice minOccurs="0">
+				<xsd:element name="UNTIL" type="xsd:dateTime">
+					<xsd:annotation>
+						<xsd:documentation>The UNTIL field of a VALIDITY PERIOD marks the end point of a period in which information is considered valid. After the UNTIL dateTime, information is considered to be no longer valid. When UNTIL has not been specified the validity period is considered to be valid until 'the end of time' or until a value is speciefied.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="DURATION" type="xsd:duration">
+					<xsd:annotation>
+						<xsd:documentation>The DURATION field of a VALIDITY PERIOD marks , in combincation with the FROM field, the end point of a period in which information is considered valid. After the that information is considered to be indeterminate.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="STATUS" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The STATUS field contains the evaluated VALIDITY PERIOD in relation to the current dateTime. Note that when FROM and UNTIL are not specified, this element may still be used to communicate the validity of an item. In this case the validity is relative to the moment of communication.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="VALID">
+							<xsd:annotation>
+								<xsd:documentation>A status of Active for a ValidityPeriod </xsd:documentation>
+							</xsd:annotation>
+						</xsd:enumeration>
+						<xsd:enumeration value="INVALID"/>
+						<xsd:enumeration value="INDETERMINATE"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PartOfDayPeriod_Type">
+		<xsd:annotation>
+			<xsd:documentation>The PartOfDayPeriod is used to denote a part of any given day. Therefore it consists of two time elements (START and END) but not of a date.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="START_TIME" type="xsd:time">
+				<xsd:annotation>
+					<xsd:documentation>A start time for the timeperiod. Note that this element is a xsd:time.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:element name="END_TIME" type="xsd:time">
+					<xsd:annotation>
+						<xsd:documentation>A start time for the timeperiod. Note that this element is a xsd:time.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="DURATION" type="xsd:duration"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TimePeriod_Type">
+		<xsd:annotation>
+			<xsd:documentation>Denotes a continuous block of time (with a start time and a duration or endtime) at a specific date. Typically used in indicating availability for a certain period. This is an alternative to a xsd:dateTime, xsd:duration combination.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="PartOfDayPeriod_Type">
+				<xsd:sequence>
+					<xsd:element name="DATE"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="LongTimePeriod_Type">
+		<xsd:annotation>
+			<xsd:documentation>Denotes a continuous block of time (with a start datetime and a duration or end datetime). The time period may span multiple days.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="START_DATETIME" type="xsd:dateTime">
+				<xsd:annotation>
+					<xsd:documentation>The start date and time of the long time period, possibly spanning multiple days.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:element name="END_DATETIME" type="xsd:dateTime">
+					<xsd:annotation>
+						<xsd:documentation>The end date and time of the long time period. The value must be later the start datetime. It may be many days in the future.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="DURATION" type="xsd:duration">
+					<xsd:annotation>
+						<xsd:documentation>A relative duration for the long time period which may be multiple days or more.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--#######################################################################################-->
+	<xsd:complexType name="Quantity_Type">
+		<xsd:annotation>
+			<xsd:documentation>A base / value business entity used to represent measurements. Note tjat for time there is also the xsd:duration type which is recommended.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FACTOR" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The factor is in some cases required to transform the amount to the actual units. This is commonly used to communicate values of a unit which is (uncommonly) combined with Milli- or Micro- factors. An example of this a system communicaing monetary amounts in Eurocents. To avoid confusion on the unit the standard unit EUR is used with a factor of 0.01.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="UNIT" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>A unit applicable to the quantity</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AMOUNT" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation>The unit of measure for the quantity, such as meters, cubic yards, kilograms [ISO 1000].</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BinarySizeQuantity_Type">
+		<xsd:annotation>
+			<xsd:documentation>The BinaryQuantity_Type is used to convey binary quantities such as '100 MB of harddisk space'.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="UNIT" type="BinarySizeUnits_Enum">
+				<xsd:annotation>
+					<xsd:documentation>The unit for the amount such as KB or MB. (Note that there are two groups of units. The first group uses multipliers based on the SI standard for example the Kilo-, Mega- etc. prefixes. In this standard the KB is defined as 1000 bytes where K (kilo) means '10 to the power of 3'. The other group if the binary equivalent which is based on powers of two. These have an additional 'i' in between and there the KiB is defined as 1024 bytes (2 to the power of 10).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AMOUNT" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation>A decimal indicating the amount of the specified units. (This number may have fractions in case there is no excact number of unit indicated, although this will typically be an integer)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="BinarySizeUnits_Enum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="B">
+				<xsd:annotation>
+					<xsd:documentation>One byte</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KB">
+				<xsd:annotation>
+					<xsd:documentation>kilo byte or 10^3 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KiB">
+				<xsd:annotation>
+					<xsd:documentation>kilo binary byte or 2^10 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MB">
+				<xsd:annotation>
+					<xsd:documentation>mega byte or 10^6 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MiB">
+				<xsd:annotation>
+					<xsd:documentation>mega binary byte or 2^20 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="GB">
+				<xsd:annotation>
+					<xsd:documentation>giga byte or 10^9 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="GiB">
+				<xsd:annotation>
+					<xsd:documentation>giga binary byte or 2^30 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="TB">
+				<xsd:annotation>
+					<xsd:documentation>tera binary byte or 10^12 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="TiB">
+				<xsd:annotation>
+					<xsd:documentation>tera binary byte or 2^40 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PB">
+				<xsd:annotation>
+					<xsd:documentation>peta byte or 10^15 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PiB">
+				<xsd:annotation>
+					<xsd:documentation>peta binary byte or 2^50 bytes</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="BinarySpeedQuantity_Type">
+		<xsd:annotation>
+			<xsd:documentation>A Quantity type specifc for speeds of binary units.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="UNIT" type="BinarySpeedUnits_Enum">
+				<xsd:annotation>
+					<xsd:documentation>The unit for the indicated speed such as KB/s or KiB/s</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AMOUNT" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation>A decimal indicating the amount of the specified units. (This number may have fractions in case there is no excact number of unit indicated, although this will typically be an integer)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="BinarySpeedUnits_Enum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="B/s">
+				<xsd:annotation>
+					<xsd:documentation>One byte per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KB/s">
+				<xsd:annotation>
+					<xsd:documentation>kilo byte per second or 10^3 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KiB/s">
+				<xsd:annotation>
+					<xsd:documentation>kilo binary byte per second or 2^10 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MB/s">
+				<xsd:annotation>
+					<xsd:documentation>mega byte per second or 10^6 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MiB/s">
+				<xsd:annotation>
+					<xsd:documentation>mega binary byte per second or 2^20 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="GB/s">
+				<xsd:annotation>
+					<xsd:documentation>giga byte per second or 10^9 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="GiB/s">
+				<xsd:annotation>
+					<xsd:documentation>giga binary byte per second or 2^30 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="TB/s">
+				<xsd:annotation>
+					<xsd:documentation>tera binary byte per second or 10^12 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="TiB/s">
+				<xsd:annotation>
+					<xsd:documentation>tera binary byte per second or 2^40 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PB/s">
+				<xsd:annotation>
+					<xsd:documentation>peta byte per second or 10^15 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PiB/s">
+				<xsd:annotation>
+					<xsd:documentation>peta binary byte per second or 2^50 bytes per second</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

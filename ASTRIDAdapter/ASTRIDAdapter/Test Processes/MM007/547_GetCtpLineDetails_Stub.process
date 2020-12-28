@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798248097" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802778671" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1087395513868" xmlns:pfx3="http://xmlns.example.com/unique/default/namespace/1113223925765" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1113223891468" xmlns:ns3="http://xmlns.kpn.com/fixed/kanvascontractadapter/common/KanvasResponse.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns4="http://xmlns.example.com/unique/default/namespace/1113226991796" xmlns:ns5="http://xmlns.kpn.com/fixed/common/PhoneNumber.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1086798248097" schemaLocation="/XSDSchemas/EnginAdapter/Request/CheckAppointment.xsd"/>
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1086802778671" schemaLocation="/XSDSchemas/EnginAdapter/Response/CheckAppointment.xsd"/>
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1113223925765" schemaLocation="/XSDSchemas/KanvasContractAdapter/Request/GetCtpLineDetails.xsd"/>
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1113223891468" schemaLocation="/XSDSchemas/KanvasContractAdapter/Response/GetCtpLineDetails.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/547_GetCtpLineDetails_Stub.process</pd:name>
+    <pd:startName>GetCtpLineDetails Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetCtpLineDetails Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>111</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Operations.KanvasRouter.Request.GetCtpLineDetails.1</subject>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx3:GetCtpLineDetails"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>51</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Schema0>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="param" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </Schema0>
+    </pd:processVariables>
+    <pd:activity name="Reply to GetCtpLineDetails Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>340</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetCtpLineDetails Subscriber</eventSource>
+            <xsdString ref="pfx4:GetCtpLineDetails"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:ID"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <xsl:if test="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:FID">
+                            <ns:FID>
+                                <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:FID"/>
+                            </ns:FID>
+                        </xsl:if>
+                        <xsl:if test="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:MID">
+                            <ns:MID>
+                                <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:MID"/>
+                            </ns:MID>
+                        </xsl:if>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:PARADIGM"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:OBJECT"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="&quot;last&quot;"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <ns:TRACKING>
+                            <ns:MESSAGE_ID>
+                                <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                            </ns:MESSAGE_ID>
+                            <ns:ITEM>
+                                <xsl:attribute name="ns:APPINFO">
+                                    <xsl:value-of select="&quot;expertdesk_stub_checkappointment&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:EVENT">
+                                    <xsl:value-of select="&quot;very eventful&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:TIMESTAMP">
+                                    <xsl:value-of select="tib:timestamp()"/>
+                                </xsl:attribute>
+                            </ns:ITEM>
+                        </ns:TRACKING>
+                    </ns:CMH>
+                    <ns3:RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;No problem&quot;"/>
+                        </xsl:attribute>
+                    </ns3:RESULT_STATUS>
+                    <xsl:choose>
+                        <xsl:when test="$GetCtpLineDetails-Subscriber/ActivityOutput/body/pfx3:CENTRAL_AREA_CODE_OFFSET = &quot;&quot;">
+                            <pfx4:NUMBER_OF_LINES>
+                                <xsl:value-of select="24"/>
+                            </pfx4:NUMBER_OF_LINES>
+                        </xsl:when>
+                        <xsl:otherwise/>
+                    </xsl:choose>
+                    <pfx4:LINE>
+                        <pfx4:CENTRAL_AREA_CODE>
+                            <xsl:value-of select="$Schema0/root/param + 1"/>
+                        </pfx4:CENTRAL_AREA_CODE>
+                        <pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                            <xsl:value-of select="$Schema0/root/param + 1"/>
+                        </pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                        <pfx4:DIKADER_NUMBER>
+                            <xsl:value-of select="$Schema0/root/param + 1"/>
+                        </pfx4:DIKADER_NUMBER>
+                        <pfx4:CURRENT>
+                            <ns4:SERVICE_ID>
+                                <xsl:value-of select="&quot;service-id&quot;"/>
+                            </ns4:SERVICE_ID>
+                            <ns4:PHONE_NUMBER>
+                                <ns5:SUBSCRIBER_NUMBER>
+                                    <xsl:value-of select="&quot;subscriber-number&quot;"/>
+                                </ns5:SUBSCRIBER_NUMBER>
+                            </ns4:PHONE_NUMBER>
+                        </pfx4:CURRENT>
+                    </pfx4:LINE>
+                    <pfx4:LINE>
+                        <pfx4:CENTRAL_AREA_CODE>
+                            <xsl:value-of select="$Schema0/root/param + 2"/>
+                        </pfx4:CENTRAL_AREA_CODE>
+                        <pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                            <xsl:value-of select="$Schema0/root/param + 2"/>
+                        </pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                        <pfx4:DIKADER_NUMBER>
+                            <xsl:value-of select="$Schema0/root/param + 2"/>
+                        </pfx4:DIKADER_NUMBER>
+                        <pfx4:CURRENT>
+                            <ns4:SERVICE_ID>
+                                <xsl:value-of select="&quot;service-id&quot;"/>
+                            </ns4:SERVICE_ID>
+                        </pfx4:CURRENT>
+                    </pfx4:LINE>
+                    <pfx4:LINE>
+                        <pfx4:CENTRAL_AREA_CODE>
+                            <xsl:value-of select="$Schema0/root/param + 3"/>
+                        </pfx4:CENTRAL_AREA_CODE>
+                        <pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                            <xsl:value-of select="$Schema0/root/param + 3"/>
+                        </pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                        <pfx4:DIKADER_NUMBER>
+                            <xsl:value-of select="$Schema0/root/param + 3"/>
+                        </pfx4:DIKADER_NUMBER>
+                        <pfx4:CURRENT>
+                            <ns4:PHONE_NUMBER>
+                                <ns5:SUBSCRIBER_NUMBER>
+                                    <xsl:value-of select="&quot;subscriber-number&quot;"/>
+                                </ns5:SUBSCRIBER_NUMBER>
+                            </ns4:PHONE_NUMBER>
+                        </pfx4:CURRENT>
+                    </pfx4:LINE>
+                    <pfx4:LINE>
+                        <pfx4:CENTRAL_AREA_CODE>
+                            <xsl:value-of select="$Schema0/root/param + 4"/>
+                        </pfx4:CENTRAL_AREA_CODE>
+                        <pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                            <xsl:value-of select="$Schema0/root/param + 4"/>
+                        </pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                        <pfx4:DIKADER_NUMBER>
+                            <xsl:value-of select="$Schema0/root/param + 4"/>
+                        </pfx4:DIKADER_NUMBER>
+                        <pfx4:CURRENT>
+                            <ns4:PHONE_NUMBER/>
+                        </pfx4:CURRENT>
+                    </pfx4:LINE>
+                    <xsl:if test="$Schema0/root/param !=20">
+                        <pfx4:LINE>
+                            <pfx4:CENTRAL_AREA_CODE>
+                                <xsl:value-of select="$Schema0/root/param + 5"/>
+                            </pfx4:CENTRAL_AREA_CODE>
+                            <pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                                <xsl:value-of select="$Schema0/root/param + 5"/>
+                            </pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                            <pfx4:DIKADER_NUMBER>
+                                <xsl:value-of select="$Schema0/root/param + 5"/>
+                            </pfx4:DIKADER_NUMBER>
+                        </pfx4:LINE>
+                    </xsl:if>
+                    <pfx4:PHONE_NUMBER>
+                        <ns5:AREA_CODE>
+                            <xsl:value-of select="&quot;area-code&quot;"/>
+                        </ns5:AREA_CODE>
+                    </pfx4:PHONE_NUMBER>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>222</pd:x>
+        <pd:y>51</pd:y>
+        <config>
+            <variableName>Schema0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:choose>
+                    <xsl:when test="$GetCtpLineDetails-Subscriber/ActivityOutput/body/pfx3:CENTRAL_AREA_CODE_OFFSET = &quot;&quot;">
+                        <param>
+                            <xsl:value-of select="0"/>
+                        </param>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <param>
+                            <xsl:value-of select="$GetCtpLineDetails-Subscriber/ActivityOutput/body/pfx3:CENTRAL_AREA_CODE_OFFSET"/>
+                        </param>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetCtpLineDetails Subscriber</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to GetCtpLineDetails Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>Reply to GetCtpLineDetails Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

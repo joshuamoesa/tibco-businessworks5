@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:SCHEDULE_NOTES_REFRESH" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:SCHEDULE_NOTES_REFRESH">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:SCHEDULE_NOTES_REFRESH">
+            <xsd:element name="ScheduleNotesRefresh" type="s:KSD_ScheduleNotesRefreshRequest"/>
+            <xsd:complexType name="KSD_ScheduleNotesRefreshRequest">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/><!-- EAI00001243: Changed dateTime to string -->
+                    <xsd:element name="scheduledDateTime" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="ScheduleNotesRefreshResponse" type="s:KSD_ScheduleNotesRefreshResponse"/>
+            <xsd:complexType name="KSD_ScheduleNotesRefreshResponse">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="scheduledDateTime" type="xsd:dateTime" minOccurs="0"/>
+                    <xsd:element name="status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="ScheduleNotesRefreshRequestMsg">
+        <part name="parameters" element="s:ScheduleNotesRefresh"/>
+    </message>
+    <message name="ScheduleNotesRefreshResponseMsg">
+        <part name="parameters" element="s:ScheduleNotesRefreshResponse"/>
+    </message>
+    <portType name="SCHEDULE_NOTES_REFRESHPortType">
+        <operation name="ScheduleNotesRefresh">
+            <input message="s:ScheduleNotesRefreshRequestMsg"/>
+            <output message="s:ScheduleNotesRefreshResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="SCHEDULE_NOTES_REFRESHSoapBinding" type="s:SCHEDULE_NOTES_REFRESHPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="ScheduleNotesRefresh">
+            <soap:operation soapAction="urn:SCHEDULE_NOTES_REFRESH/ScheduleNotesRefresh" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="SCHEDULE_NOTES_REFRESH_SERVICE">
+        <port name="SCHEDULE_NOTES_REFRESHSoap" binding="s:SCHEDULE_NOTES_REFRESHSoapBinding">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/ScheduleNotesRefresh"/>
+        </port>
+    </service>
+</definitions>

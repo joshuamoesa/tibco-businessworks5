@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/BusinessDomain" xmlns:ns5="http://www.tibco.com/CLEver/Policy" xmlns:ns6="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://www.tibco.com/CLEver/Rule" xmlns:ns7="http://www.tibco.com/CLEver/ExceptionCode" xmlns:ns8="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns1="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:ns4="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns3="http://www.tibco.com/CLEver/ExceptionType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Rule" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Rule.xsd"/>
+    <pd:name>Processes/DataServices/RuleGeneration/Exception/Sub/XPathTestHelper.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:RuleFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>150</pd:startX>
+    <pd:startY>63</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <Priority>
+                <xsl:value-of select="$Start/Input/pfx:RuleFull/pfx:ExecutionPriority"/>
+            </Priority>
+            <Test>
+                <xsl:value-of select="$GenerateXpathTest/Output/Test"/>
+            </Test>
+            <xsl:copy-of select="$Start/Input/pfx:RuleFull/ns5:PolicyFull"/>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Priority" type="xsd:string"/>
+                    <xsd:element name="Test" type="xsd:string"/>
+                    <xsd:element ref="ns5:PolicyFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>654</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="GenerateXpathTest">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>336</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/XPathTest.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/ns:BusinessDomain/ns:Name"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/BusinessDomain/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/ns2:ExceptionCategory/ns2:Name"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionCategory/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/ns4:ExceptionSeverity/ns4:Name"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionSeverity/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/ns3:ExceptionType/ns3:Name"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionType/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/ns7:ExceptionCode/ns7:Name"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionCode/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/ns1:TechnicalDomain/ns1:Name"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/TechnicalDomain/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/pfx:Component"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/Component/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/pfx:Hostname"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/HostName/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/pfx:Process"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/Process/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+                <Matches>
+                    <MatchString>
+                        <xsl:value-of select="$Start/Input/pfx:RuleFull/pfx:Service"/>
+                    </MatchString>
+                    <XPathVariable>
+                        <xsl:value-of select="concat('Exception/',$_globalVariables/ns6:GlobalVariables/StaticVariables/ConfigurationObjects/Service/XPath)"/>
+                    </XPathVariable>
+                </Matches>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GenerateXpathTest</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GenerateXpathTest</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

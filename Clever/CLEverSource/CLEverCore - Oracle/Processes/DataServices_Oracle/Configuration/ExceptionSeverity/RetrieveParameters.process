@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://www.tibco.com/CLEver/namespace/Custom" xmlns:pfx2="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:pfx3="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns3="http://www.tibco.com/CLEver/Exception" xmlns:ns4="http://www.tibco.com/CLEver/InternalException">
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExceptionSeverity" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExceptionSeverity.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/Configuration/ExceptionSeverity/RetrieveParameters.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ID" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="Version" type="xsd:string"/>
+                    <xsd:element ref="pfx3:Security"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>99</pd:startY>
+    <pd:returnBindings>
+        <pfx3:Parameters>
+            <xsl:for-each select="tib:tokenize($_globalVariables/ns1:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionSeverity/Parameters, &quot;,&quot;)">
+                <pfx3:Parameter>
+                    <pfx3:Name>
+                        <xsl:value-of select="current()"/>
+                    </pfx3:Name>
+                    <pfx3:Value>
+                        <xsl:value-of select="$Retrieve-Parameters/resultSet/Record[EXCEPTIONSEVERITYID=$Start/Input/ID and NAME=current() ]/VALUE"/>
+                    </pfx3:Value>
+                </pfx3:Parameter>
+            </xsl:for-each>
+        </pfx3:Parameters>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:Parameters"/>
+    <pd:endX>765</pd:endX>
+    <pd:endY>117</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="ValidateOperation">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>140</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/Processes/DataServices/Security/SecurityEntryPoint/ValidateOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ValidateOperation>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+                <pfx3:Object>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionSeverity/Name"/>
+                </pfx3:Object>
+                <pfx3:Operation>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/StaticVariables/Operations/Retrieve"/>
+                </pfx3:Operation>
+                <pfx3:Version>
+                    <xsl:value-of select="$Start/Input/Version"/>
+                </pfx3:Version>
+            </pfx3:ValidateOperation>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Transactional group">
+        <pd:type>com.tibco.pe.core.TransactionGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>200</pd:x>
+        <pd:y>3</pd:y>
+        <pd:width>357</pd:width>
+        <pd:height>193</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>transactionGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:transactionType>JDBCTransaction</pd:transactionType>
+            <pd:includeCheckpoint>false</pd:includeCheckpoint>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Retrieve Parameters</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Retrieve Parameters</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Retrieve Parameters">
+            <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+            <pd:x>445</pd:x>
+            <pd:y>109</pd:y>
+            <config>
+                <timeout>%%Connections/DB/Oracle/MainStorage/ExecutionTimeOut%%</timeout>
+                <commit>false</commit>
+                <maxRows>0</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <statement>Select ExceptionSeverityID,Name, Value From  CFG_ExceptionSeverity_PROP where ExceptionSeverityID=?</statement>
+                <jdbcSharedConfig>/Shared Resources/Connections/DB/Oracle/MainStorage.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>ID</parameterName>
+                        <dataType>INTEGER</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+                <QueryOutputCachedSchemaColumns>EXCEPTIONSEVERITYID</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>NAME</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>VALUE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            </config>
+            <pd:inputBindings>
+                <jdbcQueryActivityInput>
+                    <ID>
+                        <xsl:choose>
+                            <xsl:when test="exists($Start/Input/ID)">
+                                <xsl:value-of select="$Start/Input/ID"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </ID>
+                </jdbcQueryActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ValidateOperation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ValidateOperation</pd:from>
+        <pd:to>Transactional group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Transactional group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

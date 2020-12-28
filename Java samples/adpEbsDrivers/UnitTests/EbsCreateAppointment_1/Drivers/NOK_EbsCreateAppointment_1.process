@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.ziggo.nl/Integration/ESB/Generic/CMM/3.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsGetAvailableAppointmentSlots/1/Schema" xmlns:ns3="http://www.ziggo.nl/Integration/ESB/Services/ServiceRequest/EbsCreateAppointment/1/Schema" xmlns:ZiggoCustom="java://com.tibco.psg.bwutils.BWCustomFunctions">
+    <pd:name>UnitTests/EbsCreateAppointment_1/Drivers/NOK_EbsCreateAppointment_1.process</pd:name>
+    <pd:description>GenerateUpdateAppointmentError</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>65</pd:startX>
+    <pd:startY>69</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>520</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1387355500932</pd:targetNamespace>
+    <pd:activity name="Call EbsCreateAppointment_1_impl">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>370</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <processName>/Functionalities/EbsCreateAppointment_1/Implementation/EbsCreateAppointment_1_impl.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns3:Request>
+                <ns2:header>
+                    <ns2:cmmVersion>
+                        <xsl:value-of select="'3'"/>
+                    </ns2:cmmVersion>
+                    <ns2:messageContext>
+                        <ns2:businessTransactionID>
+                            <xsl:value-of select="'EBSCRM_CreateServiceRequest01220'"/>
+                        </ns2:businessTransactionID>
+                        <ns2:externalCorrelationID>
+                            <xsl:value-of select="'8d57ecf6-103b-4baf-bd46-ba0592ed770f'"/>
+                        </ns2:externalCorrelationID>
+                        <ns2:sentTimestamp>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns2:sentTimestamp>
+                    </ns2:messageContext>
+                    <ns2:sourceContext>
+                        <ns2:host>
+                            <xsl:value-of select="BW:getHostName()"/>
+                        </ns2:host>
+                        <ns2:application>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/adpEbs/Common/ServiceInvocation/Application"/>
+                        </ns2:application>
+                        <ns2:operation>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/adpEbs/Common/ServiceInvocation/EbsGetAvailableAppointmentSlots_1/operationName"/>
+                        </ns2:operation>
+                    </ns2:sourceContext>
+                </ns2:header>
+                <ns3:body>
+                    <ns3:serviceRequest>
+                        <ns3:ID>
+                            <xsl:attribute name="keyField">
+                                <xsl:value-of select="'cdm:serviceRequestID'"/>
+                            </xsl:attribute>
+                            <xsl:value-of select="'EBSCRM_CreateServiceRequest01220'"/>
+                        </ns3:ID>
+                        <ns3:customer>
+                            <ns3:ID>
+                                <xsl:attribute name="keyField">
+                                    <xsl:value-of select="'cdm:customerID'"/>
+                                </xsl:attribute>
+                                <xsl:value-of select="'20000555'"/>
+                            </ns3:ID>
+                        </ns3:customer>
+                        <ns3:products>
+                            <ns3:product>
+                                <ns3:ID>
+                                    <xsl:attribute name="keyField">
+                                        <xsl:value-of select="'cdm:productID'"/>
+                                    </xsl:attribute>
+                                    <xsl:value-of select="'productID'"/>
+                                </ns3:ID>
+                            </ns3:product>
+                        </ns3:products>
+                        <ns3:requestedTimePeriod>
+                            <ns3:startDateTime>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns3:startDateTime>
+                            <ns3:endDateTime>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns3:endDateTime>
+                        </ns3:requestedTimePeriod>
+                    </ns3:serviceRequest>
+                </ns3:body>
+            </ns3:Request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetVariable">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>197</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <variableConfig>/UnitTests/EbsGetAvailableAppointmentSlots_1/Resources/Shared Variable.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <unitTestType>
+                <xsl:value-of select="'OK'"/>
+            </unitTestType>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call EbsCreateAppointment_1_impl</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetVariable</pd:from>
+        <pd:to>Call EbsCreateAppointment_1_impl</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

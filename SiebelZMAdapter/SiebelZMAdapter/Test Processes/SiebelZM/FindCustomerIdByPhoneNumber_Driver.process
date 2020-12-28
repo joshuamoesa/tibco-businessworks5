@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/FindCustomerIdByPhoneNumber.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Response/FindCustomerIdByPhoneNumber.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0386_FindCustomerIdByPhoneNumber/1.0/Request">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/FindCustomerIdByPhoneNumber.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Request/FindCustomerIdByPhoneNumber.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Response/FindCustomerIdByPhoneNumber.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Response/FindCustomerIdByPhoneNumber.xsd"/>
+    <pd:name>SiebelZMAdapter/Test Processes/SiebelZM/FindCustomerIdByPhoneNumber_Driver.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>448</pd:endX>
+    <pd:endY>68</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVRequestActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVRequestActivity</pd:resourceType>
+        <pd:x>292</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsXMLCompliantFieldNamesOutput>false</wantsXMLCompliantFieldNamesOutput>
+            <subject>%%Env%%.FIXED.CRM.%%SiebelZMAdapter/ComponentId%%.Request.FindCustomerIdByPhoneNumber.1</subject>
+            <sharedChannel>/Common/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <inputXsdString ref="pfx:FindCustomerIdByPhoneNumber"/>
+            <outputXsdString ref="pfx2:FindCustomerIdByPhoneNumber"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="&quot;961&quot;"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                        </ns1:NAME>
+                        <ns1:FID>
+                            <xsl:value-of select="&quot;030-450000&quot;"/>
+                        </ns1:FID>
+                        <ns1:MID>
+                            <xsl:value-of select="&quot;961.30&quot;"/>
+                        </ns1:MID>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;Request&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/SiebelZMAdapter/ComponentVersion"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env, &quot;.FIXED.CRM.SiebelZmAdapter.Request.FindCustomerIdByPhoneNumber.1&quot;)"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                    </ns1:CMH>
+                    <ns2:BODY>
+                        <PHONE_NUMBER>
+                            <UNFORMATTED>
+                                <xsl:value-of select="&quot;030-450000&quot;"/>
+                            </UNFORMATTED>
+                        </PHONE_NUMBER>
+                    </ns2:BODY>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns3="http://xmlns.tibco.com/body" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://schemas.tibco.com/bw/plugins/mail/5.0/mailExceptions" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:pfx3="http://xmlns.kpn.com/fixed/cdcadapter/response/ValidateCustomer.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/cdcadapter/response/ValidateBillRecipient.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/UCMAdapter/Response/UpdateAccountUCM.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/SFAAdapter/Response/UpdateAccountSFA.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/cdcadapter/response/ValidateCustomer.xsd" schemaLocation="/XSDSchemas/CDCAdapter/Response/ValidateCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/cdcadapter/response/ValidateBillRecipient.xsd" schemaLocation="/XSDSchemas/CDCAdapter/Response/ValidateBillRecipient.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Response/UpdateAccountUCM.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Response/UpdateAccountUCM.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Response/UpdateAccountSFA.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Response/UpdateAccountSFA.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/Send Mail.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="MessageId" type="xsd:string"/>
+                    <xsd:element name="Body" type="xsd:string"/>
+                    <xsd:element name="Subject" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>73</pd:startX>
+    <pd:startY>107</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>530</pd:endX>
+    <pd:endY>118</pd:endY>
+    <pd:errorSchemas>
+        <Schema0 ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Send Mail">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>303</pd:x>
+        <pd:y>112</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>%%CRMServices/Mail/Host%%</host>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns2:mailActivityInput>
+                <from>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CRMServices/Mail/From"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CRMServices/Mail/To"/>
+                </to>
+                <cc>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CRMServices/Mail/CC"/>
+                </cc>
+                <bcc>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CRMServices/Mail/BCC"/>
+                </bcc>
+                <subject>
+                    <xsl:value-of select="$Start/ServiceIn/Subject"/>
+                </subject>
+                <ns3:bodyElement>
+                    <bodyText>
+                        <xsl:value-of select="tib:render-xml($Start/ServiceIn/Body, false(),true())"/>
+                    </bodyText>
+                </ns3:bodyElement>
+            </ns2:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>304</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <faultName>Schema0</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ActivityInput>
+                <xsl:if test="$_error_Send-Mail/ActivityErrors/ns1:SendFailedException/msg">
+                    <message>
+                        <xsl:value-of select="$_error_Send-Mail/ActivityErrors/ns1:SendFailedException/msg"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$_error_Send-Mail/ActivityErrors/ns1:SendFailedException/msgCode">
+                    <messageCode>
+                        <xsl:value-of select="$_error_Send-Mail/ActivityErrors/ns1:SendFailedException/msgCode"/>
+                    </messageCode>
+                </xsl:if>
+                <data>
+                    <pfx2:Error>
+                        <xsl:copy-of select="$_error/ns4:ErrorReport"/>
+                    </pfx2:Error>
+                </data>
+            </pfx:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Mail Message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>202</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;CRMS-04020&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Start/ServiceIn/MessageId"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Start/ServiceIn/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Mail Notification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>434</pd:x>
+        <pd:y>44</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;CRMS-04021&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Start/ServiceIn/MessageId"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="&quot;Error Mail Send&quot;"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log Mail Message</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("CRMS-04020")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Mail Message</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>Log Mail Notification</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("CRMS-04021")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Mail Notification</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

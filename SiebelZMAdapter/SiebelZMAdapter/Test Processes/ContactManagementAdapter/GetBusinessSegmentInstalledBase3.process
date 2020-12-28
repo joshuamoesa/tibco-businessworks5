@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://engine.servicescanner.edgetech.nl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:PerformLineMeasurement" xmlns:pfx3="http://10.75.146.96/eai_NLD" xmlns:pfx4="http://xmlns.example.com/1185953248309" xmlns:pfx5="http://xmlns.kpn.com/fixed/SiebelZM/FindDocument.1/FindDocument.1Impl" xmlns:ns="http://www.siebel.com/xml/KZM%20Installed%20Assets" xmlns:pfx6="http://siebel.com/ExportInstalledBase">
+    <wsdl:import namespace="http://engine.servicescanner.edgetech.nl" location="/WSDL/ANNETAdapter/ServiceScanExecutionEngine.wsdl"/>
+    <wsdl:import namespace="http://siebel.com/ExportInstalledBase" location="/WSDL/GetBusinessSegmentInstalledBase.wsdl"/>
+    <pd:name>SiebelZMAdapter/Test Processes/ContactManagementAdapter/GetBusinessSegmentInstalledBase3.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>58</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <service>pfx6:KZM_spcAccount_spcAsset_spcExport</service>
+            <wsdlNamespaceRoot>http://siebel.com/ExportInstalledBase/KZM_spcAccount_spcAsset_spcExportImpl</wsdlNamespaceRoot>
+            <operation>KZM_spcAccount_spcAsset_spcExport</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <inputNamespace>http://InputMessageNamespace</inputNamespace>
+            <outputNamespace>http://OutputMessageNamespace</outputNamespace>
+            <faultNamespace>http://FaultMessageNamespace</faultNamespace>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>document/http://10.75.146.96/eai_NLD:KZM_spcAccount_spcAsset_spcexport</soapAction>
+            <sharedChannel>/SiebelZMAdapter/Test Resources/HTTP Connection.sharedhttp</sharedChannel>
+            <useBasicAuthentication>false</useBasicAuthentication>
+            <sharedChannels>
+                <httpChannel>
+                    <useBasicAuthentication>false</useBasicAuthentication>
+                </httpChannel>
+            </sharedChannels>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <httpURI/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>296</pd:endX>
+    <pd:endY>35</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>180</pd:x>
+        <pd:y>36</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx6:KZM_spcAccount_spcAsset_spcExport_Output>
+                    <pfx6:Error_spcCode>
+                        <xsl:value-of select="0"/>
+                    </pfx6:Error_spcCode>
+                    <pfx6:Error_spcMessage>
+                        <xsl:value-of select="''"/>
+                    </pfx6:Error_spcMessage>
+                    <pfx6:KZM_spcCKRNr>
+                        <xsl:value-of select="''"/>
+                    </pfx6:KZM_spcCKRNr>
+                    <pfx6:KZM_spcIntObj_spcCount>
+                        <xsl:value-of select="''"/>
+                    </pfx6:KZM_spcIntObj_spcCount>
+                    <ns:ListOfAssetMgmt-Asset-Header/>
+                    <pfx6:KZM_spcUse_spcTestMessage>
+                        <xsl:value-of select="''"/>
+                    </pfx6:KZM_spcUse_spcTestMessage>
+                    <pfx6:KZM_spcXMLDoc>
+                        <xsl:value-of select="''"/>
+                    </pfx6:KZM_spcXMLDoc>
+                    <pfx6:Object_spcId>
+                        <xsl:value-of select="''"/>
+                    </pfx6:Object_spcId>
+                    <pfx6:Process_spcInstance_spcId>
+                        <xsl:value-of select="''"/>
+                    </pfx6:Process_spcInstance_spcId>
+                    <pfx6:Siebel_spcOperation_spcObject_spcId>
+                        <xsl:value-of select="''"/>
+                    </pfx6:Siebel_spcOperation_spcObject_spcId>
+                </pfx6:KZM_spcAccount_spcAsset_spcExport_Output>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

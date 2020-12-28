@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0414_SendDocument/1.0/Request"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.kpn.com/EAI/fixed/0414_SendDocument/1.0/Request"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:simpleType name="emailAddress_type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(([a-zA-Z0-9_-])*\.([a-zA-Z0-9_-])+)+">
+				<xs:annotation>
+					<xs:documentation>Validates whether an string conforms to the RFC 2822 which describes (among others) e-mail addresses.</xs:documentation>
+				</xs:annotation>
+			</xs:pattern>
+			<xs:maxLength value="320">
+				<xs:annotation>
+					<xs:documentation>Maximum length of an email address according to RFC 2821 is 64 for the local part (mail box) and 255 for the global part (domain). With the extra space for the '@' character the total is 320.</xs:documentation>
+				</xs:annotation>
+			</xs:maxLength>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="houseNumber_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="houseNumberExtension_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="6"/>
+			<xs:minLength value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>This is the BODY object for KPN EAI service number 0414 - SendDocument version 1.0 Request message.</xs:documentation>
+			<xs:documentation>Automatically generated schema for service:'SendDocument', version:'1.0'</xs:documentation>
+			<xs:documentation>Generated on 2008-08-14 14:58:12Z</xs:documentation>
+			<xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+			<xs:documentation>Service ID is:'0414'</xs:documentation>
+			<xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+			<xs:documentation>KPN EAI message body class.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:annotation>
+					<xs:documentation>Artificial sequence to separate.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="REQUESTOR" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="APPLICATION_ID" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Identifier for application posting the request on behalf of a user.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="PASSWORD" type="xs:string" minOccurs="0"/>
+							<xs:element name="ROLE" type="xs:string" minOccurs="0"/>
+							<xs:element name="USERNAME" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ARCHIVE_INSTANCE_SELECTION" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="ROUTING_PROPERTY" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="NAME" type="xs:string" minOccurs="0"/>
+										<xs:element name="VALUE" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="TARGET_ARCHIVE_INSTANCE" type="xs:string" minOccurs="0"/>
+							<xs:element name="DOCUMENT_TYPE" type="xs:string" minOccurs="0"/>
+							<xs:element name="DOMAIN" type="xs:string" minOccurs="0"/>
+							<xs:element name="MARKET_SEGMENT" type="xs:string" minOccurs="0"/>
+							<xs:element name="PRODUCT_GROUP" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ADDRESS" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="PROPERTY_ADDRESS" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="CITY" type="xs:string" minOccurs="0"/>
+										<xs:element name="COUNTRY" type="xs:string" minOccurs="0"/>
+										<xs:element name="ADDRESS_DESCRIPTION" type="xs:string" minOccurs="0"/>
+										<xs:element name="HOUSE_NUMBER" type="tns:houseNumber_type" minOccurs="0"/>
+										<xs:element name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" minOccurs="0"/>
+										<xs:element name="ADDRESS_NAME" type="xs:string" minOccurs="0"/>
+										<xs:element name="POST_CODE" type="xs:string" minOccurs="0"/>
+										<xs:element name="STATE" type="xs:string" minOccurs="0"/>
+										<xs:element name="STREET_NAME" type="xs:string" minOccurs="0"/>
+										<xs:element name="ADDRESS_TYPE" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="UNFORMATTED_ADDRESS" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="ADDRESS_LINE" type="xs:string" minOccurs="0"/>
+										<xs:element name="ZIP_CITY_LINE" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="E_MAIL_ADDRESS" type="tns:emailAddress_type" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DOCUMENT_INFORMATION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="DOCUMENT_TYPE" type="xs:string" minOccurs="0"/>
+							<xs:element name="DOCUMENT_ID" type="xs:string" minOccurs="0"/>
+							<xs:element name="DOCUMENT_URL" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CONTACT" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="NAME" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="UNFORMATTED" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:annotation>
+														<xs:documentation>Artificial sequence to separate.</xs:documentation>
+													</xs:annotation>
+													<xs:element name="ENTRY" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CUSTOMER_ID" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="UNSPECIFIED" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Unspecified format of customer identification number</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CLIENT_KPN_RELATION_NUMBER" type="xs:string" minOccurs="0"/>
+										<xs:element name="CKR_ID" type="xs:string" minOccurs="0"/>
+										<xs:element name="MCCS_ID" type="xs:string" minOccurs="0"/>
+										<xs:element name="CUSTOMER_ID_TYPE" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SALUTATION" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

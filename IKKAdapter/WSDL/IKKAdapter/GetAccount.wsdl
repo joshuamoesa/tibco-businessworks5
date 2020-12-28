@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.GetAccount" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GetAccount" targetNamespace="urn:IKKAdapter.GetAccount">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.GetAccount">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/GetAccount.xsd"/>
+            <xsd:element name="GetAccountRequest" type="ikk:GetAccountRequest"/>
+            <xsd:element name="GetAccountResponse" type="ikk:GetAccountResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="GetAccountRequest">
+        <part element="ikk:GetAccountRequest" name="parameters"/>
+    </message>
+    <message name="GetAccountResponse">
+        <part element="ikk:GetAccountResponse" name="parameters"/>
+    </message>
+    <portType name="GetAccountPortType">
+        <operation name="GetAccount">
+            <input message="ikk:GetAccountRequest"/>
+            <output message="ikk:GetAccountResponse"/>
+        </operation>
+    </portType>
+    <binding name="GetAccountSoapBinding" type="ikk:GetAccountPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetAccount">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetAccountService">
+        <port binding="ikk:GetAccountSoapBinding" name="GetAccountSoap">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/GetAccount"/>
+        </port>
+    </service>
+</definitions>

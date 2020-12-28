@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="EcPsXsd_V0.2" xmlns:pfx2="http://webservices.kpn-lls.com/V0.2/MmspOrdering.wsdl">
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" location="/WSDL/EcnsPortingServices.wsdl"/>
+    <pd:name>EClipsAdapter/Test Processes/SubmitOutPortingRequestAnswer/Driver.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>118</pd:startX>
+    <pd:startY>115</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>468</pd:endX>
+    <pd:endY>111</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>285</pd:x>
+        <pd:y>114</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx:EcnsPortingServicesService</service>
+            <servicePort>StartPortingRequestAnswerHttpPort</servicePort>
+            <operation>StartPortingRequestAnswerOperation</operation>
+            <soapAction>""</soapAction>
+            <endpointURL>http://pwxsf2:6072/EClipsAdapter/Processes/SubmitOutPortingRequestAnswer</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns:EcnsStartPortingRequestAnswerReq>
+                    <ns:StartPortingRequestAnswerReqStruct>
+                        <ns:PortingId>
+                            <xsl:value-of select="'PORT-1234'"/>
+                        </ns:PortingId>
+                        <ns:Blocking>
+                            <xsl:value-of select="1"/>
+                        </ns:Blocking>
+                        <ns:WishDateTime>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:WishDateTime>
+                        <ns:NumberOfRepeats>
+                            <ns:NumberSerieStruct>
+                                <ns:StartOfSerie>
+                                    <xsl:value-of select="'acs'"/>
+                                </ns:StartOfSerie>
+                                <ns:EndOfSerie>
+                                    <xsl:value-of select="'asd'"/>
+                                </ns:EndOfSerie>
+                            </ns:NumberSerieStruct>
+                            <ns:BlockingCode>
+                                <xsl:value-of select="1234"/>
+                            </ns:BlockingCode>
+                            <ns:ProposedDateTime>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns:ProposedDateTime>
+                            <ns:Note>
+                                <xsl:value-of select="'NOTE'"/>
+                            </ns:Note>
+                        </ns:NumberOfRepeats>
+                    </ns:StartPortingRequestAnswerReqStruct>
+                </ns:EcnsStartPortingRequestAnswerReq>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0363_ExecuteLineMeasurement/1.0/Request"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.kpn.com/EAI/fixed/0363_ExecuteLineMeasurement/1.0/Request"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:simpleType name="phoneNumberAreaCode_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="5"/>
+			<xs:pattern value="\d*"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:minLength value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberSubscriberNumber_type">
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:minLength value="1"/>
+			<xs:maxLength value="15"/>
+			<xs:pattern value="\d+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="serviceInstanceIdentifier_type">
+		<xs:annotation>
+			<xs:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>This is the BODY object for KPN EAI service number 0363 - ExecuteLineMeasurement version 1.0 Request message.</xs:documentation>
+			<xs:documentation>Automatically generated schema for service:'ExecuteLineMeasurement', version:'1.0'</xs:documentation>
+			<xs:documentation>Generated on 2007-10-08 14:07:14Z</xs:documentation>
+			<xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+			<xs:documentation>Service ID is:'0363'</xs:documentation>
+			<xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+			<xs:documentation>KPN EAI message body class.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:annotation>
+					<xs:documentation>Artificial sequence to separate.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="PHONE_NUMBER" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="AREA_CODE" type="tns:phoneNumberAreaCode_type"/>
+							<xs:element name="SUBSCRIBER_NUMBER" type="tns:phoneNumberSubscriberNumber_type"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TRANSPORT_CONFIGURATION" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="SERVICE_INSTANCE_ID" type="tns:serviceInstanceIdentifier_type" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

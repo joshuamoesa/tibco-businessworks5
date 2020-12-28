@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Response/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Notify/TestNotificationService.xsd"/>
+    <pd:name>Common/Template Processes/Template_Reply_TestRequestServiceJMS.process</pd:name>
+    <pd:startName>Receive JMS Request</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive JMS Request">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>77</pd:x>
+        <pd:y>137</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.Operations.TestComponent2.Request.TestRequestService.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>790</pd:endX>
+    <pd:endY>127</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Process Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>366</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <processName>/Common/Template Processes/Template_Main_TestRequestService.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <ReplyDestination>
+                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSReplyTo"/>
+                </ReplyDestination>
+                <Body>
+                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/Body"/>
+                </Body>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log JMS Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>221</pd:x>
+        <pd:y>46</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04054&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="eai:getMessageId($Receive-JMS-Request/ns2:ActivityOutput/Body)"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSDestination"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="concat(tib:render-xml($Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders, true(), true()),'&#xA;', tib:render-xml($Receive-JMS-Request/ns2:ActivityOutput/JMSProperties, true(), true()),'&#xA;', tib:render-xml($Receive-JMS-Request/ns2:ActivityOutput/OtherProperties, true(), true()))"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log JMS Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>508</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04056&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Process-Request/ServiceOut/Body/*/*[local-name()='CMH']/*[local-name()='TRACKING']/*[local-name()='MESSAGE_ID']"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSReplyTo"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($Process-Request/ServiceOut/Body/*, false(), true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send JMS Response">
+        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
+        <pd:x>663</pd:x>
+        <pd:y>126</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+                <EventSource>Receive JMS Request</EventSource>
+            </ConfigurableHeaders>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSExpiration">
+                    <JMSExpiration>
+                        <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSExpiration"/>
+                    </JMSExpiration>
+                </xsl:if>
+                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSPriority">
+                    <JMSPriority>
+                        <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSPriority"/>
+                    </JMSPriority>
+                </xsl:if>
+                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSCorrelationID">
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSCorrelationID"/>
+                    </JMSCorrelationID>
+                </xsl:if>
+                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSType">
+                    <JMSType>
+                        <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSType"/>
+                    </JMSType>
+                </xsl:if>
+                <JMSProperties>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupID">
+                        <ns2:JMSXGroupID>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupID"/>
+                        </ns2:JMSXGroupID>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupSeq">
+                        <ns2:JMSXGroupSeq>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupSeq"/>
+                        </ns2:JMSXGroupSeq>
+                    </xsl:if>
+                </JMSProperties>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/JMS_TIBCO_MSG_TRACE">
+                        <JMS_TIBCO_MSG_TRACE>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/JMS_TIBCO_MSG_TRACE"/>
+                        </JMS_TIBCO_MSG_TRACE>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/Service">
+                        <Service>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/Service"/>
+                        </Service>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/Selector">
+                        <Selector>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/Selector"/>
+                        </Selector>
+                    </xsl:if>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Process-Request/ServiceOut/Body/*, false(), true())"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>368</pd:x>
+        <pd:y>294</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <ns4:Errors>
+                    <xsl:choose>
+                        <xsl:when test="$_error_Process-Request">
+                            <xsl:copy-of select="$_error_Process-Request/ns4:ErrorReply/ns4:Errors/ns4:Error"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns4:Error>
+                                <ns4:MsgCode>
+                                    <xsl:value-of select="&quot;EAI-03059&quot;"/>
+                                </ns4:MsgCode>
+                                <ns4:Params>
+                                    <xsl:value-of select="&quot;FILLINSERVICENAME&quot;"/>
+                                </ns4:Params>
+                                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/Body">
+                                    <ns4:MsgId>
+                                        <xsl:value-of select="eai:getMessageId($Receive-JMS-Request/ns2:ActivityOutput/Body)"/>
+                                    </ns4:MsgId>
+                                </xsl:if>
+                                <ns3:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </ns3:ErrorReport>
+                                <xsl:choose>
+                                    <xsl:when test="$_error_Send-JMS-Response">
+                                        <ns4:ActivityError>
+                                            <xsl:copy-of select="$_error_Send-JMS-Response/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error_Send-JMS-Response/ActivityErrors/@*"/>
+                                            <xsl:copy-of select="$_error_Send-JMS-Response/ActivityErrors/node()"/>
+                                        </ns4:ActivityError>
+                                    </xsl:when>
+                                </xsl:choose>
+                            </ns4:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <ns4:Error>
+                        <ns4:MsgCode>
+                            <xsl:value-of select="&quot;EAI-03011&quot;"/>
+                        </ns4:MsgCode>
+                        <xsl:choose>
+                            <xsl:when test="$Receive-JMS-Request/ns2:ActivityOutput/Body">
+                                <ns4:Params>
+                                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/Body"/>
+                                </ns4:Params>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <ns4:Params>
+                                    <xsl:value-of select="&quot;&quot;"/>
+                                </ns4:Params>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/Body">
+                            <ns4:MsgId>
+                                <xsl:value-of select="eai:getMessageId($Receive-JMS-Request/ns2:ActivityOutput/Body)"/>
+                            </ns4:MsgId>
+                        </xsl:if>
+                    </ns4:Error>
+                </ns4:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="IgnoreErr">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>786</pd:x>
+        <pd:y>292</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Send JMS Error Response">
+        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
+        <pd:x>654</pd:x>
+        <pd:y>300</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+                <EventSource>Receive JMS Request</EventSource>
+            </ConfigurableHeaders>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSExpiration">
+                    <JMSExpiration>
+                        <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSExpiration"/>
+                    </JMSExpiration>
+                </xsl:if>
+                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSPriority">
+                    <JMSPriority>
+                        <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSPriority"/>
+                    </JMSPriority>
+                </xsl:if>
+                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSCorrelationID">
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSCorrelationID"/>
+                    </JMSCorrelationID>
+                </xsl:if>
+                <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSType">
+                    <JMSType>
+                        <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSType"/>
+                    </JMSType>
+                </xsl:if>
+                <JMSProperties>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupID">
+                        <ns2:JMSXGroupID>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupID"/>
+                        </ns2:JMSXGroupID>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupSeq">
+                        <ns2:JMSXGroupSeq>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSProperties/ns2:JMSXGroupSeq"/>
+                        </ns2:JMSXGroupSeq>
+                    </xsl:if>
+                </JMSProperties>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/JMS_TIBCO_MSG_TRACE">
+                        <JMS_TIBCO_MSG_TRACE>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/JMS_TIBCO_MSG_TRACE"/>
+                        </JMS_TIBCO_MSG_TRACE>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/Service">
+                        <Service>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/Service"/>
+                        </Service>
+                    </xsl:if>
+                    <xsl:if test="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/Selector">
+                        <Selector>
+                            <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/OtherProperties/Selector"/>
+                        </Selector>
+                    </xsl:if>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($_error_Process-Request/ns4:ErrorReply/ns4:Body/*, false(), true())"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log JMS Error Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>504</pd:x>
+        <pd:y>406</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04056&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$_error_Process-Request/ns4:ErrorReply/ns4:Body/*/*[local-name()='CMH']/*[local-name()='TRACKING']/*[local-name()='MESSAGE_ID']"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSReplyTo"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($_error_Process-Request/ns4:ErrorReply/ns4:Body/*, false(), true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Process Request</pd:from>
+        <pd:to>Log JMS Response</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("EAI-04056")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Request</pd:from>
+        <pd:to>Process Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Response</pd:from>
+        <pd:to>Send JMS Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Request</pd:from>
+        <pd:to>Log JMS Request</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("EAI-04054")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send JMS Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Request</pd:from>
+        <pd:to>Process Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process Request</pd:from>
+        <pd:to>Send JMS Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process Request</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Request</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send JMS Response</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IgnoreErr</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log error</pd:from>
+        <pd:to>Send JMS Error Response</pd:to>
+        <pd:xpathDescription>No Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($_error_Process-Request/ns4:ErrorReply/ns4:Body) and not(eai:isTraceOn("EAI-04056"))</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send JMS Error Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send JMS Error Response</pd:from>
+        <pd:to>IgnoreErr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log error</pd:from>
+        <pd:to>Log JMS Error Response</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($_error_Process-Request/ns4:ErrorReply/ns4:Body) and eai:isTraceOn("EAI-04056")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Error Response</pd:from>
+        <pd:to>Send JMS Error Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

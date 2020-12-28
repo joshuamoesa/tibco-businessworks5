@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by M. Claus (KPN Telecom) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="../Common/Common_Types.xsd"/>
+	<xsd:include schemaLocation="../Unallocated/Unallocated_Types.xsd"/>
+	<xsd:group name="ProductGroup_Chorda_Sni">
+		<xsd:annotation>
+			<xsd:documentation>This productgroup is cureently experimental</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="ACCESS_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:annotation>
+							<xsd:documentation>QUESTION: Are these parameters supposed to be for access onlyor also for voice, internet access? What about fiber or other forms of leasedlines?</xsd:documentation>
+						</xsd:annotation>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="DELIVERY_ADDRESS" type="Address_Type"/>
+						<xsd:element name="ACCESS_TYPE">
+							<xsd:annotation>
+								<xsd:documentation>(Type of access: Shared, NonShared)</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:enumeration value="Shared"/>
+									<xsd:enumeration value="NonShared"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="CURRENT_PHONE_NUMBER" type="PhoneNumber_Type" minOccurs="0"/>
+						<xsd:element name="DSLTYPE">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:enumeration value="ADSL2+_POTS"/>
+									<xsd:enumeration value="ADSL2+_ISDN"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="CURRENT_LINE_TYPE">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:enumeration value="PSTN"/>
+									<xsd:enumeration value="ISDN"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="ISRA_KEY" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Type of entry point</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="XDF_KEY" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="NUMBER_OF_CONCURRENT_CALLS" type="xsd:integer" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Required for bandwidth calculation</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="WHOLESALE_NEW_LINE">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:boolean"/>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="TERMINATE_VOICE">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:boolean"/>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="MIGRATE_TELCO">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:boolean"/>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="PARTY" type="Party_Type"/>
+						<xsd:element name="INSTALLATION_PERIOD" type="PartOfDayPeriod_Type"/>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="INTERNET_ACCESS_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID_ACCESS" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID_ACCESS" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="DOWNLOAD_SPEED" type="BinarySpeedQuantity_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Required for bandwidth calculation</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="UPLOAD_SPEED" type="BinarySpeedQuantity_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Required for bandwidth calculation</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="MIN_DOWNLOAD_SPEED" type="BinarySpeedQuantity_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Required for bandwidth calculation</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="MIN_UPLOAD_SPEED" type="BinarySpeedQuantity_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Required for bandwidth calculation</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="OVER_BOOKING" type="BinarySpeedQuantity_Type" minOccurs="0"/>
+						<xsd:element name="CONTACT" minOccurs="3" maxOccurs="3">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="PARTY" type="PartyId_Type"/>
+									<xsd:element name="ADDRESS" type="Address_Type"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="CONTRACT">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:positiveInteger">
+									<xsd:enumeration value="1"/>
+									<xsd:enumeration value="2"/>
+									<xsd:enumeration value="3"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="IP_ADDRESSES_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID_INTERNET_ACCESS" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID_INTERNET_ACCESS" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="NUMBER_OF_IP_ADDRESSES" type="xsd:positiveInteger"/>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="VOICE_ACCESS_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID_ACCESS" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID_ACCESS" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="NUMBER_OF_CONCURRENT_CALLS" type="xsd:positiveInteger"/>
+						<xsd:element name="WAP_ID" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="WAPVCI" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="WAPVPI" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ROUTER_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="RESOURCE" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="SERVICE" type="Service_Type"/>
+									<xsd:choice>
+										<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+											<xsd:annotation>
+												<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SERVICE_ID" type="xsd:integer">
+											<xsd:annotation>
+												<xsd:documentation>Only valid in case of change order</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:choice>
+										<xsd:element name="SUB_ORDER_ID_ACCESS" type="xsd:string">
+											<xsd:annotation>
+												<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SERVICE_ID_ACCESS" type="xsd:integer">
+											<xsd:annotation>
+												<xsd:documentation>Only valid in case of change order</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:element name="ACTION" type="xsd:string"/>
+									<xsd:element name="ROUTER_TYPE" type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation>The type of router supplied</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="MANAGED">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:boolean"/>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="INSTALLATION">
+										<xsd:annotation>
+											<xsd:documentation>Will installation be done by a mechanic </xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:boolean"/>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="BY_MAIL">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:boolean"/>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="WIFI_SUPPORT">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:boolean"/>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="FIREWALL_SUPPORT">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:boolean"/>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="PROTOCOL" type="xsd:string" minOccurs="0"/>
+									<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="INTERNET_DOMAIN_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="DOMAIN_NAME" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The domain name the customer wants to order such as microsoft.com</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PORTATION_REQUIRED" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation>True if the domainname must be transferred from another provider/host/registrar</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="WEB_SPACE_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>(Was FunctionalOrderWebSpace)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID_DOMAIN" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID_DOMAIN" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="WEB_SPACE" type="BinarySizeQuantity_Type"/>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="EMAILBOX_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>(Was FunctionalOrderMail)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="RESOURCE" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="SERVICE" type="Service_Type"/>
+									<xsd:choice>
+										<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+											<xsd:annotation>
+												<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SERVICE_ID" type="xsd:integer">
+											<xsd:annotation>
+												<xsd:documentation>Only valid in case of change order</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:choice>
+										<xsd:element name="SUB_ORDER_ID_DOMAIN" type="xsd:string">
+											<xsd:annotation>
+												<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SERVICE_ID_DOMAIN" type="xsd:integer">
+											<xsd:annotation>
+												<xsd:documentation>Only valid in case of change order</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:element name="ACTION" type="xsd:string"/>
+									<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+									<xsd:element name="NUMBER_OF_MAILBOXES" type="xsd:positiveInteger" minOccurs="0"/>
+									<xsd:element name="SIZE_LIMIT" type="BinarySizeQuantity_Type"/>
+									<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ONLINE_REMOTE_BACKUP_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>(Was FunctionalOrderORB)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="NUMBER_OF_SYSTEMS" type="xsd:positiveInteger"/>
+						<xsd:element name="DISK_SPACE" minOccurs="0" maxOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Still not sure whether this is obsolete</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="EFT_OVER_IP_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>(Was FunctionalOrderPINNENoIP) EFT stands for Electronic Fund Transfer.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="IP_CENTREX_PBX">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="PBX_ID" type="xsd:string"/>
+						<xsd:element name="CSC_USERNAME" type="xsd:string"/>
+						<xsd:element name="CSC_PASSWORD" type="xsd:string"/>
+						<xsd:element name="NUMBER_OF_SEATS" type="xsd:integer"/>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PHONENUMBER_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID_PBX" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID_PBX" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="PACKAGER" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>This needs to be adopted from the ECLIPS definitions</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType/>
+						</xsd:element>
+						<xsd:element name="RESOURCE" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="PORTATION_REQUIRED" type="xsd:boolean">
+										<xsd:annotation>
+											<xsd:documentation>True if the phonenumber must be transferred from another provider/host/registrar</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:choice>
+										<xsd:element name="PHONE_NUMBER_RANGE" type="PhoneNumberRange_Type">
+											<xsd:annotation>
+												<xsd:documentation>Multiple phonenumbers in a continuous block</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PHONE_NUMBER" type="PhoneNumber_Type">
+											<xsd:annotation>
+												<xsd:documentation>Single phone number.</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:element name="NUMBER_TYPE" minOccurs="0">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:enumeration value="Geografisch"/>
+												<xsd:enumeration value="Nomadisch"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="POST_CODE" type="Postcode_Type"/>
+									<xsd:element name="NUMBER_IN_RANGE" type="xsd:integer" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="VOICEPACKAGE_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" type="Service_Type"/>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID_PBX" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID_PBX" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:choice>
+							<xsd:element name="SUB_ORDER_ID_SITE" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SERVICE_ID_SITE" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Only valid in case of change order</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="ACTION" type="xsd:string"/>
+						<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+						<xsd:element name="PBX_ID" type="xsd:string"/>
+						<xsd:element name="PACKAGE" type="xsd:string"/>
+						<xsd:element name="LICENSES" type="xsd:integer"/>
+						<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="EQUIPMENT_PRODUCT">
+				<xsd:annotation>
+					<xsd:documentation>(Was FunctionalOrderEquipment)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="RESOURCE" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="SERVICE" type="Service_Type"/>
+									<xsd:choice>
+										<xsd:element name="SUB_ORDER_ID" type="xsd:string">
+											<xsd:annotation>
+												<xsd:documentation>Suborderid to be referenced in other segments</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SERVICE_ID" type="xsd:integer">
+											<xsd:annotation>
+												<xsd:documentation>Only valid in case of change order</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:element name="ACTION"/>
+									<xsd:element name="REQUESTED_DELIVERY_DATE" type="xsd:dateTime" minOccurs="0"/>
+									<xsd:element name="EQUIPMENT_TYPE" type="xsd:string"/>
+									<xsd:element name="QUANTITY" type="xsd:positiveInteger"/>
+									<xsd:element name="DELIVERY_ADDRESS" type="Party_Type" minOccurs="0"/>
+									<xsd:element name="INSTALLATION">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:boolean"/>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="BY_MAIL">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:boolean"/>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="ANY" type="AnyData_Type" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SUBSCRIBER_PRODUCT"/>
+		</xsd:choice>
+	</xsd:group>
+</xsd:schema>

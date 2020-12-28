@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0074.GetCustomerPaymentDetails.1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://xmlns.kpn.com/EAI/fixed/0074_GetCustomerPaymentDetails/1.0/Request" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/0074_GetCustomerPaymentDetails/1.0/Response" xmlns:ns3="http://xmlns.kpn.com/common/soap/ResultStatus.xsd" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:ns7="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:pfx="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0397.GetCustomerPaymentBehaviour.1" xmlns:ns8="http://xmlns.kpn.com/EAI/fixed/0397_GetCustomerPaymentBehaviour/1.0/Request" xmlns:ns9="http://xmlns.kpn.com/EAI/fixed/0397_GetCustomerPaymentBehaviour/1.0/Response" xmlns:pfx2="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0407.HoldCollections.1" xmlns:ns10="http://xmlns.kpn.com/EAI/fixed/0407_HoldCollections/1.0/Request" xmlns:ns11="http://xmlns.kpn.com/EAI/fixed/0407_HoldCollections/1.0/Response" xmlns:pfx3="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0408.CreateCustomerAGOP.1" xmlns:ns12="http://xmlns.kpn.com/EAI/fixed/0132_ CreateCustomerAGOP/1.0/Request" xmlns:ns13="http://xmlns.kpn.com/EAI/fixed/0132_CreateCustomerAGOP/1.0/Response" xmlns:ns14="http://xmlns.kpn.com/EAI/fixed/0292_CreateCustomerAGOP/1.0/Response" xmlns:pfx4="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0132.CreateCustomerAGOP.1">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0074_GetCustomerPaymentDetails/1.0/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0074_GetCustomerPaymentDetails_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0397_GetCustomerPaymentBehaviour/1.0/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0397_GetCustomerPaymentBehaviour_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0407_HoldCollections/1.0/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0407_HoldCollections_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0132_CreateCustomerAGOP/1.0/Response" schemaLocation="/XSDSchemas/CustomerServices/Imported/0132_CreateCustomerAGOP_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/EAI/fixed/0292_CreateCustomerAGOP/1.0/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0292_CreateCustomerAGOP_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" schemaLocation="/XSDSchemas/WSS/oasis-200401-wss-wssecurity-secext-1.0.xsd"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0074.GetCustomerPaymentDetails.1" location="/WSDL/S0074.GetCustomerPaymentDetails.1.wsdl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0397.GetCustomerPaymentBehaviour.1" location="/WSDL/S0397.GetCustomerPaymentBehaviour.1.wsdl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0407.HoldCollections.1" location="/WSDL/S0407.HoldCollections.1.wsdl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0408.CreateCustomerAGOP.1" location="/WSDL/S0408.CreateCustomerAGOP.1.wsdl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0132.CreateCustomerAGOP.1" location="/WSDL/S0132.CreateCustomerAGOP.1.wsdl"/>
+    <pd:name>GenericSOAPGateway/Processes/Services/S0132.CreateCustomerAGOP.1.SOAPHandler.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx4:S0132.CreateCustomerAGOP.1.Request"/>
+    <pd:startX>151</pd:startX>
+    <pd:startY>73</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$Call_Main/Output/BodyContainer/*" element="ns14:BODY"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <pfx4:S0132.CreateCustomerAGOP.1.Response>
+            <parameters>
+                <xsl:choose>
+                    <xsl:when test="exists($Call_InvalidDataHandler)">
+                        <pfx4:Response>
+                            <pfx4:RESULT>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/@*"/>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/node()"/>
+                            </pfx4:RESULT>
+                        </pfx4:Response>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx4:Response>
+                            <pfx4:RESULT>
+                                <xsl:copy-of select="$Call_Main/Output/Result/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Call_Main/Output/Result/@*"/>
+                                <xsl:copy-of select="$Call_Main/Output/Result/node()"/>
+                            </pfx4:RESULT>
+                            <xsl:for-each select="$Call_Main/Output/BodyContainer/ns14:BODY">
+                                <ns13:BODY>
+                                    <xsl:for-each select="ns14:RESULT_STATUS">
+                                        <ns13:RESULT_STATUS>
+                                            <xsl:attribute name="ns1:STATUS">
+                                                <xsl:value-of select="@ns1:STATUS"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="@ns1:MSG_CODE">
+                                                <xsl:attribute name="ns1:MSG_CODE">
+                                                    <xsl:value-of select="@ns1:MSG_CODE"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:ERROR_CODE">
+                                                <xsl:attribute name="ns1:ERROR_CODE">
+                                                    <xsl:value-of select="@ns1:ERROR_CODE"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:ERROR_DESCRIPTION">
+                                                <xsl:attribute name="ns1:ERROR_DESCRIPTION">
+                                                    <xsl:value-of select="@ns1:ERROR_DESCRIPTION"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                        </ns13:RESULT_STATUS>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns14:CUSTOMER">
+                                        <ns13:CUSTOMER>
+                                            <ns13:CENTRAL_CUSTOMER_ID>
+                                                <xsl:value-of select="ns14:CENTRAL_CUSTOMER_ID"/>
+                                            </ns13:CENTRAL_CUSTOMER_ID>
+                                            <xsl:for-each select="ns14:DOUBLE">
+                                                <ns13:DOUBLE>
+                                                    <ns13:CENTRAL_CUSTOMER_ID>
+                                                        <xsl:value-of select="ns14:CENTRAL_CUSTOMER_ID"/>
+                                                    </ns13:CENTRAL_CUSTOMER_ID>
+                                                </ns13:DOUBLE>
+                                            </xsl:for-each>
+                                        </ns13:CUSTOMER>
+                                    </xsl:for-each>
+                                </ns13:BODY>
+                            </xsl:for-each>
+                        </pfx4:Response>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </parameters>
+        </pfx4:S0132.CreateCustomerAGOP.1.Response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx4:S0132.CreateCustomerAGOP.1.Response"/>
+    <pd:endX>447</pd:endX>
+    <pd:endY>70</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Call_Main">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>305</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <processName>/GenericSOAPGateway/Processes/CommonHandler.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx4:S0132.CreateCustomerAGOP.1.Request/headerparameters/ns6:Security/*" element="ns6:UsernameToken"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <Input>
+                <Operation>
+                    <xsl:value-of select="&quot;S0132.CreateCustomerAGOP.1&quot;"/>
+                </Operation>
+                <ServiceProvider>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/GenericSOAPGateway/ServicesProvider/CustomerServices"/>
+                </ServiceProvider>
+                <ServiceConsumer>
+                    <xsl:value-of select="$Start/pfx4:S0132.CreateCustomerAGOP.1.Request/headerparameters/ns6:Security/ns6:UsernameToken[1]/ns6:Username"/>
+                </ServiceConsumer>
+                <BodyContainer>
+                    <xsl:copy-of select="$Start/pfx4:S0132.CreateCustomerAGOP.1.Request/parameters/pfx4:Request/ns12:BODY"/>
+                </BodyContainer>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call_InvalidDataHandler">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>304</pd:x>
+        <pd:y>157</pd:y>
+        <config>
+            <processName>/GenericSOAPGateway/Processes/InvalidDataHandler.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call_InvalidDataHandler</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_InvalidDataHandler</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call_Main</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_Main</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pfx2="http://www.tibco.com/CLEver/FrontendServices/Security/Login/LoginInterfaceSpecs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:AdminSecurity="java://com.tibco.CLEver.Security.AdministratorSecurity" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file">
+    <xsd:import namespace="http://www.tibco.com/CLEver/FrontendServices/Security/Login/LoginInterfaceSpecs" schemaLocation="/Processes/FrontendServices/Security/Login/LoginInterfaceSpecs.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <pd:name>Processes/DataServices/Security/Login/Login.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:Execute_Login_Input"/>
+    <pd:startX>123</pd:startX>
+    <pd:startY>149</pd:startY>
+    <pd:returnBindings>
+        <pfx2:Execute_Login_Output>
+            <xsl:variable name="FetchedRoles" select="if($_globalVariables/ns:GlobalVariables/LoginMode = &quot;admin&quot;) then&#xA;concat(&quot;|&quot;,$CheckRoles-Administrator/root/Roles, &quot;|&quot;)&#xA;else&#xA;&quot;|CLEver_Configure|CLEver_ReadException|CLEver_ReadLogging|&quot;&#xA;"/>
+            <pfx:ApplicationRole>
+                <pfx:Roles>
+                    <xsl:if test="(tib:index-of($FetchedRoles, concat(&quot;|&quot;,$_globalVariables/ns:GlobalVariables/Security/AdminRoles/Read_Logging,&quot;|&quot;))!=-1)">
+                        <pfx:Role>
+                            <pfx:Name>
+                                <xsl:value-of select="'Transactional_Logging'"/>
+                            </pfx:Name>
+                            <pfx:SecurityInfo>
+                                <pfx:isCreatable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isCreatable>
+                                <pfx:isReadable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isReadable>
+                                <pfx:isUpdatable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isUpdatable>
+                                <pfx:isDeletable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isDeletable>
+                            </pfx:SecurityInfo>
+                        </pfx:Role>
+                    </xsl:if>
+                    <xsl:if test="(tib:index-of($FetchedRoles, concat(&quot;|&quot;,$_globalVariables/ns:GlobalVariables/Security/AdminRoles/Read_Exception,&quot;|&quot;))!=-1)">
+                        <pfx:Role>
+                            <pfx:Name>
+                                <xsl:value-of select="'Transactional_Exception'"/>
+                            </pfx:Name>
+                            <pfx:SecurityInfo>
+                                <pfx:isCreatable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isCreatable>
+                                <pfx:isReadable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isReadable>
+                                <pfx:isUpdatable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isUpdatable>
+                                <pfx:isDeletable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isDeletable>
+                            </pfx:SecurityInfo>
+                        </pfx:Role>
+                    </xsl:if>
+                    <xsl:if test="(tib:index-of($FetchedRoles, concat(&quot;|&quot;,$_globalVariables/ns:GlobalVariables/Security/AdminRoles/Configure,&quot;|&quot;))!=-1)">
+                        <pfx:Role>
+                            <pfx:Name>
+                                <xsl:value-of select="'Configure'"/>
+                            </pfx:Name>
+                            <pfx:SecurityInfo>
+                                <pfx:isCreatable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isCreatable>
+                                <pfx:isReadable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isReadable>
+                                <pfx:isUpdatable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isUpdatable>
+                                <pfx:isDeletable>
+                                    <xsl:value-of select="true()"/>
+                                </pfx:isDeletable>
+                            </pfx:SecurityInfo>
+                        </pfx:Role>
+                    </xsl:if>
+                </pfx:Roles>
+            </pfx:ApplicationRole>
+        </pfx2:Execute_Login_Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:Execute_Login_Output"/>
+    <pd:endX>559</pd:endX>
+    <pd:endY>146</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="CheckRoles Administrator">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>340</pd:x>
+        <pd:y>151</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Roles" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Roles>
+                    <xsl:value-of select="AdminSecurity:getRolesForUser($Start/pfx2:Execute_Login_Input/pfx:Security/pfx:UserName, $Start/pfx2:Execute_Login_Input/pfx:Security/pfx:Password)"/>
+                </Roles>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CheckRoles Administrator</pd:to>
+        <pd:xpathDescription>admin</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckRoles Administrator</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

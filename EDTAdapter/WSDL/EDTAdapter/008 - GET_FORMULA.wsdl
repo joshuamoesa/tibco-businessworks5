@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_FORMULA" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_FORMULA">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_FORMULA">
+			<xsd:element name="GetFormula" type="s:KSD_GetFormula"/>
+			<xsd:complexType name="KSD_GetFormula">
+				<xsd:sequence>
+					<xsd:element name="GUID" type="xsd:string"/>
+					<!-- EAI00001243 dateTime to string -->
+					<xsd:element name="troubleReportDetectionDateTime" type="xsd:string"/>
+					<!-- EAI00001243 integer to string -->
+					<xsd:element name="productTypeCode" type="xsd:string"/>
+					<xsd:element name="serviceHoursCode" type="xsd:string"/>
+					<!-- EAI00001243 integer to string -->
+					<xsd:element name="serviceResponseWindow" type="xsd:string"/>
+					<xsd:element name="troubleUrgencyId" type="xsd:string"/>
+					<xsd:element name="troubleUrgencyFlag" type="xsd:string"/>
+					<xsd:element name="externalCustomerOrderType" type="xsd:string"/>
+					<xsd:element name="repeatedTroubleFlag" type="xsd:string"/>
+					<!-- EAI00001243 dateTime to string -->
+					<xsd:element name="expectedResolutionDateTime" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetFormulaResponse" type="s:KSD_Formula"/>
+			<xsd:complexType name="KSD_Formula">
+				<xsd:sequence>
+					<xsd:element name="GUID" type="xsd:string"/>
+					<!-- EAI00001243 dateTime to string -->
+					<xsd:element name="deadlineDateTime" type="xsd:string"/>
+					<xsd:element name="formulaId" type="xsd:string"/>
+					<xsd:element name="TroubleReports" type="s:TroubleReport"/>
+					<xsd:element name="ERROR_CODE" type="xsd:string"/>
+					<xsd:element name="ERROR_DESCRIPTION" type="xsd:string"/>
+					<xsd:element name="STATUS_CODE" type="xsd:integer"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TroubleReport">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="TroubleReport" type="s:TroubleReportType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TroubleReportType">
+				<xsd:sequence>
+					<xsd:element name="formulaCode" type="xsd:string"/>
+					<xsd:element name="formulaDescription" type="xsd:string"/>
+					<!-- EAI00001243 integer to string -->
+					<xsd:element name="formulaLevel" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="GetFormulaRequestMsg">
+		<part name="parameters" element="s:GetFormula"/>
+	</message>
+	<message name="GetFormulaResponseMsg">
+		<part name="parameters" element="s:GetFormulaResponse"/>
+	</message>
+	<portType name="GET_FORMULAPortType">
+		<operation name="GetFormula">
+			<input message="s:GetFormulaRequestMsg"/>
+			<output message="s:GetFormulaResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="GET_FORMULASoapBinding" type="s:GET_FORMULAPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="GetFormula">
+			<soap:operation soapAction="urn:GET_FORMULA/GetFormula" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="GET_FORMULA_SERVICE">
+		<port name="GET_FORMULASoap" binding="s:GET_FORMULASoapBinding">
+			<soap:address location="http://localhost:48093/EDTAdapter/Processes/GetFormula"/>
+		</port>
+	</service>
+</wsdl:definitions>

@@ -1,0 +1,2005 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/CRMServices/Request/0426_UpsertContact.xsd" xmlns:ns="http://xmlns.kpn.com/fixed/UCMAdapter/Request/GetAccountHierarchy.xsd" xmlns:pfx2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://xmlns.kpn.com/fixed/SFAAdapter/Request/0430_UpsertContact.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/CRMServices/Response/0426_UpsertContact.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/UCMAdapter/Request/0430_UpsertContact.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/fixed/CDCAdapter/Response/0425_ValidateContact.xsd" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0425_ValidateContact/1.0/Response" xmlns:pfx6="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx7="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0426_UpsertContact/1.0/Response" xmlns:ns7="http://xmlns.kpn.com/fixed/UCMAdapter/Response/0430_UpsertContact.xsd" xmlns:ns8="http://xmlns.kpn.com/EAI/fixed/0430_UpsertContact/1.0/Response" xmlns:ns9="http://xmlns.kpn.com/EAI/fixed/0426_UpsertContact/1.0/Request" xmlns:ns10="http://xmlns.kpn.com/fixed/CDCAdapter/Request/0425_ValidateContact.xsd" xmlns:pfx8="http://xmlns.kpn.com/EAI/fixed/0425_ValidateContact/1.0/Request" xmlns:ns0="http://xmlns.kpn.com/EAI/fixed/0430_UpsertContact/1.0/Request">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Request/0426_UpsertContact.xsd" schemaLocation="/XSDSchemas/CRMServices/Request/0426_UpsertContact.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Request/0430_UpsertContact.xsd" schemaLocation="/XSDSchemas/UCMAdapter/Request/0430_UpsertContact.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Response/0426_UpsertContact.xsd" schemaLocation="/XSDSchemas/CRMServices/Response/0426_UpsertContact.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/Sub_UpsertContact_UpsertContact.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:UpsertContactRequest"/>
+                    <xsd:element name="ReplyDestination" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>130</pd:startX>
+    <pd:startY>212</pd:startY>
+    <pd:returnBindings>
+        <pfx4:UpsertContactResponse>
+            <ns1:CMH>
+                <ns1:ID>
+                    <xsl:value-of select="1048"/>
+                </ns1:ID>
+                <ns1:NAME>
+                    <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                </ns1:NAME>
+                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns1:CMH/ns1:FID">
+                    <ns1:FID>
+                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns1:CMH/ns1:FID"/>
+                    </ns1:FID>
+                </xsl:if>
+                <ns1:MID>
+                    <xsl:value-of select="&quot;1046.20&quot;"/>
+                </ns1:MID>
+                <ns1:PARADIGM>
+                    <xsl:value-of select="&quot;REQUEST&quot;"/>
+                </ns1:PARADIGM>
+                <ns1:OBJECT>
+                    <xsl:value-of select="&quot;CONTACT_PERSON&quot;"/>
+                </ns1:OBJECT>
+                <ns1:VERSION>
+                    <xsl:value-of select="&quot;1.0&quot;"/>
+                </ns1:VERSION>
+                <ns1:FROM>
+                    <xsl:attribute name="ns1:COMPONENT_ID">
+                        <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentId"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="ns1:COMPONENT_VERSION">
+                        <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentVersion"/>
+                    </xsl:attribute>
+                </ns1:FROM>
+                <ns1:TO>
+                    <xsl:attribute name="ns1:DESTINATION">
+                        <xsl:value-of select="$Start/root/ReplyDestination"/>
+                    </xsl:attribute>
+                </ns1:TO>
+                <ns1:TRACKING>
+                    <ns1:MESSAGE_ID>
+                        <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                    </ns1:MESSAGE_ID>
+                    <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF">
+                        <ns1:EXTERNAL_REF>
+                            <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF"/>
+                        </ns1:EXTERNAL_REF>
+                    </xsl:if>
+                    <xsl:copy-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:ITEM" copy-namespaces="no"/>
+                    <ns1:ITEM>
+                        <xsl:attribute name="ns1:APPINFO">
+                            <xsl:value-of select="concat($_globalVariables/ns3:GlobalVariables/CRMServices/ComponentDomain,'/',$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentId,'/',$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentVersion)"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:EVENT">
+                            <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:TIMESTAMP">
+                            <xsl:value-of select="tib:timestamp()"/>
+                        </xsl:attribute>
+                    </ns1:ITEM>
+                    <xsl:for-each select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:SEQUENCE_NO">
+                        <ns1:SEQUENCE_NO>
+                            <xsl:value-of select="."/>
+                        </ns1:SEQUENCE_NO>
+                    </xsl:for-each>
+                </ns1:TRACKING>
+            </ns1:CMH>
+            <xsl:choose>
+                <xsl:when test="exists($Map-Error-Response)">
+                    <xsl:copy-of select="$Map-Error-Response/pfx4:UpsertContactResponse/pfx4:RESULT_STATUS"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <pfx4:RESULT_STATUS>
+                        <xsl:attribute name="pfx7:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="pfx7:ERROR_DESCRIPTION">
+                            <xsl:value-of select="&quot;No Error&quot;"/>
+                        </xsl:attribute>
+                    </pfx4:RESULT_STATUS>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+                <xsl:when test="exists($Map-Error-Response/pfx4:UpsertContactResponse/ns6:BODY)">
+                    <xsl:copy-of select="$Map-Error-Response/pfx4:UpsertContactResponse/ns6:BODY"/>
+                </xsl:when>
+                <xsl:when test="exists($Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY)">
+                    <ns6:BODY>
+                        <ns6:CONTACT_PERSON>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_WARNING_COUNT">
+                                <ns6:VALIDATION_WARNING_COUNT>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_WARNING_COUNT"/>
+                                </ns6:VALIDATION_WARNING_COUNT>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_ERROR_COUNT">
+                                <ns6:VALIDATION_ERROR_COUNT>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_ERROR_COUNT"/>
+                                </ns6:VALIDATION_ERROR_COUNT>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_TOTAL_WARNING_COUNT">
+                                <ns6:VALIDATION_TOTAL_WARNING_COUNT>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_TOTAL_WARNING_COUNT"/>
+                                </ns6:VALIDATION_TOTAL_WARNING_COUNT>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_TOTAL_ERROR_COUNT">
+                                <ns6:VALIDATION_TOTAL_ERROR_COUNT>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_TOTAL_ERROR_COUNT"/>
+                                </ns6:VALIDATION_TOTAL_ERROR_COUNT>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_PERSON_ID">
+                                <ns6:CONTACT_PERSON_ID>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_PERSON_ID"/>
+                                </ns6:CONTACT_PERSON_ID>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:INITIALS">
+                                <ns6:INITIALS>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:INITIALS"/>
+                                </ns6:INITIALS>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME_PREFIX">
+                                <ns6:FAMILY_NAME_PREFIX>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME_PREFIX"/>
+                                </ns6:FAMILY_NAME_PREFIX>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME">
+                                <ns6:FAMILY_NAME>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME"/>
+                                </ns6:FAMILY_NAME>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME_POSTFIX">
+                                <ns6:FAMILY_NAME_POSTFIX>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME_POSTFIX"/>
+                                </ns6:FAMILY_NAME_POSTFIX>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:PREFERRED_NAME">
+                                <ns6:PREFERRED_NAME>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:PREFERRED_NAME"/>
+                                </ns6:PREFERRED_NAME>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:DATE_OF_BIRTH">
+                                <ns6:DATE_OF_BIRTH>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:DATE_OF_BIRTH"/>
+                                </ns6:DATE_OF_BIRTH>
+                            </xsl:if>
+                            <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:ACADEMIC_TITLE">
+                                <ns6:ACADEMIC_TITLE>
+                                    <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:ACADEMIC_TITLE"/>
+                                </ns6:ACADEMIC_TITLE>
+                            </xsl:if>
+                            <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM">
+                                <ns6:CONTACT_MEDIUM>
+                                    <xsl:if test="ns8:TELEPHONE">
+                                        <ns6:TELEPHONE>
+                                            <xsl:value-of select="ns8:TELEPHONE"/>
+                                        </ns6:TELEPHONE>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:FAX">
+                                        <ns6:FAX>
+                                            <xsl:value-of select="ns8:FAX"/>
+                                        </ns6:FAX>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:EMAIL_ADDRESS">
+                                        <ns6:EMAIL_ADDRESS>
+                                            <xsl:value-of select="ns8:EMAIL_ADDRESS"/>
+                                        </ns6:EMAIL_ADDRESS>
+                                    </xsl:if>
+                                    <xsl:for-each select="ns8:USAGE">
+                                        <ns6:USAGE>
+                                            <xsl:if test="ns8:SUPPRESS_ALL_EMAILS">
+                                                <ns6:SUPPRESS_ALL_EMAILS>
+                                                    <xsl:value-of select="ns8:SUPPRESS_ALL_EMAILS"/>
+                                                </ns6:SUPPRESS_ALL_EMAILS>
+                                            </xsl:if>
+                                        </ns6:USAGE>
+                                    </xsl:for-each>
+                                </ns6:CONTACT_MEDIUM>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_RESULT">
+                                <ns6:VALIDATION_RESULT>
+                                    <ns6:SEVERITY>
+                                        <xsl:value-of select="ns8:SEVERITY"/>
+                                    </ns6:SEVERITY>
+                                    <ns6:CODE>
+                                        <xsl:value-of select="ns8:CODE"/>
+                                    </ns6:CODE>
+                                    <ns6:DESCRIPTION>
+                                        <xsl:value-of select="ns8:DESCRIPTION"/>
+                                    </ns6:DESCRIPTION>
+                                </ns6:VALIDATION_RESULT>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:ADDRESS">
+                                <ns6:ADDRESS>
+                                    <xsl:if test="@language">
+                                        <xsl:attribute name="language">
+                                            <xsl:value-of select="@language"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:VALIDATION_WARNING_COUNT">
+                                        <ns6:VALIDATION_WARNING_COUNT>
+                                            <xsl:value-of select="ns8:VALIDATION_WARNING_COUNT"/>
+                                        </ns6:VALIDATION_WARNING_COUNT>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:VALIDATION_ERROR_COUNT">
+                                        <ns6:VALIDATION_ERROR_COUNT>
+                                            <xsl:value-of select="ns8:VALIDATION_ERROR_COUNT"/>
+                                        </ns6:VALIDATION_ERROR_COUNT>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:STREET_NAME">
+                                        <ns6:STREET_NAME>
+                                            <xsl:if test="ns8:STREET_NAME/@namingConvention">
+                                                <xsl:attribute name="namingConvention">
+                                                    <xsl:value-of select="ns8:STREET_NAME/@namingConvention"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:value-of select="ns8:STREET_NAME"/>
+                                        </ns6:STREET_NAME>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:HOUSE_NUMBER">
+                                        <ns6:HOUSE_NUMBER>
+                                            <xsl:value-of select="ns8:HOUSE_NUMBER"/>
+                                        </ns6:HOUSE_NUMBER>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:HOUSE_NUMBER_EXTENSION">
+                                        <ns6:HOUSE_NUMBER_EXTENSION>
+                                            <xsl:value-of select="ns8:HOUSE_NUMBER_EXTENSION"/>
+                                        </ns6:HOUSE_NUMBER_EXTENSION>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:POSTCODE">
+                                        <ns6:POSTCODE>
+                                            <xsl:value-of select="ns8:POSTCODE"/>
+                                        </ns6:POSTCODE>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:CITY_NAME">
+                                        <ns6:CITY_NAME>
+                                            <xsl:value-of select="ns8:CITY_NAME"/>
+                                        </ns6:CITY_NAME>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:COUNTRY">
+                                        <ns6:COUNTRY>
+                                            <xsl:value-of select="ns8:COUNTRY"/>
+                                        </ns6:COUNTRY>
+                                    </xsl:if>
+                                    <ns6:COUNTRY_CODE>
+                                        <xsl:value-of select="ns8:COUNTRY_CODE"/>
+                                    </ns6:COUNTRY_CODE>
+                                    <xsl:if test="ns8:ADDRESS_TYPE">
+                                        <ns6:ADDRESS_TYPE>
+                                            <xsl:value-of select="ns8:ADDRESS_TYPE"/>
+                                        </ns6:ADDRESS_TYPE>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:LOCATION_DESCRIPTION">
+                                        <ns6:LOCATION_DESCRIPTION>
+                                            <xsl:value-of select="ns8:LOCATION_DESCRIPTION"/>
+                                        </ns6:LOCATION_DESCRIPTION>
+                                    </xsl:if>
+                                    <ns6:UNFORMATTED_ADDRESS>
+                                        <xsl:for-each select="ns8:UNFORMATTED_ADDRESS/ns8:ADDRESS_LINE">
+                                            <ns6:ADDRESS_LINE>
+                                                <xsl:attribute name="sequenceNumber">
+                                                    <xsl:value-of select="./@sequenceNumber"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="."/>
+                                            </ns6:ADDRESS_LINE>
+                                        </xsl:for-each>
+                                    </ns6:UNFORMATTED_ADDRESS>
+                                    <ns6:RUNTIME_PARAMETERS>
+                                        <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:SPECIAL_DESCRIPTION">
+                                            <ns6:SPECIAL_DESCRIPTION>
+                                                <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:SPECIAL_DESCRIPTION"/>
+                                            </ns6:SPECIAL_DESCRIPTION>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:POSTCODE_SUFFIX">
+                                            <ns6:POSTCODE_SUFFIX>
+                                                <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:POSTCODE_SUFFIX"/>
+                                            </ns6:POSTCODE_SUFFIX>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:IS_FUTURE_PRIMARY_ADDRESS">
+                                            <ns6:IS_FUTURE_PRIMARY_ADDRESS>
+                                                <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:IS_FUTURE_PRIMARY_ADDRESS"/>
+                                            </ns6:IS_FUTURE_PRIMARY_ADDRESS>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_LOGICAL_ADDRESS">
+                                            <ns6:IS_PRIMARY_LOGICAL_ADDRESS>
+                                                <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_LOGICAL_ADDRESS"/>
+                                            </ns6:IS_PRIMARY_LOGICAL_ADDRESS>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                            <ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                                <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                            </ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                        </xsl:if>
+                                    </ns6:RUNTIME_PARAMETERS>
+                                    <ns6:VALIDITY>
+                                        <xsl:if test="ns8:VALIDITY/ns8:ADDRESS_STATUS">
+                                            <ns6:ADDRESS_STATUS>
+                                                <xsl:value-of select="ns8:VALIDITY/ns8:ADDRESS_STATUS"/>
+                                            </ns6:ADDRESS_STATUS>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:VALIDITY/ns8:VALID_FROM_DATE">
+                                            <ns6:VALID_FROM_DATE>
+                                                <xsl:value-of select="ns8:VALIDITY/ns8:VALID_FROM_DATE"/>
+                                            </ns6:VALID_FROM_DATE>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:VALIDITY/ns8:VALID_UNTIL_DATE">
+                                            <ns6:VALID_UNTIL_DATE>
+                                                <xsl:value-of select="ns8:VALIDITY/ns8:VALID_UNTIL_DATE"/>
+                                            </ns6:VALID_UNTIL_DATE>
+                                        </xsl:if>
+                                    </ns6:VALIDITY>
+                                    <xsl:for-each select="ns8:VALIDATION_RESULT">
+                                        <ns6:VALIDATION_RESULT>
+                                            <ns6:SEVERITY>
+                                                <xsl:value-of select="ns8:SEVERITY"/>
+                                            </ns6:SEVERITY>
+                                            <ns6:CODE>
+                                                <xsl:value-of select="ns8:CODE"/>
+                                            </ns6:CODE>
+                                            <ns6:DESCRIPTION>
+                                                <xsl:value-of select="ns8:DESCRIPTION"/>
+                                            </ns6:DESCRIPTION>
+                                        </ns6:VALIDATION_RESULT>
+                                    </xsl:for-each>
+                                </ns6:ADDRESS>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:SIEBEL_ACCOUNT_REFERENCE">
+                                <ns6:SIEBEL_ACCOUNT_REFERENCE>
+                                    <xsl:if test="ns8:SIEBEL_ACCOUNT_ID">
+                                        <ns6:SIEBEL_ACCOUNT_ID>
+                                            <xsl:value-of select="ns8:SIEBEL_ACCOUNT_ID"/>
+                                        </ns6:SIEBEL_ACCOUNT_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:UCM_ROW_ID">
+                                        <ns6:UCM_ROW_ID>
+                                            <xsl:value-of select="ns8:UCM_ROW_ID"/>
+                                        </ns6:UCM_ROW_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:INTEGRATION_ID">
+                                        <ns6:INTEGRATION_ID>
+                                            <xsl:value-of select="ns8:INTEGRATION_ID"/>
+                                        </ns6:INTEGRATION_ID>
+                                    </xsl:if>
+                                </ns6:SIEBEL_ACCOUNT_REFERENCE>
+                            </xsl:for-each>
+                            <ns6:RUNTIME_PARAMETERS>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:INTEGRATION_ID">
+                                    <ns6:INTEGRATION_ID>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:INTEGRATION_ID"/>
+                                    </ns6:INTEGRATION_ID>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:UCM_ROW_ID">
+                                    <ns6:UCM_ROW_ID>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:UCM_ROW_ID"/>
+                                    </ns6:UCM_ROW_ID>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:ID">
+                                    <ns6:ID>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:ID"/>
+                                    </ns6:ID>
+                                </xsl:if>
+                            </ns6:RUNTIME_PARAMETERS>
+                            <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CROSS_REFERENCE">
+                                <ns6:CROSS_REFERENCE>
+                                    <xsl:if test="ns8:CONTACT_ID">
+                                        <ns6:CONTACT_ID>
+                                            <xsl:value-of select="ns8:CONTACT_ID"/>
+                                        </ns6:CONTACT_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:CIF_SYSTEM_ID">
+                                        <ns6:CIF_SYSTEM_ID>
+                                            <xsl:value-of select="ns8:CIF_SYSTEM_ID"/>
+                                        </ns6:CIF_SYSTEM_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:EXTERNAL_ID1">
+                                        <ns6:EXTERNAL_ID1>
+                                            <xsl:value-of select="ns8:EXTERNAL_ID1"/>
+                                        </ns6:EXTERNAL_ID1>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:SYSTEM_NAME">
+                                        <ns6:SYSTEM_NAME>
+                                            <xsl:value-of select="ns8:SYSTEM_NAME"/>
+                                        </ns6:SYSTEM_NAME>
+                                    </xsl:if>
+                                    <xsl:if test="ns8:SYSTEM_NUMBER">
+                                        <ns6:SYSTEM_NUMBER>
+                                            <xsl:value-of select="ns8:SYSTEM_NUMBER"/>
+                                        </ns6:SYSTEM_NUMBER>
+                                    </xsl:if>
+                                </ns6:CROSS_REFERENCE>
+                            </xsl:for-each>
+                        </ns6:CONTACT_PERSON>
+                    </ns6:BODY>
+                </xsl:when>
+            </xsl:choose>
+        </pfx4:UpsertContactResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx4:UpsertContactResponse"/>
+    <pd:endX>642</pd:endX>
+    <pd:endY>214</pd:endY>
+    <pd:errorSchemas>
+        <Schema2>
+            <xsd:element name="Result_Status" type="pfx7:ResultStatus"/>
+        </Schema2>
+        <Schema1 ref="pfx6:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>305</pd:x>
+        <pd:y>349</pd:y>
+        <config>
+            <faultName>Schema1</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Call-CDCAdapter)">
+                            <xsl:copy-of select="$_error_Call-CDCAdapter/pfx6:Errors"/>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Call-UCMAdapter)">
+                            <xsl:copy-of select="$_error_Call-UCMAdapter/pfx6:Errors"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx6:Errors>
+                                <pfx6:Error>
+                                    <pfx6:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                    </pfx6:MsgCode>
+                                    <pfx6:Params>
+                                        <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                                    </pfx6:Params>
+                                    <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                </pfx6:Error>
+                            </pfx6:Errors>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </pfx2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call CDCAdapter">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>225</pd:x>
+        <pd:y>214</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/_Sub_ValidateContact.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns10:ValidateContactRequest>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;1046&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;ValidateContact&quot;"/>
+                    </ns1:NAME>
+                    <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:FID">
+                        <ns1:FID>
+                            <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:FID"/>
+                        </ns1:FID>
+                    </xsl:if>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;1046.20&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;CONTACT_PERSON&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns3:GlobalVariables/Env,&quot;.FIXED.CRM.CDCAdapter.Request.ValidateContact.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </ns1:MESSAGE_ID>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF">
+                            <ns1:EXTERNAL_REF>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF"/>
+                            </ns1:EXTERNAL_REF>
+                        </xsl:if>
+                        <xsl:copy-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:ITEM" copy-namespaces="no"/>
+                        <ns1:ITEM>
+                            <xsl:attribute name="ns1:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns3:GlobalVariables/CRMServices/ComponentDomain,'/',$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentId,'/',$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentVersion)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:EVENT">
+                                <xsl:value-of select="&quot;ValidateContact&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns1:ITEM>
+                        <xsl:for-each select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:SEQUENCE_NO">
+                            <ns1:SEQUENCE_NO>
+                                <xsl:value-of select="."/>
+                            </ns1:SEQUENCE_NO>
+                        </xsl:for-each>
+                    </ns1:TRACKING>
+                </ns1:CMH>
+                <pfx8:BODY>
+                    <pfx8:CONTACT_PERSON>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:OVERRIDE_VALIDATION">
+                            <pfx8:OVERRIDE_VALIDATION>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:OVERRIDE_VALIDATION"/>
+                            </pfx8:OVERRIDE_VALIDATION>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:VALIDATION_WARNING_COUNT">
+                            <pfx8:VALIDATION_WARNING_COUNT>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:VALIDATION_WARNING_COUNT"/>
+                            </pfx8:VALIDATION_WARNING_COUNT>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:VALIDATION_ERROR_COUNT">
+                            <pfx8:VALIDATION_ERROR_COUNT>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:VALIDATION_ERROR_COUNT"/>
+                            </pfx8:VALIDATION_ERROR_COUNT>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:VALIDATION_TOTAL_WARNING_COUNT">
+                            <pfx8:VALIDATION_TOTAL_WARNING_COUNT>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:VALIDATION_TOTAL_WARNING_COUNT"/>
+                            </pfx8:VALIDATION_TOTAL_WARNING_COUNT>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:VALIDATION_TOTAL_ERROR_COUNT">
+                            <pfx8:VALIDATION_TOTAL_ERROR_COUNT>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:VALIDATION_TOTAL_ERROR_COUNT"/>
+                            </pfx8:VALIDATION_TOTAL_ERROR_COUNT>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_PERSON_ID">
+                            <pfx8:CONTACT_PERSON_ID>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_PERSON_ID"/>
+                            </pfx8:CONTACT_PERSON_ID>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:INITIALS">
+                            <pfx8:INITIALS>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:INITIALS"/>
+                            </pfx8:INITIALS>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:FAMILY_NAME_PREFIX">
+                            <pfx8:FAMILY_NAME_PREFIX>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:FAMILY_NAME_PREFIX"/>
+                            </pfx8:FAMILY_NAME_PREFIX>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:FAMILY_NAME">
+                            <pfx8:FAMILY_NAME>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:FAMILY_NAME"/>
+                            </pfx8:FAMILY_NAME>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:FAMILY_NAME_POSTFIX">
+                            <pfx8:FAMILY_NAME_POSTFIX>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:FAMILY_NAME_POSTFIX"/>
+                            </pfx8:FAMILY_NAME_POSTFIX>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:PREFERRED_NAME">
+                            <pfx8:PREFERRED_NAME>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:PREFERRED_NAME"/>
+                            </pfx8:PREFERRED_NAME>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:DATE_OF_BIRTH">
+                            <pfx8:DATE_OF_BIRTH>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:DATE_OF_BIRTH"/>
+                            </pfx8:DATE_OF_BIRTH>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:ACADEMIC_TITLE">
+                            <pfx8:ACADEMIC_TITLE>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:ACADEMIC_TITLE"/>
+                            </pfx8:ACADEMIC_TITLE>
+                        </xsl:if>
+                        <pfx8:CONTACT_MEDIUM>
+                            <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_MEDIUM/ns9:TELEPHONE">
+                                <pfx8:TELEPHONE>
+                                    <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_MEDIUM/ns9:TELEPHONE"/>
+                                </pfx8:TELEPHONE>
+                            </xsl:if>
+                            <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_MEDIUM/ns9:FAX">
+                                <pfx8:FAX>
+                                    <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_MEDIUM/ns9:FAX"/>
+                                </pfx8:FAX>
+                            </xsl:if>
+                            <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_MEDIUM/ns9:EMAIL_ADDRESS">
+                                <pfx8:EMAIL_ADDRESS>
+                                    <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_MEDIUM/ns9:EMAIL_ADDRESS"/>
+                                </pfx8:EMAIL_ADDRESS>
+                            </xsl:if>
+                            <pfx8:USAGE>
+                                <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_MEDIUM/ns9:USAGE/ns9:SUPPRESS_ALL_EMAILS">
+                                    <pfx8:SUPPRESS_ALL_EMAILS>
+                                        <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:CONTACT_MEDIUM/ns9:USAGE/ns9:SUPPRESS_ALL_EMAILS"/>
+                                    </pfx8:SUPPRESS_ALL_EMAILS>
+                                </xsl:if>
+                            </pfx8:USAGE>
+                        </pfx8:CONTACT_MEDIUM>
+                        <xsl:for-each select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:ADDRESS">
+                            <pfx8:ADDRESS>
+                                <xsl:attribute name="language">
+                                    <xsl:value-of select="&quot;nl&quot;"/>
+                                </xsl:attribute>
+                                <pfx8:OVERRIDE_VALIDATION>
+                                    <xsl:value-of select="if (exists(ns9:OVERRIDE_VALIDATION)) then ns9:OVERRIDE_VALIDATION else false()"/>
+                                </pfx8:OVERRIDE_VALIDATION>
+                                <pfx8:STREET_NAME>
+                                    <xsl:attribute name="namingConvention">
+                                        <xsl:value-of select="&quot;PROPRIETARY&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:value-of select="ns9:STREET_NAME"/>
+                                </pfx8:STREET_NAME>
+                                <xsl:if test="ns9:HOUSE_NUMBER">
+                                    <pfx8:HOUSE_NUMBER>
+                                        <xsl:value-of select="ns9:HOUSE_NUMBER"/>
+                                    </pfx8:HOUSE_NUMBER>
+                                </xsl:if>
+                                <xsl:if test="ns9:HOUSE_NUMBER_EXTENSION">
+                                    <pfx8:HOUSE_NUMBER_EXTENSION>
+                                        <xsl:value-of select="ns9:HOUSE_NUMBER_EXTENSION"/>
+                                    </pfx8:HOUSE_NUMBER_EXTENSION>
+                                </xsl:if>
+                                <xsl:if test="ns9:POSTCODE">
+                                    <pfx8:POSTCODE>
+                                        <xsl:value-of select="ns9:POSTCODE"/>
+                                    </pfx8:POSTCODE>
+                                </xsl:if>
+                                <xsl:if test="ns9:CITY_NAME">
+                                    <pfx8:CITY_NAME>
+                                        <xsl:value-of select="ns9:CITY_NAME"/>
+                                    </pfx8:CITY_NAME>
+                                </xsl:if>
+                                <xsl:if test="ns9:COUNTRY">
+                                    <pfx8:COUNTRY>
+                                        <xsl:value-of select="ns9:COUNTRY"/>
+                                    </pfx8:COUNTRY>
+                                </xsl:if>
+                                <pfx8:COUNTRY_CODE>
+                                    <xsl:value-of select="ns9:COUNTRY_CODE"/>
+                                </pfx8:COUNTRY_CODE>
+                                <xsl:if test="ns9:ADDRESS_TYPE">
+                                    <pfx8:ADDRESS_TYPE>
+                                        <xsl:value-of select="ns9:ADDRESS_TYPE"/>
+                                    </pfx8:ADDRESS_TYPE>
+                                </xsl:if>
+                                <xsl:if test="ns9:LOCATION_DESCRIPTION">
+                                    <pfx8:LOCATION_DESCRIPTION>
+                                        <xsl:value-of select="ns9:LOCATION_DESCRIPTION"/>
+                                    </pfx8:LOCATION_DESCRIPTION>
+                                </xsl:if>
+                                <xsl:if test="ns9:UNFORMATTED_ADDRESS">
+                                    <pfx8:UNFORMATTED_ADDRESS>
+                                        <xsl:for-each select="ns9:UNFORMATTED_ADDRESS/ns9:ADDRESS_LINE">
+                                            <pfx8:ADDRESS_LINE>
+                                                <xsl:attribute name="sequenceNumber">
+                                                    <xsl:value-of select="1"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="."/>
+                                            </pfx8:ADDRESS_LINE>
+                                        </xsl:for-each>
+                                    </pfx8:UNFORMATTED_ADDRESS>
+                                </xsl:if>
+                                <pfx8:RUNTIME_PARAMETERS>
+                                    <xsl:if test="ns9:RUNTIME_PARAMETERS/ns9:SPECIAL_DESCRIPTION">
+                                        <pfx8:SPECIAL_DESCRIPTION>
+                                            <xsl:value-of select="ns9:RUNTIME_PARAMETERS/ns9:SPECIAL_DESCRIPTION"/>
+                                        </pfx8:SPECIAL_DESCRIPTION>
+                                    </xsl:if>
+                                    <xsl:if test="ns9:RUNTIME_PARAMETERS/ns9:POSTCODE_SUFFIX">
+                                        <pfx8:POSTCODE_SUFFIX>
+                                            <xsl:value-of select="ns9:RUNTIME_PARAMETERS/ns9:POSTCODE_SUFFIX"/>
+                                        </pfx8:POSTCODE_SUFFIX>
+                                    </xsl:if>
+                                    <xsl:if test="ns9:RUNTIME_PARAMETERS/ns9:IS_FUTURE_PRIMARY_ADDRESS">
+                                        <pfx8:IS_FUTURE_PRIMARY_ADDRESS>
+                                            <xsl:value-of select="ns9:RUNTIME_PARAMETERS/ns9:IS_FUTURE_PRIMARY_ADDRESS"/>
+                                        </pfx8:IS_FUTURE_PRIMARY_ADDRESS>
+                                    </xsl:if>
+                                    <xsl:if test="ns9:RUNTIME_PARAMETERS/ns9:IS_PRIMARY_LOGICAL_ADDRESS">
+                                        <pfx8:IS_PRIMARY_LOGICAL_ADDRESS>
+                                            <xsl:value-of select="ns9:RUNTIME_PARAMETERS/ns9:IS_PRIMARY_LOGICAL_ADDRESS"/>
+                                        </pfx8:IS_PRIMARY_LOGICAL_ADDRESS>
+                                    </xsl:if>
+                                    <xsl:if test="ns9:RUNTIME_PARAMETERS/ns9:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                        <pfx8:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                            <xsl:value-of select="ns9:RUNTIME_PARAMETERS/ns9:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                        </pfx8:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                    </xsl:if>
+                                </pfx8:RUNTIME_PARAMETERS>
+                                <pfx8:VALIDITY>
+                                    <xsl:if test="ns9:VALIDITY/ns9:ADDRESS_STATUS">
+                                        <pfx8:ADDRESS_STATUS>
+                                            <xsl:value-of select="ns9:VALIDITY/ns9:ADDRESS_STATUS"/>
+                                        </pfx8:ADDRESS_STATUS>
+                                    </xsl:if>
+                                    <xsl:if test="ns9:VALIDITY/ns9:VALID_FROM_DATE">
+                                        <pfx8:VALID_FROM_DATE>
+                                            <xsl:value-of select="ns9:VALIDITY/ns9:VALID_FROM_DATE"/>
+                                        </pfx8:VALID_FROM_DATE>
+                                    </xsl:if>
+                                    <xsl:if test="ns9:VALIDITY/ns9:VALID_UNTIL_DATE">
+                                        <pfx8:VALID_UNTIL_DATE>
+                                            <xsl:value-of select="ns9:VALIDITY/ns9:VALID_UNTIL_DATE"/>
+                                        </pfx8:VALID_UNTIL_DATE>
+                                    </xsl:if>
+                                </pfx8:VALIDITY>
+                            </pfx8:ADDRESS>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:SIEBEL_ACCOUNT_REFERENCE">
+                            <pfx8:SIEBEL_ACCOUNT_REFERENCE>
+                                <xsl:if test="ns9:SIEBEL_ACCOUNT_ID">
+                                    <pfx8:SIEBEL_ACCOUNT_ID>
+                                        <xsl:value-of select="ns9:SIEBEL_ACCOUNT_ID"/>
+                                    </pfx8:SIEBEL_ACCOUNT_ID>
+                                </xsl:if>
+                                <xsl:if test="ns9:UCM_ROW_ID">
+                                    <pfx8:UCM_ROW_ID>
+                                        <xsl:value-of select="ns9:UCM_ROW_ID"/>
+                                    </pfx8:UCM_ROW_ID>
+                                </xsl:if>
+                                <xsl:if test="ns9:INTEGRATION_ID">
+                                    <pfx8:INTEGRATION_ID>
+                                        <xsl:value-of select="ns9:INTEGRATION_ID"/>
+                                    </pfx8:INTEGRATION_ID>
+                                </xsl:if>
+                            </pfx8:SIEBEL_ACCOUNT_REFERENCE>
+                        </xsl:for-each>
+                        <pfx8:RUNTIME_PARAMETERS>
+                            <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:RUNTIME_PARAMETERS/ns9:INTEGRATION_ID">
+                                <pfx8:INTEGRATION_ID>
+                                    <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:RUNTIME_PARAMETERS/ns9:INTEGRATION_ID"/>
+                                </pfx8:INTEGRATION_ID>
+                            </xsl:if>
+                            <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:RUNTIME_PARAMETERS/ns9:ID">
+                                <pfx8:ID>
+                                    <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns9:BODY/ns9:CONTACT_PERSON/ns9:RUNTIME_PARAMETERS/ns9:ID"/>
+                                </pfx8:ID>
+                            </xsl:if>
+                        </pfx8:RUNTIME_PARAMETERS>
+                    </pfx8:CONTACT_PERSON>
+                </pfx8:BODY>
+            </ns10:ValidateContactRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call-UCMAdapter">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>447</pd:x>
+        <pd:y>213</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/_sub_UpsertContact.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Map-Data/pfx5:UpsertContactRequest"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>325</pd:x>
+        <pd:y>214</pd:y>
+        <config>
+            <element ref="pfx5:UpsertContactRequest"/>
+        </config>
+        <pd:inputBindings>
+            <pfx5:UpsertContactRequest>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;1046&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;ValidateContact&quot;"/>
+                    </ns1:NAME>
+                    <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns1:CMH/ns1:FID">
+                        <ns1:FID>
+                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns1:CMH/ns1:FID"/>
+                        </ns1:FID>
+                    </xsl:if>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;1046.20&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;CONTACT_PERSON&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns3:GlobalVariables/Env,&quot;.FIXED.CRM.UCMAdapter.Request.UpsertContact.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </ns1:MESSAGE_ID>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF">
+                            <ns1:EXTERNAL_REF>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF"/>
+                            </ns1:EXTERNAL_REF>
+                        </xsl:if>
+                        <xsl:copy-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns1:CMH/ns1:TRACKING/ns1:ITEM" copy-namespaces="no"/>
+                        <ns1:ITEM>
+                            <xsl:attribute name="ns1:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns3:GlobalVariables/CRMServices/ComponentDomain,'/',$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentId)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:EVENT">
+                                <xsl:value-of select="&quot;ValidateContact&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns1:ITEM>
+                        <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns1:CMH/ns1:TRACKING/ns1:SEQUENCE_NO">
+                            <ns1:SEQUENCE_NO>
+                                <xsl:value-of select="."/>
+                            </ns1:SEQUENCE_NO>
+                        </xsl:for-each>
+                    </ns1:TRACKING>
+                </ns1:CMH>
+                <ns0:BODY>
+                    <ns0:CONTACT_PERSON>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_WARNING_COUNT">
+                            <ns0:VALIDATION_WARNING_COUNT>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_WARNING_COUNT"/>
+                            </ns0:VALIDATION_WARNING_COUNT>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_ERROR_COUNT">
+                            <ns0:VALIDATION_ERROR_COUNT>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_ERROR_COUNT"/>
+                            </ns0:VALIDATION_ERROR_COUNT>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_WARNING_COUNT">
+                            <ns0:VALIDATION_TOTAL_WARNING_COUNT>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_WARNING_COUNT"/>
+                            </ns0:VALIDATION_TOTAL_WARNING_COUNT>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_ERROR_COUNT">
+                            <ns0:VALIDATION_TOTAL_ERROR_COUNT>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_ERROR_COUNT"/>
+                            </ns0:VALIDATION_TOTAL_ERROR_COUNT>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_PERSON_ID">
+                            <ns0:CONTACT_PERSON_ID>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_PERSON_ID"/>
+                            </ns0:CONTACT_PERSON_ID>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:INITIALS">
+                            <ns0:INITIALS>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:INITIALS"/>
+                            </ns0:INITIALS>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME_PREFIX">
+                            <ns0:FAMILY_NAME_PREFIX>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME_PREFIX"/>
+                            </ns0:FAMILY_NAME_PREFIX>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME">
+                            <ns0:FAMILY_NAME>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME"/>
+                            </ns0:FAMILY_NAME>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME_POSTFIX">
+                            <ns0:FAMILY_NAME_POSTFIX>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME_POSTFIX"/>
+                            </ns0:FAMILY_NAME_POSTFIX>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:PREFERRED_NAME">
+                            <ns0:PREFERRED_NAME>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:PREFERRED_NAME"/>
+                            </ns0:PREFERRED_NAME>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:DATE_OF_BIRTH">
+                            <ns0:DATE_OF_BIRTH>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:DATE_OF_BIRTH"/>
+                            </ns0:DATE_OF_BIRTH>
+                        </xsl:if>
+                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:ACADEMIC_TITLE">
+                            <ns0:ACADEMIC_TITLE>
+                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:ACADEMIC_TITLE"/>
+                            </ns0:ACADEMIC_TITLE>
+                        </xsl:if>
+                        <ns0:CONTACT_MEDIUM>
+                            <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:TELEPHONE">
+                                <ns0:TELEPHONE>
+                                    <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:TELEPHONE"/>
+                                </ns0:TELEPHONE>
+                            </xsl:if>
+                            <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:FAX">
+                                <ns0:FAX>
+                                    <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:FAX"/>
+                                </ns0:FAX>
+                            </xsl:if>
+                            <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:EMAIL_ADDRESS">
+                                <ns0:EMAIL_ADDRESS>
+                                    <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:EMAIL_ADDRESS"/>
+                                </ns0:EMAIL_ADDRESS>
+                            </xsl:if>
+                            <ns0:USAGE>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:USAGE/ns4:SUPPRESS_ALL_EMAILS">
+                                    <ns0:SUPPRESS_ALL_EMAILS>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:USAGE/ns4:SUPPRESS_ALL_EMAILS"/>
+                                    </ns0:SUPPRESS_ALL_EMAILS>
+                                </xsl:if>
+                            </ns0:USAGE>
+                        </ns0:CONTACT_MEDIUM>
+                        <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_RESULT">
+                            <ns0:VALIDATION_RESULT>
+                                <ns0:SEVERITY>
+                                    <xsl:value-of select="ns4:SEVERITY"/>
+                                </ns0:SEVERITY>
+                                <ns0:CODE>
+                                    <xsl:value-of select="ns4:CODE"/>
+                                </ns0:CODE>
+                                <ns0:DESCRIPTION>
+                                    <xsl:value-of select="ns4:DESCRIPTION"/>
+                                </ns0:DESCRIPTION>
+                            </ns0:VALIDATION_RESULT>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:ADDRESS">
+                            <ns0:ADDRESS>
+                                <xsl:if test="@language">
+                                    <xsl:attribute name="language">
+                                        <xsl:value-of select="@language"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="ns4:VALIDATION_WARNING_COUNT">
+                                    <ns0:VALIDATION_WARNING_COUNT>
+                                        <xsl:value-of select="ns4:VALIDATION_WARNING_COUNT"/>
+                                    </ns0:VALIDATION_WARNING_COUNT>
+                                </xsl:if>
+                                <xsl:if test="ns4:VALIDATION_ERROR_COUNT">
+                                    <ns0:VALIDATION_ERROR_COUNT>
+                                        <xsl:value-of select="ns4:VALIDATION_ERROR_COUNT"/>
+                                    </ns0:VALIDATION_ERROR_COUNT>
+                                </xsl:if>
+                                <ns0:STREET_NAME>
+                                    <xsl:if test="ns4:STREET_NAME/@namingConvention">
+                                        <xsl:attribute name="namingConvention">
+                                            <xsl:value-of select="ns4:STREET_NAME/@namingConvention"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:value-of select="ns4:STREET_NAME"/>
+                                </ns0:STREET_NAME>
+                                <xsl:if test="ns4:HOUSE_NUMBER">
+                                    <ns0:HOUSE_NUMBER>
+                                        <xsl:value-of select="ns4:HOUSE_NUMBER"/>
+                                    </ns0:HOUSE_NUMBER>
+                                </xsl:if>
+                                <xsl:if test="ns4:HOUSE_NUMBER_EXTENSION">
+                                    <ns0:HOUSE_NUMBER_EXTENSION>
+                                        <xsl:value-of select="ns4:HOUSE_NUMBER_EXTENSION"/>
+                                    </ns0:HOUSE_NUMBER_EXTENSION>
+                                </xsl:if>
+                                <xsl:if test="ns4:POSTCODE">
+                                    <ns0:POSTCODE>
+                                        <xsl:value-of select="ns4:POSTCODE"/>
+                                    </ns0:POSTCODE>
+                                </xsl:if>
+                                <xsl:if test="ns4:CITY_NAME">
+                                    <ns0:CITY_NAME>
+                                        <xsl:value-of select="ns4:CITY_NAME"/>
+                                    </ns0:CITY_NAME>
+                                </xsl:if>
+                                <xsl:if test="ns4:COUNTRY">
+                                    <ns0:COUNTRY>
+                                        <xsl:value-of select="ns4:COUNTRY"/>
+                                    </ns0:COUNTRY>
+                                </xsl:if>
+                                <ns0:COUNTRY_CODE>
+                                    <xsl:value-of select="ns4:COUNTRY_CODE"/>
+                                </ns0:COUNTRY_CODE>
+                                <xsl:if test="ns4:ADDRESS_TYPE">
+                                    <ns0:ADDRESS_TYPE>
+                                        <xsl:value-of select="ns4:ADDRESS_TYPE"/>
+                                    </ns0:ADDRESS_TYPE>
+                                </xsl:if>
+                                <xsl:if test="ns4:LOCATION_DESCRIPTION">
+                                    <ns0:LOCATION_DESCRIPTION>
+                                        <xsl:value-of select="ns4:LOCATION_DESCRIPTION"/>
+                                    </ns0:LOCATION_DESCRIPTION>
+                                </xsl:if>
+                                <xsl:for-each select="ns4:UNFORMATTED_ADDRESS">
+                                    <ns0:UNFORMATTED_ADDRESS>
+                                        <xsl:for-each select="ns4:ADDRESS_LINE">
+                                            <ns0:ADDRESS_LINE>
+                                                <xsl:attribute name="sequenceNumber">
+                                                    <xsl:value-of select="@sequenceNumber"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="."/>
+                                            </ns0:ADDRESS_LINE>
+                                        </xsl:for-each>
+                                    </ns0:UNFORMATTED_ADDRESS>
+                                </xsl:for-each>
+                                <ns0:RUNTIME_PARAMETERS>
+                                    <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:SPECIAL_DESCRIPTION">
+                                        <ns0:SPECIAL_DESCRIPTION>
+                                            <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:SPECIAL_DESCRIPTION"/>
+                                        </ns0:SPECIAL_DESCRIPTION>
+                                    </xsl:if>
+                                    <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:POSTCODE_SUFFIX">
+                                        <ns0:POSTCODE_SUFFIX>
+                                            <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:POSTCODE_SUFFIX"/>
+                                        </ns0:POSTCODE_SUFFIX>
+                                    </xsl:if>
+                                    <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:IS_FUTURE_PRIMARY_ADDRESS">
+                                        <ns0:IS_FUTURE_PRIMARY_ADDRESS>
+                                            <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:IS_FUTURE_PRIMARY_ADDRESS"/>
+                                        </ns0:IS_FUTURE_PRIMARY_ADDRESS>
+                                    </xsl:if>
+                                    <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_LOGICAL_ADDRESS">
+                                        <ns0:IS_PRIMARY_LOGICAL_ADDRESS>
+                                            <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_LOGICAL_ADDRESS"/>
+                                        </ns0:IS_PRIMARY_LOGICAL_ADDRESS>
+                                    </xsl:if>
+                                    <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                        <ns0:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                            <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                        </ns0:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                    </xsl:if>
+                                </ns0:RUNTIME_PARAMETERS>
+                                <ns0:VALIDITY>
+                                    <xsl:if test="ns4:VALIDITY/ns4:ADDRESS_STATUS">
+                                        <ns0:ADDRESS_STATUS>
+                                            <xsl:value-of select="ns4:VALIDITY/ns4:ADDRESS_STATUS"/>
+                                        </ns0:ADDRESS_STATUS>
+                                    </xsl:if>
+                                    <xsl:if test="ns4:VALIDITY/ns4:VALID_FROM_DATE">
+                                        <ns0:VALID_FROM_DATE>
+                                            <xsl:value-of select="ns4:VALIDITY/ns4:VALID_FROM_DATE"/>
+                                        </ns0:VALID_FROM_DATE>
+                                    </xsl:if>
+                                    <xsl:if test="ns4:VALIDITY/ns4:VALID_UNTIL_DATE">
+                                        <ns0:VALID_UNTIL_DATE>
+                                            <xsl:value-of select="ns4:VALIDITY/ns4:VALID_UNTIL_DATE"/>
+                                        </ns0:VALID_UNTIL_DATE>
+                                    </xsl:if>
+                                </ns0:VALIDITY>
+                                <xsl:for-each select="ns4:VALIDATION_RESULT">
+                                    <ns0:VALIDATION_RESULT>
+                                        <ns0:SEVERITY>
+                                            <xsl:value-of select="ns4:SEVERITY"/>
+                                        </ns0:SEVERITY>
+                                        <ns0:CODE>
+                                            <xsl:value-of select="ns4:CODE"/>
+                                        </ns0:CODE>
+                                        <ns0:DESCRIPTION>
+                                            <xsl:value-of select="ns4:DESCRIPTION"/>
+                                        </ns0:DESCRIPTION>
+                                    </ns0:VALIDATION_RESULT>
+                                </xsl:for-each>
+                            </ns0:ADDRESS>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:SIEBEL_ACCOUNT_REFERENCE">
+                            <ns0:SIEBEL_ACCOUNT_REFERENCE>
+                                <xsl:if test="ns4:SIEBEL_ACCOUNT_ID">
+                                    <ns0:SIEBEL_ACCOUNT_ID>
+                                        <xsl:value-of select="ns4:SIEBEL_ACCOUNT_ID"/>
+                                    </ns0:SIEBEL_ACCOUNT_ID>
+                                </xsl:if>
+                                <xsl:if test="ns4:UCM_ROW_ID">
+                                    <ns0:UCM_ROW_ID>
+                                        <xsl:value-of select="ns4:UCM_ROW_ID"/>
+                                    </ns0:UCM_ROW_ID>
+                                </xsl:if>
+                                <xsl:if test="ns4:INTEGRATION_ID">
+                                    <ns0:INTEGRATION_ID>
+                                        <xsl:value-of select="ns4:INTEGRATION_ID"/>
+                                    </ns0:INTEGRATION_ID>
+                                </xsl:if>
+                            </ns0:SIEBEL_ACCOUNT_REFERENCE>
+                        </xsl:for-each>
+                        <ns0:RUNTIME_PARAMETERS>
+                            <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:INTEGRATION_ID">
+                                <ns0:INTEGRATION_ID>
+                                    <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:INTEGRATION_ID"/>
+                                </ns0:INTEGRATION_ID>
+                            </xsl:if>
+                            <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:ID">
+                                <ns0:ID>
+                                    <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:ID"/>
+                                </ns0:ID>
+                            </xsl:if>
+                        </ns0:RUNTIME_PARAMETERS>
+                    </ns0:CONTACT_PERSON>
+                </ns0:BODY>
+            </pfx5:UpsertContactRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Error Response">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>449</pd:x>
+        <pd:y>109</pd:y>
+        <config>
+            <element ref="pfx4:UpsertContactResponse"/>
+        </config>
+        <pd:inputBindings>
+            <pfx4:UpsertContactResponse>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="1048"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                    </ns1:NAME>
+                    <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns1:CMH/ns1:FID">
+                        <ns1:FID>
+                            <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns1:CMH/ns1:FID"/>
+                        </ns1:FID>
+                    </xsl:if>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;1046.20&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;CONTACT_PERSON&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="$Start/root/ReplyDestination"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </ns1:MESSAGE_ID>
+                        <xsl:if test="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF">
+                            <ns1:EXTERNAL_REF>
+                                <xsl:value-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF"/>
+                            </ns1:EXTERNAL_REF>
+                        </xsl:if>
+                        <xsl:copy-of select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:ITEM"/>
+                        <ns1:ITEM>
+                            <xsl:attribute name="ns1:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns3:GlobalVariables/CRMServices/ComponentDomain,'/',$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentId,'/',$_globalVariables/ns3:GlobalVariables/CRMServices/ComponentVersion)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:EVENT">
+                                <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns1:ITEM>
+                        <xsl:for-each select="$Start/root/pfx:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:SEQUENCE_NO">
+                            <ns1:SEQUENCE_NO>
+                                <xsl:value-of select="."/>
+                            </ns1:SEQUENCE_NO>
+                        </xsl:for-each>
+                    </ns1:TRACKING>
+                </ns1:CMH>
+                <xsl:choose>
+                    <xsl:when test="exists($Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY) and &#xA;$Call-CDCAdapter/ns2:ValidateContactResponse/ns2:RESULT_STATUS/@pfx7:STATUS!=0">
+                        <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns2:RESULT_STATUS">
+                            <pfx4:RESULT_STATUS>
+                                <xsl:attribute name="pfx7:STATUS">
+                                    <xsl:value-of select="@pfx7:STATUS"/>
+                                </xsl:attribute>
+                                <xsl:if test="@pfx7:MSG_CODE">
+                                    <xsl:attribute name="pfx7:MSG_CODE">
+                                        <xsl:value-of select="@pfx7:MSG_CODE"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="@pfx7:ERROR_CODE">
+                                    <xsl:attribute name="pfx7:ERROR_CODE">
+                                        <xsl:value-of select="@pfx7:ERROR_CODE"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="@pfx7:ERROR_DESCRIPTION">
+                                    <xsl:attribute name="pfx7:ERROR_DESCRIPTION">
+                                        <xsl:value-of select="@pfx7:ERROR_DESCRIPTION"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </pfx4:RESULT_STATUS>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:when test="exists($Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY) and $Call-UCMAdapter/ns7:UpsertContactResponse/ns7:RESULT_STATUS/@pfx7:STATUS!=0">
+                        <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns7:RESULT_STATUS">
+                            <pfx4:RESULT_STATUS>
+                                <xsl:attribute name="pfx7:STATUS">
+                                    <xsl:value-of select="@pfx7:STATUS"/>
+                                </xsl:attribute>
+                                <xsl:if test="@pfx7:MSG_CODE">
+                                    <xsl:attribute name="pfx7:MSG_CODE">
+                                        <xsl:value-of select="@pfx7:MSG_CODE"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="@pfx7:ERROR_CODE">
+                                    <xsl:attribute name="pfx7:ERROR_CODE">
+                                        <xsl:value-of select="@pfx7:ERROR_CODE"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="@pfx7:ERROR_DESCRIPTION">
+                                    <xsl:attribute name="pfx7:ERROR_DESCRIPTION">
+                                        <xsl:value-of select="@pfx7:ERROR_DESCRIPTION"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </pfx4:RESULT_STATUS>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx4:RESULT_STATUS>
+                            <xsl:attribute name="pfx7:STATUS">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx7:ERROR_DESCRIPTION">
+                                <xsl:value-of select="&quot;General Un-Attribute Error&quot;"/>
+                            </xsl:attribute>
+                        </pfx4:RESULT_STATUS>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="exists($Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY) and $Call-CDCAdapter/ns2:ValidateContactResponse/ns2:RESULT_STATUS/@pfx7:STATUS!=0">
+                        <ns6:BODY>
+                            <ns6:CONTACT_PERSON>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:OVERRIDE_VALIDATION">
+                                    <ns6:OVERRIDE_VALIDATION>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:OVERRIDE_VALIDATION"/>
+                                    </ns6:OVERRIDE_VALIDATION>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_WARNING_COUNT">
+                                    <ns6:VALIDATION_WARNING_COUNT>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_WARNING_COUNT"/>
+                                    </ns6:VALIDATION_WARNING_COUNT>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_ERROR_COUNT">
+                                    <ns6:VALIDATION_ERROR_COUNT>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_ERROR_COUNT"/>
+                                    </ns6:VALIDATION_ERROR_COUNT>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_WARNING_COUNT">
+                                    <ns6:VALIDATION_TOTAL_WARNING_COUNT>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_WARNING_COUNT"/>
+                                    </ns6:VALIDATION_TOTAL_WARNING_COUNT>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_ERROR_COUNT">
+                                    <ns6:VALIDATION_TOTAL_ERROR_COUNT>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_ERROR_COUNT"/>
+                                    </ns6:VALIDATION_TOTAL_ERROR_COUNT>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_PERSON_ID">
+                                    <ns6:CONTACT_PERSON_ID>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_PERSON_ID"/>
+                                    </ns6:CONTACT_PERSON_ID>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:INITIALS">
+                                    <ns6:INITIALS>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:INITIALS"/>
+                                    </ns6:INITIALS>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME_PREFIX">
+                                    <ns6:FAMILY_NAME_PREFIX>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME_PREFIX"/>
+                                    </ns6:FAMILY_NAME_PREFIX>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME">
+                                    <ns6:FAMILY_NAME>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME"/>
+                                    </ns6:FAMILY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME_POSTFIX">
+                                    <ns6:FAMILY_NAME_POSTFIX>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:FAMILY_NAME_POSTFIX"/>
+                                    </ns6:FAMILY_NAME_POSTFIX>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:PREFERRED_NAME">
+                                    <ns6:PREFERRED_NAME>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:PREFERRED_NAME"/>
+                                    </ns6:PREFERRED_NAME>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:DATE_OF_BIRTH">
+                                    <ns6:DATE_OF_BIRTH>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:DATE_OF_BIRTH"/>
+                                    </ns6:DATE_OF_BIRTH>
+                                </xsl:if>
+                                <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:ACADEMIC_TITLE">
+                                    <ns6:ACADEMIC_TITLE>
+                                        <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:ACADEMIC_TITLE"/>
+                                    </ns6:ACADEMIC_TITLE>
+                                </xsl:if>
+                                <ns6:CONTACT_MEDIUM>
+                                    <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:TELEPHONE">
+                                        <ns6:TELEPHONE>
+                                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:TELEPHONE"/>
+                                        </ns6:TELEPHONE>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:FAX">
+                                        <ns6:FAX>
+                                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:FAX"/>
+                                        </ns6:FAX>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:EMAIL_ADDRESS">
+                                        <ns6:EMAIL_ADDRESS>
+                                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:EMAIL_ADDRESS"/>
+                                        </ns6:EMAIL_ADDRESS>
+                                    </xsl:if>
+                                    <ns6:USAGE>
+                                        <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:USAGE/ns4:SUPPRESS_ALL_EMAILS">
+                                            <ns6:SUPPRESS_ALL_EMAILS>
+                                                <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CONTACT_MEDIUM/ns4:USAGE/ns4:SUPPRESS_ALL_EMAILS"/>
+                                            </ns6:SUPPRESS_ALL_EMAILS>
+                                        </xsl:if>
+                                    </ns6:USAGE>
+                                </ns6:CONTACT_MEDIUM>
+                                <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_RESULT">
+                                    <ns6:VALIDATION_RESULT>
+                                        <ns6:SEVERITY>
+                                            <xsl:value-of select="ns4:SEVERITY"/>
+                                        </ns6:SEVERITY>
+                                        <ns6:CODE>
+                                            <xsl:value-of select="ns4:CODE"/>
+                                        </ns6:CODE>
+                                        <ns6:DESCRIPTION>
+                                            <xsl:value-of select="ns4:DESCRIPTION"/>
+                                        </ns6:DESCRIPTION>
+                                    </ns6:VALIDATION_RESULT>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:ADDRESS">
+                                    <ns6:ADDRESS>
+                                        <xsl:if test="@language">
+                                            <xsl:attribute name="language">
+                                                <xsl:value-of select="@language"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:OVERRIDE_VALIDATION">
+                                            <ns6:OVERRIDE_VALIDATION>
+                                                <xsl:value-of select="ns4:OVERRIDE_VALIDATION"/>
+                                            </ns6:OVERRIDE_VALIDATION>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:VALIDATION_WARNING_COUNT">
+                                            <ns6:VALIDATION_WARNING_COUNT>
+                                                <xsl:value-of select="ns4:VALIDATION_WARNING_COUNT"/>
+                                            </ns6:VALIDATION_WARNING_COUNT>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:VALIDATION_ERROR_COUNT">
+                                            <ns6:VALIDATION_ERROR_COUNT>
+                                                <xsl:value-of select="ns4:VALIDATION_ERROR_COUNT"/>
+                                            </ns6:VALIDATION_ERROR_COUNT>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:STREET_NAME">
+                                            <ns6:STREET_NAME>
+                                                <xsl:if test="ns4:STREET_NAME/@namingConvention">
+                                                    <xsl:attribute name="namingConvention">
+                                                        <xsl:value-of select="ns4:STREET_NAME/@namingConvention"/>
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:value-of select="ns4:STREET_NAME"/>
+                                            </ns6:STREET_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:HOUSE_NUMBER">
+                                            <ns6:HOUSE_NUMBER>
+                                                <xsl:value-of select="ns4:HOUSE_NUMBER"/>
+                                            </ns6:HOUSE_NUMBER>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:HOUSE_NUMBER_EXTENSION">
+                                            <ns6:HOUSE_NUMBER_EXTENSION>
+                                                <xsl:value-of select="ns4:HOUSE_NUMBER_EXTENSION"/>
+                                            </ns6:HOUSE_NUMBER_EXTENSION>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:POSTCODE">
+                                            <ns6:POSTCODE>
+                                                <xsl:value-of select="ns4:POSTCODE"/>
+                                            </ns6:POSTCODE>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:CITY_NAME">
+                                            <ns6:CITY_NAME>
+                                                <xsl:value-of select="ns4:CITY_NAME"/>
+                                            </ns6:CITY_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:COUNTRY">
+                                            <ns6:COUNTRY>
+                                                <xsl:value-of select="ns4:COUNTRY"/>
+                                            </ns6:COUNTRY>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:COUNTRY_CODE">
+                                            <ns6:COUNTRY_CODE>
+                                                <xsl:value-of select="ns4:COUNTRY_CODE"/>
+                                            </ns6:COUNTRY_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:ADDRESS_TYPE">
+                                            <ns6:ADDRESS_TYPE>
+                                                <xsl:value-of select="ns4:ADDRESS_TYPE"/>
+                                            </ns6:ADDRESS_TYPE>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:LOCATION_DESCRIPTION">
+                                            <ns6:LOCATION_DESCRIPTION>
+                                                <xsl:value-of select="ns4:LOCATION_DESCRIPTION"/>
+                                            </ns6:LOCATION_DESCRIPTION>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:UNFORMATTED_ADDRESS">
+                                            <ns6:UNFORMATTED_ADDRESS>
+                                                <xsl:for-each select="ns4:UNFORMATTED_ADDRESS/ns4:ADDRESS_LINE">
+                                                    <ns6:ADDRESS_LINE>
+                                                        <xsl:attribute name="sequenceNumber">
+                                                            <xsl:value-of select="./@sequenceNumber"/>
+                                                        </xsl:attribute>
+                                                        <xsl:value-of select="."/>
+                                                    </ns6:ADDRESS_LINE>
+                                                </xsl:for-each>
+                                            </ns6:UNFORMATTED_ADDRESS>
+                                        </xsl:if>
+                                        <ns6:RUNTIME_PARAMETERS>
+                                            <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:SPECIAL_DESCRIPTION">
+                                                <ns6:SPECIAL_DESCRIPTION>
+                                                    <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:SPECIAL_DESCRIPTION"/>
+                                                </ns6:SPECIAL_DESCRIPTION>
+                                            </xsl:if>
+                                            <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:POSTCODE_SUFFIX">
+                                                <ns6:POSTCODE_SUFFIX>
+                                                    <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:POSTCODE_SUFFIX"/>
+                                                </ns6:POSTCODE_SUFFIX>
+                                            </xsl:if>
+                                            <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:IS_FUTURE_PRIMARY_ADDRESS">
+                                                <ns6:IS_FUTURE_PRIMARY_ADDRESS>
+                                                    <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:IS_FUTURE_PRIMARY_ADDRESS"/>
+                                                </ns6:IS_FUTURE_PRIMARY_ADDRESS>
+                                            </xsl:if>
+                                            <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_LOGICAL_ADDRESS">
+                                                <ns6:IS_PRIMARY_LOGICAL_ADDRESS>
+                                                    <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_LOGICAL_ADDRESS"/>
+                                                </ns6:IS_PRIMARY_LOGICAL_ADDRESS>
+                                            </xsl:if>
+                                            <xsl:if test="ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                                <ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                                    <xsl:value-of select="ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                                </ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                            </xsl:if>
+                                        </ns6:RUNTIME_PARAMETERS>
+                                        <ns6:VALIDITY>
+                                            <xsl:if test="ns4:VALIDITY/ns4:ADDRESS_STATUS">
+                                                <ns6:ADDRESS_STATUS>
+                                                    <xsl:value-of select="ns4:VALIDITY/ns4:ADDRESS_STATUS"/>
+                                                </ns6:ADDRESS_STATUS>
+                                            </xsl:if>
+                                            <xsl:if test="ns4:VALIDITY/ns4:VALID_FROM_DATE">
+                                                <ns6:VALID_FROM_DATE>
+                                                    <xsl:value-of select="ns4:VALIDITY/ns4:VALID_FROM_DATE"/>
+                                                </ns6:VALID_FROM_DATE>
+                                            </xsl:if>
+                                            <xsl:if test="ns4:VALIDITY/ns4:VALID_UNTIL_DATE">
+                                                <ns6:VALID_UNTIL_DATE>
+                                                    <xsl:value-of select="ns4:VALIDITY/ns4:VALID_UNTIL_DATE"/>
+                                                </ns6:VALID_UNTIL_DATE>
+                                            </xsl:if>
+                                        </ns6:VALIDITY>
+                                        <xsl:for-each select="ns4:VALIDATION_RESULT">
+                                            <ns6:VALIDATION_RESULT>
+                                                <ns6:SEVERITY>
+                                                    <xsl:value-of select="ns4:SEVERITY"/>
+                                                </ns6:SEVERITY>
+                                                <ns6:CODE>
+                                                    <xsl:value-of select="ns4:CODE"/>
+                                                </ns6:CODE>
+                                                <ns6:DESCRIPTION>
+                                                    <xsl:value-of select="ns4:DESCRIPTION"/>
+                                                </ns6:DESCRIPTION>
+                                            </ns6:VALIDATION_RESULT>
+                                        </xsl:for-each>
+                                    </ns6:ADDRESS>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:SIEBEL_ACCOUNT_REFERENCE">
+                                    <ns6:SIEBEL_ACCOUNT_REFERENCE>
+                                        <xsl:if test="ns4:SIEBEL_ACCOUNT_ID">
+                                            <ns6:SIEBEL_ACCOUNT_ID>
+                                                <xsl:value-of select="ns4:SIEBEL_ACCOUNT_ID"/>
+                                            </ns6:SIEBEL_ACCOUNT_ID>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:UCM_ROW_ID">
+                                            <ns6:UCM_ROW_ID>
+                                                <xsl:value-of select="ns4:UCM_ROW_ID"/>
+                                            </ns6:UCM_ROW_ID>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:INTEGRATION_ID">
+                                            <ns6:INTEGRATION_ID>
+                                                <xsl:value-of select="ns4:INTEGRATION_ID"/>
+                                            </ns6:INTEGRATION_ID>
+                                        </xsl:if>
+                                    </ns6:SIEBEL_ACCOUNT_REFERENCE>
+                                </xsl:for-each>
+                                <ns6:RUNTIME_PARAMETERS>
+                                    <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                        <ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                        </ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:INTEGRATION_ID">
+                                        <ns6:INTEGRATION_ID>
+                                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:INTEGRATION_ID"/>
+                                        </ns6:INTEGRATION_ID>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:UCM_ROW_ID">
+                                        <ns6:UCM_ROW_ID>
+                                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:UCM_ROW_ID"/>
+                                        </ns6:UCM_ROW_ID>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:ID">
+                                        <ns6:ID>
+                                            <xsl:value-of select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:RUNTIME_PARAMETERS/ns4:ID"/>
+                                        </ns6:ID>
+                                    </xsl:if>
+                                </ns6:RUNTIME_PARAMETERS>
+                                <xsl:for-each select="$Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:CROSS_REFERENCE">
+                                    <ns6:CROSS_REFERENCE>
+                                        <xsl:if test="ns4:CONTACT_ID">
+                                            <ns6:CONTACT_ID>
+                                                <xsl:value-of select="ns4:CONTACT_ID"/>
+                                            </ns6:CONTACT_ID>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:CIF_SYSTEM_ID">
+                                            <ns6:CIF_SYSTEM_ID>
+                                                <xsl:value-of select="ns4:CIF_SYSTEM_ID"/>
+                                            </ns6:CIF_SYSTEM_ID>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:EXTERNAL_ID1">
+                                            <ns6:EXTERNAL_ID1>
+                                                <xsl:value-of select="ns4:EXTERNAL_ID1"/>
+                                            </ns6:EXTERNAL_ID1>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:SYSTEM_NAME">
+                                            <ns6:SYSTEM_NAME>
+                                                <xsl:value-of select="ns4:SYSTEM_NAME"/>
+                                            </ns6:SYSTEM_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="ns4:SYSTEM_NUMBER">
+                                            <ns6:SYSTEM_NUMBER>
+                                                <xsl:value-of select="ns4:SYSTEM_NUMBER"/>
+                                            </ns6:SYSTEM_NUMBER>
+                                        </xsl:if>
+                                    </ns6:CROSS_REFERENCE>
+                                </xsl:for-each>
+                            </ns6:CONTACT_PERSON>
+                        </ns6:BODY>
+                    </xsl:when>
+                    <xsl:when test="exists($Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY) and  $Call-UCMAdapter/ns7:UpsertContactResponse/ns7:RESULT_STATUS/@pfx7:STATUS!=0">
+                        <ns6:BODY>
+                            <ns6:CONTACT_PERSON>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:OVERRIDE_VALIDATION">
+                                    <ns6:OVERRIDE_VALIDATION>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:OVERRIDE_VALIDATION"/>
+                                    </ns6:OVERRIDE_VALIDATION>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_WARNING_COUNT">
+                                    <ns6:VALIDATION_WARNING_COUNT>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_WARNING_COUNT"/>
+                                    </ns6:VALIDATION_WARNING_COUNT>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_ERROR_COUNT">
+                                    <ns6:VALIDATION_ERROR_COUNT>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_ERROR_COUNT"/>
+                                    </ns6:VALIDATION_ERROR_COUNT>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_TOTAL_WARNING_COUNT">
+                                    <ns6:VALIDATION_TOTAL_WARNING_COUNT>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_TOTAL_WARNING_COUNT"/>
+                                    </ns6:VALIDATION_TOTAL_WARNING_COUNT>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_TOTAL_ERROR_COUNT">
+                                    <ns6:VALIDATION_TOTAL_ERROR_COUNT>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_TOTAL_ERROR_COUNT"/>
+                                    </ns6:VALIDATION_TOTAL_ERROR_COUNT>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_PERSON_ID">
+                                    <ns6:CONTACT_PERSON_ID>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_PERSON_ID"/>
+                                    </ns6:CONTACT_PERSON_ID>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:INITIALS">
+                                    <ns6:INITIALS>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:INITIALS"/>
+                                    </ns6:INITIALS>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME_PREFIX">
+                                    <ns6:FAMILY_NAME_PREFIX>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME_PREFIX"/>
+                                    </ns6:FAMILY_NAME_PREFIX>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME">
+                                    <ns6:FAMILY_NAME>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME"/>
+                                    </ns6:FAMILY_NAME>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME_POSTFIX">
+                                    <ns6:FAMILY_NAME_POSTFIX>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:FAMILY_NAME_POSTFIX"/>
+                                    </ns6:FAMILY_NAME_POSTFIX>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:PREFERRED_NAME">
+                                    <ns6:PREFERRED_NAME>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:PREFERRED_NAME"/>
+                                    </ns6:PREFERRED_NAME>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:DATE_OF_BIRTH">
+                                    <ns6:DATE_OF_BIRTH>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:DATE_OF_BIRTH"/>
+                                    </ns6:DATE_OF_BIRTH>
+                                </xsl:if>
+                                <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:ACADEMIC_TITLE">
+                                    <ns6:ACADEMIC_TITLE>
+                                        <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:ACADEMIC_TITLE"/>
+                                    </ns6:ACADEMIC_TITLE>
+                                </xsl:if>
+                                <ns6:CONTACT_MEDIUM>
+                                    <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM/ns8:TELEPHONE">
+                                        <ns6:TELEPHONE>
+                                            <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM/ns8:TELEPHONE"/>
+                                        </ns6:TELEPHONE>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM/ns8:FAX">
+                                        <ns6:FAX>
+                                            <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM/ns8:FAX"/>
+                                        </ns6:FAX>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM/ns8:EMAIL_ADDRESS">
+                                        <ns6:EMAIL_ADDRESS>
+                                            <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM/ns8:EMAIL_ADDRESS"/>
+                                        </ns6:EMAIL_ADDRESS>
+                                    </xsl:if>
+                                    <ns6:USAGE>
+                                        <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM/ns8:USAGE/ns8:SUPPRESS_ALL_EMAILS">
+                                            <ns6:SUPPRESS_ALL_EMAILS>
+                                                <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CONTACT_MEDIUM/ns8:USAGE/ns8:SUPPRESS_ALL_EMAILS"/>
+                                            </ns6:SUPPRESS_ALL_EMAILS>
+                                        </xsl:if>
+                                    </ns6:USAGE>
+                                </ns6:CONTACT_MEDIUM>
+                                <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:VALIDATION_RESULT">
+                                    <ns6:VALIDATION_RESULT>
+                                        <ns6:SEVERITY>
+                                            <xsl:value-of select="ns8:SEVERITY"/>
+                                        </ns6:SEVERITY>
+                                        <ns6:CODE>
+                                            <xsl:value-of select="ns8:CODE"/>
+                                        </ns6:CODE>
+                                        <ns6:DESCRIPTION>
+                                            <xsl:value-of select="ns8:DESCRIPTION"/>
+                                        </ns6:DESCRIPTION>
+                                    </ns6:VALIDATION_RESULT>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:ADDRESS">
+                                    <ns6:ADDRESS>
+                                        <xsl:if test="@language">
+                                            <xsl:attribute name="language">
+                                                <xsl:value-of select="@language"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:OVERRIDE_VALIDATION">
+                                            <ns6:OVERRIDE_VALIDATION>
+                                                <xsl:value-of select="ns8:OVERRIDE_VALIDATION"/>
+                                            </ns6:OVERRIDE_VALIDATION>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:VALIDATION_WARNING_COUNT">
+                                            <ns6:VALIDATION_WARNING_COUNT>
+                                                <xsl:value-of select="ns8:VALIDATION_WARNING_COUNT"/>
+                                            </ns6:VALIDATION_WARNING_COUNT>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:VALIDATION_ERROR_COUNT">
+                                            <ns6:VALIDATION_ERROR_COUNT>
+                                                <xsl:value-of select="ns8:VALIDATION_ERROR_COUNT"/>
+                                            </ns6:VALIDATION_ERROR_COUNT>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:STREET_NAME">
+                                            <ns6:STREET_NAME>
+                                                <xsl:if test="ns8:STREET_NAME/@namingConvention">
+                                                    <xsl:attribute name="namingConvention">
+                                                        <xsl:value-of select="ns8:STREET_NAME/@namingConvention"/>
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:value-of select="ns8:STREET_NAME"/>
+                                            </ns6:STREET_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:HOUSE_NUMBER">
+                                            <ns6:HOUSE_NUMBER>
+                                                <xsl:value-of select="ns8:HOUSE_NUMBER"/>
+                                            </ns6:HOUSE_NUMBER>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:HOUSE_NUMBER_EXTENSION">
+                                            <ns6:HOUSE_NUMBER_EXTENSION>
+                                                <xsl:value-of select="ns8:HOUSE_NUMBER_EXTENSION"/>
+                                            </ns6:HOUSE_NUMBER_EXTENSION>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:POSTCODE">
+                                            <ns6:POSTCODE>
+                                                <xsl:value-of select="ns8:POSTCODE"/>
+                                            </ns6:POSTCODE>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:CITY_NAME">
+                                            <ns6:CITY_NAME>
+                                                <xsl:value-of select="ns8:CITY_NAME"/>
+                                            </ns6:CITY_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:COUNTRY">
+                                            <ns6:COUNTRY>
+                                                <xsl:value-of select="ns8:COUNTRY"/>
+                                            </ns6:COUNTRY>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:COUNTRY_CODE">
+                                            <ns6:COUNTRY_CODE>
+                                                <xsl:value-of select="ns8:COUNTRY_CODE"/>
+                                            </ns6:COUNTRY_CODE>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:ADDRESS_TYPE">
+                                            <ns6:ADDRESS_TYPE>
+                                                <xsl:value-of select="ns8:ADDRESS_TYPE"/>
+                                            </ns6:ADDRESS_TYPE>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:LOCATION_DESCRIPTION">
+                                            <ns6:LOCATION_DESCRIPTION>
+                                                <xsl:value-of select="ns8:LOCATION_DESCRIPTION"/>
+                                            </ns6:LOCATION_DESCRIPTION>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:UNFORMATTED_ADDRESS">
+                                            <ns6:UNFORMATTED_ADDRESS>
+                                                <xsl:for-each select="ns8:UNFORMATTED_ADDRESS/ns8:ADDRESS_LINE">
+                                                    <ns6:ADDRESS_LINE>
+                                                        <xsl:attribute name="sequenceNumber">
+                                                            <xsl:value-of select="./@sequenceNumber"/>
+                                                        </xsl:attribute>
+                                                        <xsl:value-of select="."/>
+                                                    </ns6:ADDRESS_LINE>
+                                                </xsl:for-each>
+                                            </ns6:UNFORMATTED_ADDRESS>
+                                        </xsl:if>
+                                        <ns6:RUNTIME_PARAMETERS>
+                                            <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:SPECIAL_DESCRIPTION">
+                                                <ns6:SPECIAL_DESCRIPTION>
+                                                    <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:SPECIAL_DESCRIPTION"/>
+                                                </ns6:SPECIAL_DESCRIPTION>
+                                            </xsl:if>
+                                            <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:POSTCODE_SUFFIX">
+                                                <ns6:POSTCODE_SUFFIX>
+                                                    <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:POSTCODE_SUFFIX"/>
+                                                </ns6:POSTCODE_SUFFIX>
+                                            </xsl:if>
+                                            <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:IS_FUTURE_PRIMARY_ADDRESS">
+                                                <ns6:IS_FUTURE_PRIMARY_ADDRESS>
+                                                    <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:IS_FUTURE_PRIMARY_ADDRESS"/>
+                                                </ns6:IS_FUTURE_PRIMARY_ADDRESS>
+                                            </xsl:if>
+                                            <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_LOGICAL_ADDRESS">
+                                                <ns6:IS_PRIMARY_LOGICAL_ADDRESS>
+                                                    <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_LOGICAL_ADDRESS"/>
+                                                </ns6:IS_PRIMARY_LOGICAL_ADDRESS>
+                                            </xsl:if>
+                                            <xsl:if test="ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                                <ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                                    <xsl:value-of select="ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                                </ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                            </xsl:if>
+                                        </ns6:RUNTIME_PARAMETERS>
+                                        <ns6:VALIDITY>
+                                            <xsl:if test="ns8:VALIDITY/ns8:ADDRESS_STATUS">
+                                                <ns6:ADDRESS_STATUS>
+                                                    <xsl:value-of select="ns8:VALIDITY/ns8:ADDRESS_STATUS"/>
+                                                </ns6:ADDRESS_STATUS>
+                                            </xsl:if>
+                                            <xsl:if test="ns8:VALIDITY/ns8:VALID_FROM_DATE">
+                                                <ns6:VALID_FROM_DATE>
+                                                    <xsl:value-of select="ns8:VALIDITY/ns8:VALID_FROM_DATE"/>
+                                                </ns6:VALID_FROM_DATE>
+                                            </xsl:if>
+                                            <xsl:if test="ns8:VALIDITY/ns8:VALID_UNTIL_DATE">
+                                                <ns6:VALID_UNTIL_DATE>
+                                                    <xsl:value-of select="ns8:VALIDITY/ns8:VALID_UNTIL_DATE"/>
+                                                </ns6:VALID_UNTIL_DATE>
+                                            </xsl:if>
+                                        </ns6:VALIDITY>
+                                        <xsl:for-each select="ns8:VALIDATION_RESULT">
+                                            <ns6:VALIDATION_RESULT>
+                                                <ns6:SEVERITY>
+                                                    <xsl:value-of select="ns8:SEVERITY"/>
+                                                </ns6:SEVERITY>
+                                                <ns6:CODE>
+                                                    <xsl:value-of select="ns8:CODE"/>
+                                                </ns6:CODE>
+                                                <ns6:DESCRIPTION>
+                                                    <xsl:value-of select="ns8:DESCRIPTION"/>
+                                                </ns6:DESCRIPTION>
+                                            </ns6:VALIDATION_RESULT>
+                                        </xsl:for-each>
+                                    </ns6:ADDRESS>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:SIEBEL_ACCOUNT_REFERENCE">
+                                    <ns6:SIEBEL_ACCOUNT_REFERENCE>
+                                        <xsl:if test="ns8:SIEBEL_ACCOUNT_ID">
+                                            <ns6:SIEBEL_ACCOUNT_ID>
+                                                <xsl:value-of select="ns8:SIEBEL_ACCOUNT_ID"/>
+                                            </ns6:SIEBEL_ACCOUNT_ID>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:UCM_ROW_ID">
+                                            <ns6:UCM_ROW_ID>
+                                                <xsl:value-of select="ns8:UCM_ROW_ID"/>
+                                            </ns6:UCM_ROW_ID>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:INTEGRATION_ID">
+                                            <ns6:INTEGRATION_ID>
+                                                <xsl:value-of select="ns8:INTEGRATION_ID"/>
+                                            </ns6:INTEGRATION_ID>
+                                        </xsl:if>
+                                    </ns6:SIEBEL_ACCOUNT_REFERENCE>
+                                </xsl:for-each>
+                                <ns6:RUNTIME_PARAMETERS>
+                                    <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_MULTI_VALUE_GROUP">
+                                        <ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                            <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:IS_PRIMARY_MULTI_VALUE_GROUP"/>
+                                        </ns6:IS_PRIMARY_MULTI_VALUE_GROUP>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:INTEGRATION_ID">
+                                        <ns6:INTEGRATION_ID>
+                                            <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:INTEGRATION_ID"/>
+                                        </ns6:INTEGRATION_ID>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:UCM_ROW_ID">
+                                        <ns6:UCM_ROW_ID>
+                                            <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:UCM_ROW_ID"/>
+                                        </ns6:UCM_ROW_ID>
+                                    </xsl:if>
+                                    <xsl:if test="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:ID">
+                                        <ns6:ID>
+                                            <xsl:value-of select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:RUNTIME_PARAMETERS/ns8:ID"/>
+                                        </ns6:ID>
+                                    </xsl:if>
+                                </ns6:RUNTIME_PARAMETERS>
+                                <xsl:for-each select="$Call-UCMAdapter/ns7:UpsertContactResponse/ns8:BODY/ns8:CONTACT_PERSON/ns8:CROSS_REFERENCE">
+                                    <ns6:CROSS_REFERENCE>
+                                        <xsl:if test="ns8:CONTACT_ID">
+                                            <ns6:CONTACT_ID>
+                                                <xsl:value-of select="ns8:CONTACT_ID"/>
+                                            </ns6:CONTACT_ID>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:CIF_SYSTEM_ID">
+                                            <ns6:CIF_SYSTEM_ID>
+                                                <xsl:value-of select="ns8:CIF_SYSTEM_ID"/>
+                                            </ns6:CIF_SYSTEM_ID>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:EXTERNAL_ID1">
+                                            <ns6:EXTERNAL_ID1>
+                                                <xsl:value-of select="ns8:EXTERNAL_ID1"/>
+                                            </ns6:EXTERNAL_ID1>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:SYSTEM_NAME">
+                                            <ns6:SYSTEM_NAME>
+                                                <xsl:value-of select="ns8:SYSTEM_NAME"/>
+                                            </ns6:SYSTEM_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="ns8:SYSTEM_NUMBER">
+                                            <ns6:SYSTEM_NUMBER>
+                                                <xsl:value-of select="ns8:SYSTEM_NUMBER"/>
+                                            </ns6:SYSTEM_NUMBER>
+                                        </xsl:if>
+                                    </ns6:CROSS_REFERENCE>
+                                </xsl:for-each>
+                            </ns6:CONTACT_PERSON>
+                        </ns6:BODY>
+                    </xsl:when>
+                </xsl:choose>
+            </pfx4:UpsertContactResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Call CDCAdapter</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:xpathDescription>No Error or Warning</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>(exists($Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_WARNING_COUNT) and $Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_WARNING_COUNT =0) and 
+(exists($Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_ERROR_COUNT) and $Call-CDCAdapter/ns2:ValidateContactResponse/ns4:BODY/ns4:CONTACT_PERSON/ns4:VALIDATION_TOTAL_ERROR_COUNT =0) and 
+$Call-CDCAdapter/ns2:ValidateContactResponse/ns2:RESULT_STATUS/@pfx7:STATUS=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Call-UCMAdapter</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call CDCAdapter</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-UCMAdapter</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-UCMAdapter</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call CDCAdapter</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call CDCAdapter</pd:from>
+        <pd:to>Map Error Response</pd:to>
+        <pd:xpathDescription>Error in CDC</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-UCMAdapter</pd:from>
+        <pd:to>Map Error Response</pd:to>
+        <pd:xpathDescription>Error in UCM </pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Call-UCMAdapter/ns7:UpsertContactResponse/ns7:RESULT_STATUS/@pfx7:STATUS!=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Error Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Error Response</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

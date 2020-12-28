@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://www.tibco.com/CLEver/Log" xmlns:pfx3="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pfx4="http://www.tibco.com/CLEver/Resolution" xmlns:pfx5="http://www.tibco.com/CLEver/Policy">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Log" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Log.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <pd:name>Processes/BackendServices/Transactional/Logging/Starter/ReceiveLogging_JMS.process</pd:name>
+    <pd:startName>Receive Logging</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive Logging">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>74</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>23</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Naming/Environment%%.%%Naming/Organisation%%.%%Naming/FunctionalDomain%%.%%Naming/Application%%.%%Connections/JMS/EventBus/LoggingQueue%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Shared Resources/Connections/JMS/JMS.sharedjmscon</ConnectionReference>
+            <OutDataxsdString ref="pfx2:Log"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>476</pd:endX>
+    <pd:endY>60</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send out Exception Error">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>213</pd:x>
+        <pd:y>173</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Naming/Environment%%.%%Naming/Organisation%%.%%Naming/FunctionalDomain%%.%%Naming/Application%%.%%Connections/JMS/EventBus/LoggingQueue%%.ERROR</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Shared Resources/Connections/JMS/JMS.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx2:Log"/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:if test="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSExpiration">
+                    <JMSExpiration>
+                        <xsl:value-of select="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSExpiration"/>
+                    </JMSExpiration>
+                </xsl:if>
+                <xsl:if test="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSPriority">
+                    <JMSPriority>
+                        <xsl:value-of select="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSPriority"/>
+                    </JMSPriority>
+                </xsl:if>
+                <xsl:if test="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSDeliveryMode">
+                    <JMSDeliveryMode>
+                        <xsl:value-of select="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSDeliveryMode"/>
+                    </JMSDeliveryMode>
+                </xsl:if>
+                <xsl:if test="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID">
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID"/>
+                    </JMSCorrelationID>
+                </xsl:if>
+                <xsl:if test="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSType">
+                    <JMSType>
+                        <xsl:value-of select="$Receive-Logging/ns:ActivityOutput/JMSHeaders/ns:JMSType"/>
+                    </JMSType>
+                </xsl:if>
+                <xsl:for-each select="$Receive-Logging/ns:ActivityOutput/JMSProperties">
+                    <JMSProperties>
+                        <ns:JMSXGroupID>
+                            <xsl:value-of select="ns:JMSXGroupID"/>
+                        </ns:JMSXGroupID>
+                        <ns:JMSXGroupSeq>
+                            <xsl:value-of select="ns:JMSXGroupSeq"/>
+                        </ns:JMSXGroupSeq>
+                    </JMSProperties>
+                </xsl:for-each>
+                <xsl:copy-of select="$Receive-Logging/ns:ActivityOutput/Body"/>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>255</pd:x>
+        <pd:y>301</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>476</pd:x>
+        <pd:y>301</pd:y>
+        <config>
+            <ConfirmEvent>Receive Logging</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>357</pd:x>
+        <pd:y>302</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(' Exception occured while parsing incomming message' ,tib:render-xml($_error))"/>
+                </message>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm normal">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>58</pd:y>
+        <config>
+            <ConfirmEvent>Receive Logging</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ReceiveLogging">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>211</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <processName>/Processes/BackendServices/Transactional/Logging/Implementation/ReceiveLogging.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Receive-Logging/ns:ActivityOutput/Body/pfx2:Log"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Send out Exception Error</pd:from>
+        <pd:to>Confirm normal</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm normal</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive Logging</pd:from>
+        <pd:to>ReceiveLogging</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveLogging</pd:from>
+        <pd:to>Confirm normal</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveLogging</pd:from>
+        <pd:to>Send out Exception Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

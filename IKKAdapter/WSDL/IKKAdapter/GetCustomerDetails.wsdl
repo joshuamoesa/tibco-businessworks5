@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.GetCustomerDetails" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GetCustomerDetails" targetNamespace="urn:IKKAdapter.GetCustomerDetails">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.GetCustomerDetails">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/GetCustomerDetails.xsd"/>
+            <xsd:element name="GetCustomerDetailsRequest" type="ikk:GetCustomerDetailsRequest"/>
+            <xsd:element name="GetCustomerDetailsResponse" type="ikk:GetCustomerDetailsResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="GetCustomerDetailsRequest">
+        <part element="ikk:GetCustomerDetailsRequest" name="parameters"/>
+    </message>
+    <message name="GetCustomerDetailsResponse">
+        <part element="ikk:GetCustomerDetailsResponse" name="parameters"/>
+    </message>
+    <portType name="GetCustomerDetailsPortType">
+        <operation name="GetCustomerDetails">
+            <input message="ikk:GetCustomerDetailsRequest"/>
+            <output message="ikk:GetCustomerDetailsResponse"/>
+        </operation>
+    </portType>
+    <binding name="GetCustomerDetailsSoapBinding" type="ikk:GetCustomerDetailsPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetCustomerDetails">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetCustomerDetailsService">
+        <port binding="ikk:GetCustomerDetailsSoapBinding" name="GetCustomerDetailsSoap">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/GetCustomerDetails"/>
+        </port>
+    </service>
+</definitions>

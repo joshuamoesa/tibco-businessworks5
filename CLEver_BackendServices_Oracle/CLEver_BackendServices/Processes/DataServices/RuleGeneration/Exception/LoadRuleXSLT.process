@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ExceptionRuleXslt="java://XSLTTransform" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/Rule" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes">
+    <pd:name>Processes/DataServices/RuleGeneration/Exception/LoadRuleXSLT.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ID" type="xsd:int"/>
+                    <xsd:element ref="pfx:Security"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>43</pd:startX>
+    <pd:startY>68</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>676</pd:endX>
+    <pd:endY>67</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="LoadRules">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>140</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Exception/Sub/LoadRules.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/Input"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ConstructTests">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>258</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Exception/Sub/ConstructTests.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$LoadRules/Output/ns:RulesFull"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RenderXslt">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>391</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Exception/Sub/RenderXslt.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$ConstructTests/Rules"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Init RuleXSLT">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>543</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Dummy" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Dummy>
+                    <xsl:value-of select="ExceptionRuleXslt:loadXslt('ExceptionRule', $RenderXslt/Output/Result)"/>
+                </Dummy>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>LoadRules</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LoadRules</pd:from>
+        <pd:to>ConstructTests</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ConstructTests</pd:from>
+        <pd:to>RenderXslt</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RenderXslt</pd:from>
+        <pd:to>Init RuleXSLT</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init RuleXSLT</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

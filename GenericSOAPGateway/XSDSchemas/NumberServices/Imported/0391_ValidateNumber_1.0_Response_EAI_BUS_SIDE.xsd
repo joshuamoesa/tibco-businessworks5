@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0391_ValidateNumber/1.0/Response"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.kpn.com/EAI/fixed/0391_ValidateNumber/1.0/Response"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SUBSCRIPTION_VALID_AT_LOCATION">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="true"/>
+							<xs:enumeration value="false"/>
+							<xs:enumeration value="unknown"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SUBSCRIPTION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SERVICE_PROVIDER_ID">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="3"/>
+										<xs:maxLength value="6"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IS_WHOLE_SALE_LINE_RENTAL">
+							    <xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="true"/>
+									<xs:enumeration value="false"/>
+									<xs:enumeration value="unknown"/>
+								</xs:restriction>
+							    </xs:simpleType>
+							</xs:element>
+							<xs:element name="NETWORK_SERVICE_TYPE" minOccurs="0">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="PSTN"/>
+										<xs:enumeration value="ISDN"/>
+										<xs:enumeration value="UNKNOWN"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="MAIN_NUMBER" minOccurs="0">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="26"/>
+										<xs:pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SUB_NUMBER" minOccurs="0" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="26"/>
+										<xs:pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="LOCATION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DUTCH_POSTCODE">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:length value="6"/>
+										<xs:pattern value="\d{4}[a-zA-Z]{2}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="HOUSE_NUMBER">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="5"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="HOUSE_NUMBER_EXTENSION" minOccurs="0">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="0"/>
+										<xs:maxLength value="6"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

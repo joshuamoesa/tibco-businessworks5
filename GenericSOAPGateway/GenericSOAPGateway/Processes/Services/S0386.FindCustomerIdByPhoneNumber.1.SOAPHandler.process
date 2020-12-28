@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0363.ExecuteLineMeasurement.1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://xmlns.kpn.com/EAI/fixed/0363_ExecuteLineMeasurement/1.0/Request" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://xmlns.kpn.com/EAI/fixed/0363_ExecuteLineMeasurement/1.0/Response" xmlns:ns4="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:ns5="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:pfx="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0386.FindCustomerIdByPhoneNumber.1" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0386_FindCustomerIdByPhoneNumber/1.0/Request" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns7="http://xmlns.kpn.com/EAI/fixed/0386_FindCustomerIdByPhoneNumber/1.0/Response">
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0363_ExecuteLineMeasurement/1.0/Request" schemaLocation="/XSDSchemas/NetworkResource/Request/ExecuteLineMeasurement.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0363_ExecuteLineMeasurement/1.0/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0363_ExecuteLineMeasurement_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0386.FindCustomerIdByPhoneNumber.1" schemaLocation="/WSDL/S0386.FindCustomerIdByPhoneNumber.1.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0386_FindCustomerIdByPhoneNumber/1.0/Response"/>
+    <xsd:import namespace="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0363.ExecuteLineMeasurement.1" location="/WSDL/S0363.ExecuteLineMeasurement.1.wsdl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0386.FindCustomerIdByPhoneNumber.1" location="/WSDL/S0386.FindCustomerIdByPhoneNumber.1.wsdl"/>
+    <pd:name>GenericSOAPGateway/Processes/Services/S0386.FindCustomerIdByPhoneNumber.1.SOAPHandler.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx:S0386.FindCustomerIdByPhoneNumber.1.Request"/>
+    <pd:startX>131</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$Call_Main/Output/BodyContainer/*" element="ns7:BODY"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <pfx:S0386.FindCustomerIdByPhoneNumber.1.Response>
+            <parameters>
+                <xsl:choose>
+                    <xsl:when test="exists($Call_InvalidDataHandler)">
+                        <pfx:Response>
+                            <pfx:RESULT>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/@*"/>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/node()"/>
+                            </pfx:RESULT>
+                        </pfx:Response>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx:Response>
+                            <pfx:RESULT>
+                                <xsl:copy-of select="$Call_Main/Output/Result/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Call_Main/Output/Result/@*"/>
+                                <xsl:copy-of select="$Call_Main/Output/Result/node()"/>
+                            </pfx:RESULT>
+                            <xsl:copy-of select="$Call_Main/Output/BodyContainer/ns7:BODY"/>
+                        </pfx:Response>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </parameters>
+        </pfx:S0386.FindCustomerIdByPhoneNumber.1.Response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx:S0386.FindCustomerIdByPhoneNumber.1.Response"/>
+    <pd:endX>452</pd:endX>
+    <pd:endY>67</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Call_Main">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>285</pd:x>
+        <pd:y>68</pd:y>
+        <config>
+            <processName>/GenericSOAPGateway/Processes/CommonHandler.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx:S0386.FindCustomerIdByPhoneNumber.1.Request/headerparameters/ns4:Security/*" element="ns4:UsernameToken"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <Input>
+                <Operation>
+                    <xsl:value-of select="&quot;S0386.FindCustomerIdByPhoneNumber.1&quot;"/>
+                </Operation>
+                <ServiceProvider>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ServicesProvider/SiebelZMAdapter"/>
+                </ServiceProvider>
+                <ServiceConsumer>
+                    <xsl:value-of select="$Start/pfx:S0386.FindCustomerIdByPhoneNumber.1.Request/headerparameters/ns4:Security/ns4:UsernameToken[1]/ns4:Username"/>
+                </ServiceConsumer>
+                <BodyContainer>
+                    <xsl:copy-of select="$Start/pfx:S0386.FindCustomerIdByPhoneNumber.1.Request/parameters/pfx:Request/ns6:BODY"/>
+                </BodyContainer>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call_InvalidDataHandler">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>290</pd:x>
+        <pd:y>158</pd:y>
+        <config>
+            <processName>/GenericSOAPGateway/Processes/InvalidDataHandler.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$_error/ns2:ErrorReport"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call_Main</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_Main</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call_InvalidDataHandler</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_InvalidDataHandler</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

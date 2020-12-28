@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ref="http://www.tibco.com/tnt/utilitySchema">
+    <pd:name>B2BAdapter/Processes/Sub/RenderHashMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="parameters">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="name" type="xsd:string"/>
+                                <xsd:element name="value" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>31</pd:startX>
+    <pd:startY>67</pd:startY>
+    <pd:returnBindings>
+        <HashMap>
+            <xsl:value-of select="$Java-Code/javaCodeActivityOutput/hashMap"/>
+        </HashMap>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="HashMap" type="ref:nativeJavaObjectKey"/>
+    </pd:endType>
+    <pd:endX>259</pd:endX>
+    <pd:endY>66</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Java Code">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>144</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <fileName>RenderHashMapJavaCode</fileName>
+            <packageName>B2BAdapter.Processes.Sub.RenderHashMap</packageName>
+            <fullsource>package B2BAdapter.Processes.Sub.RenderHashMap;
+import java.util.*;
+import java.io.*;
+public class RenderHashMapJavaCode{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String[] key = null;
+	protected String[] value = null;
+	protected Object hashMap = null;
+	public String[] getkey() {
+		return key;
+	}
+	public void setkey(String[] val) {
+		key = val;
+	}
+	public String[] getvalue() {
+		return value;
+	}
+	public void setvalue(String[] val) {
+		value = val;
+	}
+	public Object gethashMap() {
+		return hashMap;
+	}
+	public void sethashMap(Object val) {
+		hashMap = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public RenderHashMapJavaCode() {
+	}
+
+	@SuppressWarnings("unchecked")
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String[] key
+	In  : String[] value
+	Out : Object hashMap
+* Available Variables: DO NOT MODIFY *****/
+
+HashMap map = new HashMap();
+
+for (int i=0;i&lt;key.length;i++) {
+	map.put(key[i],value[i]);
+}
+sethashMap(map);
+}
+}
+</fullsource>
+            <inputData>
+                <row>
+                    <fieldName>key</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>repeating</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>value</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>repeating</fieldRequired>
+                </row>
+            </inputData>
+            <outputData>
+                <row>
+                    <fieldName>hashMap</fieldName>
+                    <fieldType>ObjectReference</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>RenderHashMapJavaCode</name>
+                    <byteCode>yv66vgAAADEALwkACQAjCQAJACQJAAkAJQoACgAmBwAnCgAFACYKAAUAKAoACQApBwAqBwArAQADa2V5AQATW0xqYXZhL2xhbmcvU3RyaW5nOwEABXZhbHVlAQAHaGFzaE1hcAEAEkxqYXZhL2xhbmcvT2JqZWN0OwEABmdldGtleQEAFSgpW0xqYXZhL2xhbmcvU3RyaW5nOwEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBAAZzZXRrZXkBABYoW0xqYXZhL2xhbmcvU3RyaW5nOylWAQAIZ2V0dmFsdWUBAAhzZXR2YWx1ZQEACmdldGhhc2hNYXABABQoKUxqYXZhL2xhbmcvT2JqZWN0OwEACnNldGhhc2hNYXABABUoTGphdmEvbGFuZy9PYmplY3Q7KVYBAAY8aW5pdD4BAAMoKVYBAAZpbnZva2UBAApFeGNlcHRpb25zBwAsAQAKU291cmNlRmlsZQEAGlJlbmRlckhhc2hNYXBKYXZhQ29kZS5qYXZhDAALAAwMAA0ADAwADgAPDAAcAB0BABFqYXZhL3V0aWwvSGFzaE1hcAwALQAuDAAaABsBADxCMkJBZGFwdGVyL1Byb2Nlc3Nlcy9TdWIvUmVuZGVySGFzaE1hcC9SZW5kZXJIYXNoTWFwSmF2YUNvZGUBABBqYXZhL2xhbmcvT2JqZWN0AQATamF2YS9sYW5nL0V4Y2VwdGlvbgEAA3B1dAEAOChMamF2YS9sYW5nL09iamVjdDtMamF2YS9sYW5nL09iamVjdDspTGphdmEvbGFuZy9PYmplY3Q7ACEACQAKAAAAAwAEAAsADAAAAAQADQAMAAAABAAOAA8AAAAIAAEAEAARAAEAEgAAAB0AAQABAAAABSq0AAGwAAAAAQATAAAABgABAAAACgABABQAFQABABIAAAAiAAIAAgAAAAYqK7UAAbEAAAABABMAAAAKAAIAAAANAAUADgABABYAEQABABIAAAAdAAEAAQAAAAUqtAACsAAAAAEAEwAAAAYAAQAAABAAAQAXABUAAQASAAAAIgACAAIAAAAGKiu1AAKxAAAAAQATAAAACgACAAAAEwAFABQAAQAYABkAAQASAAAAHQABAAEAAAAFKrQAA7AAAAABABMAAAAGAAEAAAAWAAEAGgAbAAEAEgAAACIAAgACAAAABiortQADsQAAAAEAEwAAAAoAAgAAABkABQAaAAEAHAAdAAEAEgAAADwAAgABAAAAFCq3AAQqAbUAASoBtQACKgG1AAOxAAAAAQATAAAAFgAFAAAAHAAEAAYACQAHAA4ACAATAB0AAQAeAB0AAgASAAAAXAAEAAMAAAAwuwAFWbcABkwDPRwqtAABvqIAGisqtAABHDIqtAACHDK2AAdXhAIBp//jKiu2AAixAAAAAQATAAAAGgAGAAAAJwAIACkAEwAqACQAKQAqACwALwAtAB8AAAAEAAEAIAABACEAAAACACI=</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <xsl:for-each select="$Start/parameters/parameter/name">
+                    <key>
+                        <xsl:value-of select="."/>
+                    </key>
+                </xsl:for-each>
+                <xsl:for-each select="$Start/parameters/parameter/value">
+                    <value>
+                        <xsl:value-of select="."/>
+                    </value>
+                </xsl:for-each>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Java Code</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Java Code</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

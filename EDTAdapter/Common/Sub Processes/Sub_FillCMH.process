@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <pd:name>Common/Sub Processes/Sub_FillCMH.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="CMH-IN">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="NewCMH" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="ID" type="xsd:string"/>
+                                <xsd:element name="NAME" type="xsd:string"/>
+                                <xsd:element name="FID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="MID" type="xsd:string"/>
+                                <xsd:element name="PARADIGM" type="xsd:string"/>
+                                <xsd:element name="OBJECT" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="VERSION" type="xsd:string"/>
+                                <xsd:element name="COMPONENT-ID" type="xsd:string"/>
+                                <xsd:element name="COMPONENT-VERSION" type="xsd:string"/>
+                                <xsd:element name="DESTINATION" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="ExistingCMH" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="COMPONENT-ID" type="xsd:string"/>
+                                <xsd:element name="COMPONENT-VERSION" type="xsd:string"/>
+                                <xsd:element name="PARADIGM" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="FID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="MID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="OBJECT" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="DESTINATION" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="COPY_ATTRIBUTES" type="xsd:boolean"/>
+                                <xsd:element name="EXTENT_TRACKING" type="xsd:boolean"/>
+                                <xsd:element name="CMH" type="pfx:CMHInfo"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>35</pd:startY>
+    <pd:returnBindings>
+        <CMH>
+            <xsl:copy-of select="$CMH/CMH/ancestor-or-self::*/namespace::node()"/>
+            <xsl:copy-of select="$CMH/CMH/@*"/>
+            <xsl:copy-of select="$CMH/CMH/node()"/>
+        </CMH>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="CMH" type="pfx:CMHInfo"/>
+    </pd:endType>
+    <pd:endX>345</pd:endX>
+    <pd:endY>35</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <CMH>
+            <xsd:element name="CMH" type="pfx:CMHInfo"/>
+        </CMH>
+    </pd:processVariables>
+    <pd:activity name="getGUID">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>117</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <fullsource>package Common.SubProcesses.SUB_FillCMH;
+import java.util.*;
+import java.io.*;
+public class SUB_FillCMHgetGUID{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String guid = "";
+	public String getguid() {
+		return guid;
+	}
+	public void setguid(String val) {
+		guid = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public SUB_FillCMHgetGUID() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	Out : String guid
+* Available Variables: DO NOT MODIFY *****/
+	setguid(new com.tibco.sdk.tools.MGUIDGenerator().newGUID().toString());
+}
+}
+</fullsource>
+            <fileName>SUB_FillCMHgetGUID</fileName>
+            <packageName>Common.SubProcesses.SUB_FillCMH</packageName>
+            <outputData>
+                <row>
+                    <fieldName>guid</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>SUB_FillCMHgetGUID</name>
+                    <byteCode>yv66vgAAAC4AKQkACQAaCgAKABsIABwHAB0KAAQAGwoABAAeCgAfACAKAAkAIQcAIgcAIwEABGd1aWQBABJMamF2YS9sYW5nL1N0cmluZzsBAAdnZXRndWlkAQAUKClMamF2YS9sYW5nL1N0cmluZzsBAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQAHc2V0Z3VpZAEAFShMamF2YS9sYW5nL1N0cmluZzspVgEABjxpbml0PgEAAygpVgEABmludm9rZQEACkV4Y2VwdGlvbnMHACQBAApTb3VyY2VGaWxlAQAXU1VCX0ZpbGxDTUhnZXRHVUlELmphdmEMAAsADAwAEwAUAQAAAQAiY29tL3RpYmNvL3Nkay90b29scy9NR1VJREdlbmVyYXRvcgwAJQAmBwAnDAAoAA4MABEAEgEAMkNvbW1vbi9TdWJQcm9jZXNzZXMvU1VCX0ZpbGxDTUgvU1VCX0ZpbGxDTUhnZXRHVUlEAQAQamF2YS9sYW5nL09iamVjdAEAE2phdmEvbGFuZy9FeGNlcHRpb24BAAduZXdHVUlEAQAdKClMY29tL3RpYmNvL3Nkay90b29scy9NR1VJRDsBABljb20vdGliY28vc2RrL3Rvb2xzL01HVUlEAQAIdG9TdHJpbmcAIQAJAAoAAAABAAQACwAMAAAABAABAA0ADgABAA8AAAAdAAEAAQAAAAUqtAABsAAAAAEAEAAAAAYAAQAAAAgAAQARABIAAQAPAAAAIgACAAIAAAAGKiu1AAGxAAAAAQAQAAAACgACAAAACwAFAAwAAQATABQAAQAPAAAAKwACAAEAAAALKrcAAioSA7UAAbEAAAABABAAAAAOAAMAAAAOAAQABgAKAA8AAQAVABQAAgAPAAAALgADAAEAAAASKrsABFm3AAW2AAa2AAe2AAixAAAAAQAQAAAACgACAAAAFAARABUAFgAAAAQAAQAXAAEAGAAAAAIAGQ==</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ExtentCMH">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>246</pd:x>
+        <pd:y>135</pd:y>
+        <config>
+            <variableName>CMH</variableName>
+        </config>
+        <pd:inputBindings>
+            <CMH>
+                <pfx:ID>
+                    <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:ID"/>
+                </pfx:ID>
+                <pfx:NAME>
+                    <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:NAME"/>
+                </pfx:NAME>
+                <xsl:choose>
+                    <xsl:when test="$Start/CMH-IN/ExistingCMH/FID">
+                        <xsl:if test="$Start/CMH-IN/ExistingCMH/FID">
+                            <pfx:FID>
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/FID"/>
+                            </pfx:FID>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$Start/CMH-IN/ExistingCMH/CMH/pfx:FID">
+                            <pfx:FID>
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:FID"/>
+                            </pfx:FID>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$Start/CMH-IN/ExistingCMH/MID">
+                        <xsl:if test="$Start/CMH-IN/ExistingCMH/MID">
+                            <pfx:MID>
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/MID"/>
+                            </pfx:MID>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$Start/CMH-IN/ExistingCMH/CMH/pfx:MID">
+                            <pfx:MID>
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:MID"/>
+                            </pfx:MID>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$Start/CMH-IN/ExistingCMH/PARADIGM">
+                        <pfx:PARADIGM>
+                            <xsl:value-of select="$Start/CMH-IN/ExistingCMH/PARADIGM"/>
+                        </pfx:PARADIGM>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx:PARADIGM>
+                            <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:PARADIGM"/>
+                        </pfx:PARADIGM>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$Start/CMH-IN/ExistingCMH/OBJECT">
+                        <pfx:OBJECT>
+                            <xsl:value-of select="$Start/CMH-IN/ExistingCMH/OBJECT"/>
+                        </pfx:OBJECT>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx:OBJECT>
+                            <xsl:value-of select="concat(&quot;CO_&quot;,$Start/CMH-IN/ExistingCMH/CMH/pfx:NAME)"/>
+                        </pfx:OBJECT>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <pfx:VERSION>
+                    <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:VERSION"/>
+                </pfx:VERSION>
+                <pfx:FROM>
+                    <xsl:attribute name="pfx:COMPONENT_ID">
+                        <xsl:value-of select="$Start/CMH-IN/ExistingCMH/COMPONENT-ID"/>
+                    </xsl:attribute>
+                    <xsl:if test="$Start/CMH-IN/ExistingCMH/COMPONENT-VERSION">
+                        <xsl:attribute name="pfx:COMPONENT_VERSION">
+                            <xsl:value-of select="$Start/CMH-IN/ExistingCMH/COMPONENT-VERSION"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="$Start/CMH-IN/ExistingCMH/CMH/pfx:FROM/@pfx:END_USER_INFO">
+                        <xsl:attribute name="pfx:END_USER_INFO">
+                            <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:FROM/@pfx:END_USER_INFO"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="$Start/CMH-IN/ExistingCMH/CMH/pfx:FROM/@pfx:SOURCE_ADDRESS">
+                        <xsl:attribute name="pfx:SOURCE_ADDRESS">
+                            <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:FROM/@pfx:SOURCE_ADDRESS"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                </pfx:FROM>
+                <pfx:TO>
+                    <xsl:choose>
+                        <xsl:when test="$Start/CMH-IN/ExistingCMH/DESTINATION">
+                            <xsl:attribute name="pfx:DESTINATION">
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/DESTINATION"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="pfx:DESTINATION">
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:TO/@pfx:DESTINATION"/>
+                            </xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pfx:TO>
+                <pfx:TRACKING>
+                    <xsl:choose>
+                        <xsl:when test="$Start/CMH-IN/ExistingCMH/CMH/pfx:TRACKING/pfx:MESSAGE_ID">
+                            <pfx:MESSAGE_ID>
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:TRACKING/pfx:MESSAGE_ID"/>
+                            </pfx:MESSAGE_ID>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx:MESSAGE_ID>
+                                <xsl:value-of select="$getGUID/javaCodeActivityOutput/guid"/>
+                            </pfx:MESSAGE_ID>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if test="$Start/CMH-IN/ExistingCMH/CMH/pfx:TRACKING/pfx:EXTERNAL_REF">
+                        <pfx:EXTERNAL_REF>
+                            <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:TRACKING/pfx:EXTERNAL_REF"/>
+                        </pfx:EXTERNAL_REF>
+                    </xsl:if>
+                    <xsl:for-each select="$Start/CMH-IN/ExistingCMH/CMH/pfx:TRACKING/pfx:ITEM">
+                        <pfx:ITEM>
+                            <xsl:attribute name="pfx:APPINFO">
+                                <xsl:value-of select="@pfx:APPINFO"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx:EVENT">
+                                <xsl:value-of select="@pfx:EVENT"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx:TIMESTAMP">
+                                <xsl:value-of select="@pfx:TIMESTAMP"/>
+                            </xsl:attribute>
+                        </pfx:ITEM>
+                    </xsl:for-each>
+                    <xsl:if test="$Start/CMH-IN/ExistingCMH/EXTENT_TRACKING=&quot;true&quot;">
+                        <pfx:ITEM>
+                            <xsl:attribute name="pfx:APPINFO">
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/COMPONENT-ID"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx:EVENT">
+                                <xsl:value-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:NAME"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </pfx:ITEM>
+                    </xsl:if>
+                </pfx:TRACKING>
+                <xsl:if test="$Start/CMH-IN/ExistingCMH/COPY_ATTRIBUTES=&quot;true&quot;">
+                    <xsl:copy-of select="$Start/CMH-IN/ExistingCMH/CMH/pfx:ATTRIBUTE"/>
+                </xsl:if>
+            </CMH>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FillCMH">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>244</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <variableName>CMH</variableName>
+        </config>
+        <pd:inputBindings>
+            <CMH>
+                <pfx:ID>
+                    <xsl:value-of select="$Start/CMH-IN/NewCMH/ID"/>
+                </pfx:ID>
+                <pfx:NAME>
+                    <xsl:value-of select="$Start/CMH-IN/NewCMH/NAME"/>
+                </pfx:NAME>
+                <xsl:if test="$Start/CMH-IN/NewCMH/FID">
+                    <pfx:FID>
+                        <xsl:value-of select="$Start/CMH-IN/NewCMH/FID"/>
+                    </pfx:FID>
+                </xsl:if>
+                <pfx:MID>
+                    <xsl:value-of select="$Start/CMH-IN/NewCMH/MID"/>
+                </pfx:MID>
+                <pfx:PARADIGM>
+                    <xsl:value-of select="$Start/CMH-IN/NewCMH/PARADIGM"/>
+                </pfx:PARADIGM>
+                <xsl:choose>
+                    <xsl:when test="$Start/CMH-IN/NewCMH/OBJECT">
+                        <pfx:OBJECT>
+                            <xsl:value-of select="$Start/CMH-IN/NewCMH/OBJECT"/>
+                        </pfx:OBJECT>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx:OBJECT>
+                            <xsl:value-of select="concat(&quot;CO_&quot;,$Start/CMH-IN/NewCMH/NAME)"/>
+                        </pfx:OBJECT>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <pfx:VERSION>
+                    <xsl:value-of select="$Start/CMH-IN/NewCMH/VERSION"/>
+                </pfx:VERSION>
+                <pfx:FROM>
+                    <xsl:attribute name="pfx:COMPONENT_ID">
+                        <xsl:value-of select="$Start/CMH-IN/NewCMH/COMPONENT-ID"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="pfx:COMPONENT_VERSION">
+                        <xsl:value-of select="$Start/CMH-IN/NewCMH/COMPONENT-VERSION"/>
+                    </xsl:attribute>
+                </pfx:FROM>
+                <pfx:TO>
+                    <xsl:attribute name="pfx:DESTINATION">
+                        <xsl:value-of select="$Start/CMH-IN/NewCMH/DESTINATION"/>
+                    </xsl:attribute>
+                </pfx:TO>
+                <pfx:TRACKING>
+                    <pfx:MESSAGE_ID>
+                        <xsl:value-of select="$getGUID/javaCodeActivityOutput/guid"/>
+                    </pfx:MESSAGE_ID>
+                    <pfx:ITEM>
+                        <xsl:attribute name="pfx:APPINFO">
+                            <xsl:value-of select="$Start/CMH-IN/NewCMH/COMPONENT-ID"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="pfx:EVENT">
+                            <xsl:value-of select="$Start/CMH-IN/NewCMH/NAME"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="pfx:TIMESTAMP">
+                            <xsl:value-of select="tib:timestamp()"/>
+                        </xsl:attribute>
+                    </pfx:ITEM>
+                </pfx:TRACKING>
+            </CMH>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>getGUID</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getGUID</pd:from>
+        <pd:to>FillCMH</pd:to>
+        <pd:xpathDescription> New</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Start/CMH-IN/NewCMH)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getGUID</pd:from>
+        <pd:to>ExtentCMH</pd:to>
+        <pd:xpathDescription>Change</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Start/CMH-IN/ExistingCMH)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FillCMH</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExtentCMH</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GET_DYNAMICSTRUCTURE" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:GenericMessageRequest">
+    <wsdl:import namespace="urn:GET_DYNAMICSTRUCTURE" location="/WSDL/EDTAdapter/getdynamicstructure.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/211-(0145)_SOAP_GetVPNInstalledBase2.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>47</pd:startX>
+    <pd:startY>83</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>319</pd:endX>
+    <pd:endY>86</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>172</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <timeout>%%EDTAdapter/Test/SOAP/Timeout%%</timeout>
+            <service>pfx:GET_DYNAMICSTRUCTURE_SERVICE</service>
+            <servicePort>GET_DYNAMICSTRUCTURESoap</servicePort>
+            <operation>GetDynamicStructure</operation>
+            <soapAction>urn:GET_DYNAMICSTRUCTURE/GetDynamicStructure</soapAction>
+            <endpointURL>%%EDTAdapter/Test/SOAP/GenericRequestServicesEndPoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:GetStructureRequest>
+                    <pfx:GUID>
+                        <xsl:value-of select="&quot;GUID-GetVPNInstalledBase&quot;"/>
+                    </pfx:GUID>
+                    <pfx:RequestType>
+                        <xsl:value-of select="&quot;GetVPNInstalledBase&quot;"/>
+                    </pfx:RequestType>
+                    <pfx:Request>
+                        <pfx:Request>
+                            <pfx:Label>
+                                <xsl:value-of select="&quot;CENTRAL_CUSTOMER_ID&quot;"/>
+                            </pfx:Label>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;String&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;CENTRAL_CUSTOMER_ID&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Label>
+                                <xsl:value-of select="&quot;RESULT_SET_OFFSET&quot;"/>
+                            </pfx:Label>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;Integer&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;2&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Label>
+                                <xsl:value-of select="&quot;RESULT_SET_SIZE&quot;"/>
+                            </pfx:Label>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;Integer&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;8&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Label>
+                                <xsl:value-of select="&quot;RESULT_SET_SORT_FIELD&quot;"/>
+                            </pfx:Label>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;String&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;RESULT_SET_SORT_FIELD&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Label>
+                                <xsl:value-of select="&quot;RESULT_SET_TIMESTAMP&quot;"/>
+                            </pfx:Label>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;String&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Label>
+                                <xsl:value-of select="&quot;RESULT_SET_SORT_DIRECTION&quot;"/>
+                            </pfx:Label>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;String&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;RESULT_SET_SORT_DIRECTION&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                    </pfx:Request>
+                </pfx:GetStructureRequest>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

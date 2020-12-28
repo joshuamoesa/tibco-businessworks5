@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns2="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/UpdateOrderStatus.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd"/>
+    <pd:name>GenericOrderGateway/Test Processes/Drivers/Inbound/UpdateGenericProductOrderStatus.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>55</pd:startX>
+    <pd:startY>57</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>518</pd:endX>
+    <pd:endY>56</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="JMS Topic Publisher">
+        <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
+        <pd:x>368</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination/>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns3:ActivityInput>
+                <destinationTopic>
+                    <xsl:value-of select="$Map-Data/pfx:UpdateOrderStatus/ns1:CMH/ns1:TO/@ns1:DESTINATION"/>
+                </destinationTopic>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx:UpdateOrderStatus,false(),true())"/>
+                </Body>
+            </ns3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>255</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <element ref="pfx:UpdateOrderStatus"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:UpdateOrderStatus>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;1081&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;UpdateGenericProductOrderStatus&quot;"/>
+                    </ns1:NAME>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;1081.20&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;Order&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="1.0"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/GenericOrderGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/GenericOrderGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env,'.FIXED.Order.OrderServices.Publish.UpdateOrderStatus.1')"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="eai:createGUID()"/>
+                        </ns1:MESSAGE_ID>
+                    </ns1:TRACKING>
+                </ns1:CMH>
+                <ns2:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="&quot;STATUS_UPDATE&quot;"/>
+                            </ORDER_TYPE>
+                            <COMMERCIAL_PRODUCT_CATEGORY>
+                                <xsl:value-of select="&quot;WOD&quot;"/>
+                            </COMMERCIAL_PRODUCT_CATEGORY>
+                            <CREATION_DATE>
+                                <xsl:value-of select="&quot;2008-01-01T00:00:00&quot;"/>
+                            </CREATION_DATE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="&quot;analogueTV&quot;"/>
+                                </ORDER_ITEM_TYPE>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="&quot;WHOLESALE_IP_PRODUCT&quot;"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT xsi:type="pfx2:Product_Type">
+                                <GENERIC_ORDER_PRODUCT>
+                                    <PRODUCT_NAME>
+                                        <xsl:value-of select="&quot;&quot;"/>
+                                    </PRODUCT_NAME>
+                                    <PRODUCT_VERSION>
+                                        <xsl:value-of select="1.0"/>
+                                    </PRODUCT_VERSION>
+                                    <ACTION_PARADIGM>
+                                        <xsl:value-of select="&quot;Asynchronous&quot;"/>
+                                    </ACTION_PARADIGM>
+                                    <CUSTOM_ORDER_PARAMETERS>
+                                        <xsl:copy-of select="$Map-Data-1/root/Parameters[Name=&quot;SpFpId&quot;]"/>
+                                    </CUSTOM_ORDER_PARAMETERS>
+                                    <CUSTOM_ITEM_PARAMETERS>
+                                        <xsl:copy-of select="$Map-Data-1/root/Parameters[Name=&quot;SpFpIdUser&quot;]"/>
+                                    </CUSTOM_ITEM_PARAMETERS>
+                                    <ACTION_PARAMETERS>
+                                        <xsl:copy-of select="$Map-Data-1/root/Parameters[Name=&quot;SpFpIdlog&quot;]"/>
+                                    </ACTION_PARAMETERS>
+                                </GENERIC_ORDER_PRODUCT>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns2:BODY>
+            </pfx:UpdateOrderStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map-Data-1">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>147</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Parameters" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Name" type="xsd:string"/>
+                                        <xsd:element name="Value" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <xsl:variable name="var" select="'ooteooteboe'"/>
+            <root>
+                <Parameters>
+                    <Name>
+                        <xsl:value-of select="&quot;SpFpId&quot;"/>
+                    </Name>
+                    <Value>
+                        <xsl:value-of select="tib:evaluate(concat('$', 'var'))[1]"/>
+                    </Value>
+                </Parameters>
+                <Parameters>
+                    <Name>
+                        <xsl:value-of select="&quot;SpFpIdUser&quot;"/>
+                    </Name>
+                    <Value>
+                        <xsl:value-of select="&quot;2&quot;"/>
+                    </Value>
+                </Parameters>
+                <Parameters>
+                    <Name>
+                        <xsl:value-of select="&quot;SpFpIdlog&quot;"/>
+                    </Name>
+                    <Value>
+                        <xsl:value-of select="&quot;3&quot;"/>
+                    </Value>
+                </Parameters>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map-Data-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Topic Publisher</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Topic Publisher</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map-Data-1</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

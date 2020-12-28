@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx="http://xmlns.kpn.com/eai/common/errors" xmlns:ns1="http://www.tibco.com/pe/EngineTypes">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>ASTRIDAdapter/Processes/0355_CustomerInteractionNotification.2/Sub_Data_Inbound.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ORIGINATOR" type="xsd:string"/>
+                    <xsd:element name="INTERACTION_TYPE" type="xsd:string"/>
+                    <xsd:element name="INTERACTION_SUBTYPE" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="INTERACTION_INITIATION" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>162</pd:startX>
+    <pd:startY>130</pd:startY>
+    <pd:returnBindings>
+        <xsl:choose>
+            <xsl:when test="exists($JDBC-Query/resultSet/Record)">
+                <root>
+                    <xsl:choose>
+                        <xsl:when test="exists($JDBC-Query/resultSet/Record[1]/MANAGED_OBJECT_CLASS) and&#xA;upper-case($JDBC-Query/resultSet/Record[1]/MANAGED_OBJECT_CLASS) !=&quot;&lt;COPY>&quot;">
+                            <MOC>
+                                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/MANAGED_OBJECT_CLASS"/>
+                            </MOC>
+                        </xsl:when>
+                        <xsl:when test="upper-case($JDBC-Query/resultSet/Record[1]/MANAGED_OBJECT_CLASS) = &quot;&lt;COPY>&quot;">
+                            <MOC>
+                                <xsl:value-of select="$Start/root/INTERACTION_TYPE"/>
+                            </MOC>
+                        </xsl:when>
+                    </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="exists($JDBC-Query/resultSet/Record[1]/MANAGED_OBJECT_CLASS_EXTENSION) and&#xA;upper-case($JDBC-Query/resultSet/Record[1]/MANAGED_OBJECT_CLASS_EXTENSION) !=&quot;&lt;COPY>&quot;">
+                            <MOCE>
+                                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/MANAGED_OBJECT_CLASS_EXTENSION"/>
+                            </MOCE>
+                        </xsl:when>
+                        <xsl:when test="upper-case($JDBC-Query/resultSet/Record[1]/MANAGED_OBJECT_CLASS_EXTENSION) = &quot;&lt;COPY>&quot;">
+                            <xsl:if test="$Start/root/INTERACTION_SUBTYPE">
+                                <MOCE>
+                                    <xsl:value-of select="$Start/root/INTERACTION_SUBTYPE"/>
+                                </MOCE>
+                            </xsl:if>
+                        </xsl:when>
+                    </xsl:choose>
+                </root>
+            </xsl:when>
+            <xsl:otherwise>
+                <root>
+                    <MOC>
+                        <xsl:value-of select="$Start/root/INTERACTION_TYPE"/>
+                    </MOC>
+                    <xsl:if test="$Start/root/INTERACTION_SUBTYPE">
+                        <MOCE>
+                            <xsl:value-of select="$Start/root/INTERACTION_SUBTYPE"/>
+                        </MOCE>
+                    </xsl:if>
+                </root>
+            </xsl:otherwise>
+        </xsl:choose>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="MOC" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="MOCE" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>439</pd:endX>
+    <pd:endY>130</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="JDBC Query">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>283</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/ASTRIDAdapter/Shared Resources/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+            <statement>SELECT 
+MANAGED_OBJECT_CLASS, MANAGED_OBJECT_CLASS_EXTENSION
+FROM 
+ASTRIDADAPTER_IN_ROUTING 
+WHERE 
+ORIGINATOR = ? AND 
+INTERACTION_TYPE = ? AND
+INTERACTION_SUBTYPE IN ('*', ?) AND
+INTERACTION_INITIATION IN ('*', ?)
+ORDER BY 
+ORIGINATOR DESC, 
+INTERACTION_TYPE DESC, 
+INTERACTION_SUBTYPE DESC,
+INTERACTION_INITIATION DESC</statement>
+            <wizardData/>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>ORIGINATOR</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>INTERACTION_TYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>INTERACTION_SUBTYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>INTERACTION_INITIATION</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <QueryOutputCachedSchemaColumns>MANAGED_OBJECT_CLASS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MANAGED_OBJECT_CLASS_EXTENSION</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <ORIGINATOR>
+                    <xsl:value-of select="$Start/root/ORIGINATOR"/>
+                </ORIGINATOR>
+                <INTERACTION_TYPE>
+                    <xsl:value-of select="$Start/root/INTERACTION_TYPE"/>
+                </INTERACTION_TYPE>
+                <xsl:choose>
+                    <xsl:when test="$Start/root/INTERACTION_SUBTYPE">
+                        <INTERACTION_SUBTYPE>
+                            <xsl:choose>
+                                <xsl:when test="exists($Start/root/INTERACTION_SUBTYPE)">
+                                    <xsl:value-of select="$Start/root/INTERACTION_SUBTYPE"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </INTERACTION_SUBTYPE>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <INTERACTION_SUBTYPE>
+                            <xsl:value-of select="&quot;-&quot;"/>
+                        </INTERACTION_SUBTYPE>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$Start/root/INTERACTION_INITIATION">
+                        <INTERACTION_INITIATION>
+                            <xsl:value-of select="$Start/root/INTERACTION_INITIATION"/>
+                        </INTERACTION_INITIATION>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <INTERACTION_INITIATION>
+                            <xsl:value-of select="&quot;-&quot;"/>
+                        </INTERACTION_INITIATION>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>286</pd:x>
+        <pd:y>254</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <data>
+                    <pfx:Error>
+                        <pfx:ErrorReport>
+                            <xsl:copy-of select="$_error/ns1:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns1:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns1:ErrorReport/node()"/>
+                        </pfx:ErrorReport>
+                        <pfx:ActivityError>
+                            <xsl:copy-of select="$_error_JDBC-Query/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error_JDBC-Query/ActivityErrors/@*"/>
+                            <xsl:copy-of select="$_error_JDBC-Query/ActivityErrors/node()"/>
+                        </pfx:ActivityError>
+                    </pfx:Error>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Query</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

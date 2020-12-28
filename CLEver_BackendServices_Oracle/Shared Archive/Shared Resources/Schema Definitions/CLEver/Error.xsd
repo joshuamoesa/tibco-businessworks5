@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.tibco.com/CLEver/InternalException"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://www.tibco.com/CLEver/InternalException"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xsd:attributeGroup name="Error"/>
+	<xsd:element name="Exception">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Service" type="xsd:string"/>
+				<xsd:element name="ErrorMessage" type="xsd:string"/>
+				<xsd:element name="ErrorCode" type="xsd:string" minOccurs="0"/>
+				<xsd:element ref="Error"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ErrorReport">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="StackTrace" type="xsd:string" nillable="true"/>
+				<xsd:element name="Msg" type="xsd:string" nillable="true"/>
+				<xsd:element name="FullClass" type="xsd:string" nillable="true"/>
+				<xsd:element name="Class" type="xsd:string" nillable="true"/>
+				<xsd:element name="ProcessStack" type="xsd:string" nillable="true"/>
+				<xsd:element name="MsgCode" type="xsd:string" nillable="true" minOccurs="0"/>
+				<xsd:element name="Data" nillable="true" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:any namespace="##any" processContents="skip" maxOccurs="unbounded"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Error">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ErrorReport" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:attribute name="nil" type="xsd:string"/>
+	<xsd:element name="ExceptionEnvelope">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Exception"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:pfx2="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx3="urn:GET_CUSTOMER_DETAILS" xmlns:pfx4="urn:GET_CUSTOMER_CONTRACTS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="urn:GET_WORKORDERS" xmlns:pfx6="http://xmlns.example.com/unique/default/namespace/1087453986478" xmlns:pfx7="urn:StartNumberInporting">
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_CONTRACTS" location="/WSDL/EDTAdapter/004 - GET_CUSTOMER_CONTRACTS.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_DETAILS" location="/WSDL/EDTAdapter/002 - GET_CUSTOMER_DETAILS.wsdl"/>
+    <wsdl:import namespace="urn:GET_WORKORDERS" location="/WSDL/EDTAdapter/003 - GET_WORKORDERS.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/0003_SOAP_GetWorkOrders.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <timeout>30</timeout>
+            <endpointURL>http://localhost:%%EDTAdapter/Outbound/SOAP/ServerPort%%/EDTAdapter/Processes/GetWorkorders</endpointURL>
+            <service>pfx5:GET_WORKORDERS_SERVICE</service>
+            <servicePort>GET_WORKORDERSSoap</servicePort>
+            <operation>GetWorkorders</operation>
+            <soapAction>urn:GET_WORKORDERS/GetWorkorders</soapAction>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx5:GetWorkorders>
+                    <pfx5:GUID>
+                        <xsl:value-of select="&quot;123457&quot;"/>
+                    </pfx5:GUID>
+                    <pfx5:CKRNummer>
+                        <xsl:value-of select="&quot;CDX K31 93&quot;"/>
+                    </pfx5:CKRNummer>
+                </pfx5:GetWorkorders>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

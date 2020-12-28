@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:pfx2="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx3="urn:GET_CUSTOMER_DETAILS" xmlns:pfx4="urn:GET_CUSTOMER_CONTRACTS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="urn:GET_WORKORDERS" xmlns:pfx6="urn:CHECK_APPOINTMENT" xmlns:pfx7="urn:GET_AGENDA" xmlns:pfx8="urn:CANCEL_APPOINTMENT" xmlns:pfx9="urn:CONCEPT_ASTRID_CKR51" xmlns:pfx10="urn:CONCEPT_ASTRID_WS_844" xmlns:pfx11="urn:CONCEPT_ASTRID_CKR167" xmlns:pfx12="urn:CONCEPT_ASTRID_P011" xmlns:pfx13="urn:FindCustomer" xmlns:pfx14="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Request/GetTickets.xsd" xmlns:pfx15="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Response/GetTickets.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/HDR-SW-0101.xsd" xmlns:pfx16="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Request/SendTicket.xsd" xmlns:pfx17="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Response/SendTicket.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Request/GetTickets.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Request/GetTickets.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Response/GetTickets.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Response/GetTickets.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Request/SendTicket.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Request/SendTicket.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Response/SendTicket.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Response/SendTicket.xsd"/>
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_DETAILS" location="/WSDL/EDTAdapter/002 - GET_CUSTOMER_DETAILS.wsdl"/>
+    <wsdl:import namespace="urn:GET_WORKORDERS" location="/WSDL/EDTAdapter/003 - GET_WORKORDERS.wsdl"/>
+    <wsdl:import namespace="urn:GET_CUSTOMER_CONTRACTS" location="/WSDL/EDTAdapter/004 - GET_CUSTOMER_CONTRACTS.wsdl"/>
+    <wsdl:import namespace="urn:CHECK_APPOINTMENT" location="/WSDL/ASTRIDAdapter/011 - CHECK_APPOINTMENT.wsdl"/>
+    <wsdl:import namespace="urn:CONCEPT_ASTRID_CKR51" location="/WSDL/ASTRIDAdapter/CONCEPT_ASTRID_CKR51.wsdl"/>
+    <wsdl:import namespace="urn:FindCustomer" location="/WSDL/ASTRIDAdapter/FindCustomer.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/475_RV_SendTicket.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVRequestActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVRequestActivity</pd:resourceType>
+        <pd:x>288</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsXMLCompliantFieldNamesOutput>false</wantsXMLCompliantFieldNamesOutput>
+            <subject>%%Env%%.FIXED.Operations.ASTRIDAdapter.Request.SendTicket.1</subject>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <operationTimeout>60000</operationTimeout>
+            <xmlEncoding>true</xmlEncoding>
+            <inputXsdString ref="pfx16:SendTicket"/>
+            <outputXsdString ref="pfx17:SendTicket"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="&quot;54321&quot;"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="&quot;GetTickets&quot;"/>
+                        </ns1:NAME>
+                        <ns1:FID>
+                            <xsl:value-of select="&quot;trans001&quot;"/>
+                        </ns1:FID>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="&quot;Ticket&quot;"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="2.0"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="&quot;123&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                <xsl:value-of select="&quot;2&quot;"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/Env, &quot;.FIXED.Operations.ASTRIDAdapter.Request.SendTicket.1&quot;)"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                    </ns1:CMH>
+                    <pfx16:ENGIN>
+                        <pfx16:HDR-SW-0101>
+                            <ns3:AFZENDER_APPLICATIE>
+                                <xsl:value-of select="&quot;afz&quot;"/>
+                            </ns3:AFZENDER_APPLICATIE>
+                        </pfx16:HDR-SW-0101>
+                    </pfx16:ENGIN>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

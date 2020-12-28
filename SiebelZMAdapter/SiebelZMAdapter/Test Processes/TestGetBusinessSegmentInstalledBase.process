@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.siebel.com/xml/KZM%20Account%20Info%20Request" xmlns:pfx2="http://siebel.com/ExportInstalledBase" xmlns:ns="http://www.siebel.com/xml/KZM%20Installed%20Assets" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.siebel.com/xml/KZM%20Account%20Info%20Request" schemaLocation="/WSDL/GetBusinessSegmentInstalledBase.wsdl"/>
+    <wsdl:import namespace="http://siebel.com/ExportInstalledBase" location="/WSDL/GetBusinessSegmentInstalledBase.wsdl"/>
+    <pd:name>SiebelZMAdapter/Test Processes/TestGetBusinessSegmentInstalledBase.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx2:KZM_spcAccount_spcAsset_spcExport_Output"/>
+    <pd:startX>88</pd:startX>
+    <pd:startY>178</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>605</pd:endX>
+    <pd:endY>174</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1237375009703</pd:targetNamespace>
+    <pd:group name="OutputMap">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>209</pd:x>
+        <pd:y>68</pd:y>
+        <pd:width>289</pd:width>
+        <pd:height>201</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/pfx2:KZM_spcAccount_spcAsset_spcExport_Output/KZM_spcAccount_spcAsset_spcExport_Output/pfx2:KZM_spcAccount_spcAsset_spcExport_Output/ns:ListOfAssetMgmt-Asset-Header/ns:AssetMgmt-Asset-Header</pd:over>
+            <pd:iterationElementSlot>currentItem</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:outSlot>ConsolidateOutput</pd:outSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map to CDM</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map to CDM</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Map to CDM">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>355</pd:x>
+            <pd:y>178</pd:y>
+            <config>
+                <processName>/SiebelZMAdapter/Processes/SubProcesses/GetBusinessSegmentInstalledBase/RenderProductList.process</processName>
+            </config>
+            <pd:inputBindings>
+                <input>
+                    <AssetMgmt-Asset>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfAssetMgmt-Asset/ns:AssetMgmt-Asset/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfAssetMgmt-Asset/ns:AssetMgmt-Asset/@*"/>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfAssetMgmt-Asset/ns:AssetMgmt-Asset/node()"/>
+                    </AssetMgmt-Asset>
+                    <ListOfAccount>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfAccount/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfAccount/@*"/>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfAccount/node()"/>
+                    </ListOfAccount>
+                    <ListOfKzm-BillingAccount>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfKzm-BillingAccount/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfKzm-BillingAccount/@*"/>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfKzm-BillingAccount/node()"/>
+                    </ListOfKzm-BillingAccount>
+                    <ListOfKzm-ServiceAccount>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfKzm-ServiceAccount/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfKzm-ServiceAccount/@*"/>
+                        <xsl:copy-of select="$currentItem/ns:AssetMgmt-Asset-Header/ns:ListOfKzm-ServiceAccount/node()"/>
+                    </ListOfKzm-ServiceAccount>
+                </input>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>OutputMap</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>OutputMap</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

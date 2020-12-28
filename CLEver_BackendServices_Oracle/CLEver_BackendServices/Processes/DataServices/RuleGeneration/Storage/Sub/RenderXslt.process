@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/BusinessDomain" xmlns:ns5="http://www.tibco.com/CLEver/Policy" xmlns:ns6="http://www.tibco.com/CLEver/Notification" xmlns:ns7="http://www.tibco.com/CLEver/Resolution" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns8="http://www.tibco.com/CLEver/Schedule" xmlns:ExceptionRuleXslt="java://XSLTTransform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns1="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:ns4="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns3="http://www.tibco.com/CLEver/ExceptionType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/CLEver/Rule">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <pd:name>Processes/DataServices/RuleGeneration/Storage/Sub/RenderXslt.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Rules">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Storage" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Value" type="xsd:string"/>
+                                <xsd:element name="Test" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>34</pd:startX>
+    <pd:startY>70</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <Result>
+                <xsl:value-of select="$GenerateXsltBaseDocument/Output/xsltDocument"/>
+            </Result>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Result" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>768</pd:endX>
+    <pd:endY>75</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ChildXSLT>
+            <xsd:element name="XSLTElement" type="xsd:string"/>
+        </ChildXSLT>
+    </pd:processVariables>
+    <pd:group name="GenerateXSLTChildParentRelation">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>266</pd:x>
+        <pd:y>4</pd:y>
+        <pd:width>254</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$SortonValue/Rules/Storage</pd:over>
+            <pd:iterationElementSlot>StorageRules</pd:iterationElementSlot>
+            <pd:indexSlot>j</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GenerateXsltChooseStructure</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GenerateXsltChooseStructure</pd:from>
+            <pd:to>Assign</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GenerateXsltChooseStructure">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>347</pd:x>
+            <pd:y>75</pd:y>
+            <config>
+                <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/XsltChooseStructure.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <When>
+                        <Test>
+                            <xsl:value-of select="$StorageRules/Storage/Test"/>
+                        </Test>
+                        <Content>
+                            <xsl:value-of select="$StorageRules/Storage/Value"/>
+                        </Content>
+                    </When>
+                    <Otherwise>
+                        <xsl:value-of select="$ChildXSLT/XSLTElement"/>
+                    </Otherwise>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>451</pd:x>
+            <pd:y>75</pd:y>
+            <config>
+                <variableName>ChildXSLT</variableName>
+            </config>
+            <pd:inputBindings>
+                <XSLTElement>
+                    <xsl:value-of select="$GenerateXsltChooseStructure/Output/xsltCode"/>
+                </XSLTElement>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="GenerateXsltBaseDocument">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>642</pd:x>
+        <pd:y>77</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/XsltBaseDocument.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsltElements>
+                    <xsl:value-of select="$ChildXSLT/XSLTElement"/>
+                </xsltElements>
+                <text>
+                    <xsl:value-of select="true()"/>
+                </text>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SortonValue">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>159</pd:x>
+        <pd:y>68</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Rules">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Storage" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Value" type="xsd:string"/>
+                                        <xsd:element name="Test" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Rules>
+                <xsl:for-each select="$Start/Rules/Storage">
+                    <xsl:sort select="Value" order="descending"/>
+                    <Storage>
+                        <Value>
+                            <xsl:value-of select="Value"/>
+                        </Value>
+                        <Test>
+                            <xsl:value-of select="Test"/>
+                        </Test>
+                    </Storage>
+                </xsl:for-each>
+            </Rules>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GenerateXSLTChildParentRelation</pd:from>
+        <pd:to>GenerateXsltBaseDocument</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GenerateXsltBaseDocument</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SortonValue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SortonValue</pd:from>
+        <pd:to>GenerateXSLTChildParentRelation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

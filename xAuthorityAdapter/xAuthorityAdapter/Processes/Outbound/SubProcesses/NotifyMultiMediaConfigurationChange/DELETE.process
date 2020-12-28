@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/xAuthority/addDevice.xsd" xmlns:ns3="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/xAuthority/deleteDevice.xsd" xmlns:pfx5="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" xmlns:pfx6="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Publish/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/xAuthority/addDevice.xsd" schemaLocation="/XSDSchemas/xAuthority/addDevice.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/xAuthority/deleteDevice.xsd" schemaLocation="/XSDSchemas/xAuthority/deleteDevice.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Subscribe/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Subscribe/UpdateOrderStatus.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Outbound/SubProcesses/NotifyMultiMediaConfigurationChange/DELETE.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Destination" type="xsd:string"/>
+                    <xsd:element name="MessageId" type="xsd:string"/>
+                    <xsd:element name="XmlString" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>67</pd:startX>
+    <pd:startY>188</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:copy-of select="$Map-To-CDM/pfx6:UpdateOrderStatus"/>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx6:UpdateOrderStatus"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>452</pd:endX>
+    <pd:endY>196</pd:endY>
+    <pd:errorSchemas>
+        <ErrorSchema ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>250</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <faultName>ErrorSchema</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:variable name="MessageCode" select="'EAI-03000'"/>
+                <messageCode>
+                    <xsl:value-of select="$MessageCode"/>
+                </messageCode>
+                <data>
+                    <pfx2:Error>
+                        <pfx2:MsgCode>
+                            <xsl:value-of select="$MessageCode"/>
+                        </pfx2:MsgCode>
+                        <pfx2:Params>
+                            <xsl:value-of select="&quot;Input data Invaid:&quot;"/>
+                        </pfx2:Params>
+                        <xsl:copy-of select="$_error/ns4:ErrorReport"/>
+                        <pfx2:ActivityError>
+                            <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/@*"/>
+                            <xsl:copy-of select="$_error_Parse-XML/ActivityErrors/node()"/>
+                        </pfx2:ActivityError>
+                    </pfx2:Error>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map To CDM">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>324</pd:x>
+        <pd:y>103</pd:y>
+        <config>
+            <element ref="pfx6:UpdateOrderStatus"/>
+        </config>
+        <pd:inputBindings>
+            <pfx6:UpdateOrderStatus>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="'820'"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="'UpdateOrder'"/>
+                    </ns2:NAME>
+                    <ns2:MID>
+                        <xsl:value-of select="'820.10'"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="'Publish'"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="'Order'"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="'1.0'"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="$Start/Input/Destination"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/Input/MessageId"/>
+                        </ns2:MESSAGE_ID>
+                        <ns2:ITEM>
+                            <xsl:attribute name="ns2:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/ComponentDomain,&quot;.&quot;,$_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/ComponentId)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns2:EVENT">
+                                <xsl:value-of select="'NotifyMultimediaOrderChange'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns2:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns2:ITEM>
+                    </ns2:TRACKING>
+                </ns2:CMH>
+                <ns3:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/NotifyMultiMediaConfigurationChange/DELETE/ORDER_TYPE"/>
+                            </ORDER_TYPE>
+                            <CREATION_DATE>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </CREATION_DATE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="'Product'"/>
+                                </ORDER_ITEM_TYPE>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/NotifyMultiMediaConfigurationChange/DELETE/PRODUCT_CATEGORY"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT>
+                                <PBX_PRODUCT>
+                                    <ENTERPRISE_ACCOUNT>
+                                        <NAME>
+                                            <xsl:value-of select="$Parse-XML/message/enterpriseId"/>
+                                        </NAME>
+                                    </ENTERPRISE_ACCOUNT>
+                                    <SITE_ACCOUNT>
+                                        <NAME>
+                                            <xsl:value-of select="$Parse-XML/message/siteId"/>
+                                        </NAME>
+                                    </SITE_ACCOUNT>
+                                    <SHARED_DEVICE>
+                                        <TYPE>
+                                            <xsl:value-of select="$Parse-XML/message/deviceType"/>
+                                        </TYPE>
+                                        <SERIAL_NUMBER>
+                                            <xsl:value-of select="$Parse-XML/message/serialNumber"/>
+                                        </SERIAL_NUMBER>
+                                        <MAC_ADDRESS>
+                                            <xsl:value-of select="$Parse-XML/message/manufacturerOUI"/>
+                                        </MAC_ADDRESS>
+                                        <FIREWALL_LEVEL>
+                                            <xsl:value-of select="$Parse-XML/message/firewallLevel"/>
+                                        </FIREWALL_LEVEL>
+                                    </SHARED_DEVICE>
+                                </PBX_PRODUCT>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns3:BODY>
+            </pfx6:UpdateOrderStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>194</pd:x>
+        <pd:y>101</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx4:message"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/Input/XmlString"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3394816</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map To CDM</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Map To CDM</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52480</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map To CDM</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>The Module implements the Add Device activity 
+
+The module is called when the message/@type=DELETE
+
+The follwing thigs are done here
+
+Product category : CHANGE_BG_DELETE
+
+Input message is mapped to PBX_PRODUCT </pd:description>
+        <pd:x>487</pd:x>
+        <pd:y>312</pd:y>
+        <pd:width>380</pd:width>
+        <pd:height>158</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-6684775</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

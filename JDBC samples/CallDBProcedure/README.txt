@@ -1,0 +1,1 @@
+Get the database connection object from Oracle and use it in a Java Code activity.

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://wsdlns.kpn.com/fixed/B2BAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://xmlns.kpn.com/b2b/public/XDFAccess" xmlns:pfx2="http://wsdlns.kpn.com/fixed/MOMSAdapter" xmlns:pfx3="urn:CustomerServiceRequest" xmlns:pfx4="urn:CustomerServiceReportStateAndStatusUpdateAcknowledgement" xmlns:pfx5="urn:CustomerServiceRequestUpdateNotification" xmlns:pfx6="urn:ProactiveCustomerServiceRequestConfirmation" xmlns:pfx7="urn:B2B_Proactive_CustomerServiceRequest_Confirmation">
+    <wsdl:import namespace="http://wsdlns.kpn.com/fixed/B2BAdapter" location="/WSDL/xDFAccessAdapter/XDFOrderMessage.wsdl"/>
+    <wsdl:import namespace="urn:CustomerServiceRequest" location="/WSDL/EDTAdapter/840-CustomerServiceRequest.wsdl"/>
+    <wsdl:import namespace="urn:CustomerServiceReportStateAndStatusUpdateAcknowledgement" location="/WSDL/EDTAdapter/844 - CustomerServiceReportStateAndStatusUpdateAcknowledgement.wsdl"/>
+    <wsdl:import namespace="urn:CustomerServiceRequestUpdateNotification" location="/WSDL/EDTAdapter/846 - CustomerServiceRequestUpdateNotification.wsdl"/>
+    <wsdl:import namespace="urn:ProactiveCustomerServiceRequestConfirmation" location="/WSDL/EDTAdapter/869 - ProactiveCustomerServiceRequestConfirmation.wsdl"/>
+    <wsdl:import namespace="urn:B2B_Proactive_CustomerServiceRequest_Confirmation" location="/WSDL/EDTAdapter/B2B_Proactive_CustomerServiceRequest_Confirmation.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/Inbound/ProactiveCustomerServiceRequestConfirmationSOAPServerStub.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>59</pd:x>
+        <pd:y>50</pd:y>
+        <config>
+            <service>pfx7:B2B_Proactive_CustomerServiceRequest_ConfirmationPortType</service>
+            <wsdlNamespaceRoot>urn:B2B_Proactive_CustomerServiceRequest_Confirmation/CreateImpl</wsdlNamespaceRoot>
+            <operation>Create</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>urn:B2B_Proactive_CustomerServiceRequest_Confirmation/Create</soapAction>
+            <sharedChannel>/EDTAdapter/Test Resources/Test HTTP Connection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <sharedChannels>
+                <httpChannel>
+                    <useBasicAuthentication>false</useBasicAuthentication>
+                </httpChannel>
+            </sharedChannels>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>368</pd:endX>
+    <pd:endY>56</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>216</pd:x>
+        <pd:y>57</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx7:CreateResponse>
+                    <pfx7:GUID>
+                        <xsl:value-of select="&quot;guid&quot;"/>
+                    </pfx7:GUID>
+                    <pfx7:STATUS>
+                        <xsl:value-of select="0"/>
+                    </pfx7:STATUS>
+                    <pfx7:MSG_CODE>
+                        <xsl:value-of select="&quot;msg_code&quot;"/>
+                    </pfx7:MSG_CODE>
+                    <pfx7:ERROR_CODE>
+                        <xsl:value-of select="&quot;err_code&quot;"/>
+                    </pfx7:ERROR_CODE>
+                    <pfx7:ERROR_DESCRIPTION>
+                        <xsl:value-of select="&quot;err_desc&quot;"/>
+                    </pfx7:ERROR_DESCRIPTION>
+                </pfx7:CreateResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

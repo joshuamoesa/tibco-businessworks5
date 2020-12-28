@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/CLEver/ExtraTypes">
+    <pd:name>Test/StoredProcs/TestProcess.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1296831139078</pd:targetNamespace>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>303</pd:x>
+        <pd:y>82</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Transactional/Logging/Retrieve.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <FromRow>
+                    <xsl:value-of select="0"/>
+                </FromRow>
+                <ToRow>
+                    <xsl:value-of select="10"/>
+                </ToRow>
+                <ns:RestrictionParameters>
+                    <ns:TransactionId>
+                        <xsl:value-of select="'*'"/>
+                    </ns:TransactionId>
+                </ns:RestrictionParameters>
+                <ns:Security>
+                    <ns:UserName>
+                        <xsl:value-of select="' admin'"/>
+                    </ns:UserName>
+                    <ns:Password>
+                        <xsl:value-of select="'geheim'"/>
+                    </ns:Password>
+                </ns:Security>
+                <OrderBy>
+                    <Row>
+                        <xsl:value-of select="'TransactionID'"/>
+                    </Row>
+                    <Asc>
+                        <xsl:value-of select="0"/>
+                    </Asc>
+                </OrderBy>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

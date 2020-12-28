@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://java.sun.com/products/oss/xml/ServiceActivation" xmlns:ns1="http://java.sun.com/products/oss/xml/Common" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns12="http://xmlns.kpn.com/eai/common/errors" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://java.sun.com/products/oss/xml/ServiceActivation" schemaLocation="/XSDSchemas/xAuthority/XmlServiceActivationSchema.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Inbound/SubscribeEvent.process</pd:name>
+    <pd:startName>JMS Topic Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS Topic Subscriber">
+        <pd:type>com.tibco.plugin.jms.JMSTopicEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicEventSource</pd:resourceType>
+        <pd:x>37</pd:x>
+        <pd:y>227</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%xAuthorityAdapter/XAuthorityQueuesTopicNames/XAuthorityEventTopic%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/xAuthorityAdapter/Shared Resources/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>719</pd:endX>
+    <pd:endY>220</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ProcessSchema>
+            <xsd:element name="Msg">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Type" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ProcessSchema>
+    </pd:processVariables>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>173</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term>
+                <xsd:any processContents="skip"/>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>223</pd:y>
+        <config>
+            <variableName>ProcessSchema</variableName>
+        </config>
+        <pd:inputBindings>
+            <Msg>
+                <Type>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="local-name($Parse-XML/*)"/>
+                </Type>
+            </Msg>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="orderCreateEvent">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>436</pd:x>
+        <pd:y>39</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:orderCreateEvent"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="orderRemoveEvent">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>435</pd:x>
+        <pd:y>125</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:orderRemoveEvent"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="orderStateChangeEvent">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>454</pd:x>
+        <pd:y>394</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:orderStateChangeEvent"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="orderAttributeValueChangeEvent">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>450</pd:x>
+        <pd:y>299</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:orderAttributeValueChangeEvent"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>850</pd:x>
+        <pd:y>215</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>636</pd:x>
+        <pd:y>383</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($orderStateChangeEvent/pfx:orderStateChangeEvent, false(), true())"/>
+                </message>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Notify">
+        <pd:type>com.tibco.plugin.waitnotify.NotifyActivity</pd:type>
+        <pd:resourceType>ae.activities.notifyActivity</pd:resourceType>
+        <pd:x>604</pd:x>
+        <pd:y>470</pd:y>
+        <config>
+            <sharedConfig>/xAuthorityAdapter/Shared Resources/Inbound/Events.sharednotify</sharedConfig>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <key>
+                    <xsl:value-of select="$orderStateChangeEvent/pfx:orderStateChangeEvent/pfx:orderKey/pfx:primaryKey"/>
+                </key>
+                <Group>
+                    <xsl:for-each select="$orderStateChangeEvent/pfx:orderStateChangeEvent">
+                        <pfx:orderStateChangeEvent>
+                            <ns1:applicationDN>
+                                <xsl:value-of select="ns1:applicationDN"/>
+                            </ns1:applicationDN>
+                            <ns1:eventTime>
+                                <xsl:value-of select="ns1:eventTime"/>
+                            </ns1:eventTime>
+                            <pfx:currentState>
+                                <xsl:value-of select="pfx:currentState"/>
+                            </pfx:currentState>
+                            <xsl:for-each select="pfx:orderKey">
+                                <pfx:orderKey>
+                                    <xsl:for-each select="ns1:applicationContext">
+                                        <ns1:applicationContext>
+                                            <ns1:factoryClass>
+                                                <xsl:value-of select="ns1:factoryClass"/>
+                                            </ns1:factoryClass>
+                                            <ns1:url>
+                                                <xsl:value-of select="ns1:url"/>
+                                            </ns1:url>
+                                            <xsl:for-each select="ns1:systemProperties">
+                                                <ns1:systemProperties>
+                                                    <xsl:for-each select="ns1:property">
+                                                        <ns1:property>
+                                                            <ns1:name>
+                                                                <xsl:value-of select="ns1:name"/>
+                                                            </ns1:name>
+                                                            <ns1:value>
+                                                                <xsl:value-of select="ns1:value"/>
+                                                            </ns1:value>
+                                                        </ns1:property>
+                                                    </xsl:for-each>
+                                                </ns1:systemProperties>
+                                            </xsl:for-each>
+                                        </ns1:applicationContext>
+                                    </xsl:for-each>
+                                    <ns1:applicationDN>
+                                        <xsl:value-of select="ns1:applicationDN"/>
+                                    </ns1:applicationDN>
+                                    <ns1:type>
+                                        <xsl:value-of select="ns1:type"/>
+                                    </ns1:type>
+                                    <pfx:primaryKey>
+                                        <xsl:value-of select="pfx:primaryKey"/>
+                                    </pfx:primaryKey>
+                                </pfx:orderKey>
+                            </xsl:for-each>
+                            <pfx:reason>
+                                <xsl:value-of select="pfx:reason"/>
+                            </pfx:reason>
+                        </pfx:orderStateChangeEvent>
+                    </xsl:for-each>
+                </Group>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>639</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <ConfirmEvent>JMS Topic Subscriber</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogJMSEvent">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>114</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;XAuth-03017&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="eai:getMessageId($JMS-Topic-Subscriber/ns:ActivityOutput/Body)"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/xAuthorityAdapter/XAuthorityQueuesTopicNames/XAuthorityEventTopic"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="concat(tib:render-xml($JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders, true(), true()),'&#xA;', tib:render-xml($JMS-Topic-Subscriber/ns:ActivityOutput/JMSProperties, true(), true()),'&#xA;')"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>848</pd:x>
+        <pd:y>82</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <ns12:Errors>
+                    <ns12:Error>
+                        <ns12:MsgCode>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </ns12:MsgCode>
+                        <ns12:ActivityError>
+                            <xsl:value-of select="$Catch/exceptiondata/*"/>
+                        </ns12:ActivityError>
+                    </ns12:Error>
+                </ns12:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMS Topic Subscriber</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:xpathDescription>otherwise</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>orderRemoveEvent</pd:to>
+        <pd:xpathDescription>REMOVE</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ProcessSchema/Msg/Type="orderRemoveEvent"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>orderCreateEvent</pd:to>
+        <pd:xpathDescription>CREATE</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ProcessSchema/Msg/Type="orderCreateEvent"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>orderStateChangeEvent</pd:to>
+        <pd:xpathDescription>STATECHANGE</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ProcessSchema/Msg/Type="orderStateChangeEvent"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>orderAttributeValueChangeEvent</pd:to>
+        <pd:xpathDescription>ATTRCHANGE</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ProcessSchema/Msg/Type="orderAttributeValueChangeEvent"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>orderCreateEvent</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>orderRemoveEvent</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>orderAttributeValueChangeEvent</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>orderStateChangeEvent</pd:from>
+        <pd:to>Notify</pd:to>
+        <pd:xpathDescription>CLOSED</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($orderStateChangeEvent/pfx:orderStateChangeEvent/pfx:currentState, 'closed')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>orderStateChangeEvent</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Notify</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Topic Subscriber</pd:from>
+        <pd:to>LogJMSEvent</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("XAuth-03017")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogJMSEvent</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

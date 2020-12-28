@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Stulemeijer (KPN Telecom) -->
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Atos Origin (Atos Origin) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="../Unallocated/Unallocated_Types.xsd"/>
+	<xsd:include schemaLocation="../Party/Party_Type.xsd"/>
+	<xsd:include schemaLocation="../Location/PropertyAddress_Type.xsd"/>
+	<xsd:complexType name="Customer_Type">
+		<xsd:annotation>
+			<xsd:documentation>to be used for all customer related services</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="CUSTOMER_ID" type="CustomerId_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Defines the valid scope for the customer id. The id may not be unique across the enterprise</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NAME" minOccurs="0"/>
+			<xsd:element name="PARTY" type="Party_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The Customer is a Role played by a Party. There can be only one Customer associated with Party.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SEGMENTATION" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="MARKET_GROUP_CODE" minOccurs="0"/>
+						<xsd:element name="MARKET_SEGMENT_CODE" minOccurs="0"/>
+						<xsd:element name="CUSTOMER_SIZE_GROUP_CODE" minOccurs="0"/>
+						<xsd:element name="CUSTOMER_SIZE_GROUP_DESCRIPTION" minOccurs="0"/>
+						<xsd:element name="BRAND" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The main brand of the Customer. The customer may have products from different brands, one of witch is assigned as the main brand for the customer.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CREDIT_PROFILE" minOccurs="0">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="STATUS" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates the current status of the customer such as INACTIVE, ACTIVE, PROSPECE, etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CONTACT_MEDIUM" type="ContactMedium_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CustomerId_Type">
+		<xsd:sequence>
+			<xsd:element name="ID_CKR" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Fixed customers are identified by their CKR number</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string"/>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="ID_MCCS" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>MCCS CustomerID's are  identified by the complex key CustomerID plus ServiceProviderID</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ID_PACKAGER" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The code of a packager which acts as the customer on certain interfaces.</xsd:documentation>
+					<xsd:documentation source="design">The ID_PACKAGER should change into an a separate external packager id (called ID_PACKAGER) and an interal packager (ID_INTERNAL_PACKAGER)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="EXTERNAL" type="packagerCode_type"/>
+						<xsd:element name="INTERNAL" type="packagerCode_type" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PARTY_ID" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>One or more id's that identify the party. Multiple id's all refer to the same party</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TYPE" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Examples:
+ID_CKR, ID_MCCS, ID_PACKAGER_INTERNAL,ID_PACKAGER_EXTERNAL, KPN-RELATION_ID</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ID" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="packagerCode_type">
+
+		<!--##################################################################-->
+		<xsd:annotation>
+			<xsd:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="25"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

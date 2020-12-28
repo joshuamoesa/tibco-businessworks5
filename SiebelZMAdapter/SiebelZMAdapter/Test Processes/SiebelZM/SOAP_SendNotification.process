@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/SiebelZM/SendNotification.1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="http://xmlns.kpn.com/fixed/SiebelZM/SendNotification.1/SendNotification.1Impl" xmlns:pfx3="http://xmlns.kpn.com/fixed/SiebelZM/SendNotification.1/SendNotification.1" xmlns:ns="http://www.kpn.com/StreamServeRequest">
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/SendNotification.1" location="/WSDL/SiebelZMAdapter/SendNotification1.wsdl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/SendNotification.1/SendNotification.1" location="/WSDL/SiebelZMAdapter/SendNotification.wsdl"/>
+    <pd:name>SiebelZMAdapter/Test Processes/SiebelZM/SOAP_SendNotification.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>27</pd:startX>
+    <pd:startY>35</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>297</pd:endX>
+    <pd:endY>35</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>167</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <servicePort>SOAPEventSource</servicePort>
+            <operation>SendNotification.1</operation>
+            <service>pfx3:SendNotification</service>
+            <soapAction>""</soapAction>
+            <endpointURL>http://localhost:48085/SiebelZMAdapter/Processes/SendNotification</endpointURL>
+            <useProxy>false</useProxy>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity/>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:Request>
+                    <ns:SiebelMessage>
+                        <ns:kzmstreamserve>
+                            <ns:senddocument>
+                                <ns:requestor>
+                                    <ns:userName>
+                                        <xsl:value-of select="&quot;uname&quot;"/>
+                                    </ns:userName>
+                                    <ns:password>
+                                        <xsl:value-of select="&quot;pwd&quot;"/>
+                                    </ns:password>
+                                    <ns:applicationId>
+                                        <xsl:value-of select="&quot;aid&quot;"/>
+                                    </ns:applicationId>
+                                </ns:requestor>
+                                <ns:properties>
+                                    <ns:CRM_BRIEFNUMMER>
+                                        <xsl:value-of select="&quot;briefno&quot;"/>
+                                    </ns:CRM_BRIEFNUMMER>
+                                </ns:properties>
+                                <ns:header>
+                                    <ns:documentSpecification>
+                                        <ns:subject>
+                                            <xsl:value-of select="&quot;subject&quot;"/>
+                                        </ns:subject>
+                                    </ns:documentSpecification>
+                                    <ns:delivery>
+                                        <ns:companyName>
+                                            <xsl:value-of select="&quot;compname&quot;"/>
+                                        </ns:companyName>
+                                        <ns:customerId>
+                                            <ns:ACCOUNTID>
+                                                <xsl:value-of select="&quot;accid&quot;"/>
+                                            </ns:ACCOUNTID>
+                                        </ns:customerId>
+                                    </ns:delivery>
+                                </ns:header>
+                                <ns:content>
+                                    <ns:orders>
+                                        <ns:ordertype>
+                                            <xsl:value-of select="&quot;ordtype&quot;"/>
+                                        </ns:ordertype>
+                                        <ns:orderlineitems>
+                                            <ns:serviceid>
+                                                <xsl:value-of select="&quot;serviceid&quot;"/>
+                                            </ns:serviceid>
+                                            <ns:serviceaccount>
+                                                <ns:name>
+                                                    <xsl:value-of select="&quot;name&quot;"/>
+                                                </ns:name>
+                                                <ns:serviceaccountorganizationpaymentprofile>
+                                                    <ns:accountnumber>
+                                                        <xsl:value-of select="&quot;accnr&quot;"/>
+                                                    </ns:accountnumber>
+                                                </ns:serviceaccountorganizationpaymentprofile>
+                                                <ns:serviceaccountcontactperson>
+                                                    <ns:role>
+                                                        <xsl:value-of select="&quot;role&quot;"/>
+                                                    </ns:role>
+                                                </ns:serviceaccountcontactperson>
+                                                <ns:serviceaccountaddressdetails>
+                                                    <ns:street>
+                                                        <xsl:value-of select="&quot;street&quot;"/>
+                                                    </ns:street>
+                                                </ns:serviceaccountaddressdetails>
+                                            </ns:serviceaccount>
+                                            <ns:orderitemattributes>
+                                                <ns:value>
+                                                    <xsl:value-of select="&quot;value&quot;"/>
+                                                </ns:value>
+                                            </ns:orderitemattributes>
+                                            <ns:assethistory>
+                                                <ns:lastname>
+                                                    <xsl:value-of select="&quot;lname&quot;"/>
+                                                </ns:lastname>
+                                            </ns:assethistory>
+                                            <ns:internalproduct>
+                                                <ns:classname>
+                                                    <xsl:value-of select="&quot;classname&quot;"/>
+                                                </ns:classname>
+                                            </ns:internalproduct>
+                                        </ns:orderlineitems>
+                                        <ns:billingaccount>
+                                            <ns:type>
+                                                <xsl:value-of select="&quot;type&quot;"/>
+                                            </ns:type>
+                                            <ns:billingaccountorganizationpaymentprofile>
+                                                <ns:accountnumber>
+                                                    <xsl:value-of select="&quot;accno&quot;"/>
+                                                </ns:accountnumber>
+                                            </ns:billingaccountorganizationpaymentprofile>
+                                            <ns:billingaccountcontactperson>
+                                                <ns:lastname>
+                                                    <xsl:value-of select="&quot;lname&quot;"/>
+                                                </ns:lastname>
+                                            </ns:billingaccountcontactperson>
+                                            <ns:billingaccountaddressdetails>
+                                                <ns:street>
+                                                    <xsl:value-of select="&quot;street&quot;"/>
+                                                </ns:street>
+                                            </ns:billingaccountaddressdetails>
+                                        </ns:billingaccount>
+                                        <ns:account>
+                                            <ns:name>
+                                                <xsl:value-of select="&quot;name&quot;"/>
+                                            </ns:name>
+                                            <ns:agreement>
+                                                <ns:Id>
+                                                    <xsl:value-of select="&quot;id&quot;"/>
+                                                </ns:Id>
+                                            </ns:agreement>
+                                            <ns:organizationpaymentprofile>
+                                                <ns:accountnumber>
+                                                    <xsl:value-of select="&quot;accnr&quot;"/>
+                                                </ns:accountnumber>
+                                            </ns:organizationpaymentprofile>
+                                            <ns:contactperson>
+                                                <ns:gender>
+                                                    <xsl:value-of select="&quot;M&quot;"/>
+                                                </ns:gender>
+                                            </ns:contactperson>
+                                            <ns:invoicedata>
+                                                <ns:billtoaccount>
+                                                    <xsl:value-of select="&quot;bacc&quot;"/>
+                                                </ns:billtoaccount>
+                                            </ns:invoicedata>
+                                            <ns:asset>
+                                                <ns:status>
+                                                    <xsl:value-of select="&quot;stat&quot;"/>
+                                                </ns:status>
+                                                <ns:assetattribute>
+                                                    <ns:value>
+                                                        <xsl:value-of select="&quot;val&quot;"/>
+                                                    </ns:value>
+                                                </ns:assetattribute>
+                                                <ns:assetsubcomponenten>
+                                                    <ns:version>
+                                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                                    </ns:version>
+                                                </ns:assetsubcomponenten>
+                                            </ns:asset>
+                                            <ns:accountaddressdetails>
+                                                <ns:POBox>
+                                                    <xsl:value-of select="&quot;pobox&quot;"/>
+                                                </ns:POBox>
+                                            </ns:accountaddressdetails>
+                                        </ns:account>
+                                    </ns:orders>
+                                </ns:content>
+                            </ns:senddocument>
+                        </ns:kzmstreamserve>
+                    </ns:SiebelMessage>
+                </pfx:Request>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

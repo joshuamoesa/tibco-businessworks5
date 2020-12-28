@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/namespace/Custom" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/CLEver/InternalException" xmlns:ns3="http://www.tibco.com/CLEver/Exception" xmlns:pfx5="http://www.tibco.com/CLEver/FrontendServices/Transactional/Exception/ExceptionGroupingInterfaceSpecs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/CLEver/Log" xmlns:pfx3="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pfx2="http://www.tibco.com/CLEver/BusinessDomain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Log" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Log.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/BusinessDomain" schemaLocation="/Shared Resources/Schema Definitions/CLEver/BusinessDomain.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/FrontendServices/Transactional/Exception/ExceptionGroupingInterfaceSpecs" schemaLocation="/Processes/FrontendServices/Transactional/ExceptionGrouping/ExceptionGroupingInterfaceSpecs.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/Transactional/ExceptionGrouping/Retrieve.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx5:Retrieve_ExceptionsGrouping_Input"/>
+    <pd:startX>30</pd:startX>
+    <pd:startY>96</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <ns3:Exceptions>
+                <xsl:for-each select="$SelectItems/jdbcGeneralActivityOutput/unknownResultset/row">
+                    <ns3:Exception>
+                        <ns3:ID>
+                            <xsl:value-of select="{--sorry--}&#xA;column[name='ID']/value"/>
+                        </ns3:ID>
+                        <pfx3:ProcessContext>
+                            <pfx3:BusinessDomain>
+                                <xsl:value-of select="column[name='TDA_BUSINESSDOMAIN']/value"/>
+                            </pfx3:BusinessDomain>
+                            <pfx3:TechnicalDomain>
+                                <xsl:value-of select="column[name='TDA_TECHNICALDOMAIN']/value"/>
+                            </pfx3:TechnicalDomain>
+                            <pfx3:BusinessConcept>
+                                <xsl:value-of select="column[name='TDA_BUSINESSCONCEPT']/value"/>
+                            </pfx3:BusinessConcept>
+                            <pfx3:BusinessOperation>
+                                <xsl:value-of select="column[name='TDA_BUSINESSOPERATION']/value"/>
+                            </pfx3:BusinessOperation>
+                            <pfx3:TransactionID>
+                                <xsl:value-of select="column[name='TRANSACTIONID']/value"/>
+                            </pfx3:TransactionID>
+                            <pfx3:ServiceName>
+                                <xsl:value-of select="column[name='TDA_SERVICE']/value"/>
+                            </pfx3:ServiceName>
+                            <pfx3:ProcessName>
+                                <xsl:value-of select="column[name='PROCEDURENAME']/value"/>
+                            </pfx3:ProcessName>
+                            <pfx3:ComponentName>
+                                <xsl:value-of select="column[name='TDA_COMPONENT']/value"/>
+                            </pfx3:ComponentName>
+                            <pfx3:HostName>
+                                <xsl:value-of select="column[name='HOSTNAME']/value"/>
+                            </pfx3:HostName>
+                            <pfx3:DateTime>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx3:DateTime>
+                        </pfx3:ProcessContext>
+                        <ns3:ExceptionDetail>
+                            <ns3:ExceptionCategory>
+                                <xsl:value-of select="column[name='TDA_EXCEPTIONCATEGORY']/value"/>
+                            </ns3:ExceptionCategory>
+                            <ns3:ExceptionSeverity>
+                                <xsl:value-of select="column[name='EXCEPTIONSEVERITY']/value"/>
+                            </ns3:ExceptionSeverity>
+                            <ns3:ExceptionType>
+                                <xsl:value-of select="column[name='TDA_EXCEPTIONTYPE']/value"/>
+                            </ns3:ExceptionType>
+                            <ns3:ExceptionCode>
+                                <xsl:value-of select="column[name='TDA_EXCEPTIONCODE']/value"/>
+                            </ns3:ExceptionCode>
+                            <ns3:ReplyDestination>
+                                <xsl:value-of select="column[name='REPLYDESTINATION']/value"/>
+                            </ns3:ReplyDestination>
+                            <ns3:Status>
+                                <xsl:value-of select="column[name='STATUS']/value"/>
+                            </ns3:Status>
+                        </ns3:ExceptionDetail>
+                    </ns3:Exception>
+                </xsl:for-each>
+            </ns3:Exceptions>
+            <MaxRows>
+                <xsl:value-of select="$Determine-rows/jdbcGeneralActivityOutput/unknownResultset[1]/row[1]/column[1]/value"/>
+            </MaxRows>
+            <FromRow>
+                <xsl:value-of select="$Determine-Range/Range/From"/>
+            </FromRow>
+            <ToRow>
+                <xsl:value-of select="$Determine-Range/Range/To"/>
+            </ToRow>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns3:Exceptions"/>
+                    <xsd:element name="MaxRows" type="xsd:long"/>
+                    <xsd:element name="FromRow" type="xsd:long"/>
+                    <xsd:element name="ToRow" type="xsd:long"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>826</pd:endX>
+    <pd:endY>95</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1279787783071</pd:targetNamespace>
+    <pd:activity name="Handle Exception">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>332</pd:y>
+        <config>
+            <processName>/Processes/InternalServices/Exception Handler/Local Exception Handler.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns4:Exception>
+                    <Service>
+                        <xsl:value-of select="$_error/ns:ErrorReport/ProcessStack"/>
+                    </Service>
+                    <ErrorMessage>
+                        <xsl:value-of select="'DataService error'"/>
+                    </ErrorMessage>
+                    <xsl:if test="$_error/ns:ErrorReport/MsgCode">
+                        <ErrorCode>
+                            <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                        </ErrorCode>
+                    </xsl:if>
+                    <ns4:Error>
+                        <ns4:ErrorReport>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/node()"/>
+                        </ns4:ErrorReport>
+                    </ns4:Error>
+                </ns4:Exception>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ValidateOperation">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>123</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/Processes/DataServices/Security/SecurityEntryPoint/ValidateOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ValidateOperation>
+                <xsl:copy-of select="$Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx3:Security"/>
+                <pfx3:Object>
+                    <xsl:value-of select="''"/>
+                </pfx3:Object>
+                <pfx3:Operation>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/StaticVariables/Operations/Retrieve"/>
+                </pfx3:Operation>
+            </pfx3:ValidateOperation>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>72</pd:x>
+        <pd:y>333</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Rethrow">
+        <pd:type>com.tibco.pe.core.RethrowActivity</pd:type>
+        <pd:resourceType>ae.activities.rethrow</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>332</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SelectItems">
+        <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
+        <pd:x>720</pd:x>
+        <pd:y>93</pd:y>
+        <config>
+            <timeout>%%Connections/DB/Oracle/MainStorage/ExecutionTimeOut%%</timeout>
+            <commit>false</commit>
+            <maxRows>0</maxRows>
+            <jdbcSharedConfig>/Shared Resources/Connections/DB/Oracle/MainStorage.sharedjdbc</jdbcSharedConfig>
+        </config>
+        <pd:inputBindings>
+            <jdbcGeneralActivityInput>
+                <statement>
+                    <xsl:value-of select="concat(&#xA;' select count(*) as ID, ', &#xA;$Construct-GroupQuery/root/SELECT,&#xA;' from   TDA_EXCEPTION,' ,&#xA;$Construct-GroupQuery/root/FROM, ' WHERE ',&#xA;$Construct-GroupQuery/root/WHERE,&#xA;' group by ', $Construct-GroupQuery/root/GROUPBY,&#xA;' order by ID desc'&#xA;)&#xA;&#xA;{--select count(*) as totalNumber, srv.NAME service, component.NAME component, cat.NAME exceptioncategory, REF.VALUE BZREF &#xA;from TDA_EXCEPTION m, TDA_COMPONENT component, TDA_EXCEPTIONCATEGORY cat, TDA_SERVICE srv, TDA_REFERENCE ref &#xA;where m.COMPONENT = component.id op-and m.SERVICE=srv.id op-and m.exceptioncategory=cat.id op-and m.ID=ref.ID op-and ref.NAME = 'EXTERNAL_REF'&#xA;group by srv.NAME, component.NAME, cat.NAME, REF.VALUE--}"/>
+                </statement>
+                <maxRows>
+                    <xsl:value-of select="100"/>
+                </maxRows>
+            </jdbcGeneralActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Construct InnerQuery">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>438</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="InnerSQL" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <InnerSQL>
+                    <xsl:value-of select="concat(&quot;&quot;,&quot;select count(*) as totalNumber,SERVICE, COMPONENT from TDA_EXCEPTION  group by SERVICE, COMPONENT order by totalNumber desc;&quot;)"/>
+                </InnerSQL>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Determine rows">
+        <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
+        <pd:x>584</pd:x>
+        <pd:y>223</pd:y>
+        <config>
+            <timeout>%%Connections/DB/Oracle/MainStorage/ExecutionTimeOut%%</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <jdbcSharedConfig>/Shared Resources/Connections/DB/Oracle/MainStorage.sharedjdbc</jdbcSharedConfig>
+        </config>
+        <pd:inputBindings>
+            <jdbcGeneralActivityInput>
+                <statement>
+                    <xsl:value-of select="concat('SELECT ',$Construct-Count/root/SELECT,' FROM ',$Construct-Count/root/FROM,' WHERE ',$Construct-Count/root/WHERE)"/>
+                </statement>
+            </jdbcGeneralActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Determine Range">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>587</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Range">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="From" type="xsd:long"/>
+                            <xsd:element name="To" type="xsd:long"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Range>
+                <xsl:variable name="MaxRow" select="$Determine-rows/jdbcGeneralActivityOutput/unknownResultset[1]/row[1]/column[1]/value"/>
+                <xsl:variable name="FromRow" select="if ($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:FromRow&lt;0) then&#xA;0&#xA;else&#xA;$Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:FromRow"/>
+                <xsl:choose>
+                    <xsl:when test="($FromRow + 100)&lt;$MaxRow">
+                        <From>
+                            <xsl:value-of select="$FromRow"/>
+                        </From>
+                        <To>
+                            <xsl:value-of select="$FromRow + 100"/>
+                        </To>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test="($MaxRow - 100)>0">
+                                <From>
+                                    <xsl:value-of select="$MaxRow - 100"/>
+                                </From>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <From>
+                                    <xsl:value-of select="0"/>
+                                </From>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <To>
+                            <xsl:value-of select="$MaxRow"/>
+                        </To>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </Range>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Construct-Count">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>421</pd:x>
+        <pd:y>221</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="SELECT" type="xsd:string"/>
+                            <xsd:element name="FROM" type="xsd:string"/>
+                            <xsd:element name="WHERE" type="xsd:string"/>
+                            <xsd:element name="ORDERBY" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SELECT>
+                    <xsl:value-of select="&quot;count (*)&quot;"/>
+                </SELECT>
+                <FROM>
+                    <xsl:value-of select="$DetermineFrom/Output/From"/>
+                </FROM>
+                <WHERE>
+                    <xsl:value-of select="tib:concat-sequence-format($Construct-Where-Clause/root/group/WHERECLAUSE, &quot; AND &quot;, true())"/>
+                </WHERE>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="DetermineFrom">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>223</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Transactional/General/SQLHelpers/DetermineFrom.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:for-each select="$Construct-Where-Clause/root/group">
+                    <xsl:for-each select="tib:tokenize(WHERECLAUSE,'=')">
+                        <Tables>
+                            <Name>
+                                <xsl:value-of select="substring-before(., '.')"/>
+                            </Name>
+                        </Tables>
+                    </xsl:for-each>
+                </xsl:for-each>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Construct-Where-Clause">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>96</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="group" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="WHERECLAUSE" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="TABLE" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='ExceptionCode' ]/pfx5:Name) > 0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.EXCEPTIONCODE=TDA_EXCEPTIONCODE.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_EXCEPTIONCODE'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='Category' ]/pfx5:Name)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.EXCEPTIONCATEGORY=TDA_EXCEPTIONCATEGORY.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_EXCEPTIONCATEGORY'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='Type' ]/pfx5:Name)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.EXCEPTIONTYPE=TDA_EXCEPTIONTYPE.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_EXCEPTIONTYPE'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='Service' ]/pfx5:Name)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.SERVICE=TDA_SERVICE.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_SERVICE'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='Component' ]/pfx5:Name)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.COMPONENT=TDA_COMPONENT.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_COMPONENT'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="count($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx3:RestrictionParameters/pfx3:StartDate)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="concat(&quot;TDA_EXCEPTION.DATE_NUMBER >= &quot;,$Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx3:RestrictionParameters/pfx3:StartDate)"/>
+                            </WHERECLAUSE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="count($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx3:RestrictionParameters/pfx3:EndDate)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="concat(&quot;TDA_EXCEPTION.DATE_NUMBER &lt;= &quot;,$Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx3:RestrictionParameters/pfx3:EndDate)"/>
+                            </WHERECLAUSE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='TechnicalDomain' ]/pfx5:Name)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.TECHNICALDOMAIN=TDA_TECHNICALDOMAIN.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_TECHNICALDOMAIN'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='BusinessDomain' ]/pfx5:Name)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.BUSINESSDOMAIN=TDA_BUSINESSDOMAIN.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_BUSINESSDOMAIN'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='BusinessOperation' ]/pfx5:Name)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.BUSINESSOPERATION=TDA_BUSINESSOPERATION.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_BUSINESSOPERATION'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:StandardFields[pfx5:Name='BusinessConcept' ]/pfx5:Name)>0">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.BUSINESSCONCEPT=TDA_BUSINESSCONCEPT.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_BUSINESSCONCEPT'"/>
+                            </TABLE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="count($Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:CustomFields/pfx5:Name)>1">
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="'TDA_EXCEPTION.ID=TDA_REFERENCE.ID'"/>
+                            </WHERECLAUSE>
+                            <TABLE>
+                                <xsl:value-of select="'TDA_REFERENCE'"/>
+                            </TABLE>
+                        </group>
+                        <group>
+                            <WHERECLAUSE>
+                                <xsl:value-of select="concat(&quot;TDA_REFERENCE.NAME='&quot;,$Start/pfx5:Retrieve_ExceptionsGrouping_Input/pfx5:GroupBy/pfx5:CustomFields/pfx5:Name[1],&quot;'&quot;)"/>
+                            </WHERECLAUSE>
+                        </group>
+                    </xsl:when>
+                </xsl:choose>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Construct-GroupQuery">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>436</pd:x>
+        <pd:y>96</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="SELECT" type="xsd:string"/>
+                            <xsd:element name="FROM" type="xsd:string"/>
+                            <xsd:element name="WHERE" type="xsd:string"/>
+                            <xsd:element name="GROUPBY" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SELECT>
+                    <xsl:value-of select="tib:concat-sequence-format(&#xA;for $var in $Construct-Where-Clause/root/group[TABLE!=''] return(concat($var/TABLE,&quot;.NAME as &quot;,$var/TABLE))&#xA;, ',',true())"/>
+                </SELECT>
+                <FROM>
+                    <xsl:value-of select="tib:concat-sequence-format(&#xA;for $var in $Construct-Where-Clause/root/group return($var/TABLE)&#xA;, ',',true())&#xA;&#xA;&#xA;{--tib:substring-before-last(tib:concat-sequence-format(for $var in $Construct-Where-Clause/root/group return $var/TABLE, ',',true()), ',')--}"/>
+                </FROM>
+                <WHERE>
+                    <xsl:value-of select="tib:concat-sequence-format($Construct-Where-Clause/root/group/WHERECLAUSE, &quot; AND &quot;, true())"/>
+                </WHERE>
+                <GROUPBY>
+                    <xsl:value-of select="tib:concat-sequence-format(&#xA;for $var in $Construct-Where-Clause/root/group[TABLE!=''] return(concat($var/TABLE,&quot;.NAME&quot;))&#xA;, ',',true())&#xA;&#xA;{--tib:substring-before-last(tib:concat-sequence-format(for $var in $Construct-Where-Clause/root/group return(if (string-length($var/TABLE)>0) then  concat($var/TABLE,'.','NAME') else ''), ',',true()), ',')--}"/>
+                </GROUPBY>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ValidateOperation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Handle Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Handle Exception</pd:from>
+        <pd:to>Rethrow</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SelectItems</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Determine rows</pd:from>
+        <pd:to>Determine Range</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Determine Range</pd:from>
+        <pd:to>SelectItems</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Construct-Count</pd:from>
+        <pd:to>Determine rows</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Construct InnerQuery</pd:from>
+        <pd:to>Determine Range</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>DetermineFrom</pd:from>
+        <pd:to>Construct-Count</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ValidateOperation</pd:from>
+        <pd:to>Construct-Where-Clause</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Construct-Where-Clause</pd:from>
+        <pd:to>DetermineFrom</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Construct-Where-Clause</pd:from>
+        <pd:to>Construct InnerQuery</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>false()</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Construct-Where-Clause</pd:from>
+        <pd:to>Construct-GroupQuery</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Construct-GroupQuery</pd:from>
+        <pd:to>Determine Range</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

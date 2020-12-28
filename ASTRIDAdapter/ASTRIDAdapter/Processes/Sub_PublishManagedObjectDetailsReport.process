@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/UpsertTroubleReport.xsd" xmlns:pfx2="http://tempuri.org" xmlns:pfx3="http://tempuri.org/GenericRequest" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="urn:GenericMessageRequest" xmlns:pfx5="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/TroubleReport.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/CustomerOrganization.xsd" xmlns:pfx7="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/ManagedObjectInTrouble.xsd" xmlns:pfx8="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/SupportedService.xsd" xmlns:pfx9="http://xmlns.kpn.com/fixed/common/PropertyAddress.xsd" xmlns:ns3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx10="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:pfx11="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/UpdateManagedObjectAttribute.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/ManagedObject.xsd" xmlns:pfx12="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/Attributes.xsd" xmlns:ns6="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/ManagedObjectDetailsReport.xsd">
+    <xsd:import namespace="http://tempuri.org/GenericRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessage.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" schemaLocation="/XSDSchemas/Common/AnyXMLMessage.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/UpsertTroubleReport.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Publish/UpsertTroubleReport.xsd"/>
+    <xsd:import namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/UpdateManagedObjectAttribute.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Publish/UpdateManagedObjectAttribute.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/ManagedObjectDetailsReport.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Publish/ManagedObjectDetailsReport.xsd"/>
+    <pd:name>ASTRIDAdapter/Processes/Sub_PublishManagedObjectDetailsReport.process</pd:name>
+    <pd:description>0080 UpdateManagedObjectAttribute publish service offered by ASTRID.</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="PublishGenericMessage">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="MessageType" type="xsd:string" minOccurs="0"/>
+                    <xsd:element ref="pfx4:GenericMessage"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>42</pd:startX>
+    <pd:startY>48</pd:startY>
+    <pd:returnBindings>
+        <GUID>
+            <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:GUID"/>
+        </GUID>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="GUID" type="xsd:string"/>
+    </pd:endType>
+    <pd:endX>241</pd:endX>
+    <pd:endY>165</pd:endY>
+    <pd:errorSchemas>
+        <FunctionalError>
+            <xsd:element name="group">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ResultStatus" type="pfx10:ResultStatus"/>
+                        <xsd:element name="CMH" type="ns:CMHInfo"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </FunctionalError>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>86</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <faultName>FunctionalError</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns3:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;General Error&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-03300&quot;"/>
+                </messageCode>
+                <data>
+                    <group>
+                        <ResultStatus>
+                            <xsl:attribute name="pfx10:STATUS">
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx10:MSG_CODE">
+                                <xsl:value-of select="$_error/ns4:ErrorReport/MsgCode"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx10:ERROR_DESCRIPTION">
+                                <xsl:value-of select="concat($_error/ns4:ErrorReport/Msg, &quot;,&quot;,  $_error/ns4:ErrorReport/StackTrace)"/>
+                            </xsl:attribute>
+                        </ResultStatus>
+                        <CMH>
+                            <ns:ID>
+                                <xsl:value-of select="&quot;195&quot;"/>
+                            </ns:ID>
+                            <ns:NAME>
+                                <xsl:value-of select="$Start/PublishGenericMessage/MessageType"/>
+                            </ns:NAME>
+                            <ns:FID>
+                                <xsl:value-of select="concat($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier, &quot;,&quot;, $Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:managed_object_instance)"/>
+                            </ns:FID>
+                            <ns:MID>
+                                <xsl:value-of select="&quot;195.30&quot;"/>
+                            </ns:MID>
+                            <ns:PARADIGM>
+                                <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                            </ns:PARADIGM>
+                            <ns:OBJECT>
+                                <xsl:value-of select="&quot;ManagedObjectDetailsReport&quot;"/>
+                            </ns:OBJECT>
+                            <ns:VERSION>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns:VERSION>
+                            <ns:FROM>
+                                <xsl:attribute name="ns:COMPONENT_ID">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:COMPONENT_VERSION">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                                </xsl:attribute>
+                            </ns:FROM>
+                            <ns:TO>
+                                <xsl:attribute name="ns:DESTINATION">
+                                    <xsl:value-of select="concat('ErrorLog.',$_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.&quot;,&#xA;    $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentDomain, &quot;.&quot;,&#xA;    $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId, &quot;.Publish.&quot;,&#xA;    $Start/PublishGenericMessage/MessageType , '.1')"/>
+                                </xsl:attribute>
+                            </ns:TO>
+                            <ns:TRACKING>
+                                <ns:MESSAGE_ID>
+                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:GUID"/>
+                                </ns:MESSAGE_ID>
+                                <ns:ITEM>
+                                    <xsl:attribute name="ns:APPINFO">
+                                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentDomain, &quot;.&quot;, $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId, '.ERROR')"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:EVENT">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/MessageType"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:TIMESTAMP">
+                                        <xsl:value-of select="tib:timestamp()"/>
+                                    </xsl:attribute>
+                                </ns:ITEM>
+                            </ns:TRACKING>
+                        </CMH>
+                    </group>
+                </data>
+            </ns3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Publish message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>172</pd:x>
+        <pd:y>49</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Publisher.process</processName>
+        </config>
+        <pd:inputBindings>
+            <PublisherIn>
+                <Destination>
+                    <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.&quot;,&#xA;    $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentDomain, &quot;.&quot;,&#xA;    $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId, &quot;.Publish.&quot;,&#xA;    $Start/PublishGenericMessage/MessageType , '.1')"/>
+                </Destination>
+                <Body>
+                    <ns6:ManagedObjectDetailsReport>
+                        <ns:CMH>
+                            <ns:ID>
+                                <xsl:value-of select="&quot;195&quot;"/>
+                            </ns:ID>
+                            <ns:NAME>
+                                <xsl:value-of select="$Start/PublishGenericMessage/MessageType"/>
+                            </ns:NAME>
+                            <ns:FID>
+                                <xsl:value-of select="concat($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier, &quot;,&quot;, $Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:managed_object_instance)"/>
+                            </ns:FID>
+                            <ns:MID>
+                                <xsl:value-of select="&quot;195.30&quot;"/>
+                            </ns:MID>
+                            <ns:PARADIGM>
+                                <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                            </ns:PARADIGM>
+                            <ns:OBJECT>
+                                <xsl:value-of select="&quot;ManagedObjectDetailsReport&quot;"/>
+                            </ns:OBJECT>
+                            <ns:VERSION>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns:VERSION>
+                            <ns:FROM>
+                                <xsl:attribute name="ns:COMPONENT_ID">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:COMPONENT_VERSION">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                                </xsl:attribute>
+                            </ns:FROM>
+                            <ns:TO>
+                                <xsl:attribute name="ns:DESTINATION">
+                                    <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.&quot;,&#xA;    $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentDomain, &quot;.&quot;,&#xA;    $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId, &quot;.Publish.&quot;,&#xA;    $Start/PublishGenericMessage/MessageType , '.1')"/>
+                                </xsl:attribute>
+                            </ns:TO>
+                            <ns:TRACKING>
+                                <ns:MESSAGE_ID>
+                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:GUID"/>
+                                </ns:MESSAGE_ID>
+                                <ns:ITEM>
+                                    <xsl:attribute name="ns:APPINFO">
+                                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentDomain, &quot;.&quot;, $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId)"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:EVENT">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/MessageType"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:TIMESTAMP">
+                                        <xsl:value-of select="tib:timestamp()"/>
+                                    </xsl:attribute>
+                                </ns:ITEM>
+                            </ns:TRACKING>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:managed_object_class!=&quot;&quot;">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="&quot;managed_object_class&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:managed_object_class"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:if>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:managed_object_class_extension!=&quot;&quot;">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="&quot;managed_object_class_extension&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:managed_object_class_extension"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:if>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:managed_object_class_version!=&quot;&quot;">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="&quot;managed_object_class_version&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:managed_object_class_version"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:if>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_origination_it_domain!=&quot;&quot;">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="&quot;message_origination_it_domain&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_origination_it_domain"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:if>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_instance!=&quot;&quot;">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="&quot;message_instance&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_instance"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:if>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_creation_time!=&quot;&quot;">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="&quot;message_creation_time&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_creation_time"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:if>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_destination_it_domain!=&quot;&quot;">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="&quot;message_destination_it_domain&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_destination_it_domain"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:if>
+                        </ns:CMH>
+                        <ns6:TROUBLE_REPORT>
+                            <ns2:TROUBLE_REPORT_ID>
+                                <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier"/>
+                            </ns2:TROUBLE_REPORT_ID>
+                        </ns6:TROUBLE_REPORT>
+                        <ns6:MANAGED_OBJECT>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:managed_object_instance">
+                                <ns5:MANAGED_OBJECT_INSTANCE>
+                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:managed_object_instance"/>
+                                </ns5:MANAGED_OBJECT_INSTANCE>
+                            </xsl:if>
+                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_network_class">
+                                <ns5:NETWORK_CLASS>
+                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_network_class"/>
+                                </ns5:NETWORK_CLASS>
+                            </xsl:if>
+                            <ns5:ATTRIBUTES>
+                                <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_attribute_name">
+                                    <pfx12:NAME>
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_attribute_name"/>
+                                    </pfx12:NAME>
+                                </xsl:if>
+                                <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_attribute_value">
+                                    <pfx12:VALUE>
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_attribute_value"/>
+                                    </pfx12:VALUE>
+                                </xsl:if>
+                            </ns5:ATTRIBUTES>
+                            <ns5:SUPPORTED_SERVICE>
+                                <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_class">
+                                    <pfx8:SUPPORTED_SERVICE_CLASS>
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_class"/>
+                                    </pfx8:SUPPORTED_SERVICE_CLASS>
+                                </xsl:if>
+                                <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_instance">
+                                    <pfx8:SUPPORTED_SERVICE_INSTANCE>
+                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_instance"/>
+                                    </pfx8:SUPPORTED_SERVICE_INSTANCE>
+                                </xsl:if>
+                            </ns5:SUPPORTED_SERVICE>
+                        </ns6:MANAGED_OBJECT>
+                    </ns6:ManagedObjectDetailsReport>
+                </Body>
+                <JMS>
+                    <xsl:if test="not($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_destination_it_domain/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                        <Selector>
+                            <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_destination_it_domain"/>
+                        </Selector>
+                    </xsl:if>
+                </JMS>
+            </PublisherIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish message</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Publish message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish message</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52378</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

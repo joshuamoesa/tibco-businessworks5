@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/GetBusinessSegmentInstalledBase.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Response/GetBusinessSegmentInstalledBase.xsd" xmlns:ns2="http://xmlns.kpn.com/EAI/fixed/GetBusinessSegmentInstalledBaseRequest" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/GetBusinessSegmentInstalledBase.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Request/GetBusinessSegmentInstalledBase.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Response/GetBusinessSegmentInstalledBase.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Response/GetBusinessSegmentInstalledBase.xsd"/>
+    <pd:name>SiebelZMAdapter/Test Processes/ContactManagementAdapter/GetBusinessSegmentInstalledBase_Driver.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVRequestActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVRequestActivity</pd:resourceType>
+        <pd:x>271</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsXMLCompliantFieldNamesOutput>false</wantsXMLCompliantFieldNamesOutput>
+            <sharedChannel>/Common/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <subject>%%Env%%.FIXED.CRM.%%SiebelZMAdapter/ComponentId%%.Request.GetBusinessSegmentInstalledBase.1</subject>
+            <inputXsdString ref="pfx:GetBusinessSegmentInstalledBase"/>
+            <outputXsdString ref="pfx2:GetBusinessSegmentInstalledBase"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="&quot;874&quot;"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="&quot;GetBusinessSegmentInstalledBase&quot;"/>
+                        </ns:NAME>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="&quot;REQUEST&quot;"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="&quot;CUSTOMER_ID&quot;"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/SiebelZMAdapter/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:COMPONENT_VERSION">
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/SiebelZMAdapter/ComponentVersion"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                    </ns:CMH>
+                    <ns2:BODY>
+                        <ns2:CUSTOMER_ID>
+                            <ns2:ID_CKR>
+                                <xsl:value-of select="&quot;ABCD0007&quot;"/>
+                            </ns2:ID_CKR>
+                        </ns2:CUSTOMER_ID>
+                    </ns2:BODY>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

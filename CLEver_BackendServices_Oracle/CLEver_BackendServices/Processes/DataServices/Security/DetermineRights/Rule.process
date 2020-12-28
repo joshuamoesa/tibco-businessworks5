@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/Version" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.tibco.com/CLEver/ExtraTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/CLEver/Rule">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Rule" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Rule.xsd"/>
+    <pd:name>Processes/DataServices/Security/DetermineRights/Rule.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:Rules"/>
+    <pd:startX>68</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:for-each select="$Start/pfx:Rules">
+            <pfx:Rules>
+                <xsl:for-each select="pfx:Rule">
+                    <pfx:Rule>
+                        <pfx:ID>
+                            <xsl:value-of select="pfx:ID"/>
+                        </pfx:ID>
+                        <pfx:Name>
+                            <xsl:value-of select="pfx:Name"/>
+                        </pfx:Name>
+                        <pfx:Description>
+                            <xsl:value-of select="pfx:Description"/>
+                        </pfx:Description>
+                        <xsl:if test="pfx:BusinessDomainID">
+                            <pfx:BusinessDomainID>
+                                <xsl:value-of select="pfx:BusinessDomainID"/>
+                            </pfx:BusinessDomainID>
+                        </xsl:if>
+                        <xsl:if test="pfx:TechnicalDomainID">
+                            <pfx:TechnicalDomainID>
+                                <xsl:value-of select="pfx:TechnicalDomainID"/>
+                            </pfx:TechnicalDomainID>
+                        </xsl:if>
+                        <xsl:if test="pfx:CategoryID">
+                            <pfx:CategoryID>
+                                <xsl:value-of select="pfx:CategoryID"/>
+                            </pfx:CategoryID>
+                        </xsl:if>
+                        <xsl:if test="pfx:TypeID">
+                            <pfx:TypeID>
+                                <xsl:value-of select="pfx:TypeID"/>
+                            </pfx:TypeID>
+                        </xsl:if>
+                        <xsl:if test="pfx:SeverityID">
+                            <pfx:SeverityID>
+                                <xsl:value-of select="pfx:SeverityID"/>
+                            </pfx:SeverityID>
+                        </xsl:if>
+                        <pfx:CodeID>
+                            <xsl:value-of select="pfx:CodeID"/>
+                        </pfx:CodeID>
+                        <xsl:if test="pfx:Hostname">
+                            <pfx:Hostname>
+                                <xsl:value-of select="pfx:Hostname"/>
+                            </pfx:Hostname>
+                        </xsl:if>
+                        <xsl:if test="pfx:Component">
+                            <pfx:Component>
+                                <xsl:value-of select="pfx:Component"/>
+                            </pfx:Component>
+                        </xsl:if>
+                        <xsl:if test="pfx:Service">
+                            <pfx:Service>
+                                <xsl:value-of select="pfx:Service"/>
+                            </pfx:Service>
+                        </xsl:if>
+                        <xsl:if test="pfx:Process">
+                            <pfx:Process>
+                                <xsl:value-of select="pfx:Process"/>
+                            </pfx:Process>
+                        </xsl:if>
+                        <xsl:if test="pfx:PolicyID">
+                            <pfx:PolicyID>
+                                <xsl:value-of select="pfx:PolicyID"/>
+                            </pfx:PolicyID>
+                        </xsl:if>
+                        <xsl:if test="pfx:ExecutionPriority">
+                            <pfx:ExecutionPriority>
+                                <xsl:value-of select="pfx:ExecutionPriority"/>
+                            </pfx:ExecutionPriority>
+                        </xsl:if>
+                        <ns:Version>
+                            <xsl:value-of select="ns:Version"/>
+                        </ns:Version>
+                        <xsl:copy-of select="ns:Parameters"/>
+                        <xsl:choose>
+                            <xsl:when test="$Retrieve/ns2:Versions/ns2:Version/ns2:Status=1">
+                                <ns:SecurityInfo>
+                                    <ns:isCreatable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isCreatable>
+                                    <ns:isReadable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isReadable>
+                                    <ns:isUpdatable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isUpdatable>
+                                    <ns:isDeletable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isDeletable>
+                                </ns:SecurityInfo>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <ns:SecurityInfo>
+                                    <ns:isCreatable>
+                                        <xsl:value-of select="false()"/>
+                                    </ns:isCreatable>
+                                    <ns:isReadable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isReadable>
+                                    <ns:isUpdatable>
+                                        <xsl:value-of select="false()"/>
+                                    </ns:isUpdatable>
+                                    <ns:isDeletable>
+                                        <xsl:value-of select="false()"/>
+                                    </ns:isDeletable>
+                                </ns:SecurityInfo>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </pfx:Rule>
+                </xsl:for-each>
+            </pfx:Rules>
+        </xsl:for-each>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:Rules"/>
+    <pd:endX>672</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Retrieve">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>316</pd:x>
+        <pd:y>138</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Version/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Version/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ID>
+                    <xsl:value-of select="$Start/pfx:Rules/pfx:Rule[1]/ns:Version"/>
+                </ID>
+                <ns:Security>
+                    <ns:UserName>
+                        <xsl:value-of select="''"/>
+                    </ns:UserName>
+                    <ns:Password>
+                        <xsl:value-of select="''"/>
+                    </ns:Password>
+                </ns:Security>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Retrieve</pd:to>
+        <pd:xpathDescription>exists</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Start/pfx:Rules/pfx:Rule)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Retrieve</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

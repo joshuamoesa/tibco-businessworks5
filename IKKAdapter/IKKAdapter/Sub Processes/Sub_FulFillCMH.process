@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://xmlns.kpn.com/common/cdm/NewCMH.xsd" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMH.xsd" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/Common/InvocationException.xsd" xmlns:ns1="http://schemas.tibco.com/bw/plugins/java/5.0/javaExceptions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/InvocationException.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/NewCMH.xsd" schemaLocation="/XSDSchemas/OrderManagerAdapter/Common/NewCMH.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/Common/InvocationException.xsd" schemaLocation="/XSDSchemas/Common/InvocationException.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/InvocationException.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/InvocationException.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMH.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/CMH.xsd"/>
+    <pd:name>IKKAdapter/Sub Processes/Sub_FulFillCMH.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="InputCMH" type="pfx3:CMH"/>
+    </pd:startType>
+    <pd:startX>113</pd:startX>
+    <pd:startY>85</pd:startY>
+    <pd:returnBindings>
+        <CMH>
+            <xsl:if test="$Start/InputCMH/ID">
+                <ID>
+                    <xsl:value-of select="$Start/InputCMH/ID"/>
+                </ID>
+            </xsl:if>
+            <xsl:if test="$Start/InputCMH/NAME">
+                <NAME>
+                    <xsl:value-of select="$Start/InputCMH/NAME"/>
+                </NAME>
+            </xsl:if>
+            <xsl:if test="$Start/InputCMH/VERSION">
+                <VERSION>
+                    <xsl:value-of select="$Start/InputCMH/VERSION"/>
+                </VERSION>
+            </xsl:if>
+            <xsl:if test="$Start/InputCMH/OBJECT">
+                <OBJECT>
+                    <xsl:value-of select="$Start/InputCMH/OBJECT"/>
+                </OBJECT>
+            </xsl:if>
+            <xsl:if test="$Start/InputCMH/PARADIGM">
+                <PARADIGM>
+                    <xsl:value-of select="$Start/InputCMH/PARADIGM"/>
+                </PARADIGM>
+            </xsl:if>
+            <xsl:if test="$Start/InputCMH/FID">
+                <FID>
+                    <xsl:value-of select="$Start/InputCMH/FID"/>
+                </FID>
+            </xsl:if>
+            <xsl:if test="$Start/InputCMH/MID">
+                <MID>
+                    <xsl:value-of select="$Start/InputCMH/MID"/>
+                </MID>
+            </xsl:if>
+            <FROM>
+                <xsl:attribute name="COMPONENT_ID">
+                    <xsl:value-of select="$Start/InputCMH/FROM/@COMPONENT_ID"/>
+                </xsl:attribute>
+                <xsl:if test="$Start/InputCMH/FROM/@COMPONENT_VERSION">
+                    <xsl:attribute name="COMPONENT_VERSION">
+                        <xsl:value-of select="$Start/InputCMH/FROM/@COMPONENT_VERSION"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Start/InputCMH/FROM/@END_USER_INFO">
+                    <xsl:attribute name="END_USER_INFO">
+                        <xsl:value-of select="$Start/InputCMH/FROM/@END_USER_INFO"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Start/InputCMH/FROM/@SOURCE_ADDRESS">
+                    <xsl:attribute name="SOURCE_ADDRESS">
+                        <xsl:value-of select="$Start/InputCMH/FROM/@SOURCE_ADDRESS"/>
+                    </xsl:attribute>
+                </xsl:if>
+            </FROM>
+            <TO>
+                <xsl:if test="$Start/InputCMH/TO/@DESTINATION">
+                    <xsl:attribute name="DESTINATION">
+                        <xsl:value-of select="$Start/InputCMH/TO/@DESTINATION"/>
+                    </xsl:attribute>
+                </xsl:if>
+            </TO>
+            <TRACKING>
+                <xsl:if test="$getGUID/javaCodeActivityOutput/guid">
+                    <MESSAGE_ID>
+                        <xsl:value-of select="$getGUID/javaCodeActivityOutput/guid"/>
+                    </MESSAGE_ID>
+                </xsl:if>
+                <xsl:if test="$Start/InputCMH/TRACKING/EXTERNAL_REF">
+                    <EXTERNAL_REF>
+                        <xsl:value-of select="$Start/InputCMH/TRACKING/EXTERNAL_REF"/>
+                    </EXTERNAL_REF>
+                </xsl:if>
+                <xsl:if test="$Start/InputCMH/TRACKING/SEQUENCE_NO">
+                    <SEQUENCE_NO>
+                        <xsl:value-of select="$Start/InputCMH/TRACKING/SEQUENCE_NO"/>
+                    </SEQUENCE_NO>
+                </xsl:if>
+                <xsl:for-each select="$Start/InputCMH/TRACKING/ITEM">
+                    <ITEM>
+                        <xsl:if test="@APPINFO">
+                            <xsl:attribute name="APPINFO">
+                                <xsl:value-of select="@APPINFO"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="@EVENT">
+                            <xsl:attribute name="EVENT">
+                                <xsl:value-of select="@EVENT"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:attribute name="TIMESTAMP">
+                            <xsl:value-of select="tib:timestamp()"/>
+                        </xsl:attribute>
+                    </ITEM>
+                </xsl:for-each>
+            </TRACKING>
+            <xsl:copy-of select="$Start/InputCMH/ATTRIBUTE"/>
+        </CMH>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endDescription>Copy input CHM to output and add @TIMESTAMP and MESSAGE_ID
+</pd:endDescription>
+    <pd:endType>
+        <xsd:element name="CMH" type="pfx3:CMH"/>
+    </pd:endType>
+    <pd:endX>455</pd:endX>
+    <pd:endY>85</pd:endY>
+    <pd:errorSchemas>
+        <ErrorSchema>
+            <xsd:element name="InvocationException" type="ns3:InvocationException"/>
+        </ErrorSchema>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="getGUID">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>265</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <fullsource>package IKKAdapter.SubProcesses.Sub_FulFillCMH;
+import java.util.*;
+import java.io.*;
+public class Sub_FulFillCMHgetGUID{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String guid = "";
+	public String getguid() {
+		return guid;
+	}
+	public void setguid(String val) {
+		guid = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public Sub_FulFillCMHgetGUID() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	Out : String guid
+* Available Variables: DO NOT MODIFY *****/
+	setguid(new com.tibco.sdk.tools.MGUIDGenerator().newGUID().toString());
+}
+}
+</fullsource>
+            <fileName>Sub_FulFillCMHgetGUID</fileName>
+            <packageName>IKKAdapter.SubProcesses.Sub_FulFillCMH</packageName>
+            <outputData>
+                <row>
+                    <fieldName>guid</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>Sub_FulFillCMHgetGUID</name>
+                    <byteCode>yv66vgAAAC4AKQkACQAaCgAKABsIABwHAB0KAAQAGwoABAAeCgAfACAKAAkAIQcAIgcAIwEABGd1aWQBABJMamF2YS9sYW5nL1N0cmluZzsBAAdnZXRndWlkAQAUKClMamF2YS9sYW5nL1N0cmluZzsBAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQAHc2V0Z3VpZAEAFShMamF2YS9sYW5nL1N0cmluZzspVgEABjxpbml0PgEAAygpVgEABmludm9rZQEACkV4Y2VwdGlvbnMHACQBAApTb3VyY2VGaWxlAQAaU3ViX0Z1bEZpbGxDTUhnZXRHVUlELmphdmEMAAsADAwAEwAUAQAAAQAiY29tL3RpYmNvL3Nkay90b29scy9NR1VJREdlbmVyYXRvcgwAJQAmBwAnDAAoAA4MABEAEgEAPElLS0FkYXB0ZXIvU3ViUHJvY2Vzc2VzL1N1Yl9GdWxGaWxsQ01IL1N1Yl9GdWxGaWxsQ01IZ2V0R1VJRAEAEGphdmEvbGFuZy9PYmplY3QBABNqYXZhL2xhbmcvRXhjZXB0aW9uAQAHbmV3R1VJRAEAHSgpTGNvbS90aWJjby9zZGsvdG9vbHMvTUdVSUQ7AQAZY29tL3RpYmNvL3Nkay90b29scy9NR1VJRAEACHRvU3RyaW5nACEACQAKAAAAAQAEAAsADAAAAAQAAQANAA4AAQAPAAAAHQABAAEAAAAFKrQAAbAAAAABABAAAAAGAAEAAAAIAAEAEQASAAEADwAAACIAAgACAAAABiortQABsQAAAAEAEAAAAAoAAgAAAAsABQAMAAEAEwAUAAEADwAAACsAAgABAAAACyq3AAIqEgO1AAGxAAAAAQAQAAAADgADAAAADgAEAAYACgAPAAEAFQAUAAIADwAAAC4AAwABAAAAEiq7AARZtwAFtgAGtgAHtgAIsQAAAAEAEAAAAAoAAgAAABQAEQAVABYAAAAEAAEAFwABABgAAAACABk=</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>264</pd:x>
+        <pd:y>229</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;Invoke Java Code Exception&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;InvokeJavaException&quot;"/>
+                </messageCode>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>getGUID</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getGUID</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getGUID</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65434</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

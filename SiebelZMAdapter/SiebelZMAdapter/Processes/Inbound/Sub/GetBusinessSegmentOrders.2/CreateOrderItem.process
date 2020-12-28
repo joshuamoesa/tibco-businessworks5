@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/2.0/Response" xmlns:pfx2="http://www.siebel.com/xml/KZM%20Order%20Account%20Data%20Export">
+    <xsd:import namespace="http://www.siebel.com/xml/KZM%20Order%20Account%20Data%20Export" schemaLocation="/WSDL/GetBusinessSegmentOrders.2.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/2.0/Response" schemaLocation="/XSDSchemas/SiebelZMAdapter/Imported/0365_GetBusinessSegmentOrders_2.0_Response_EAI_BUS_SIDE.xsd"/>
+    <pd:name>SiebelZMAdapter/Processes/Inbound/Sub/GetBusinessSegmentOrders.2/CreateOrderItem.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="OrderEntry-LineItems" type="pfx2:OrderEntry-LineItems" minOccurs="0"/>
+                    <xsd:element name="ListOfAccount" type="pfx2:ListOfAccount" minOccurs="0"/>
+                    <xsd:element name="ListOfKzm-BillingAccount" type="pfx2:ListOfKzm-BillingAccount" minOccurs="0"/>
+                    <xsd:element name="ListOfKzm-ServiceAccount" type="pfx2:ListOfKzm-ServiceAccount" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>119</pd:startX>
+    <pd:startY>44</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$CreateOrderItem/ORDER_ITEM"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="ORDER_ITEM" type="pfx:ORDER_ITEM"/>
+    </pd:endType>
+    <pd:endX>450</pd:endX>
+    <pd:endY>44</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="CreateProduct">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>235</pd:x>
+        <pd:y>44</pd:y>
+        <config>
+            <processName>/SiebelZMAdapter/Processes/Inbound/Sub/GetBusinessSegmentOrders.2/CreateProduct.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <xsl:copy-of select="$Start/Input/OrderEntry-LineItems"/>
+                <xsl:copy-of select="$Start/Input/ListOfAccount"/>
+                <xsl:copy-of select="$Start/Input/ListOfKzm-BillingAccount"/>
+                <xsl:copy-of select="$Start/Input/ListOfKzm-ServiceAccount"/>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CreateOrderItem">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>348</pd:x>
+        <pd:y>44</pd:y>
+        <config>
+            <element>
+                <xsd:element name="ORDER_ITEM" type="pfx:ORDER_ITEM"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <ORDER_ITEM>
+                <pfx:PRODUCT_CATEGORY>
+                    <xsl:value-of select="&quot;ZIPB/ZIZB IP&quot;"/>
+                </pfx:PRODUCT_CATEGORY>
+                <pfx:ORDER_ITEM_HEADER>
+                    <pfx:ORDER_ITEM_TYPE>
+                        <xsl:value-of select="&quot;ZIPB/ZIZB IP&quot;"/>
+                    </pfx:ORDER_ITEM_TYPE>
+                    <xsl:if test="exists($Start/Input/OrderEntry-LineItems/pfx2:Status) and $Start/Input/OrderEntry-LineItems/pfx2:Status!=&quot;&quot;">
+                        <pfx:ORDER_ITEM_STATUS>
+                            <pfx:ORDER_ITEM_STATUS>
+                                <xsl:value-of select="$Start/Input/OrderEntry-LineItems/pfx2:Status"/>
+                            </pfx:ORDER_ITEM_STATUS>
+                        </pfx:ORDER_ITEM_STATUS>
+                    </xsl:if>
+                </pfx:ORDER_ITEM_HEADER>
+                <pfx:PRODUCT>
+                    <xsl:copy-of select="$CreateProduct/Output/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$CreateProduct/Output/PRODUCT/@*"/>
+                    <xsl:copy-of select="$CreateProduct/Output/PRODUCT/node()"/>
+                </pfx:PRODUCT>
+            </ORDER_ITEM>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CreateProduct</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateProduct</pd:from>
+        <pd:to>CreateOrderItem</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateOrderItem</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

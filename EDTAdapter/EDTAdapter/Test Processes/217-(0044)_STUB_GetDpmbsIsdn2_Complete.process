@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1113221274359" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1113221298625" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1113219960156" xmlns:ns3="http://xmlns.example.com/unique/default/namespace/1113220541234" xmlns:ns4="http://xmlns.kpn.com/fixed/kanvascontractadapter/common/KanvasResponse.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://xmlns.example.com/unique/default/namespace/1113223011750" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1113223040015" xmlns:ns5="http://xmlns.example.com/unique/default/namespace/1113223074734" xmlns:pfx5="http://xmlns.example.com/unique/default/namespace/1113223685343" xmlns:pfx6="http://xmlns.example.com/unique/default/namespace/1113223755812" xmlns:ns6="http://xmlns.example.com/unique/default/namespace/1113228290656" xmlns:ns7="http://xmlns.kpn.com/fixed/common/PhoneNumber.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1113221274359" schemaLocation="/XSDSchemas/KanvasContractAdapter/Request/GetPbxGroups.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1113221298625" schemaLocation="/XSDSchemas/KanvasContractAdapter/Response/GetPbxGroups.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1113223011750" schemaLocation="/XSDSchemas/KanvasContractAdapter/Request/GetDirectDialBlocks.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1113223040015" schemaLocation="/XSDSchemas/KanvasContractAdapter/Response/GetDirectDialBlocks.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1113223685343" schemaLocation="/XSDSchemas/KanvasContractAdapter/Request/GetDpmbsIsdn2.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1113223755812" schemaLocation="/XSDSchemas/KanvasContractAdapter/Response/GetDpmbsIsdn2.xsd"/>
+    <pd:name>EDTAdapter/Test Processes/217-(0044)_STUB_GetDpmbsIsdn2_Complete.process</pd:name>
+    <pd:startName>Rendezvous Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Rendezvous Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>68</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <sharedChannel>/EDTAdapter/Shared Resources/RVDQ Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <subject>%%Env%%.FIXED.Operations.KanvasRouter.Request.GetDpmbsIsdn2.1</subject>
+            <xsdString ref="pfx5:GetDpmbsIsdn2"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>294</pd:endX>
+    <pd:endY>57</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>186</pd:x>
+        <pd:y>57</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>Rendezvous Subscriber</eventSource>
+            <xsdString ref="pfx6:GetDpmbsIsdn2"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <xsl:for-each select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH">
+                        <ns:CMH>
+                            <ns:ID>
+                                <xsl:value-of select="ns:ID"/>
+                            </ns:ID>
+                            <ns:NAME>
+                                <xsl:value-of select="ns:NAME"/>
+                            </ns:NAME>
+                            <xsl:if test="ns:FID">
+                                <ns:FID>
+                                    <xsl:value-of select="ns:FID"/>
+                                </ns:FID>
+                            </xsl:if>
+                            <xsl:if test="ns:MID">
+                                <ns:MID>
+                                    <xsl:value-of select="ns:MID"/>
+                                </ns:MID>
+                            </xsl:if>
+                            <ns:PARADIGM>
+                                <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                            </ns:PARADIGM>
+                            <ns:OBJECT>
+                                <xsl:value-of select="ns:OBJECT"/>
+                            </ns:OBJECT>
+                            <ns:VERSION>
+                                <xsl:value-of select="ns:VERSION"/>
+                            </ns:VERSION>
+                            <xsl:for-each select="ns:FROM">
+                                <ns:FROM>
+                                    <xsl:attribute name="ns:COMPONENT_ID">
+                                        <xsl:value-of select="@ns:COMPONENT_ID"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="@ns:COMPONENT_VERSION">
+                                        <xsl:attribute name="ns:COMPONENT_VERSION">
+                                            <xsl:value-of select="@ns:COMPONENT_VERSION"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="@ns:END_USER_INFO">
+                                        <xsl:attribute name="ns:END_USER_INFO">
+                                            <xsl:value-of select="@ns:END_USER_INFO"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="@ns:SOURCE_ADDRESS">
+                                        <xsl:attribute name="ns:SOURCE_ADDRESS">
+                                            <xsl:value-of select="@ns:SOURCE_ADDRESS"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </ns:FROM>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns:TO">
+                                <ns:TO>
+                                    <xsl:attribute name="ns:DESTINATION">
+                                        <xsl:value-of select="@ns:DESTINATION"/>
+                                    </xsl:attribute>
+                                </ns:TO>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns:TRACKING">
+                                <ns:TRACKING>
+                                    <ns:MESSAGE_ID>
+                                        <xsl:value-of select="ns:MESSAGE_ID"/>
+                                    </ns:MESSAGE_ID>
+                                    <xsl:if test="ns:EXTERNAL_REF">
+                                        <ns:EXTERNAL_REF>
+                                            <xsl:value-of select="ns:EXTERNAL_REF"/>
+                                        </ns:EXTERNAL_REF>
+                                    </xsl:if>
+                                    <xsl:for-each select="ns:ITEM">
+                                        <ns:ITEM>
+                                            <xsl:attribute name="ns:APPINFO">
+                                                <xsl:value-of select="@ns:APPINFO"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns:EVENT">
+                                                <xsl:value-of select="@ns:EVENT"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns:TIMESTAMP">
+                                                <xsl:value-of select="@ns:TIMESTAMP"/>
+                                            </xsl:attribute>
+                                        </ns:ITEM>
+                                        <ns:ITEM>
+                                            <xsl:attribute name="ns:APPINFO">
+                                                <xsl:value-of select="&quot;KanvasContractAdapterStub&quot;"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns:EVENT">
+                                                <xsl:value-of select="@ns:EVENT"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns:TIMESTAMP">
+                                                <xsl:value-of select="tib:timestamp()"/>
+                                            </xsl:attribute>
+                                        </ns:ITEM>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns:SEQUENCE_NO">
+                                        <ns:SEQUENCE_NO>
+                                            <xsl:value-of select="."/>
+                                        </ns:SEQUENCE_NO>
+                                    </xsl:for-each>
+                                </ns:TRACKING>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns:ATTRIBUTE">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="@ns:NAME"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="@ns:VALUE"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:for-each>
+                        </ns:CMH>
+                    </xsl:for-each>
+                    <ns4:RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                    </ns4:RESULT_STATUS>
+                    <pfx6:NUMBER_OF_PHONENUMBERS>
+                        <xsl:value-of select="&quot;Number_Of_PhoneNumbers&quot;"/>
+                    </pfx6:NUMBER_OF_PHONENUMBERS>
+                    <pfx6:RSM_NUMBER>
+                        <xsl:value-of select="&quot;Rsm_Number&quot;"/>
+                    </pfx6:RSM_NUMBER>
+                    <pfx6:ROUTING_TYPE>
+                        <xsl:value-of select="&quot;Routing_Type&quot;"/>
+                    </pfx6:ROUTING_TYPE>
+                    <pfx6:DPMBS_ISDN2_DETAILS>
+                        <ns6:PHONENUMBER_TYPE>
+                            <xsl:value-of select="&quot;Phonenumber_Type_1&quot;"/>
+                        </ns6:PHONENUMBER_TYPE>
+                        <ns6:CURRENT_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Current_Subscriber_Number_1&quot;"/>
+                        </ns6:CURRENT_SUBSCRIBER_NUMBER>
+                        <ns6:FUTURE_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Future_Subscriber_Number_1&quot;"/>
+                        </ns6:FUTURE_SUBSCRIBER_NUMBER>
+                        <ns6:STATUS>
+                            <xsl:value-of select="&quot;Status_1&quot;"/>
+                        </ns6:STATUS>
+                        <ns6:DMB_LINK_ID>
+                            <xsl:value-of select="&quot;Dmb_Link_Id_1&quot;"/>
+                        </ns6:DMB_LINK_ID>
+                        <ns6:TIME_SLOT>
+                            <xsl:value-of select="&quot;Time_Slot_1&quot;"/>
+                        </ns6:TIME_SLOT>
+                        <ns6:DLCI_NUMBER>
+                            <xsl:value-of select="&quot;Dlci_Number_1&quot;"/>
+                        </ns6:DLCI_NUMBER>
+                        <ns6:TEI_NUMBER>
+                            <xsl:value-of select="&quot;Tei_Number_1&quot;"/>
+                        </ns6:TEI_NUMBER>
+                        <ns6:TEI_STATUS>
+                            <xsl:value-of select="&quot;Tei_Status_1&quot;"/>
+                        </ns6:TEI_STATUS>
+                        <ns6:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;Service_Type_1&quot;"/>
+                        </ns6:SERVICE_TYPE>
+                        <ns6:DPMBS_TYPE>
+                            <xsl:value-of select="&quot;Dpmbs_Type_1&quot;"/>
+                        </ns6:DPMBS_TYPE>
+                        <ns6:BD_SEQUENCE_NUMBER>
+                            <xsl:value-of select="&quot;Db_Sequence_Number_1&quot;"/>
+                        </ns6:BD_SEQUENCE_NUMBER>
+                        <ns6:BD_GROUP>
+                            <ns6:BD_GROUP_NUMBER>
+                                <xsl:value-of select="&quot;Db_Group_Number_1&quot;"/>
+                            </ns6:BD_GROUP_NUMBER>
+                            <ns6:BD_MEMBER>
+                                <ns6:BD_MEMBER_NUMBER>
+                                    <xsl:value-of select="&quot;Db_Member_Number_1&quot;"/>
+                                </ns6:BD_MEMBER_NUMBER>
+                            </ns6:BD_MEMBER>
+                        </ns6:BD_GROUP>
+                        <ns6:TRUNK>
+                            <ns6:TRUNK_GROUP_ID>
+                                <xsl:value-of select="&quot;Trunk_Group_id_1&quot;"/>
+                            </ns6:TRUNK_GROUP_ID>
+                            <ns6:TRUNK_ID>
+                                <xsl:value-of select="&quot;Trunk_Id_1&quot;"/>
+                            </ns6:TRUNK_ID>
+                        </ns6:TRUNK>
+                    </pfx6:DPMBS_ISDN2_DETAILS>
+                    <pfx6:DPMBS_ISDN2_DETAILS>
+                        <ns6:PHONENUMBER_TYPE>
+                            <xsl:value-of select="&quot;Phonenumber_Type_2&quot;"/>
+                        </ns6:PHONENUMBER_TYPE>
+                        <ns6:CURRENT_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Current_Subscriber_Number_2&quot;"/>
+                        </ns6:CURRENT_SUBSCRIBER_NUMBER>
+                        <ns6:FUTURE_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Future_Subscriber_Number_2&quot;"/>
+                        </ns6:FUTURE_SUBSCRIBER_NUMBER>
+                        <ns6:STATUS>
+                            <xsl:value-of select="&quot;Status_2&quot;"/>
+                        </ns6:STATUS>
+                        <ns6:DMB_LINK_ID>
+                            <xsl:value-of select="&quot;Dmb_Link_Id_2&quot;"/>
+                        </ns6:DMB_LINK_ID>
+                        <ns6:TIME_SLOT>
+                            <xsl:value-of select="&quot;Time_Slot_2&quot;"/>
+                        </ns6:TIME_SLOT>
+                        <ns6:DLCI_NUMBER>
+                            <xsl:value-of select="&quot;Dlci_Number_2&quot;"/>
+                        </ns6:DLCI_NUMBER>
+                        <ns6:TEI_NUMBER>
+                            <xsl:value-of select="&quot;Tei_Number_2&quot;"/>
+                        </ns6:TEI_NUMBER>
+                        <ns6:TEI_STATUS>
+                            <xsl:value-of select="&quot;Tei_Status_2&quot;"/>
+                        </ns6:TEI_STATUS>
+                        <ns6:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;Service_Type_2&quot;"/>
+                        </ns6:SERVICE_TYPE>
+                        <ns6:DPMBS_TYPE>
+                            <xsl:value-of select="&quot;Dpmbs_Type_2&quot;"/>
+                        </ns6:DPMBS_TYPE>
+                        <ns6:BD_SEQUENCE_NUMBER>
+                            <xsl:value-of select="&quot;Db_Sequence_Number_2&quot;"/>
+                        </ns6:BD_SEQUENCE_NUMBER>
+                        <ns6:BD_GROUP>
+                            <ns6:BD_GROUP_NUMBER>
+                                <xsl:value-of select="&quot;Db_Group_Number_2&quot;"/>
+                            </ns6:BD_GROUP_NUMBER>
+                            <ns6:BD_MEMBER>
+                                <ns6:BD_MEMBER_NUMBER>
+                                    <xsl:value-of select="&quot;Db_Member_Number_2&quot;"/>
+                                </ns6:BD_MEMBER_NUMBER>
+                            </ns6:BD_MEMBER>
+                        </ns6:BD_GROUP>
+                        <ns6:TRUNK>
+                            <ns6:TRUNK_GROUP_ID>
+                                <xsl:value-of select="&quot;Trunk_Group_id_2&quot;"/>
+                            </ns6:TRUNK_GROUP_ID>
+                            <ns6:TRUNK_ID>
+                                <xsl:value-of select="&quot;Trunk_Id_2&quot;"/>
+                            </ns6:TRUNK_ID>
+                        </ns6:TRUNK>
+                    </pfx6:DPMBS_ISDN2_DETAILS>
+                    <pfx6:DPMBS_ISDN2_DETAILS>
+                        <ns6:PHONENUMBER_TYPE>
+                            <xsl:value-of select="&quot;Phonenumber_Type_3&quot;"/>
+                        </ns6:PHONENUMBER_TYPE>
+                        <ns6:CURRENT_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Current_Subscriber_Number_3&quot;"/>
+                        </ns6:CURRENT_SUBSCRIBER_NUMBER>
+                        <ns6:FUTURE_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Future_Subscriber_Number_3&quot;"/>
+                        </ns6:FUTURE_SUBSCRIBER_NUMBER>
+                        <ns6:STATUS>
+                            <xsl:value-of select="&quot;Status_3&quot;"/>
+                        </ns6:STATUS>
+                        <ns6:DMB_LINK_ID>
+                            <xsl:value-of select="&quot;Dmb_Link_Id_3&quot;"/>
+                        </ns6:DMB_LINK_ID>
+                        <ns6:TIME_SLOT>
+                            <xsl:value-of select="&quot;Time_Slot_3&quot;"/>
+                        </ns6:TIME_SLOT>
+                        <ns6:DLCI_NUMBER>
+                            <xsl:value-of select="&quot;Dlci_Number_3&quot;"/>
+                        </ns6:DLCI_NUMBER>
+                        <ns6:TEI_NUMBER>
+                            <xsl:value-of select="&quot;Tei_Number_3&quot;"/>
+                        </ns6:TEI_NUMBER>
+                        <ns6:TEI_STATUS>
+                            <xsl:value-of select="&quot;Tei_Status_3&quot;"/>
+                        </ns6:TEI_STATUS>
+                        <ns6:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;Service_Type_3&quot;"/>
+                        </ns6:SERVICE_TYPE>
+                        <ns6:DPMBS_TYPE>
+                            <xsl:value-of select="&quot;Dpmbs_Type_3&quot;"/>
+                        </ns6:DPMBS_TYPE>
+                        <ns6:BD_SEQUENCE_NUMBER>
+                            <xsl:value-of select="&quot;Db_Sequence_Number_3&quot;"/>
+                        </ns6:BD_SEQUENCE_NUMBER>
+                        <ns6:BD_GROUP>
+                            <ns6:BD_GROUP_NUMBER>
+                                <xsl:value-of select="&quot;Db_Group_Number_3&quot;"/>
+                            </ns6:BD_GROUP_NUMBER>
+                            <ns6:BD_MEMBER>
+                                <ns6:BD_MEMBER_NUMBER>
+                                    <xsl:value-of select="&quot;Db_Member_Number_3&quot;"/>
+                                </ns6:BD_MEMBER_NUMBER>
+                            </ns6:BD_MEMBER>
+                        </ns6:BD_GROUP>
+                        <ns6:TRUNK>
+                            <ns6:TRUNK_GROUP_ID>
+                                <xsl:value-of select="&quot;Trunk_Group_id_3&quot;"/>
+                            </ns6:TRUNK_GROUP_ID>
+                            <ns6:TRUNK_ID>
+                                <xsl:value-of select="&quot;Trunk_Id_3&quot;"/>
+                            </ns6:TRUNK_ID>
+                        </ns6:TRUNK>
+                    </pfx6:DPMBS_ISDN2_DETAILS>
+                    <pfx6:DPMBS_ISDN2_DETAILS>
+                        <ns6:PHONENUMBER_TYPE>
+                            <xsl:value-of select="&quot;Phonenumber_Type_4&quot;"/>
+                        </ns6:PHONENUMBER_TYPE>
+                        <ns6:CURRENT_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Current_Subscriber_Number_4&quot;"/>
+                        </ns6:CURRENT_SUBSCRIBER_NUMBER>
+                        <ns6:FUTURE_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Future_Subscriber_Number_4&quot;"/>
+                        </ns6:FUTURE_SUBSCRIBER_NUMBER>
+                        <ns6:STATUS>
+                            <xsl:value-of select="&quot;Status_4&quot;"/>
+                        </ns6:STATUS>
+                        <ns6:DMB_LINK_ID>
+                            <xsl:value-of select="&quot;Dmb_Link_Id_4&quot;"/>
+                        </ns6:DMB_LINK_ID>
+                        <ns6:TIME_SLOT>
+                            <xsl:value-of select="&quot;Time_Slot_4&quot;"/>
+                        </ns6:TIME_SLOT>
+                        <ns6:DLCI_NUMBER>
+                            <xsl:value-of select="&quot;Dlci_Number_4&quot;"/>
+                        </ns6:DLCI_NUMBER>
+                        <ns6:TEI_NUMBER>
+                            <xsl:value-of select="&quot;Tei_Number_4&quot;"/>
+                        </ns6:TEI_NUMBER>
+                        <ns6:TEI_STATUS>
+                            <xsl:value-of select="&quot;Tei_Status_4&quot;"/>
+                        </ns6:TEI_STATUS>
+                        <ns6:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;Service_Type_4&quot;"/>
+                        </ns6:SERVICE_TYPE>
+                        <ns6:DPMBS_TYPE>
+                            <xsl:value-of select="&quot;Dpmbs_Type_4&quot;"/>
+                        </ns6:DPMBS_TYPE>
+                        <ns6:BD_SEQUENCE_NUMBER>
+                            <xsl:value-of select="&quot;Db_Sequence_Number_4&quot;"/>
+                        </ns6:BD_SEQUENCE_NUMBER>
+                        <ns6:BD_GROUP>
+                            <ns6:BD_GROUP_NUMBER>
+                                <xsl:value-of select="&quot;Db_Group_Number_4&quot;"/>
+                            </ns6:BD_GROUP_NUMBER>
+                            <ns6:BD_MEMBER>
+                                <ns6:BD_MEMBER_NUMBER>
+                                    <xsl:value-of select="&quot;Db_Member_Number_4&quot;"/>
+                                </ns6:BD_MEMBER_NUMBER>
+                            </ns6:BD_MEMBER>
+                        </ns6:BD_GROUP>
+                        <ns6:TRUNK>
+                            <ns6:TRUNK_GROUP_ID>
+                                <xsl:value-of select="&quot;Trunk_Group_id_4&quot;"/>
+                            </ns6:TRUNK_GROUP_ID>
+                            <ns6:TRUNK_ID>
+                                <xsl:value-of select="&quot;Trunk_Id_4&quot;"/>
+                            </ns6:TRUNK_ID>
+                        </ns6:TRUNK>
+                    </pfx6:DPMBS_ISDN2_DETAILS>
+                    <pfx6:DPMBS_ISDN2_DETAILS>
+                        <ns6:PHONENUMBER_TYPE>
+                            <xsl:value-of select="&quot;Phonenumber_Type_5&quot;"/>
+                        </ns6:PHONENUMBER_TYPE>
+                        <ns6:CURRENT_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Current_Subscriber_Number_5&quot;"/>
+                        </ns6:CURRENT_SUBSCRIBER_NUMBER>
+                        <ns6:FUTURE_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Future_Subscriber_Number_5&quot;"/>
+                        </ns6:FUTURE_SUBSCRIBER_NUMBER>
+                        <ns6:STATUS>
+                            <xsl:value-of select="&quot;Status_5&quot;"/>
+                        </ns6:STATUS>
+                        <ns6:DMB_LINK_ID>
+                            <xsl:value-of select="&quot;Dmb_Link_Id_5&quot;"/>
+                        </ns6:DMB_LINK_ID>
+                        <ns6:TIME_SLOT>
+                            <xsl:value-of select="&quot;Time_Slot_5&quot;"/>
+                        </ns6:TIME_SLOT>
+                        <ns6:DLCI_NUMBER>
+                            <xsl:value-of select="&quot;Dlci_Number_5&quot;"/>
+                        </ns6:DLCI_NUMBER>
+                        <ns6:TEI_NUMBER>
+                            <xsl:value-of select="&quot;Tei_Number_5&quot;"/>
+                        </ns6:TEI_NUMBER>
+                        <ns6:TEI_STATUS>
+                            <xsl:value-of select="&quot;Tei_Status_5&quot;"/>
+                        </ns6:TEI_STATUS>
+                        <ns6:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;Service_Type_5&quot;"/>
+                        </ns6:SERVICE_TYPE>
+                        <ns6:DPMBS_TYPE>
+                            <xsl:value-of select="&quot;Dpmbs_Type_5&quot;"/>
+                        </ns6:DPMBS_TYPE>
+                        <ns6:BD_SEQUENCE_NUMBER>
+                            <xsl:value-of select="&quot;Db_Sequence_Number_5&quot;"/>
+                        </ns6:BD_SEQUENCE_NUMBER>
+                        <ns6:BD_GROUP>
+                            <ns6:BD_GROUP_NUMBER>
+                                <xsl:value-of select="&quot;Db_Group_Number_5&quot;"/>
+                            </ns6:BD_GROUP_NUMBER>
+                            <ns6:BD_MEMBER>
+                                <ns6:BD_MEMBER_NUMBER>
+                                    <xsl:value-of select="&quot;Db_Member_Number_5&quot;"/>
+                                </ns6:BD_MEMBER_NUMBER>
+                            </ns6:BD_MEMBER>
+                        </ns6:BD_GROUP>
+                        <ns6:TRUNK>
+                            <ns6:TRUNK_GROUP_ID>
+                                <xsl:value-of select="&quot;Trunk_Group_id_5&quot;"/>
+                            </ns6:TRUNK_GROUP_ID>
+                            <ns6:TRUNK_ID>
+                                <xsl:value-of select="&quot;Trunk_Id_5&quot;"/>
+                            </ns6:TRUNK_ID>
+                        </ns6:TRUNK>
+                    </pfx6:DPMBS_ISDN2_DETAILS>
+                    <pfx6:DPMBS_ISDN2_DETAILS>
+                        <ns6:PHONENUMBER_TYPE>
+                            <xsl:value-of select="&quot;Phonenumber_Type_6&quot;"/>
+                        </ns6:PHONENUMBER_TYPE>
+                        <ns6:CURRENT_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Current_Subscriber_Number_6&quot;"/>
+                        </ns6:CURRENT_SUBSCRIBER_NUMBER>
+                        <ns6:FUTURE_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Future_Subscriber_Number_6&quot;"/>
+                        </ns6:FUTURE_SUBSCRIBER_NUMBER>
+                        <ns6:STATUS>
+                            <xsl:value-of select="&quot;Status_6&quot;"/>
+                        </ns6:STATUS>
+                        <ns6:DMB_LINK_ID>
+                            <xsl:value-of select="&quot;Dmb_Link_Id_6&quot;"/>
+                        </ns6:DMB_LINK_ID>
+                        <ns6:TIME_SLOT>
+                            <xsl:value-of select="&quot;Time_Slot_6&quot;"/>
+                        </ns6:TIME_SLOT>
+                        <ns6:DLCI_NUMBER>
+                            <xsl:value-of select="&quot;Dlci_Number_6&quot;"/>
+                        </ns6:DLCI_NUMBER>
+                        <ns6:TEI_NUMBER>
+                            <xsl:value-of select="&quot;Tei_Number_6&quot;"/>
+                        </ns6:TEI_NUMBER>
+                        <ns6:TEI_STATUS>
+                            <xsl:value-of select="&quot;Tei_Status_6&quot;"/>
+                        </ns6:TEI_STATUS>
+                        <ns6:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;Service_Type_6&quot;"/>
+                        </ns6:SERVICE_TYPE>
+                        <ns6:DPMBS_TYPE>
+                            <xsl:value-of select="&quot;Dpmbs_Type_6&quot;"/>
+                        </ns6:DPMBS_TYPE>
+                        <ns6:BD_SEQUENCE_NUMBER>
+                            <xsl:value-of select="&quot;Db_Sequence_Number_6&quot;"/>
+                        </ns6:BD_SEQUENCE_NUMBER>
+                        <ns6:BD_GROUP>
+                            <ns6:BD_GROUP_NUMBER>
+                                <xsl:value-of select="&quot;Db_Group_Number_6&quot;"/>
+                            </ns6:BD_GROUP_NUMBER>
+                            <ns6:BD_MEMBER>
+                                <ns6:BD_MEMBER_NUMBER>
+                                    <xsl:value-of select="&quot;Db_Member_Number_6&quot;"/>
+                                </ns6:BD_MEMBER_NUMBER>
+                            </ns6:BD_MEMBER>
+                        </ns6:BD_GROUP>
+                        <ns6:TRUNK>
+                            <ns6:TRUNK_GROUP_ID>
+                                <xsl:value-of select="&quot;Trunk_Group_id_6&quot;"/>
+                            </ns6:TRUNK_GROUP_ID>
+                            <ns6:TRUNK_ID>
+                                <xsl:value-of select="&quot;Trunk_Id_6&quot;"/>
+                            </ns6:TRUNK_ID>
+                        </ns6:TRUNK>
+                    </pfx6:DPMBS_ISDN2_DETAILS>
+                    <pfx6:DPMBS_ISDN2_DETAILS>
+                        <ns6:PHONENUMBER_TYPE>
+                            <xsl:value-of select="&quot;Phonenumber_Type_7&quot;"/>
+                        </ns6:PHONENUMBER_TYPE>
+                        <ns6:CURRENT_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Current_Subscriber_Number_7&quot;"/>
+                        </ns6:CURRENT_SUBSCRIBER_NUMBER>
+                        <ns6:FUTURE_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Future_Subscriber_Number_7&quot;"/>
+                        </ns6:FUTURE_SUBSCRIBER_NUMBER>
+                        <ns6:STATUS>
+                            <xsl:value-of select="&quot;Status_7&quot;"/>
+                        </ns6:STATUS>
+                        <ns6:DMB_LINK_ID>
+                            <xsl:value-of select="&quot;Dmb_Link_Id_7&quot;"/>
+                        </ns6:DMB_LINK_ID>
+                        <ns6:TIME_SLOT>
+                            <xsl:value-of select="&quot;Time_Slot_7&quot;"/>
+                        </ns6:TIME_SLOT>
+                        <ns6:DLCI_NUMBER>
+                            <xsl:value-of select="&quot;Dlci_Number_7&quot;"/>
+                        </ns6:DLCI_NUMBER>
+                        <ns6:TEI_NUMBER>
+                            <xsl:value-of select="&quot;Tei_Number_7&quot;"/>
+                        </ns6:TEI_NUMBER>
+                        <ns6:TEI_STATUS>
+                            <xsl:value-of select="&quot;Tei_Status_7&quot;"/>
+                        </ns6:TEI_STATUS>
+                        <ns6:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;Service_Type_7&quot;"/>
+                        </ns6:SERVICE_TYPE>
+                        <ns6:DPMBS_TYPE>
+                            <xsl:value-of select="&quot;Dpmbs_Type_7&quot;"/>
+                        </ns6:DPMBS_TYPE>
+                        <ns6:BD_SEQUENCE_NUMBER>
+                            <xsl:value-of select="&quot;Db_Sequence_Number_7&quot;"/>
+                        </ns6:BD_SEQUENCE_NUMBER>
+                        <ns6:BD_GROUP>
+                            <ns6:BD_GROUP_NUMBER>
+                                <xsl:value-of select="&quot;Db_Group_Number_7&quot;"/>
+                            </ns6:BD_GROUP_NUMBER>
+                            <ns6:BD_MEMBER>
+                                <ns6:BD_MEMBER_NUMBER>
+                                    <xsl:value-of select="&quot;Db_Member_Number_7&quot;"/>
+                                </ns6:BD_MEMBER_NUMBER>
+                            </ns6:BD_MEMBER>
+                        </ns6:BD_GROUP>
+                        <ns6:TRUNK>
+                            <ns6:TRUNK_GROUP_ID>
+                                <xsl:value-of select="&quot;Trunk_Group_id_7&quot;"/>
+                            </ns6:TRUNK_GROUP_ID>
+                            <ns6:TRUNK_ID>
+                                <xsl:value-of select="&quot;Trunk_Id_7&quot;"/>
+                            </ns6:TRUNK_ID>
+                        </ns6:TRUNK>
+                    </pfx6:DPMBS_ISDN2_DETAILS>
+                    <pfx6:DPMBS_ISDN2_DETAILS>
+                        <ns6:PHONENUMBER_TYPE>
+                            <xsl:value-of select="&quot;Phonenumber_Type_8&quot;"/>
+                        </ns6:PHONENUMBER_TYPE>
+                        <ns6:CURRENT_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Current_Subscriber_Number_8&quot;"/>
+                        </ns6:CURRENT_SUBSCRIBER_NUMBER>
+                        <ns6:FUTURE_SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="&quot;Future_Subscriber_Number_8&quot;"/>
+                        </ns6:FUTURE_SUBSCRIBER_NUMBER>
+                        <ns6:STATUS>
+                            <xsl:value-of select="&quot;Status_8&quot;"/>
+                        </ns6:STATUS>
+                        <ns6:DMB_LINK_ID>
+                            <xsl:value-of select="&quot;Dmb_Link_Id_8&quot;"/>
+                        </ns6:DMB_LINK_ID>
+                        <ns6:TIME_SLOT>
+                            <xsl:value-of select="&quot;Time_Slot_8&quot;"/>
+                        </ns6:TIME_SLOT>
+                        <ns6:DLCI_NUMBER>
+                            <xsl:value-of select="&quot;Dlci_Number_8&quot;"/>
+                        </ns6:DLCI_NUMBER>
+                        <ns6:TEI_NUMBER>
+                            <xsl:value-of select="&quot;Tei_Number_8&quot;"/>
+                        </ns6:TEI_NUMBER>
+                        <ns6:TEI_STATUS>
+                            <xsl:value-of select="&quot;Tei_Status_8&quot;"/>
+                        </ns6:TEI_STATUS>
+                        <ns6:SERVICE_TYPE>
+                            <xsl:value-of select="&quot;Service_Type_8&quot;"/>
+                        </ns6:SERVICE_TYPE>
+                        <ns6:DPMBS_TYPE>
+                            <xsl:value-of select="&quot;Dpmbs_Type_8&quot;"/>
+                        </ns6:DPMBS_TYPE>
+                        <ns6:BD_SEQUENCE_NUMBER>
+                            <xsl:value-of select="&quot;Db_Sequence_Number_8&quot;"/>
+                        </ns6:BD_SEQUENCE_NUMBER>
+                        <ns6:BD_GROUP>
+                            <ns6:BD_GROUP_NUMBER>
+                                <xsl:value-of select="&quot;Db_Group_Number_8&quot;"/>
+                            </ns6:BD_GROUP_NUMBER>
+                            <ns6:BD_MEMBER>
+                                <ns6:BD_MEMBER_NUMBER>
+                                    <xsl:value-of select="&quot;Db_Member_Number_8&quot;"/>
+                                </ns6:BD_MEMBER_NUMBER>
+                            </ns6:BD_MEMBER>
+                        </ns6:BD_GROUP>
+                        <ns6:TRUNK>
+                            <ns6:TRUNK_GROUP_ID>
+                                <xsl:value-of select="&quot;Trunk_Group_id_8&quot;"/>
+                            </ns6:TRUNK_GROUP_ID>
+                            <ns6:TRUNK_ID>
+                                <xsl:value-of select="&quot;Trunk_Id_8&quot;"/>
+                            </ns6:TRUNK_ID>
+                        </ns6:TRUNK>
+                    </pfx6:DPMBS_ISDN2_DETAILS>
+                    <pfx6:OPERATOR>
+                        <pfx6:OPERATOR_CODE>
+                            <xsl:value-of select="&quot;Operator_Code&quot;"/>
+                        </pfx6:OPERATOR_CODE>
+                        <pfx6:OPERATOR_NAME>
+                            <xsl:value-of select="&quot;Operator_Name&quot;"/>
+                        </pfx6:OPERATOR_NAME>
+                        <pfx6:X25_CONNECTION_TEST_NUMBER>
+                            <xsl:value-of select="&quot;X25_Connection_Test_Number&quot;"/>
+                        </pfx6:X25_CONNECTION_TEST_NUMBER>
+                        <pfx6:PHONE_NUMBER>
+                            <ns7:AREA_CODE>
+                                <xsl:value-of select="&quot;Area_Code&quot;"/>
+                            </ns7:AREA_CODE>
+                        </pfx6:PHONE_NUMBER>
+                    </pfx6:OPERATOR>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Rendezvous Subscriber</pd:from>
+        <pd:to>Reply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://kpn.com/eai/genericorder" xmlns:ns="http://kpn.com/eai/product/generic" xmlns:pfx3="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" xmlns:pfx4="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx6="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" xmlns:pfx7="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" xmlns:pfx8="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx9="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns1="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CDM/Product/Product_Type.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns4="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns5="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericOrderGateway/Imported/Product/Product_Type.xsd" xmlns:pfx91="http://kpn.com/eai/generic/order" xmlns:ns6="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:pfx10="http://xmlns.kpn.com/eai/common/errors" xmlns:ns7="http://www.tibco.com/pe/EngineTypes" xmlns:ns8="http://www.tibco.com/ns/ax/bc/SOAP/2002/10/aeschema" xmlns:ns9="http://www.tibco.com/ns/ax/bc/EZComm/2005/10/aeschema" xmlns:pfx11="http://xmlns.kpn.com/b2b/public/XDFAccess" xmlns:pfx12="http://ikkrijgglas.nl/">
+    <xsd:import namespace="http://schemas.kpn.com/wholesaleorderdesk/1.0/interface/b2b" schemaLocation="/Schema/WMP/kpn.wod.w9.input.003.wsdl"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/ORDER_WSDL/Validation/Schema.xsd" schemaLocation="/Validation/ValidationService.xsd"/>
+    <xsd:import namespace="http://kpn.com/eai/genericorder" schemaLocation="/Schemas/cdm xsd's/CDM Order/GenericOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Request/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Request/ValidateMessageRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/Response/ValidateMessage" schemaLocation="/XSDSchemas/UtilityServices/Response/ValidateMessageResponse.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://schemas.xmlsoap.org/soap/envelope/" schemaLocation="/XSDSchemas/GenericOrderGateway/Imported/WSDL/SOAP1.1.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/b2b/public/XDFAccess" schemaLocation="/BCSchemas/SOAP/XDF/1.0/XDFOrderMessage/XDFOrderMessage.xsd"/>
+    <xsd:import namespace="http://ikkrijgglas.nl/" schemaLocation="/BCSchemas/SOAP/ReggeFiber1/1.0/GetAddresses/GetAddressesResponse.xsd"/>
+    <pd:name>GenericOrderGateway/Processes/Outbound/SubmitB2BOrder.process</pd:name>
+    <pd:startName>ReceiveRequest</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ReceiveRequest">
+        <pd:type>com.tibco.plugin.ax.bc.B2BResponderRequestEventSource</pd:type>
+        <pd:resourceType>ae.eventsources.ResponderRequest</pd:resourceType>
+        <pd:x>52</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <parsePayload>false</parsePayload>
+            <eventSmartidOK>true</eventSmartidOK>
+            <eventSmartidShared>true</eventSmartidShared>
+            <eventSmartid>WMP</eventSmartid>
+            <sharedB2BConfig>/GenericOrderGateway/Shared Resources/BCServerConfig.bcsc</sharedB2BConfig>
+            <operationName>*</operationName>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>713</pd:endX>
+    <pd:endY>141</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SubmitOrder">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>235</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <processName>/GenericOrderGateway/Processes/Outbound/Sub/SubmitB2BOrder.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <Body>
+                    <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:body/ns8:stringData"/>
+                </Body>
+                <operationType>
+                    <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:operationType"/>
+                </operationType>
+                <operationID>
+                    <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:operationID"/>
+                </operationID>
+                <xsl:if test="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:sourceTP">
+                    <sourceTP>
+                        <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:sourceTP"/>
+                    </sourceTP>
+                </xsl:if>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>346</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GOG-04010&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$SubmitOrder/ServiceOut/MsgId"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="concat('Synchronous message:',tib:render-xml($SubmitOrder/ServiceOut/Body,false(),true()))"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="concat('operationID:',$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:operationID)"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>427</pd:x>
+        <pd:y>140</pd:y>
+        <config>
+            <ConfirmEvent>ReceiveRequest</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SendResponderResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>592</pd:x>
+        <pd:y>142</pd:y>
+        <config>
+            <processName>/GenericOrderGateway/Processes/Sub/SendResponderResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns8:ResponderResponse>
+                <ns8:statusCode>
+                    <xsl:value-of select="200"/>
+                </ns8:statusCode>
+                <ns8:statusMsg>
+                    <xsl:value-of select="&quot;OK&quot;"/>
+                </ns8:statusMsg>
+                <ns8:standardID>
+                    <xsl:value-of select="&quot;SOAP&quot;"/>
+                </ns8:standardID>
+                <ns8:response>
+                    <xsl:value-of select="tib:render-xml($SubmitOrder/ServiceOut/Body,false(),true())"/>
+                </ns8:response>
+                <ns8:closure>
+                    <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:closure"/>
+                </ns8:closure>
+                <xsl:if test="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:operationID">
+                    <ns8:operationID>
+                        <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:operationID"/>
+                    </ns8:operationID>
+                </xsl:if>
+            </ns8:ResponderResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>234</pd:x>
+        <pd:y>267</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <pfx10:Errors>
+                    <xsl:choose>
+                        <xsl:when test="$_error_SubmitOrder">
+                            <xsl:copy-of select="$_error_SubmitOrder/pfx10:Errors/pfx10:Error"/>
+                        </xsl:when>
+                        <xsl:when test="$_error_SendResponderResponse">
+                            <xsl:copy-of select="$_error_SendResponderResponse/pfx10:Error"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx10:Error>
+                                <pfx10:MsgCode>
+                                    <xsl:value-of select="$_error/ns7:ErrorReport/MsgCode"/>
+                                </pfx10:MsgCode>
+                                <pfx10:Params>
+                                    <xsl:value-of select="$_error/ns7:ErrorReport/Msg"/>
+                                </pfx10:Params>
+                            </pfx10:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pfx10:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Panic Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>407</pd:x>
+        <pd:y>388</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <pfx9:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;EAI Error during Error Notification&quot;"/>
+                </message>
+            </pfx9:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm-Error">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>547</pd:x>
+        <pd:y>265</pd:y>
+        <config>
+            <ConfirmEvent>ReceiveRequest</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log B2B Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>230</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GOG-04009&quot;"/>
+                </MsgCode>
+                <xsl:if test="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:transactionID">
+                    <MsgId>
+                        <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:transactionID"/>
+                    </MsgId>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:duplicate=&quot;true&quot;">
+                        <Parameter>
+                            <xsl:value-of select="&quot;duplicate&quot;"/>
+                        </Parameter>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <Parameter>
+                            <xsl:value-of select="&quot;new&quot;"/>
+                        </Parameter>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest,true(),true())"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:body/ns8:stringData"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Ignore">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>554</pd:x>
+        <pd:y>388</pd:y>
+        <config>
+            <ConfirmEvent>ReceiveRequest</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SendResponse">
+        <pd:type>com.tibco.plugin.ax.bc.B2BSendResponseActivity</pd:type>
+        <pd:resourceType>ae.activities.SendResponse</pd:resourceType>
+        <pd:x>409</pd:x>
+        <pd:y>267</pd:y>
+        <config>
+            <sharedB2BConfig>/GenericOrderGateway/Shared Resources/BCServerConfig.bcsc</sharedB2BConfig>
+            <parsePayload>false</parsePayload>
+            <operationName>CS/1.0/Confirmation</operationName>
+            <requestName>-- &lt;Custom Request&gt; --</requestName>
+            <protocol>SOAP</protocol>
+        </config>
+        <pd:inputBindings>
+            <ns8:SendResponseInput>
+                <ns8:BCResponderResponse>
+                    <ns8:statusCode>
+                        <xsl:value-of select="500"/>
+                    </ns8:statusCode>
+                    <ns8:statusMsg>
+                        <xsl:value-of select="&quot;EAI Error&quot;"/>
+                    </ns8:statusMsg>
+                    <ns8:closure>
+                        <xsl:value-of select="$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:closure"/>
+                    </ns8:closure>
+                    <ns8:soapFault>
+                        <ns8:faultCode>
+                            <xsl:value-of select="&quot;soap:server&quot;"/>
+                        </ns8:faultCode>
+                        <ns8:faultString>
+                            <xsl:value-of select="$_error/ns7:ErrorReport/Msg"/>
+                        </ns8:faultString>
+                    </ns8:soapFault>
+                </ns8:BCResponderResponse>
+            </ns8:SendResponseInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Notify">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>589</pd:x>
+        <pd:y>46</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SubmitOrder</pd:from>
+        <pd:to>Log Response</pd:to>
+        <pd:xpathDescription>TRACE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GOG-04010") and $ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:operationType!='notify'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveRequest</pd:from>
+        <pd:to>SubmitOrder</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SubmitOrder</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Response</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>SendResponderResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveRequest</pd:from>
+        <pd:to>Log B2B Request</pd:to>
+        <pd:xpathDescription>TRACE (or) DUPLICATE</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GOG-04009") or $ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:duplicate="true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendResponderResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SubmitOrder</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveRequest</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendResponderResponse</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:xpathDescription>ERROR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Panic Log</pd:from>
+        <pd:to>Ignore</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm-Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log B2B Request</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:xpathDescription>DUPLICATE</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:duplicate='true' and $_globalVariables/pfx5:GlobalVariables/GenericOrderGateway/Services/Outbound/SubmitB2BOrder/duplicateCheck='true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log B2B Request</pd:from>
+        <pd:to>SubmitOrder</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Ignore</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>SendResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendResponse</pd:from>
+        <pd:to>Confirm-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendResponse</pd:from>
+        <pd:to>Panic Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>Notify</pd:to>
+        <pd:xpathDescription>NOTIFICATION</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ReceiveRequest/ns8:ResponderRequestOutput/ns8:BCResponderRequest/ns8:operationType='notify'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Notify</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

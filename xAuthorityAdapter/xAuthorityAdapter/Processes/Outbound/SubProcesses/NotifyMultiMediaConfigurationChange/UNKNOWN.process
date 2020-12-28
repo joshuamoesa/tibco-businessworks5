@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" xmlns:pfx4="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Publish/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/SubmitOrder.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Subscribe/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Subscribe/UpdateOrderStatus.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Outbound/SubProcesses/NotifyMultiMediaConfigurationChange/UNKNOWN.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Destination" type="xsd:string"/>
+                    <xsd:element name="MessageId" type="xsd:string"/>
+                    <xsd:element name="XmlString" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>96</pd:startX>
+    <pd:startY>196</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx4:UpdateOrderStatus>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="'820'"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="'UpdateOrder'"/>
+                    </ns2:NAME>
+                    <ns2:MID>
+                        <xsl:value-of select="'820.10'"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="'Publish'"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="'Order'"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="'1.0'"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env,&quot;.FIXED.Operations.xAuthorityAdapter.Publish.NotifyMultiMediaConfigurationChange.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/Input/MessageId"/>
+                        </ns2:MESSAGE_ID>
+                        <ns2:ITEM>
+                            <xsl:attribute name="ns2:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/ComponentDomain,&quot;.&quot;,$_globalVariables/ns1:GlobalVariables/xAuthorityAdapter/ComponentId)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns2:EVENT">
+                                <xsl:value-of select="'NotifyMultimediaOrderChange'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns2:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns2:ITEM>
+                    </ns2:TRACKING>
+                </ns2:CMH>
+            </pfx4:UpdateOrderStatus>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx4:UpdateOrderStatus"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>452</pd:endX>
+    <pd:endY>195</pd:endY>
+    <pd:errorSchemas>
+        <ErrorSchema ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>250</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <faultName>ErrorSchema</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:variable name="MessageCode" select="'EAI-03000'"/>
+                <message>
+                    <xsl:value-of select="&quot;Input data invalid&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$MessageCode"/>
+                </messageCode>
+                <data>
+                    <pfx2:Error>
+                        <pfx2:MsgCode>
+                            <xsl:value-of select="$MessageCode"/>
+                        </pfx2:MsgCode>
+                        <pfx2:MsgId>
+                            <xsl:value-of select="$Start/Input/MessageId"/>
+                        </pfx2:MsgId>
+                    </pfx2:Error>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3394816</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>No path</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>false()</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns6="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/xAuthorityAdapter/CreateMultiMediaCombinedRegistration.xsd" xmlns:ns7="http://xmlns.kpn.com/fixed/xAuthorityAdapter/NotifyMultiMediaRegistrationStatus.xsd" xmlns:pfx7="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" xmlns:ns8="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns9="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:ns10="http://xmlns.kpn.com/imported/ordermessage_Site_Enterprise.xsd" xmlns:ns12="http://java.sun.com/products/oss/xml/ServiceActivation" xmlns:ns11="http://java.sun.com/products/oss/xml/Common" xmlns:ns13="http://Enterprise.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" xmlns:ns14="http://Site.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" xmlns:ns15="http://schemas.tibco.com/bw/plugins/xml/5.0/xmlExceptions">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Response/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Notify/TestNotificationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/ModifyMultiMediaLocationRegistration.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/ModifyMultiMediaSubscriptionRegistration.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/xAuthorityAdapter/CreateMultiMediaCombinedRegistration.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/CreateMultiMediaCombinedRegistration.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" schemaLocation="/XSDSchemas/xAuthorityAdapter/Publish/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://Enterprise.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" schemaLocation="/XSDSchemas/xAuthority/BVoIPEnterpriseDataServiceValue.xsd"/>
+    <xsd:import namespace="http://Site.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" schemaLocation="/XSDSchemas/xAuthority/BVoIPSiteDataServiceValue.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Inbound/0348-CreateMultiMediaCombinedRegistrationJMS.process</pd:name>
+    <pd:startName>Receive JMS Request</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive JMS Request">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>77</pd:x>
+        <pd:y>137</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>%%Common/JMS/JmsMaxSessions%%</maxSessions>
+                <destination>%%Env%%.FIXED.%%xAuthorityAdapter/ComponentDomain%%.%%xAuthorityAdapter/ComponentId%%.Request.CreateMultiMediaCombinedRegistration.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/xAuthorityAdapter/Shared Resources/JMS_PUBLIC Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>873</pd:endX>
+    <pd:endY>130</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Create Enterprise">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>429</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Main_0348-CreateMultiMediaCombinedRegistration_Enterprise.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx7:SubmitOrder>
+                <xsl:copy-of select="$Parse-XML/pfx7:SubmitOrder/ns1:CMH"/>
+                <xsl:copy-of select="$Parse-XML/pfx7:SubmitOrder/ns8:BODY"/>
+            </pfx7:SubmitOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log JMS Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>221</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04055&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="eai:getMessageId($Receive-JMS-Request/ns2:ActivityOutput/Body)"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders/ns2:JMSDestination"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="concat(tib:render-xml($Receive-JMS-Request/ns2:ActivityOutput/JMSHeaders, true(), true()),'&#xA;', tib:render-xml($Receive-JMS-Request/ns2:ActivityOutput/JMSProperties, true(), true()),'&#xA;', tib:render-xml($Receive-JMS-Request/ns2:ActivityOutput/OtherProperties, true(), true()))"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>433</pd:x>
+        <pd:y>379</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <ns4:Errors>
+                    <xsl:choose>
+                        <xsl:when test="$_error_Create-Enterprise">
+                            <xsl:copy-of select="$_error_Create-Enterprise/ns4:Error"/>
+                        </xsl:when>
+                        <xsl:when test="$_error_Create-Site">
+                            <xsl:copy-of select="$_error_Create-Site/ns4:Error"/>
+                        </xsl:when>
+                        <xsl:when test="$_error_Delete-Enterprise">
+                            <xsl:copy-of select="$_error_Delete-Enterprise/ns4:Error"/>
+                        </xsl:when>
+                        <xsl:when test="$_error">
+                            <ns4:Error>
+                                <ns4:MsgCode>
+                                    <xsl:value-of select="&quot;EAI-03059&quot;"/>
+                                </ns4:MsgCode>
+                                <ns4:Params>
+                                    <xsl:value-of select="&quot;CreateMultiMediaCombinedRegistration&quot;"/>
+                                </ns4:Params>
+                                <ns4:MsgId>
+                                    <xsl:value-of select="eai:getMessageId($Receive-JMS-Request/ns2:ActivityOutput/Body)"/>
+                                </ns4:MsgId>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                            </ns4:Error>
+                        </xsl:when>
+                        <xsl:when test="$_error_Parse-XML">
+                            <ns4:Error>
+                                <ns4:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03016&quot;"/>
+                                </ns4:MsgCode>
+                                <ns4:ActivityError>
+                                    <xsl:value-of select="tib:render-xml($_error_Parse-XML/ActivityErrors, false(),true())"/>
+                                </ns4:ActivityError>
+                            </ns4:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns4:Error>
+                                <ns4:MsgCode>
+                                    <xsl:value-of select="&quot;EAI-03059&quot;"/>
+                                </ns4:MsgCode>
+                                <ns4:Params>
+                                    <xsl:value-of select="&quot;CreateMultiMediaCombinedRegistration&quot;"/>
+                                </ns4:Params>
+                            </ns4:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns4:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>229</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx7:SubmitOrder"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Receive-JMS-Request/ns2:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Create Site">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>608</pd:x>
+        <pd:y>131</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Main_0348-CreateMultiMediaCombinedRegistration_SITE.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx7:SubmitOrder>
+                <xsl:copy-of select="$Parse-XML/pfx7:SubmitOrder/ns1:CMH"/>
+                <xsl:copy-of select="$Parse-XML/pfx7:SubmitOrder/ns8:BODY"/>
+            </pfx7:SubmitOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call NotifyMultimediaRegistrationStatus">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>761</pd:x>
+        <pd:y>129</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Outbound/0337-NotifyMultimediaRegistrationStatus.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:choose>
+                    <xsl:when test="exists($Delete-Enterprise)">
+                        <ns12:getOrdeByKeyrResponse>
+                            <ns12:orderValue>
+                                <xsl:copy-of select="$Delete-Enterprise/output/OrderValue/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Delete-Enterprise/output/OrderValue/@*"/>
+                                <xsl:copy-of select="$Delete-Enterprise/output/OrderValue/node()"/>
+                            </ns12:orderValue>
+                        </ns12:getOrdeByKeyrResponse>
+                    </xsl:when>
+                    <xsl:when test="exists($Create-Site)">
+                        <ns12:getOrdeByKeyrResponse>
+                            <ns12:orderValue>
+                                <xsl:copy-of select="$Create-Site/output/OrderValue/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Create-Site/output/OrderValue/@*"/>
+                                <xsl:copy-of select="$Create-Site/output/OrderValue/node()"/>
+                            </ns12:orderValue>
+                        </ns12:getOrdeByKeyrResponse>
+                    </xsl:when>
+                    <xsl:when test="exists($Create-Enterprise)">
+                        <ns12:getOrdeByKeyrResponse>
+                            <ns12:orderValue>
+                                <xsl:copy-of select="$Create-Enterprise/output/OrderValue/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Create-Enterprise/output/OrderValue/@*"/>
+                                <xsl:copy-of select="$Create-Enterprise/output/OrderValue/node()"/>
+                            </ns12:orderValue>
+                        </ns12:getOrdeByKeyrResponse>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_Delete-Enterprise)">
+                        <ErrorDescription>
+                            <xsl:value-of select="if (exists($_error_Delete-Enterprise/ns4:Error/ns4:ApplicationError)) then&#xA;&#x9;$_error_Delete-Enterprise/ns4:Error/ns4:ApplicationError&#xA;else&#xA;&#x9;concat($_globalVariables/ns:GlobalVariables/xAuthorityAdapter/ErrorDescription/InternalError,&quot; ErrorReport - &quot;,tib:render-xml($_error_Delete-Enterprise/ns4:Error, false(), true()))"/>
+                        </ErrorDescription>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Create-Site)">
+                        <ErrorDescription>
+                            <xsl:value-of select="if(exists($_error_Create-Site/ns4:Error/ns4:ApplicationError)) then&#xA;&#x9;$_error_Create-Site/ns4:Error/ns4:ApplicationError&#xA;else&#xA;&#x9;concat($_globalVariables/ns:GlobalVariables/xAuthorityAdapter/ErrorDescription/InternalError,&quot; ErrorReport - &quot;,tib:render-xml($_error_Create-Site/ns4:Error, false(), true()))"/>
+                        </ErrorDescription>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Create-Enterprise)">
+                        <ErrorDescription>
+                            <xsl:value-of select="if(exists($_error_Create-Enterprise/ns4:Error/ns4:ApplicationError)) then&#xA;&#x9;$_error_Create-Enterprise/ns4:Error/ns4:ApplicationError&#xA;else&#xA;&#x9;concat($_globalVariables/ns:GlobalVariables/xAuthorityAdapter/ErrorDescription/InternalError,&quot; ErrorReport - &quot;,tib:render-xml($_error_Create-Enterprise/ns4:Error, false(), true()))"/>
+                        </ErrorDescription>
+                    </xsl:when>
+                    <xsl:when test="count($Delete-Enterprise/output/OrderValue/ns12:failedServices/ns12:item)>=1">
+                        <ErrorDescription>
+                            <xsl:value-of select="$Delete-Enterprise/output/OrderValue/ns12:failedServices/ns12:item[1]/ns11:exception/ns11:message"/>
+                        </ErrorDescription>
+                    </xsl:when>
+                    <xsl:when test="count($Create-Site/output/OrderValue/ns12:failedServices/ns12:item)>=1">
+                        <ErrorDescription>
+                            <xsl:value-of select="$Create-Site/output/OrderValue/ns12:failedServices/ns12:item[1]/ns11:exception/ns11:message"/>
+                        </ErrorDescription>
+                    </xsl:when>
+                    <xsl:when test="count($Create-Enterprise/output/OrderValue/ns12:failedServices/ns12:item)>=1">
+                        <ErrorDescription>
+                            <xsl:value-of select="$Create-Enterprise/output/OrderValue/ns12:failedServices/ns12:item[1]/ns11:exception/ns11:message"/>
+                        </ErrorDescription>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Parse-XML)">
+                        <ErrorDescription>
+                            <xsl:value-of select="tib:render-xml($_error_Parse-XML/ActivityErrors, false(), true())"/>
+                        </ErrorDescription>
+                    </xsl:when>
+                    <xsl:when test="exists($_error)">
+                        <ErrorDescription>
+                            <xsl:value-of select="tib:render-xml($_error/ns3:ErrorReport, false(), true())"/>
+                        </ErrorDescription>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                </xsl:choose>
+                <xsl:if test="exists($Parse-XML)">
+                    <xsl:if test="$Parse-XML/pfx7:SubmitOrder/ns1:CMH/ns1:FID">
+                        <FID>
+                            <xsl:value-of select="$Parse-XML/pfx7:SubmitOrder/ns1:CMH/ns1:FID"/>
+                        </FID>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="exists($Parse-XML)">
+                    <OrderType>
+                        <xsl:value-of select="$Parse-XML/pfx7:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/ORDER_TYPE"/>
+                    </OrderType>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_Create-Enterprise) or exists($_error_Create-Site) or exists($_error_Delete-Enterprise) or count($Create-Site/output/OrderValue/ns12:failedServices/ns12:item)>=1 or count($Create-Enterprise/output/OrderValue/ns12:failedServices/ns12:item)>=1 or count($Delete-Enterprise/output/OrderValue/ns12:failedServices/ns12:item)>=1 or exists($_error_Parse-XML)  or exists($_error)">
+                        <StatusCode>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/xAuthorityAdapter/StatusCode/Failed"/>
+                        </StatusCode>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <StatusCode>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/xAuthorityAdapter/StatusCode/Success"/>
+                        </StatusCode>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <Product_Category>
+                    <xsl:value-of select="$Parse-XML/pfx7:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                </Product_Category>
+                <xsl:if test="exists($Parse-XML)">
+                    <External-Reference>
+                        <xsl:value-of select="$Parse-XML/pfx7:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                    </External-Reference>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Delete Enterprise">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>612</pd:x>
+        <pd:y>304</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Main_CreateMultiMediaCombinedRegistration_Delete_Enterprise.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx7:SubmitOrder>
+                <xsl:copy-of select="$Parse-XML/pfx7:SubmitOrder/ns1:CMH"/>
+                <xsl:copy-of select="$Parse-XML/pfx7:SubmitOrder/ns8:BODY"/>
+            </pfx7:SubmitOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>523</pd:x>
+        <pd:y>217</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>711</pd:x>
+        <pd:y>221</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null-2">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>759</pd:x>
+        <pd:y>468</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log Notify Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>817</pd:x>
+        <pd:y>298</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <ns4:Errors>
+                    <xsl:copy-of select="$_error_Call-NotifyMultimediaRegistrationStatus/ns4:Error"/>
+                </ns4:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Receive JMS Request</pd:from>
+        <pd:to>Log JMS Request</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("EAI-04055")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Request</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create Enterprise</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log error</pd:from>
+        <pd:to>Call NotifyMultimediaRegistrationStatus</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Request</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Create Enterprise</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create Enterprise</pd:from>
+        <pd:to>Create Site</pd:to>
+        <pd:xpathDescription>No Failed Services</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Create-Enterprise/output/OrderValue/ns12:failedServices/ns12:item)=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create Site</pd:from>
+        <pd:to>Call NotifyMultimediaRegistrationStatus</pd:to>
+        <pd:xpathDescription>No Failed Services</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Create-Site/output/OrderValue/ns12:failedServices/ns12:item)=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create Site</pd:from>
+        <pd:to>Delete Enterprise</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call NotifyMultimediaRegistrationStatus</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Delete Enterprise</pd:from>
+        <pd:to>Call NotifyMultimediaRegistrationStatus</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Delete Enterprise</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create Enterprise</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create Site</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>Delete Enterprise</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log error</pd:from>
+        <pd:to>Null-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-2</pd:from>
+        <pd:to>Call NotifyMultimediaRegistrationStatus</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Request</pd:from>
+        <pd:to>Log error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call NotifyMultimediaRegistrationStatus</pd:from>
+        <pd:to>Log Notify Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Notify Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

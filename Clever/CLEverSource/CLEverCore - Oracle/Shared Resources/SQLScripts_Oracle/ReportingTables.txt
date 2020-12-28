@@ -1,0 +1,141 @@
+/* Formatted on 2007/11/09 11:58 (Formatter Plus v4.8.5) */
+DROP TABLE rep_logging_min;
+CREATE TABLE rep_logging_min AS(
+SELECT COUNT(*) "count",MIN(m.datetime) "date", ROLE.NAME ROLE, srv.NAME service,
+       component.NAME component, proc.NAME procedurename, HOST.NAME hostname,
+       bdomain.NAME businessdomain, operation.NAME businessoperation,
+       concept.NAME businessconcept, tdomain.NAME technicaldomain,
+       status.NAME status
+  FROM tda_logging m,
+       tda_role ROLE,
+       tda_hostname HOST,
+       tda_procedure proc,
+       tda_service srv,
+       tda_technicaldomain tdomain,
+       tda_businessconcept concept,
+       tda_businessdomain bdomain,
+       tda_businessoperation operation,
+       tda_component component,
+       tda_logstatus status
+ WHERE m.service = srv.ID(+)
+   AND m.component = component.ID(+)
+   AND m.processname = proc.ID(+)
+   AND m.hostname = HOST.ID(+)
+   AND m.ROLE = ROLE.ID(+)
+   AND m.technicaldomain = tdomain.ID(+)
+   AND m.businessdomain = bdomain.ID(+)
+   AND m.businessoperation = operation.ID(+)
+   AND m.businessconcept = concept.ID(+)
+   AND m.logstatus = status.ID(+)
+GROUP BY  ROLE.NAME , srv.NAME ,
+       component.NAME , proc.NAME , HOST.NAME ,
+       bdomain.NAME , operation.NAME ,
+       concept.NAME , tdomain.NAME ,
+       status.NAME ,TO_CHAR(m.datetime,'YYYYMMDD HH24:MI'));
+
+DROP TABLE rep_logging_hour;
+CREATE TABLE rep_logging_hour AS(
+SELECT COUNT(*) "count",MIN(m.datetime) "date", ROLE.NAME ROLE, srv.NAME service,
+       component.NAME component, proc.NAME procedurename, HOST.NAME hostname,
+       bdomain.NAME businessdomain, operation.NAME businessoperation,
+       concept.NAME businessconcept, tdomain.NAME technicaldomain,
+       status.NAME status
+  FROM tda_logging m,
+       tda_role ROLE,
+       tda_hostname HOST,
+       tda_procedure proc,
+       tda_service srv,
+       tda_technicaldomain tdomain,
+       tda_businessconcept concept,
+       tda_businessdomain bdomain,
+       tda_businessoperation operation,
+       tda_component component,
+       tda_logstatus status
+ WHERE m.service = srv.ID(+)
+   AND m.component = component.ID(+)
+   AND m.processname = proc.ID(+)
+   AND m.hostname = HOST.ID(+)
+   AND m.ROLE = ROLE.ID(+)
+   AND m.technicaldomain = tdomain.ID(+)
+   AND m.businessdomain = bdomain.ID(+)
+   AND m.businessoperation = operation.ID(+)
+   AND m.businessconcept = concept.ID(+)
+   AND m.logstatus = status.ID(+)
+GROUP BY  ROLE.NAME , srv.NAME ,
+       component.NAME , proc.NAME , HOST.NAME ,
+       bdomain.NAME , operation.NAME ,
+       concept.NAME , tdomain.NAME ,
+       status.NAME ,TO_CHAR(m.datetime,'YYYYMMDD HH24'));
+
+DROP TABLE rep_logging_day;
+CREATE TABLE rep_logging_day AS(
+SELECT COUNT(*) "count",MIN(m.datetime) "date", ROLE.NAME ROLE, srv.NAME service,
+       component.NAME component, proc.NAME procedurename, HOST.NAME hostname,
+       bdomain.NAME businessdomain, operation.NAME businessoperation,
+       concept.NAME businessconcept, tdomain.NAME technicaldomain,
+       status.NAME status
+  FROM tda_logging m,
+       tda_role ROLE,
+       tda_hostname HOST,
+       tda_procedure proc,
+       tda_service srv,
+       tda_technicaldomain tdomain,
+       tda_businessconcept concept,
+       tda_businessdomain bdomain,
+       tda_businessoperation operation,
+       tda_component component,
+       tda_logstatus status
+ WHERE m.service = srv.ID(+)
+   AND m.component = component.ID(+)
+   AND m.processname = proc.ID(+)
+   AND m.hostname = HOST.ID(+)
+   AND m.ROLE = ROLE.ID(+)
+   AND m.technicaldomain = tdomain.ID(+)
+   AND m.businessdomain = bdomain.ID(+)
+   AND m.businessoperation = operation.ID(+)
+   AND m.businessconcept = concept.ID(+)
+   AND m.logstatus = status.ID(+)
+GROUP BY  ROLE.NAME , srv.NAME ,
+       component.NAME , proc.NAME , HOST.NAME ,
+       bdomain.NAME , operation.NAME ,
+       concept.NAME , tdomain.NAME ,
+       status.NAME ,TO_CHAR(m.datetime,'YYYYMMDD HH24'));
+
+DROP TABLE rep_exception;	   
+CREATE TABLE rep_exception AS(
+SELECT m.ID, cat.NAME exceptioncategory, trans.NAME transactionid,
+       srv.NAME service, component.NAME component, proc.NAME procedurename,
+       HOST.NAME hostname, code.NAME exceptioncode,
+       bdomain.NAME businessdomain, operation.NAME businessoperation,
+       concept.NAME businessconcept, tdomain.NAME technicaldomain,
+       sev.NAME exceptionseverity, typ.NAME exceptiontype, m.datetime,
+       m.replydestination, status.NAME status
+  FROM tda_exception  m,
+       tda_exceptioncategory cat,
+       tda_exceptioncode code,
+       tda_exceptionseverity sev,
+       tda_exceptiontype typ,
+       tda_hostname HOST,
+       tda_procedure proc,
+       tda_service srv,
+       tda_technicaldomain tdomain,
+       tda_transactionid trans,
+       tda_businessconcept concept,
+       tda_businessdomain bdomain,
+       tda_businessoperation operation,
+       tda_component component,
+       tda_status status
+ WHERE m.transactionid = trans.ID(+)
+   AND m.service = srv.ID(+)
+   AND m.component = component.ID(+)
+   AND m.procedurename = proc.ID(+)
+   AND m.hostname = HOST.ID(+)
+   AND m.exceptioncategory = cat.ID(+)
+   AND m.exceptioncode = code.ID(+)
+   AND m.exceptionseverity = sev.ID(+)
+   AND m.exceptiontype = typ.ID(+)
+   AND m.technicaldomain = tdomain.ID(+)
+   AND m.businessdomain = bdomain.ID(+)
+   AND m.businessoperation = operation.ID(+)
+   AND m.businessconcept = concept.ID(+)
+   AND m.status = status.ID(+))

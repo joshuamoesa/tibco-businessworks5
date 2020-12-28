@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1095237788188" xmlns:ns="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/Message.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/Common/Shared Resources/TIBCOAeErrors.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1095237788188" schemaLocation="/XSDSchemas/Common/ErrorMessage.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/Message.xsd" schemaLocation="/XSDSchemas/Common/Message.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" schemaLocation="/XSDSchemas/Common/AnyXMLMessage.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Common/Shared Resources/TIBCOAeErrors.xsd" schemaLocation="/Common/Shared Resources/TIBCOAeErrors.xsd"/>
+    <pd:name>Common/Sub Processes/Sub_LogMessage.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="LogMessage_In">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="MsgCode" type="xsd:string"/>
+                    <xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="ExtraInfo" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>39</pd:startX>
+    <pd:startY>308</pd:startY>
+    <pd:returnBindings>
+        <ErrorStatus>
+            <xsl:copy-of select="$Start/root/ResultStatus/ancestor-or-self::*/namespace::node()"/>
+            <xsl:copy-of select="$Start/root/ResultStatus/@*"/>
+            <xsl:copy-of select="$Start/root/ResultStatus/node()"/>
+        </ErrorStatus>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>678</pd:endX>
+    <pd:endY>310</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Render XML">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>144</pd:x>
+        <pd:y>310</pd:y>
+        <config>
+            <renderAsText>text</renderAsText>
+            <validateInput>false</validateInput>
+            <textEncoding>UTF-8</textEncoding>
+            <term>
+                <xsd:element name="Data">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <Data>
+                <xsl:if test="exists($Start/LogMessage_In/ExtraInfo)">
+                    <xsl:for-each select="$Start/LogMessage_In/ExtraInfo/*">
+                        <xsl:copy-of select="current()"/>
+                    </xsl:for-each>
+                </xsl:if>
+            </Data>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ignoreErrors">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>145</pd:x>
+        <pd:y>417</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="LogGroup">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>237</pd:x>
+        <pd:y>0</pd:y>
+        <pd:width>312</pd:width>
+        <pd:height>607</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LogUnknown</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LogDebug</pd:to>
+            <pd:xpathDescription>Debug</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>starts-with(tib:right($Start/LogMessage_In/MsgCode, 4), "0")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LogWarn</pd:to>
+            <pd:xpathDescription>Warn</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>starts-with(tib:right($Start/LogMessage_In/MsgCode, 4), "2")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LogActivity</pd:to>
+            <pd:xpathDescription>Activity</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>starts-with(tib:right($Start/LogMessage_In/MsgCode, 4), "4")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LogInfo</pd:to>
+            <pd:xpathDescription>Info</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>starts-with(tib:right($Start/LogMessage_In/MsgCode, 4), "1")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LogError</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>starts-with(tib:right($Start/LogMessage_In/MsgCode, 4), "3")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogDebug</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogInfo</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogUnknown</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogActivity</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogWarn</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="LogDebug">
+            <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+            <pd:resourceType>ae.activities.log</pd:resourceType>
+            <pd:x>386</pd:x>
+            <pd:y>64</pd:y>
+            <config>
+                <role>Debug</role>
+                <suppressHeader>true</suppressHeader>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput>
+                    <xsl:choose>
+                        <xsl:when test="exists($Render-XML/xmlString) and exists($Start/LogMessage_In/Message)">
+                            <message>
+                                <xsl:value-of select="concat($Start/LogMessage_In/Message,&quot;&#xA;&quot;,$Render-XML/xmlString)"/>
+                            </message>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <message>
+                                <xsl:value-of select="$Start/LogMessage_In/Message"/>
+                            </message>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <msgCode>
+                        <xsl:value-of select="$Start/LogMessage_In/MsgCode"/>
+                    </msgCode>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogInfo">
+            <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+            <pd:resourceType>ae.activities.log</pd:resourceType>
+            <pd:x>387</pd:x>
+            <pd:y>160</pd:y>
+            <config>
+                <role>Info</role>
+                <suppressHeader>true</suppressHeader>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput>
+                    <xsl:choose>
+                        <xsl:when test="exists($Render-XML/xmlString) and exists($Start/LogMessage_In/Message)">
+                            <message>
+                                <xsl:value-of select="concat($Start/LogMessage_In/Message,&quot;&#xA;&quot;,$Render-XML/xmlString)"/>
+                            </message>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <message>
+                                <xsl:value-of select="$Start/LogMessage_In/Message"/>
+                            </message>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <msgCode>
+                        <xsl:value-of select="$Start/LogMessage_In/MsgCode"/>
+                    </msgCode>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogWarn">
+            <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+            <pd:resourceType>ae.activities.log</pd:resourceType>
+            <pd:x>389</pd:x>
+            <pd:y>257</pd:y>
+            <config>
+                <role>Warn</role>
+                <suppressHeader>true</suppressHeader>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput>
+                    <xsl:choose>
+                        <xsl:when test="exists($Render-XML/xmlString) and exists($Start/LogMessage_In/Message)">
+                            <message>
+                                <xsl:value-of select="concat($Start/LogMessage_In/Message,&quot;&#xA;&quot;,$Render-XML/xmlString)"/>
+                            </message>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <message>
+                                <xsl:value-of select="$Start/LogMessage_In/Message"/>
+                            </message>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <msgCode>
+                        <xsl:value-of select="$Start/LogMessage_In/MsgCode"/>
+                    </msgCode>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogError">
+            <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+            <pd:resourceType>ae.activities.log</pd:resourceType>
+            <pd:x>393</pd:x>
+            <pd:y>351</pd:y>
+            <config>
+                <role>Error</role>
+                <suppressHeader>true</suppressHeader>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput>
+                    <xsl:choose>
+                        <xsl:when test="exists($Render-XML/xmlString) and exists($Start/LogMessage_In/Message)">
+                            <message>
+                                <xsl:value-of select="concat($Start/LogMessage_In/Message,&quot;&#xA;&quot;,$Render-XML/xmlString)"/>
+                            </message>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <message>
+                                <xsl:value-of select="$Start/LogMessage_In/Message"/>
+                            </message>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <msgCode>
+                        <xsl:value-of select="$Start/LogMessage_In/MsgCode"/>
+                    </msgCode>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogActivity">
+            <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+            <pd:resourceType>ae.activities.log</pd:resourceType>
+            <pd:x>396</pd:x>
+            <pd:y>439</pd:y>
+            <config>
+                <role>Activity</role>
+                <suppressHeader>true</suppressHeader>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput>
+                    <xsl:choose>
+                        <xsl:when test="exists($Render-XML/xmlString) and exists($Start/LogMessage_In/Message)">
+                            <message>
+                                <xsl:value-of select="concat($Start/LogMessage_In/Message,&quot;&#xA;&quot;,$Render-XML/xmlString)"/>
+                            </message>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <message>
+                                <xsl:value-of select="$Start/LogMessage_In/Message"/>
+                            </message>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <msgCode>
+                        <xsl:value-of select="$Start/LogMessage_In/MsgCode"/>
+                    </msgCode>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogUnknown">
+            <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+            <pd:resourceType>ae.activities.log</pd:resourceType>
+            <pd:x>398</pd:x>
+            <pd:y>531</pd:y>
+            <config>
+                <role>Unknown</role>
+                <suppressHeader>true</suppressHeader>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput>
+                    <xsl:choose>
+                        <xsl:when test="exists($Render-XML/xmlString) and exists($Start/LogMessage_In/Message)">
+                            <message>
+                                <xsl:value-of select="concat($Start/LogMessage_In/Message,&quot;&#xA;&quot;,$Render-XML/xmlString)"/>
+                            </message>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <message>
+                                <xsl:value-of select="$Start/LogMessage_In/Message"/>
+                            </message>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <msgCode>
+                        <xsl:value-of select="$Start/LogMessage_In/MsgCode"/>
+                    </msgCode>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="ignoreLogErrors">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>681</pd:x>
+        <pd:y>429</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Render XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render XML</pd:from>
+        <pd:to>ignoreErrors</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogGroup</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render XML</pd:from>
+        <pd:to>LogGroup</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ignoreErrors</pd:from>
+        <pd:to>LogGroup</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogGroup</pd:from>
+        <pd:to>ignoreLogErrors</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ignoreLogErrors</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

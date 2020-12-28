@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx2="urn:NotifyNumberInportingComplete" xmlns:pfx3="http://xmlns.kpn.com/fixed/portingservices/publish/NotifyNumberInportingComplete">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRID/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/JMSSubscribers/0110_CustomerIncidentReportConfirmation_SOAP [NIL].process</pd:name>
+    <pd:description>Purpose:
+Act as ASTRID wanting to publish.</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>77</pd:startX>
+    <pd:startY>57</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>323</pd:endX>
+    <pd:endY>60</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:description>Note:
+The message content has to be corrected.</pd:description>
+        <pd:x>195</pd:x>
+        <pd:y>58</pd:y>
+        <config>
+            <timeout>%%ASTRIDAdapter/Test/Timeout%%</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>%%ASTRIDAdapter/Test/Endpoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:GenericMessage>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="&quot;0110-CustomerIncidentReportConfirmation&quot;"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="&quot;Customer Service Incident Report Confirmation EDT&quot;"/>
+                        </ns:managed_object_class>
+                    </ns:Header>
+                </pfx:GenericMessage>
+                <headers>
+                    <Header.parameters>
+                        <xsl:attribute name="mustUnderstand">
+                            <xsl:value-of select="&quot;false&quot;"/>
+                        </xsl:attribute>
+                    </Header.parameters>
+                </headers>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

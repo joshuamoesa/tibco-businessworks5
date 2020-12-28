@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798248097" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802778671" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1087395513868" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/ckradapter/common/Customer.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:pfx7="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx8="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:pfx9="http://xmlns.kpn.com/fixed/CramerAdapter/response/GetDSLAMInfo.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/CramerAdapter/request/GetDSLAMInfo.xsd" xmlns:pfx11="http://xmlns.kpn.com/EAI/fixed/0288_GetDslamInfo/1.0/Request" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0288_GetDslamInfo/1.0/Response" xmlns:pfx12="http://xmlns.kpn.com/fixed/NIMAllIPAdapter/request/GetDSLAMInfo.xsd" xmlns:pfx13="http://xmlns.kpn.com/fixed/NIMAllIPAdapter/response/GetDSLAMInfo.xsd" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0288_GetDslamInfo/1.1/Response" xmlns:pfx14="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086798248097" schemaLocation="/XSDSchemas/EnginAdapter/Request/CheckAppointment.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802778671" schemaLocation="/XSDSchemas/EnginAdapter/Response/CheckAppointment.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/FindCustomer.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/CramerAdapter/request/GetDSLAMInfo.xsd" schemaLocation="/XSDSchemas/CramerAdapter/Request/GetDSLAMInfo.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/CramerAdapter/response/GetDSLAMInfo.xsd" schemaLocation="/XSDSchemas/CramerAdapter/Response/GetDSLAMInfo.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/NIMAllIPAdapter/request/GetDSLAMInfo.xsd" schemaLocation="/XSDSchemas/NIMAllIPAdapter/Request/GetDSLAMInfo.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/NIMAllIPAdapter/response/GetDSLAMInfo.xsd" schemaLocation="/XSDSchemas/NIMAllIPAdapter/Response/GetDSLAMInfo.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/NIMAllIPAdapter/0228_RV_GetDslamInfo_Erroneous_Response.process</pd:name>
+    <pd:description>Used to validate that DSLAM_VLAN_ID in the SOAP response is filled
+properly with the value 828.</pd:description>
+    <pd:startName>GetDslamInfo Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetDslamInfo Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>44</pd:x>
+        <pd:y>44</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Operations.NIMAllIPAdapter.Request.GetDslamInfo.1</subject>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx12:GetDSLAMInfo"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>334</pd:endX>
+    <pd:endY>35</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="GetDslamInfoResponse">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>191</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetDslamInfo Subscriber</eventSource>
+            <xsdString ref="pfx14:msg"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <pfx14:field>
+                        <pfx14:name>
+                            <xsl:value-of select="&quot;xml&quot;"/>
+                        </pfx14:name>
+                        <pfx14:id>
+                            <xsl:value-of select="0"/>
+                        </pfx14:id>
+                        <pfx14:simple>
+                            <xsl:value-of select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&lt;ns0:GetDSLAMInfo xmlns:ns0=&quot;http://xmlns.kpn.com/fixed/NIMAllIPAdapter/response/GetDSLAMInfo.xsd&quot;>&#xA;    &lt;ns1:CMH xmlns:ns1=&quot;http://xmlns.kpn.com/common/cdm/Base.xsd&quot;>&#xA;        &lt;ns1:ID>739&lt;/ns1:ID>&#xA;        &lt;ns1:NAME>GetDslamInfo&lt;/ns1:NAME>&#xA;        &lt;ns1:FID/>&#xA;        &lt;ns1:MID>738.30&lt;/ns1:MID>&#xA;        &lt;ns1:PARADIGM>RESPONSE&lt;/ns1:PARADIGM>&#xA;        &lt;ns1:OBJECT>Node&lt;/ns1:OBJECT>&#xA;        &lt;ns1:VERSION>1.0&lt;/ns1:VERSION>&#xA;        &lt;ns1:FROM ns1:COMPONENT_ID=&quot;NIMAllIPAdapter&quot; ns1:COMPONENT_VERSION=&quot;2.14.2&quot;/>&#xA;        &lt;ns1:TO ns1:DESTINATION=&quot;_INBOX.0A040F05.20D247D92114109290.5&quot;/>&#xA;        &lt;ns1:TRACKING>&#xA;            &lt;ns1:MESSAGE_ID>v4sraYYcj2fb8Et8/r--4Ls-Zhg&lt;/ns1:MESSAGE_ID>&#xA;            &lt;ns1:ITEM xmlns:ns0=&quot;http://xmlns.kpn.com/fixed/NIMAllIPAdapter/request/GetDSLAMInfo.xsd&quot; xmlns:ns1=&quot;http://xmlns.kpn.com/common/cdm/Base.xsd&quot; ns1:APPINFO=&quot;ASTRIDAdapter.Operations&quot; ns1:EVENT=&quot;GetDslamInfo&quot; ns1:TIMESTAMP=&quot;1205749868332&quot;/>&#xA;            &lt;ns1:ITEM ns1:APPINFO=&quot;Operations/NIMAllIPAdapter:2.14.2&quot; ns1:EVENT=&quot;JDBC Call completed for serviceInfo&quot; ns1:TIMESTAMP=&quot;1205749868547&quot;/>&#xA;        &lt;/ns1:TRACKING>&#xA;    &lt;/ns1:CMH>&#xA;    &lt;ns0:RESULT_STATUS xmlns:ns1=&quot;http://xmlns.kpn.com/common/cdm/ResultStatus.xsd&quot; ns1:STATUS=&quot;0&quot;/>&#xA;    &lt;ns1:BODY xmlns:ns1=&quot;http://xmlns.kpn.com/EAI/fixed/0288_GetDslamInfo/1.1/Response&quot;>&#xA;        &lt;DSLAM>&#xA;            &lt;NODE>&#xA;                &lt;ADDRESS>&#xA;                    &lt;GPS>&#xA;                        &lt;LATITUDE>1000&lt;/LATITUDE>&#xA;                        &lt;LONGITUDE>1000&lt;/LONGITUDE>&#xA;                    &lt;/GPS>&#xA;                    &lt;STREET_NAME>Prinses Beatrixlaan&lt;/STREET_NAME>&#xA;                    &lt;HOUSE_NUMBER>400&lt;/HOUSE_NUMBER>&#xA;                    &lt;HOUSE_NUMBER_EXTENSION>Num A&lt;/HOUSE_NUMBER_EXTENSION>&#xA;                    &lt;DUTCH_POSTCODE>2595BK&lt;/DUTCH_POSTCODE>&#xA;                    &lt;CITY_NAME>Den Haag&lt;/CITY_NAME>&#xA;                &lt;/ADDRESS>&#xA;                &lt;RACK>&#xA;                    &lt;SHELF>&#xA;                        &lt;SLOT>&#xA;                            &lt;CARD>&#xA;                                &lt;PHYSICAL_PORT>&#xA;                                    &lt;SERVICE>&#xA;                                        &lt;VLAN_ID>828&lt;/VLAN_ID>&#xA;                                    &lt;/SERVICE>&#xA;                                    &lt;PORT_TYPE>FE Optical&lt;/PORT_TYPE>&#xA;                                    &lt;PORT_ID>Room/Row/Rack/HE-01/Pos 1&lt;/PORT_ID>&#xA;                                    &lt;PORT_STATUS>In service&lt;/PORT_STATUS>&#xA;                                    &lt;SIP_STIFT>PORT_KPN_ALL/FE Optical&lt;/SIP_STIFT>&#xA;                                    &lt;PORT_NAME>FE Optical.0.15/0.0&lt;/PORT_NAME>&#xA;                                &lt;/PHYSICAL_PORT>&#xA;                                &lt;CARD_TYPE>Hua eSFP FE&lt;/CARD_TYPE>&#xA;                                &lt;CARD_STATUS>Not Specified&lt;/CARD_STATUS>&#xA;                                &lt;CARD_POSITION>Slot 15&lt;/CARD_POSITION>&#xA;                                &lt;CARD_ID>Room/Row/Rack/HE-01/Pos 1/Slot 15&lt;/CARD_ID>&#xA;                                &lt;CARD_NAME>Hua eSFP FE&lt;/CARD_NAME>&#xA;                            &lt;/CARD>&#xA;                        &lt;/SLOT>&#xA;                        &lt;SHELF_POSITION>Pos 1&lt;/SHELF_POSITION>&#xA;                        &lt;SHELF_TYPE>Hua MA5600T Service shelf&lt;/SHELF_TYPE>&#xA;                        &lt;SHELF_STATUS>Not Specified&lt;/SHELF_STATUS>&#xA;                        &lt;SHELF_ID>Room/Row/Rack/HE-01/Pos 1&lt;/SHELF_ID>&#xA;                        &lt;SHELF_NAME>GV-BZH-PB/DSLA/0001/0&lt;/SHELF_NAME>&#xA;                    &lt;/SHELF>&#xA;                &lt;/RACK>&#xA;                &lt;SERVICE>&#xA;                    &lt;SERVICE_ID>SI-80000001/1&lt;/SERVICE_ID>&#xA;                    &lt;SERVICE_OPERATOR_ID>Broadband Subscriber_14&lt;/SERVICE_OPERATOR_ID>&#xA;                    &lt;E_NUMBER>E00001&lt;/E_NUMBER>&#xA;                    &lt;WAP_AREA>Gv-Bzh&lt;/WAP_AREA>&#xA;                    &lt;WAP_VLAN_ID>120&lt;/WAP_VLAN_ID>&#xA;                    &lt;VPN>Wanadoo&lt;/VPN>&#xA;                &lt;/SERVICE>&#xA;                &lt;NODE_NAME>GV-BZH-PB/DSLA/0001&lt;/NODE_NAME>&#xA;            &lt;/NODE>&#xA;        &lt;/DSLAM>&#xA;    &lt;/ns1:BODY>&#xA;&lt;/ns0:GetDSLAMInfo>'"/>
+                        </pfx14:simple>
+                    </pfx14:field>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetDslamInfo Subscriber</pd:from>
+        <pd:to>GetDslamInfoResponse</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetDslamInfoResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

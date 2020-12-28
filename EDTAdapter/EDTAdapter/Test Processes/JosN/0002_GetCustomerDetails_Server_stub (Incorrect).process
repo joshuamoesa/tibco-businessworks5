@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/request/GetCustomerDetails.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/ckradapter/response/GetCustomerDetails.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/common/Customer.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/common/IndividualName.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/ckradapter/common/CKRRequest.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ckradapter/request/GetCustomerDetails.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/GetCustomerDetails.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ckradapter/response/GetCustomerDetails.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/GetCustomerDetails.xsd"/>
+    <pd:name>EDTAdapter/Test Processes/0002_GetCustomerDetails_Server_stub (Incorrect).process</pd:name>
+    <pd:description>This server stub generates a reply on an incoming request.  It adheers to the good scenario.</pd:description>
+    <pd:startName>GetCustomerDetails Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetCustomerDetails Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>138</pd:x>
+        <pd:y>84</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/EDTAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <subject>%%Env%%.FIXED.Order.CKRAdapter.Request.GetCustomerDetails.2</subject>
+            <xsdString ref="pfx:GetCustomerDetails"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>454</pd:endX>
+    <pd:endY>75</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to GetCustomerDetails Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>292</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetCustomerDetails Subscriber</eventSource>
+            <xsdString ref="pfx2:GetCustomerDetails"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="&quot;002&quot;"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$GetCustomerDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <xsl:if test="$GetCustomerDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:FID">
+                            <ns:FID>
+                                <xsl:value-of select="$GetCustomerDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:FID"/>
+                            </ns:FID>
+                        </xsl:if>
+                        <ns:MID>
+                            <xsl:value-of select="&quot;002.30&quot;"/>
+                        </ns:MID>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="&quot;REPLY&quot;"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="&quot;CO_GetCustomerDetails&quot;"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$GetCustomerDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$GetCustomerDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <xsl:for-each select="$GetCustomerDetails-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING">
+                            <ns:TRACKING>
+                                <ns:MESSAGE_ID>
+                                    <xsl:value-of select="ns:MESSAGE_ID"/>
+                                </ns:MESSAGE_ID>
+                                <xsl:if test="ns:EXTERNAL_REF">
+                                    <ns:EXTERNAL_REF>
+                                        <xsl:value-of select="ns:EXTERNAL_REF"/>
+                                    </ns:EXTERNAL_REF>
+                                </xsl:if>
+                                <xsl:for-each select="ns:ITEM">
+                                    <ns:ITEM>
+                                        <xsl:attribute name="ns:APPINFO">
+                                            <xsl:value-of select="@ns:APPINFO"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns:EVENT">
+                                            <xsl:value-of select="@ns:EVENT"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns:TIMESTAMP">
+                                            <xsl:value-of select="@ns:TIMESTAMP"/>
+                                        </xsl:attribute>
+                                    </ns:ITEM>
+                                </xsl:for-each>
+                                <xsl:for-each select="ns:SEQUENCE_NO">
+                                    <ns:SEQUENCE_NO>
+                                        <xsl:value-of select="."/>
+                                    </ns:SEQUENCE_NO>
+                                </xsl:for-each>
+                            </ns:TRACKING>
+                        </xsl:for-each>
+                    </ns:CMH>
+                    <ns2:RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;Message code&quot;"/>
+                        </xsl:attribute>
+                    </ns2:RESULT_STATUS>
+                    <pfx2:CUSTOMER>
+                        <pfx3:CENTRAL_CUSTOMER_ID>
+                            <xsl:value-of select="&quot;CKR Id.&quot;"/>
+                        </pfx3:CENTRAL_CUSTOMER_ID>
+                        <pfx3:IS_ACTIVE>
+                            <xsl:value-of select="&quot;Is active?&quot;"/>
+                        </pfx3:IS_ACTIVE>
+                        <pfx3:PARTY>
+                            <VALID_FROM_DATE>
+                                <xsl:value-of select="tib:create-date(1959, 7, 20)"/>
+                            </VALID_FROM_DATE>
+                            <VALID_UNTIL_DATE>
+                                <xsl:value-of select="tib:create-date(2010, 2, 28)"/>
+                            </VALID_UNTIL_DATE>
+                            <PARTY_ID>
+                                <xsl:value-of select="&quot;Party ID&quot;"/>
+                            </PARTY_ID>
+                            <PARTY_NAME>
+                                <xsl:value-of select="&quot;Party Name&quot;"/>
+                            </PARTY_NAME>
+                            <PARTY_NAME_DIACRITICS>
+                                <xsl:value-of select="&quot;Party Name Diacritics&quot;"/>
+                            </PARTY_NAME_DIACRITICS>
+                            <BRANCH_NAME>
+                                <xsl:value-of select="&quot;Branch Name&quot;"/>
+                            </BRANCH_NAME>
+                            <BRANCH_NAME_DIACRITICS>
+                                <xsl:value-of select="&quot;Branch Name Diacritics&quot;"/>
+                            </BRANCH_NAME_DIACRITICS>
+                            <xsl:if test="$GetCustomerDetails-Subscriber/ActivityOutput/body/pfx:CENTRAL_CUSTOMER_ID">
+                                <CENTRAL_CUSTOMER_ID>
+                                    <xsl:value-of select="$GetCustomerDetails-Subscriber/ActivityOutput/body/pfx:CENTRAL_CUSTOMER_ID"/>
+                                </CENTRAL_CUSTOMER_ID>
+                            </xsl:if>
+                            <KVK_NUMBER>
+                                <xsl:value-of select="&quot;KvK number&quot;"/>
+                            </KVK_NUMBER>
+                            <INDIVIDUAL_NAME>
+                                <pfx4:ACADEMIC_TITLE>
+                                    <xsl:value-of select="&quot;Drs&quot;"/>
+                                </pfx4:ACADEMIC_TITLE>
+                                <pfx4:INITIALS>
+                                    <xsl:value-of select="&quot;JF&quot;"/>
+                                </pfx4:INITIALS>
+                                <pfx4:ARISTOCRATIC_TITLE>
+                                    <xsl:value-of select="&quot;title&quot;"/>
+                                </pfx4:ARISTOCRATIC_TITLE>
+                                <pfx4:FAMILY_NAME_PREFIX>
+                                    <xsl:value-of select="&quot;Von&quot;"/>
+                                </pfx4:FAMILY_NAME_PREFIX>
+                                <pfx4:FAMILY_NAME>
+                                    <xsl:value-of select="&quot;Gerlofs&quot;"/>
+                                </pfx4:FAMILY_NAME>
+                            </INDIVIDUAL_NAME>
+                        </pfx3:PARTY>
+                        <pfx3:PROPERTY_ADDRESS>
+                            <ns3:STREET_NAME>
+                                <xsl:value-of select="&quot;Klipper&quot;"/>
+                            </ns3:STREET_NAME>
+                            <ns3:HOUSE_NUMBER>
+                                <xsl:value-of select="&quot;19&quot;"/>
+                            </ns3:HOUSE_NUMBER>
+                            <ns3:HOUSE_NUMBER_EXTENSION>
+                                <xsl:value-of select="&quot;ext&quot;"/>
+                            </ns3:HOUSE_NUMBER_EXTENSION>
+                            <ns3:CITY_NAME>
+                                <xsl:value-of select="&quot;Uithoorn&quot;"/>
+                            </ns3:CITY_NAME>
+                            <ns3:CITY_CODE>
+                                <xsl:value-of select="&quot;city_code&quot;"/>
+                            </ns3:CITY_CODE>
+                            <ns3:COUNTRY>
+                                <xsl:value-of select="&quot;Netherlands&quot;"/>
+                            </ns3:COUNTRY>
+                            <ns3:DUTCH_POSTCODE_LETTERS>
+                                <xsl:value-of select="&quot;BK&quot;"/>
+                            </ns3:DUTCH_POSTCODE_LETTERS>
+                            <ns3:DUTCH_POSTCODE_NUMBERS>
+                                <xsl:value-of select="&quot;1423&quot;"/>
+                            </ns3:DUTCH_POSTCODE_NUMBERS>
+                            <ns3:ZIPCODE_BEFORE>
+                                <xsl:value-of select="&quot;Zip before&quot;"/>
+                            </ns3:ZIPCODE_BEFORE>
+                            <ns3:ZIPCODE_AFTER>
+                                <xsl:value-of select="&quot;Zip after&quot;"/>
+                            </ns3:ZIPCODE_AFTER>
+                        </pfx3:PROPERTY_ADDRESS>
+                        <pfx3:MARKET_GROUP_CODE>
+                            <xsl:value-of select="&quot;Market Group Code&quot;"/>
+                        </pfx3:MARKET_GROUP_CODE>
+                        <pfx3:MARKET_SEGMENT_CODE>
+                            <xsl:value-of select="&quot;Market Segment Code&quot;"/>
+                        </pfx3:MARKET_SEGMENT_CODE>
+                        <pfx3:TELECOM_REGION_CODE>
+                            <xsl:value-of select="&quot;Telecom Region Code&quot;"/>
+                        </pfx3:TELECOM_REGION_CODE>
+                        <pfx3:CUSTOMER_CREDIT_PROFILE>
+                            <BIK_CODE>
+                                <xsl:value-of select="&quot;BIK Code&quot;"/>
+                            </BIK_CODE>
+                            <CUSTOMER_SIZE_GROUP>
+                                <xsl:value-of select="&quot;Customer Size Group&quot;"/>
+                            </CUSTOMER_SIZE_GROUP>
+                            <KVK_REGISTRATION_TYPE>
+                                <xsl:value-of select="&quot;KvK Registration Type&quot;"/>
+                            </KVK_REGISTRATION_TYPE>
+                            <FINANCIAL_STATUS>
+                                <xsl:value-of select="&quot;Financial Status&quot;"/>
+                            </FINANCIAL_STATUS>
+                        </pfx3:CUSTOMER_CREDIT_PROFILE>
+                        <pfx3:CUSTOMER_REFERENCE>
+                            <ns4:ROLE>
+                                <xsl:value-of select="&quot;Role&quot;"/>
+                            </ns4:ROLE>
+                            <ns4:APPLICATION_ID>
+                                <xsl:value-of select="&quot;Application ID&quot;"/>
+                            </ns4:APPLICATION_ID>
+                            <ns4:EXTERNAL_CUSTOMER_REFERENCE>
+                                <pfx5:REF_NAME>
+                                    <xsl:value-of select="&quot;Ref Name&quot;"/>
+                                </pfx5:REF_NAME>
+                            </ns4:EXTERNAL_CUSTOMER_REFERENCE>
+                        </pfx3:CUSTOMER_REFERENCE>
+                        <pfx3:ADDRESS_STATUS>
+                            <xsl:value-of select="&quot;Address Status&quot;"/>
+                        </pfx3:ADDRESS_STATUS>
+                    </pfx2:CUSTOMER>
+                    <pfx2:IS_MOVE>
+                        <xsl:value-of select="&quot;Is move?&quot;"/>
+                    </pfx2:IS_MOVE>
+                    <pfx2:IS_PART_OF_ACCOUNT>
+                        <xsl:value-of select="&quot;Is part of account?&quot;"/>
+                    </pfx2:IS_PART_OF_ACCOUNT>
+                    <pfx2:HAS_RESPONSIBLE_SALESPERSON>
+                        <xsl:value-of select="&quot;Has responsible salesperson?&quot;"/>
+                    </pfx2:HAS_RESPONSIBLE_SALESPERSON>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetCustomerDetails Subscriber</pd:from>
+        <pd:to>Reply to GetCustomerDetails Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to GetCustomerDetails Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

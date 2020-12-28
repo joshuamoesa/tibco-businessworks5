@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.ReportCustomerRevenue" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ReportCustomerRevenue" targetNamespace="urn:IKKAdapter.ReportCustomerRevenue">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.ReportCustomerRevenue">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/ReportCustomerRevenue.xsd"/>
+            <xsd:element name="ReportCustomerRevenueRequest" type="ikk:ReportCustomerRevenueRequest"/>
+            <xsd:element name="ReportCustomerRevenueResponse" type="ikk:ReportCustomerRevenueResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="ReportCustomerRevenueRequest">
+        <part element="ikk:ReportCustomerRevenueRequest" name="parameters"/>
+    </message>
+    <message name="ReportCustomerRevenueResponse">
+        <part element="ikk:ReportCustomerRevenueResponse" name="parameters"/>
+    </message>
+    <portType name="ReportCustomerRevenuePortType">
+        <operation name="ReportCustomerRevenue">
+            <input message="ikk:ReportCustomerRevenueRequest"/>
+            <output message="ikk:ReportCustomerRevenueResponse"/>
+        </operation>
+    </portType>
+    <binding name="ReportCustomerRevenueSoapBinding" type="ikk:ReportCustomerRevenuePortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="ReportCustomerRevenue">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="ReportCustomerRevenueService">
+        <port binding="ikk:ReportCustomerRevenueSoapBinding" name="ReportCustomerRevenueSoap">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/ReportCustomerRevenue"/>
+        </port>
+    </service>
+</definitions>

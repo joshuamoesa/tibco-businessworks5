@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Harald Dam (KPN Telecom) -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sml="http://xmlns.kpn.com/mobile/m2c/cdm/sml/envelope.1" xmlns:pi="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/sml/envelope.1" elementFormDefault="qualified" attributeFormDefault="qualified">
+	<complexType name="Header">
+		<sequence>
+			<element ref="sml:MessageHeader"/>
+			<element ref="sml:TraceHeaderList" minOccurs="0"/>
+			<element ref="sml:ErrorList" minOccurs="0"/>
+			<element ref="sml:TransactionList" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<element name="MessageHeader" type="sml:MessageHeader"/>
+	<element name="TraceHeaderList" type="sml:TraceHeaderList"/>
+	<element name="ErrorList" type="sml:ErrorList"/>
+	<element name="TransactionList" type="sml:TransactionList"/>
+	<complexType name="MessageHeader">
+		<sequence>
+			<element name="From" type="sml:From"/>
+			<element name="To" type="sml:To"/>
+			<element name="HeaderFields" type="sml:HeaderFields"/>
+			<element name="ConnectionInfo" type="sml:ConnectionInfo"/>
+			<element name="Service" type="sml:Service"/>
+			<element name="QualityOfServiceInfo" type="sml:QualityOfServiceInfo" minOccurs="0"/>
+			<element name="TimeToLive" type="xsd:dateTime" minOccurs="0"/>
+			<element name="Description" type="sml:Text" minOccurs="0"/>
+		</sequence>
+		<attribute name="version" type="xsd:string" use="required"/>
+	</complexType>
+	<complexType name="From">
+		<sequence>
+			<element name="PartyId" type="sml:PartyId"/>
+			<element name="Location" type="xsd:string" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="To">
+		<sequence>
+			<element name="PartyId" type="sml:PartyId" minOccurs="0"/>
+			<element name="Location" type="xsd:string"/>
+		</sequence>
+	</complexType>
+	<complexType name="PartyId">
+		<simpleContent>
+			<extension base="xsd:string">
+				<attribute name="type" type="xsd:string"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="ConnectionInfo">
+		<sequence>
+			<element name="CPAId" type="xsd:string" minOccurs="0"/>
+			<element name="ExternalRefToMessageId" type="xsd:string" nillable="true" minOccurs="0"/>
+			<element name="Principal" type="xsd:string" minOccurs="0"/>
+			<element name="Credentials" type="xsd:string" minOccurs="0"/>
+			<element name="Signature" type="xsd:string" minOccurs="0"/>
+			<element name="RemoteAddress" type="xsd:string" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="HeaderFields">
+		<sequence>
+			<element name="ConversationId" type="xsd:string" minOccurs="0"/>
+			<element name="MessageId" type="xsd:string" minOccurs="0"/>
+			<element name="Timestamp" type="xsd:dateTime" minOccurs="0"/>
+			<element name="HeaderProperties" type="sml:HeaderProperties" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="HeaderProperties">
+		<sequence>
+			<element name="HeaderProperty" type="sml:HeaderProperty" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="HeaderProperty">
+		<attribute name="Name" type="xsd:string" use="required"/>
+		<attribute name="Value" type="xsd:string" use="required"/>
+	</complexType>
+	<complexType name="Service">
+		<sequence>
+			<element name="Paradigm" type="xsd:string"/>
+			<element name="Name" type="xsd:string"/>
+			<element name="Version" type="xsd:string" minOccurs="0"/>
+			<element name="Action" type="xsd:string" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="QualityOfServiceInfo">
+		<sequence>
+			<element name="SequenceNumber" type="sml:SequenceNumber" minOccurs="0"/>
+			<element name="DuplicateElimination" minOccurs="0"/>
+		</sequence>
+		<attribute name="deliveryReceiptRequest" type="xsd:string"/>
+	</complexType>
+	<complexType name="SequenceNumber">
+		<simpleContent>
+			<extension base="xsd:integer">
+				<attribute name="status" type="xsd:string" use="required"/>
+				<attribute name="finalMessage" type="xsd:boolean" use="required"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="TraceHeaderList">
+		<sequence>
+			<element name="TraceHeader" type="sml:TraceHeader" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="TraceHeader">
+		<sequence>
+			<element name="Sender" type="sml:From"/>
+			<element name="Receiver" type="sml:To" minOccurs="0"/>
+			<element name="Service" type="sml:Service"/>
+			<element name="MessageData" type="sml:MessageData"/>
+		</sequence>
+	</complexType>
+	<complexType name="MessageData">
+		<sequence>
+			<element name="MessageId" type="xsd:string"/>
+			<element name="Timestamp" type="xsd:dateTime"/>
+			<element name="RefToMessageId" type="xsd:string" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<simpleType name="ResultStatus">
+		<restriction base="xsd:string">
+			<enumeration value="OK"/>
+			<enumeration value="ERROR"/>
+		</restriction>
+	</simpleType>
+	<complexType name="Result">
+		<sequence>
+			<element name="Status" type="sml:ResultStatus"/>
+			<element name="Fault" type="sml:Error" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="ErrorList">
+		<sequence>
+			<element name="Error" type="sml:Error" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="Error">
+		<sequence>
+			<element name="Code" type="xsd:string"/>
+			<element name="Reason" type="xsd:string"/>
+			<element name="Service" type="sml:Service" minOccurs="0"/>
+			<element name="Detail" type="sml:Detail" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="Detail">
+		<sequence>
+			<element name="SpecificError" type="sml:SpecificError" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="SpecificError">
+		<sequence>
+			<element name="Code" type="xsd:string"/>
+			<element name="SubCode" type="xsd:string" minOccurs="0"/>
+			<element name="Text" type="sml:Text"/>
+		</sequence>
+	</complexType>
+	<complexType name="TransactionList">
+		<sequence>
+			<element name="Transaction" type="sml:Transaction" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="Transaction">
+		<sequence>
+			<element name="Interaction" type="xsd:string"/>
+			<element name="TransactionId" type="xsd:string"/>
+			<element name="SystemId" type="xsd:string"/>
+			<element name="MessageId" type="xsd:string"/>
+			<element name="Timestamp" type="xsd:dateTime"/>
+		</sequence>
+	</complexType>
+	<complexType name="Text">
+		<simpleContent>
+			<extension base="xsd:string">
+				<attribute name="lang" type="xsd:string"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="Body"/>
+	<complexType name="party">
+		<sequence>
+			<element name="domain" type="xsd:string" minOccurs="0">
+				<annotation>
+					<documentation>This field is used to specify a domain for identifying connecting parties (i.e. ZZZ (user defined),  ZZ (mutual defined)</documentation>
+				</annotation>
+			</element>
+			<element name="name" type="xsd:string">
+				<annotation>
+					<documentation>This field identifies the connecting party within the above specified domain.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="PartyInfo">
+		<sequence>
+			<element name="from" type="sml:party"/>
+			<element name="to" type="sml:party"/>
+			<element name="operationID" type="xsd:string">
+				<annotation>
+					<documentation>This field specifies what operation on the B2B portal is invoked. For each service the value to be used will be provided by KPN (EAI FB) (i.e. MOBILE/1.0/[name of service])</documentation>
+				</annotation>
+			</element>
+			<element name="operationType" type="xsd:string">
+				<annotation>
+					<documentation>This field specifies the messaging paradigm being used. This field should be filled with the value ‘syncRequestResponse’.</documentation>
+				</annotation>
+			</element>
+			<element name="transactionID" type="xsd:string">
+				<annotation>
+					<documentation>This is a unique identifier the the message. A UUID can be used here.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="B2Bheader">
+		<sequence>
+			<element name="PartyInfo" type="sml:PartyInfo"/>
+		</sequence>
+	</complexType>
+</schema>

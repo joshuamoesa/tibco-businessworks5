@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:ns="http://tempuri.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://tempuri.org/GenericRequest" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/WSDL/ASTRID/GenericMessageRequest.wsdl" xmlns:pfx4="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" xmlns:pfx5="urn:NotifyNumberInportingComplete" xmlns:ns0="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/EDTAdapter/Response/UpsertTroubleReport.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/portingservices/publish/NotifyNumberInportingComplete" xmlns:ns4="http://xmlns.kpn.com/fixed/EDTAdapter/common/CustomerIncidentReport.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/EDTAdapter/common/EDTResponse.xsd" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns7="http://www.tibco.com/pe/EngineTypes" xmlns:pfx7="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns8="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns9="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Response/UpsertCustomerIncidentReport.xsd" xmlns:ns10="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/TroubleReport.xsd" xmlns:ns11="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/ASTRIDResponse.xsd" xmlns:ns12="http://schemas.tibco.com/bw/plugins/soap/5.0/SoapPluginExceptions" xmlns:ns13="http://xmlns.kpn.com/fixed/ASTRIDAdapter/../WSDL/ASTRIDAdapter/GenericMessageRequest.xsd" xmlns:ns14="http://xmlns.kpn.com/fixed/common/internal/InitialError.xsd">
+    <xsd:import namespace="http://tempuri.org/GenericRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/JMSPublishers/0000_EDT.process</pd:name>
+    <pd:description>Generic process that handles all communications originating from EDT, directed towards the EAI bus.
+Note: It deals with client request-reply and server publish-subscribe.</pd:description>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>59</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <service>pfx:GenericMessageRequestPortType</service>
+            <operation>GenericMessage</operation>
+            <attachmentStyle>none</attachmentStyle>
+            <wsdlNamespaceRoot>urn:GenericMessageRequest/GenericMessageImpl</wsdlNamespaceRoot>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/HTTP Server Connection.sharedhttp</sharedChannel>
+            <sharedChannels>
+                <httpChannel>
+                    <useBasicAuthentication>false</useBasicAuthentication>
+                </httpChannel>
+            </sharedChannels>
+            <useBasicAuthentication>false</useBasicAuthentication>
+            <portAddressPrefix/>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>304</pd:endX>
+    <pd:endY>60</pd:endY>
+    <pd:errorSchemas>
+        <InternalError ref="pfx:GenericMessage"/>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <ErrorStatus>
+            <xsd:element name="ResultStatus" type="ns6:ResultStatus"/>
+        </ErrorStatus>
+    </pd:processVariables>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>197</pd:x>
+        <pd:y>58</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx:GenericMessageResponse>
+                    <pfx:GUID>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:GUID"/>
+                    </pfx:GUID>
+                    <pfx:error>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx:error>
+                    <pfx:error_message>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx:error_message>
+                    <pfx:error_status>
+                        <xsl:value-of select="0"/>
+                    </pfx:error_status>
+                </pfx:GenericMessageResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

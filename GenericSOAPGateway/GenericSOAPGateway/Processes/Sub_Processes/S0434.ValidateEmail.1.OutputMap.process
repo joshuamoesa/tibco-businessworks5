@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" xmlns:pfx2="http://xmlns.kpn.com/EAI/fixed/0074_GetCustomerPaymentDetails/1.0/Response" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd" xmlns:ns1="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetails.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/PMAdapter/common/PMResponse.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/PMAdapter/common/InvoiceSummary.xsd" xmlns:pfx3="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd" xmlns:pfx4="http://xmlns.kpn.com/EAI/fixed/0407_HoldCollections/1.0/Response" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns6="http://xmlns.kpn.com/fixed/PMAdapter/response/HoldCollections.xsd" xmlns:pfx5="http://xmlns.kpn.com/EAI/fixed/0434_ValidateEmail/1.0/Response" xmlns:ns7="http://xmlns.kpn.com/fixed/COMETAdapter/Response/ValidateEmail.xsd" xmlns:ns8="http://xmlns.kpn.com/fixed/COMETAdapter/Request/ValidateEmail.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0074_GetCustomerPaymentDetails/1.0/Response" schemaLocation="/XSDSchemas/GenericSOAPGateway/Response/0074_GetCustomerPaymentDetails_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd" schemaLocation="/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetailsPatch.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/PMAdapter/Response/GetCustomerPaymentDetails.xsd" schemaLocation="/XSDSchemas/PMAdapter/Response/GetCustomerPaymentDetails.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0407_HoldCollections/1.0/Response" schemaLocation="/XSDSchemas/PMAdapter/Imported/0407_HoldCollections_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/PMAdapter/response/HoldCollections.xsd" schemaLocation="/XSDSchemas/PMAdapter/Response/HoldCollections.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0434_ValidateEmail/1.0/Response" schemaLocation="/XSDSchemas/COMETAdapter/Imported/0434_ValidateEmail_1.0_Response_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/COMETAdapter/Response/ValidateEmail.xsd" schemaLocation="/XSDSchemas/COMETAdapter/Response/ValidateEmail.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0434.ValidateEmail.1.OutputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:BodyContainer"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>70</pd:startY>
+    <pd:returnBindings>
+        <pfx3:BodyContainer>
+            <xsl:copy-of select="$Map-Data/Output/pfx5:BODY"/>
+        </pfx3:BodyContainer>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:BodyContainer"/>
+    <pd:endX>445</pd:endX>
+    <pd:endY>72</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Output">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx5:BODY" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx:BodyContainer/*" element="ns7:ValidateEmailResponse"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <Output>
+                <xsl:copy-of select="$Start/pfx:BodyContainer/ns7:ValidateEmailResponse/pfx5:BODY"/>
+            </Output>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

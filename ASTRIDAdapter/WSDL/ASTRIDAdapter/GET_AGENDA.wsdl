@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_AGENDA" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_AGENDA">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_AGENDA">
+			<xsd:element name="GetAgendaRequest" type="s:KSD_GetAgenda"/>
+			<xsd:complexType name="KSD_GetAgenda">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="researchDepartmentCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="researchEmployeeCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="startDate" nillable="true" type="xsd:date"/>
+					<xsd:element name="endDate" nillable="true" type="xsd:date"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetAgendaResponse" type="s:KSD_Agenda"/>
+			<xsd:complexType name="KSD_Agenda">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="ServiceVisits" nillable="true" type="s:ServiceVisit"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ServiceVisit">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="ServiceVisit" type="s:ServiceVisitType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ServiceVisitType">
+				<xsd:sequence>
+					<xsd:element name="index" nillable="true" type="xsd:integer"/>
+					<xsd:element name="date" nillable="true" type="xsd:date"/>
+					<xsd:element name="startTime" nillable="true" type="xsd:time"/>
+					<xsd:element name="endTime" nillable="true" type="xsd:time"/>
+					<xsd:element name="availableAppointments" nillable="true" type="xsd:integer"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="GetAgendaRequestMsg">
+		<part name="parameters" element="s:GetAgendaRequest"/>
+	</message>
+	<message name="GetAgendaResponseMsg">
+		<part name="parameters" element="s:GetAgendaResponse"/>
+	</message>
+	<portType name="GET_AGENDAPortType">
+		<operation name="GetAgendaRequest">
+			<input message="s:GetAgendaRequestMsg"/>
+			<output message="s:GetAgendaResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="GET_AGENDASoapBinding" type="s:GET_AGENDAPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="GetAgendaRequest">
+			<soap:operation soapAction="urn:GET_AGENDA/GetAgenda" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="GET_AGENDA_SERVICE">
+		<wsdl:documentation>versie 2.0</wsdl:documentation>
+		<port name="GET_AGENDASoap" binding="s:GET_AGENDASoapBinding">
+			<soap:address location="http://localhost:9190/ExpertDeskAdapter"/>
+		</port>
+	</service>
+</wsdl:definitions>

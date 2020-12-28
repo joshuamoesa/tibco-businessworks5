@@ -1,0 +1,979 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated on 2008/10/28 15:15:11 with EAIPlugin 1.2.0 -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:grp="http://kpn.com/products/SNI-FA" xmlns:ord="http://kpn.com/eai/generic/order/1.0" xmlns:prd="http://kpn.com/products/SNI-FA/telephoneNumber/data/v1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://kpn.com/products/SNI-FA/telephoneNumber/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/products/SNI-FA/telephoneNumber/v1">
+<wsdl:documentation>
+    Telephone number functional product
+
+    Version History:
+    * 1.0 - Initial version
+</wsdl:documentation>
+<wsdl:types>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/SNI-FA" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_activation  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_activation">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Active"/>
+      <xsd:enumeration value="Inactive"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_callBarringServiceNumbers  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_callBarringServiceNumbers">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="0906"/>
+      <xsd:enumeration value="0906-0909"/>
+      <xsd:enumeration value="0900-0906-0909"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_carrierType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_carrierType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="FTTC"/>
+      <xsd:enumeration value="FTTH"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_keyType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_keyType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="source"/>
+      <xsd:enumeration value="target"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_orderScenario  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_orderScenario">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="New"/>
+      <xsd:enumeration value="Migrate"/>
+      <xsd:enumeration value="Move"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_qualityOfService  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_qualityOfService">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Best Effort"/>
+      <xsd:enumeration value="Premium"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  E_yesNo  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="E_yesNo">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Y"/>
+      <xsd:enumeration value="N"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_telephoneNumber  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_telephoneNumber">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  T_zipcode  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="T_zipcode">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrder  <<order>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrder">
+    <xsd:sequence>
+      <xsd:element name="type" type="xsd:string"/>
+      <xsd:element name="keyType" type="grp:E_keyType"/>
+      <xsd:element name="requesterId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderItem  <<orderItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderItem">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="serviceInstanceId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderStatus  <<orderStatus>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderStatus">
+    <xsd:sequence>
+      <xsd:element name="keyType" type="grp:E_keyType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  SNI-FAOrderStatusItem  <<orderStatusItem>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="SNI-FAOrderStatusItem">
+    <xsd:sequence>
+      <xsd:element name="serviceInstanceId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/eai/generic/order/1.0" version="1.0">
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:simpleType name="OrderStatusEnumeration">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="INITIAL"/>
+      <xsd:enumeration value="ACCEPTED"/>
+      <xsd:enumeration value="REJECTED"/>
+      <xsd:enumeration value="ERROR"/>
+      <xsd:enumeration value="COMPLETED"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <xsd:complexType name="Error">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="detail" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Order">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="orderDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="OrderStatus">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="customerOrderId" type="xsd:string"/>
+      <xsd:element name="supplierOrderId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="error" type="ord:Error"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://kpn.com/products/SNI-FA/telephoneNumber/data/v1.0" version="1.0">
+  <xsd:import namespace="http://kpn.com/products/SNI-FA"/>
+  <xsd:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+  <!-- ================================================== -->
+  <!-- =====  Element Declarations  -->
+  <!-- ================================================== -->
+  <xsd:element name="telephoneNumbercancelRequest" type="prd:telephoneNumbercancelRequest"/>
+  <xsd:element name="telephoneNumbercancelResponse" type="prd:telephoneNumbercancelResponse"/>
+  <xsd:element name="telephoneNumbercreateRequest" type="prd:telephoneNumbercreateRequest"/>
+  <xsd:element name="telephoneNumbercreateResponse" type="prd:telephoneNumbercreateResponse"/>
+  <xsd:element name="telephoneNumberdeleteRequest" type="prd:telephoneNumberdeleteRequest"/>
+  <xsd:element name="telephoneNumberdeleteResponse" type="prd:telephoneNumberdeleteResponse"/>
+  <xsd:element name="telephoneNumberoutportCancellationRequest" type="prd:telephoneNumberoutportCancellationRequest"/>
+  <xsd:element name="telephoneNumberoutportCancellationResponse" type="prd:telephoneNumberoutportCancellationResponse"/>
+  <xsd:element name="telephoneNumberoutportExecutionRequest" type="prd:telephoneNumberoutportExecutionRequest"/>
+  <xsd:element name="telephoneNumberoutportExecutionResponse" type="prd:telephoneNumberoutportExecutionResponse"/>
+  <xsd:element name="telephoneNumberoutportNotificationRequest" type="prd:telephoneNumberoutportNotificationRequest"/>
+  <xsd:element name="telephoneNumberoutportNotificationResponse" type="prd:telephoneNumberoutportNotificationResponse"/>
+  <xsd:element name="telephoneNumberprequalRequest" type="prd:telephoneNumberprequalRequest"/>
+  <xsd:element name="telephoneNumberprequalResponse" type="prd:telephoneNumberprequalResponse"/>
+  <xsd:element name="telephoneNumberreplanRequest" type="prd:telephoneNumberreplanRequest"/>
+  <xsd:element name="telephoneNumberreplanResponse" type="prd:telephoneNumberreplanResponse"/>
+  <!-- ================================================== -->
+  <!-- =====  Simple Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberStatusEnum  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:simpleType name="telephoneNumberStatusEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Rejected"/>
+      <xsd:enumeration value="Failed"/>
+      <xsd:enumeration value="Completed"/>
+      <xsd:enumeration value="Planned"/>
+      <xsd:enumeration value="Delivered"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  cancelRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="cancelRequest">
+    <xsd:sequence>
+      <xsd:element name="refOrderId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="note" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  cancelResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="cancelResponse">
+    <xsd:sequence>
+      <xsd:element name="refOrderId" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createRequest">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdTelephoneNumber" type="xsd:string"/>
+      <xsd:element name="fpIdSpTemplate" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="telephoneNumber" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="contractorName" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="contractorStreet" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="contractorHouseNr" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="contractorHouseNrExt" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="contractorZipcode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="contractorCity" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="portingDateTime" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="accessZipcode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="numberType" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  createResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="createResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fpIdTelephoneNumber" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="telephoneNumber" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="telco" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteRequest">
+    <xsd:sequence>
+      <xsd:element name="fpIdTelephoneNumber" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  deleteResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="deleteResponse">
+    <xsd:sequence>
+      <xsd:element name="fpIdTelephoneNumber" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  outportCancellationRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="outportCancellationRequest">
+    <xsd:sequence>
+      <xsd:element name="telephoneNumber" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  outportCancellationResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="outportCancellationResponse"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  outportExecutionRequest  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="outportExecutionRequest">
+    <xsd:sequence>
+      <xsd:element name="telephoneNumber" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  outportExecutionResponse  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="outportExecutionResponse"/>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  outportNotificationRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="outportNotificationRequest">
+    <xsd:sequence>
+      <xsd:element name="telephoneNumber" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="initials" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="prefix" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="lastName" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="companyName" type="xsd:string"/>
+      <xsd:element name="street" type="xsd:string"/>
+      <xsd:element name="houseNumber" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="houseNumberExt" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="zipCode" type="xsd:string"/>
+      <xsd:element name="city" type="xsd:string"/>
+      <xsd:element name="telcoCodeRecipient" type="xsd:string"/>
+      <xsd:element name="wishDate" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  outportNotificationResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="outportNotificationResponse">
+    <xsd:sequence>
+      <xsd:element name="blockingYN" type="grp:E_yesNo"/>
+      <xsd:element minOccurs="0" name="blockingCode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="proposedDateTime" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="note" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  prequalRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="prequalRequest">
+    <xsd:sequence>
+      <xsd:element name="telephoneNumber" type="xsd:string"/>
+      <xsd:element name="accessZipcode" type="xsd:string"/>
+      <xsd:element name="accessHouseNr" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  prequalResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="prequalResponse">
+    <xsd:sequence>
+      <xsd:element name="telco" type="xsd:string"/>
+      <xsd:element name="isWLR" type="xsd:boolean"/>
+      <xsd:element name="isValidZipcode" type="xsd:boolean"/>
+      <xsd:element minOccurs="0" name="telephonyType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="mainNumber" type="xsd:string"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="subNumber" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  replanRequest  <<actionRequest>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="replanRequest">
+    <xsd:sequence>
+      <xsd:element name="refOrderId" type="xsd:string"/>
+      <xsd:element name="newPortingDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  replanResponse  <<actionResponse>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="replanResponse">
+    <xsd:sequence>
+      <xsd:element name="refOrderId" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="proposedPortingDateTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumbercancelRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumbercancelRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumbercancelRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumbercancelRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumbercancelRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:cancelRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumbercancelResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumbercancelResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:telephoneNumberStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumbercancelResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumbercancelResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumbercancelResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:cancelResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumbercreateRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumbercreateRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumbercreateRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumbercreateRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumbercreateRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:createRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumbercreateResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumbercreateResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:telephoneNumberStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumbercreateResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumbercreateResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumbercreateResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:createResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberdeleteRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberdeleteRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberdeleteRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberdeleteRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberdeleteRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:deleteRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberdeleteResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberdeleteResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:telephoneNumberStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberdeleteResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberdeleteResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberdeleteResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:deleteResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportCancellationRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportCancellationRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberoutportCancellationRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportCancellationRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportCancellationRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:outportCancellationRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportCancellationResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportCancellationResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:telephoneNumberStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberoutportCancellationResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportCancellationResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportCancellationResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportExecutionRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportExecutionRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberoutportExecutionRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportExecutionRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportExecutionRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:outportExecutionRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportExecutionResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportExecutionResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:telephoneNumberStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberoutportExecutionResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportExecutionResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportExecutionResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportNotificationRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportNotificationRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberoutportNotificationRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportNotificationRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportNotificationRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:outportNotificationRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportNotificationResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportNotificationResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:telephoneNumberStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberoutportNotificationResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberoutportNotificationResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberoutportNotificationResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:outportNotificationResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberprequalRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberprequalRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberprequalRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberprequalRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberprequalRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:prequalRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberprequalResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberprequalResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:telephoneNumberStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberprequalResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberprequalResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberprequalResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:prequalResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberreplanRequest  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberreplanRequest">
+    <xsd:complexContent>
+      <xsd:extension base="ord:Order">
+        <xsd:sequence>
+          <xsd:element name="OrderParameters" type="grp:SNI-FAOrder"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberreplanRequestItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberreplanRequestItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberreplanRequestItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderItem">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="prd:replanRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberreplanResponse  <<xsdGen>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberreplanResponse">
+    <xsd:complexContent>
+      <xsd:extension base="ord:OrderStatus">
+        <xsd:sequence>
+          <xsd:element name="status" type="prd:telephoneNumberStatusEnum"/>
+          <xsd:element name="OrderStatusParameters" type="grp:SNI-FAOrderStatus"/>
+          <xsd:element name="OrderItem" type="prd:telephoneNumberreplanResponseItem"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  telephoneNumberreplanResponseItem  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="telephoneNumberreplanResponseItem">
+    <xsd:complexContent>
+      <xsd:extension base="grp:SNI-FAOrderStatusItem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Parameters" type="prd:replanResponse"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>
+</wsdl:types>
+<wsdl:message name="cancelStatusUpdateRequest">
+<wsdl:part element="prd:telephoneNumbercancelResponse" name="telephoneNumbercancelStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="outportExecutionRequest">
+<wsdl:part element="prd:telephoneNumberoutportExecutionRequest" name="telephoneNumberoutportExecutionRequest"/>
+</wsdl:message>
+<wsdl:message name="outportNotificationStatusUpdateRequest">
+<wsdl:part element="prd:telephoneNumberoutportNotificationResponse" name="telephoneNumberoutportNotificationStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="prequalStatusUpdateRequest">
+<wsdl:part element="prd:telephoneNumberprequalResponse" name="telephoneNumberprequalStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="createRequest">
+<wsdl:part element="prd:telephoneNumbercreateRequest" name="telephoneNumbercreateRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteRequest">
+<wsdl:part element="prd:telephoneNumberdeleteRequest" name="telephoneNumberdeleteRequest"/>
+</wsdl:message>
+<wsdl:message name="deleteStatusUpdateRequest">
+<wsdl:part element="prd:telephoneNumberdeleteResponse" name="telephoneNumberdeleteStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="replanStatusUpdateRequest">
+<wsdl:part element="prd:telephoneNumberreplanResponse" name="telephoneNumberreplanStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="outportNotificationRequest">
+<wsdl:part element="prd:telephoneNumberoutportNotificationRequest" name="telephoneNumberoutportNotificationRequest"/>
+</wsdl:message>
+<wsdl:message name="outportExecutionStatusUpdateRequest">
+<wsdl:part element="prd:telephoneNumberoutportExecutionResponse" name="telephoneNumberoutportExecutionStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="prequalRequest">
+<wsdl:part element="prd:telephoneNumberprequalRequest" name="telephoneNumberprequalRequest"/>
+</wsdl:message>
+<wsdl:message name="replanRequest">
+<wsdl:part element="prd:telephoneNumberreplanRequest" name="telephoneNumberreplanRequest"/>
+</wsdl:message>
+<wsdl:message name="Error">
+<wsdl:part name="Error" type="ord:Error"/>
+</wsdl:message>
+<wsdl:message name="outportCancellationRequest">
+<wsdl:part element="prd:telephoneNumberoutportCancellationRequest" name="telephoneNumberoutportCancellationRequest"/>
+</wsdl:message>
+<wsdl:message name="outportCancellationStatusUpdateRequest">
+<wsdl:part element="prd:telephoneNumberoutportCancellationResponse" name="telephoneNumberoutportCancellationStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="createStatusUpdateRequest">
+<wsdl:part element="prd:telephoneNumbercreateResponse" name="telephoneNumbercreateStatusUpdateRequest"/>
+</wsdl:message>
+<wsdl:message name="cancelRequest">
+<wsdl:part element="prd:telephoneNumbercancelRequest" name="telephoneNumbercancelRequest"/>
+</wsdl:message>
+<wsdl:portType name="telephoneNumberCallbackServices">
+<wsdl:operation name="outportExecutionStatusUpdate">
+<wsdl:input message="tns:outportExecutionStatusUpdateRequest" name="outportExecutionStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="prequalStatusUpdate">
+<wsdl:input message="tns:prequalStatusUpdateRequest" name="prequalStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="outportNotificationStatusUpdate">
+<wsdl:input message="tns:outportNotificationStatusUpdateRequest" name="outportNotificationStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="replanStatusUpdate">
+<wsdl:input message="tns:replanStatusUpdateRequest" name="replanStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="createStatusUpdate">
+<wsdl:input message="tns:createStatusUpdateRequest" name="createStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="outportCancellationStatusUpdate">
+<wsdl:input message="tns:outportCancellationStatusUpdateRequest" name="outportCancellationStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="cancelStatusUpdate">
+<wsdl:input message="tns:cancelStatusUpdateRequest" name="cancelStatusUpdateRequest"/>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<wsdl:input message="tns:deleteStatusUpdateRequest" name="deleteStatusUpdateRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:portType name="telephoneNumberServices">
+<wsdl:operation name="outportCancellation">
+<wsdl:input message="tns:outportCancellationRequest" name="outportCancellationRequest"/>
+</wsdl:operation>
+<wsdl:operation name="outportExecution">
+<wsdl:input message="tns:outportExecutionRequest" name="outportExecutionRequest"/>
+</wsdl:operation>
+<wsdl:operation name="create">
+<wsdl:input message="tns:createRequest" name="createRequest"/>
+</wsdl:operation>
+<wsdl:operation name="replan">
+<wsdl:input message="tns:replanRequest" name="replanRequest"/>
+</wsdl:operation>
+<wsdl:operation name="outportNotification">
+<wsdl:input message="tns:outportNotificationRequest" name="outportNotificationRequest"/>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<wsdl:input message="tns:deleteRequest" name="deleteRequest"/>
+</wsdl:operation>
+<wsdl:operation name="prequal">
+<wsdl:input message="tns:prequalRequest" name="prequalRequest"/>
+</wsdl:operation>
+<wsdl:operation name="cancel">
+<wsdl:input message="tns:cancelRequest" name="cancelRequest"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="telephoneNumberBindingSOAP" type="tns:telephoneNumberServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="outportCancellation">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_outportCancellation_Asynchronous" style="document"/>
+<wsdl:input name="outportCancellationRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="outportExecution">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_outportExecution_Asynchronous" style="document"/>
+<wsdl:input name="outportExecutionRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="create">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="replan">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_replan_Asynchronous" style="document"/>
+<wsdl:input name="replanRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="outportNotification">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_outportNotification_Asynchronous" style="document"/>
+<wsdl:input name="outportNotificationRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="delete">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="prequal">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_prequal_Asynchronous" style="document"/>
+<wsdl:input name="prequalRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="cancel">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_cancel_Asynchronous" style="document"/>
+<wsdl:input name="cancelRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:binding name="telephoneNumberCallbackBindingSOAP" type="tns:telephoneNumberCallbackServices">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="outportExecutionStatusUpdate">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_outportExecution_Asynchronous" style="document"/>
+<wsdl:input name="outportExecutionStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="prequalStatusUpdate">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_prequal_Asynchronous" style="document"/>
+<wsdl:input name="prequalStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="outportNotificationStatusUpdate">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_outportNotification_Asynchronous" style="document"/>
+<wsdl:input name="outportNotificationStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="replanStatusUpdate">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_replan_Asynchronous" style="document"/>
+<wsdl:input name="replanStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="createStatusUpdate">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_create_Asynchronous" style="document"/>
+<wsdl:input name="createStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="outportCancellationStatusUpdate">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_outportCancellation_Asynchronous" style="document"/>
+<wsdl:input name="outportCancellationStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="cancelStatusUpdate">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_cancel_Asynchronous" style="document"/>
+<wsdl:input name="cancelStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+<wsdl:operation name="deleteStatusUpdate">
+<soap:operation soapAction="SNI-FA_telephoneNumber_1.0_delete_Asynchronous" style="document"/>
+<wsdl:input name="deleteStatusUpdateRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="telephoneNumber">
+<wsdl:port binding="tns:telephoneNumberCallbackBindingSOAP" name="telephoneNumberCallbackServices">
+<soap:address location="http://localhost:8080/path/telephoneNumberCallbackServices"/>
+</wsdl:port>
+<wsdl:port binding="tns:telephoneNumberBindingSOAP" name="telephoneNumberServices">
+<soap:address location="http://localhost:8080/path/telephoneNumberServices"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

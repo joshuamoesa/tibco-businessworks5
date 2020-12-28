@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1095237788188" xmlns:ns="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx3="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/AnyXMLMessage.xsd" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/LogLevel.xsd" xmlns:pfx6="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMHNew.xsd" xmlns:pfx7="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMHExisted.xsd" xmlns:pfx8="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/LogError.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx9="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMH.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" schemaLocation="/XSDSchemas/Common/ErrorMessage.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/LogLevel.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Common/LogLevel.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMHNew.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/CMHNew.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/LogError.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/LogError.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/AnyXMLMessage.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Common/AnyXMLMessage.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMH.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/CMH.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Common/CMHExisted.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Common/CMHExisted.xsd"/>
+    <pd:name>IKKAdapter/Sub Processes/Sub_LogError.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="param">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx4:AnyXMLMessage" minOccurs="0"/>
+                    <xsd:element name="StringMessage" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>50</pd:startX>
+    <pd:startY>159</pd:startY>
+    <pd:returnBindings>
+        <ErrorStatus>
+            <xsl:copy-of select="$Start/LogError/ResultStatus/ancestor-or-self::*/namespace::node()"/>
+            <xsl:copy-of select="$Start/LogError/ResultStatus/@*"/>
+            <xsl:copy-of select="$Start/LogError/ResultStatus/node()"/>
+        </ErrorStatus>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>652</pd:endX>
+    <pd:endY>161</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="TryCatch">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>139</pd:x>
+        <pd:y>24</pd:y>
+        <pd:width>421</pd:width>
+        <pd:height>256</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LogMessage</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IgnoreLogError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>BuildCMH</pd:from>
+            <pd:to>ReportError2Rv</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogMessage</pd:from>
+            <pd:to>BuildCMH</pd:to>
+            <pd:xpathDescription>With Report to Rv</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ReportError2Rv</pd:from>
+            <pd:to>IgnoreLogError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogMessage</pd:from>
+            <pd:to>IgnoreLogError</pd:to>
+            <pd:xpathDescription>Without Report to Rv</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_globalVariables/ns2:GlobalVariables/IKKAdapter/AppSetting/IsErrorLog2Rv = 0</pd:xpath>
+        </pd:transition>
+        <pd:activity name="ReportError2Rv">
+            <pd:type>com.tibco.plugin.tibrv.RVPubActivity</pd:type>
+            <pd:resourceType>ae.rvpalette.RVPubActivity</pd:resourceType>
+            <pd:x>409</pd:x>
+            <pd:y>204</pd:y>
+            <config>
+                <wantsXMLCompliantFieldNames>true</wantsXMLCompliantFieldNames>
+                <xmlEncoding>true</xmlEncoding>
+                <sharedChannel>/IKKAdapter/Shared Resources/EAI Rendezvous Transport.rvtransport</sharedChannel>
+                <xsdString>
+                    <xsd:element name="group">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="NotifyLogError" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                <xsd:element name="Payload" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsdString>
+            </config>
+            <pd:inputBindings>
+                <ActivityInput>
+                    <body>
+                        <xsl:if test="$Start/param/StringMessage">
+                            <NotifyLogError>
+                                <xsl:value-of select="$Start/param/StringMessage"/>
+                            </NotifyLogError>
+                        </xsl:if>
+                        <Payload>
+                            <xsl:copy-of select="$Start/param/AnyXMLMessage/*/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/param/AnyXMLMessage/*/@*"/>
+                            <xsl:copy-of select="$Start/param/AnyXMLMessage/*/node()"/>
+                        </Payload>
+                    </body>
+                </ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="IgnoreLogError">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>478</pd:x>
+            <pd:y>92</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="BuildCMH">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>304</pd:x>
+            <pd:y>204</pd:y>
+            <config>
+                <processName>/IKKAdapter/Sub Processes/Sub_FulFillCMH.process</processName>
+            </config>
+            <pd:inputBindings>
+                <InputCMH>
+                    <ID>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/IKKAdapter/ApplicationID"/>
+                    </ID>
+                    <TRACKING>
+                        <ITEM>
+                            <xsl:attribute name="TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ITEM>
+                    </TRACKING>
+                </InputCMH>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogMessage">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>223</pd:x>
+            <pd:y>90</pd:y>
+            <config>
+                <processName>/IKKAdapter/Sub Processes/Sub_LogMessage.process</processName>
+            </config>
+            <pd:inputBindings>
+                <param>
+                    <xsl:copy-of select="$Start/param/AnyXMLMessage"/>
+                    <xsl:if test="$Start/param/StringMessage">
+                        <StringMessage>
+                            <xsl:value-of select="$Start/param/StringMessage"/>
+                        </StringMessage>
+                    </xsl:if>
+                    <LogLevel>
+                        <xsl:value-of select="&quot;ERROR&quot;"/>
+                    </LogLevel>
+                </param>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="LogProcessError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>555</pd:x>
+        <pd:y>346</pd:y>
+        <config>
+            <processName>/IKKAdapter/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <param>
+                <AnyXMLMessage>
+                    <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                </AnyXMLMessage>
+                <StringMessage>
+                    <xsl:value-of select="&quot;Sub_LogErr proc err: &quot;"/>
+                </StringMessage>
+                <LogLevel>
+                    <xsl:value-of select="&quot;ERROR&quot;"/>
+                </LogLevel>
+            </param>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>TryCatch</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TryCatch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TryCatch</pd:from>
+        <pd:to>LogProcessError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52378</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogProcessError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

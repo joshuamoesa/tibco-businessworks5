@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:pfx2="urn:FIND_CUSTOMER" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx3="urn:SEND_TICKET" xmlns:pfx4="urn:GET_LINE_MEASUREMENT" xmlns:pfx5="urn:SCHEDULE_NOTES_REFRESH" xmlns:pfx6="urn:GET_CUSTOMER_DETAILS" xmlns:pfx7="urn:UpdateTicketStatusRequest" xmlns:pfx8="urn:GetLineMeasurementUpdateRequest" xmlns:pfx9="http://xmlns.kpn.com/fixed/portingservices/publish/NotifyNumberInportingComplete" xmlns:ns2="http://tempuri.org">
+    <wsdl:import namespace="urn:FIND_CUSTOMER" location="/WSDL/EDTAdapter/001 - FIND_CUSTOMER.wsdl"/>
+    <wsdl:import namespace="urn:SEND_TICKET" location="/WSDL/EDTAdapter/014 - SEND_TICKET.wsdl"/>
+    <wsdl:import namespace="urn:UpdateTicketStatusRequest" location="/WSDL/EDTAdapter/014a - UPDATE_TICKET_STATUS.wsdl"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/SOAP_SendTicket_MM007Light.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>136</pd:x>
+        <pd:y>211</pd:y>
+        <config>
+            <service>pfx7:UPDATE_TICKET_STATUSPortType</service>
+            <wsdlNamespaceRoot>urn:UpdateTicketStatusRequest/UpdateTicketStatusImpl</wsdlNamespaceRoot>
+            <operation>UpdateTicketStatus</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>/EDTAdapter/Test Processes/JosN/SOAP_SendTicket_MM007Light</soapAction>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+            <sharedChannel>/EDTAdapter/Shared Resources/HTTP Server Connection.sharedhttp</sharedChannel>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>383</pd:x>
+        <pd:y>307</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx7:UpdateTicketStatusResponse>
+                    <ns2:GUID>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:UpdateTicketStatus/pfx7:GUID"/>
+                    </ns2:GUID>
+                </pfx7:UpdateTicketStatusResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>translateJson.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="inputString" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <outputString>
+                <xsl:value-of select="$translateJSON/javaCodeActivityOutput/out_var_1"/>
+            </outputString>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="outputString" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>448</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1409142145628</pd:targetNamespace>
+    <pd:activity name="translateJSON">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>297</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <fileName>translateJsontranslateJSON</fileName>
+            <packageName>translateJson</packageName>
+            <fullsource>package translateJson;
+import java.util.*;
+import java.io.*;
+public class translateJsontranslateJSON{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String in_var_1 = "";
+	protected String out_var_1 = "";
+	public String getin_var_1() {
+		return in_var_1;
+	}
+	public void setin_var_1(String val) {
+		in_var_1 = val;
+	}
+	public String getout_var_1() {
+		return out_var_1;
+	}
+	public void setout_var_1(String val) {
+		out_var_1 = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public translateJsontranslateJSON() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String in_var_1
+	Out : String out_var_1
+* Available Variables: DO NOT MODIFY *****/
+
+in_var_1 = in_var_1.replace("16x16", "avatar16x16");
+
+in_var_1 = in_var_1.replace("24x24", "avatar24x24");
+
+in_var_1 = in_var_1.replace("32x32", "avatar32x32");
+
+in_var_1 = in_var_1.replace("48x48", "avatar48x48");
+
+in_var_1 = in_var_1.replace("“", "==");
+
+in_var_1 = in_var_1.replace("”", "==");
+
+in_var_1 = in_var_1.replace("'", "");
+
+in_var_1 = in_var_1.replace("–", "-");
+
+in_var_1 = in_var_1.replace("’", "'");
+
+in_var_1 = in_var_1.replace("‘", "''");
+
+in_var_1 = in_var_1.replace("…", "...");
+
+out_var_1 = in_var_1.replace("•", "-'");}
+}
+</fullsource>
+            <inputData>
+                <row>
+                    <fieldName>in_var_1</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </inputData>
+            <outputData>
+                <row>
+                    <fieldName>out_var_1</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>translateJsontranslateJSON</name>
+                    <byteCode>yv66vgAAADMAUAkAGwAvCQAbADAKABwAMQgAMggAMwgANAoANQA2CAA3CAA4CAA5CAA6CAA7CAA8CAA9CAA+CAA/CABACABBCABCCABDCABECABFCABGCABHCABICABJBwBKBwBLAQAIaW5fdmFyXzEBABJMamF2YS9sYW5nL1N0cmluZzsBAAlvdXRfdmFyXzEBAAtnZXRpbl92YXJfMQEAFCgpTGphdmEvbGFuZy9TdHJpbmc7AQAEQ29kZQEAD0xpbmVOdW1iZXJUYWJsZQEAC3NldGluX3Zhcl8xAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWAQAMZ2V0b3V0X3Zhcl8xAQAMc2V0b3V0X3Zhcl8xAQAGPGluaXQ+AQADKClWAQAGaW52b2tlAQAKRXhjZXB0aW9ucwcATAEAClNvdXJjZUZpbGUBAB90cmFuc2xhdGVKc29udHJhbnNsYXRlSlNPTi5qYXZhDAAdAB4MAB8AHgwAKAApAQAAAQAFMTZ4MTYBAAthdmF0YXIxNngxNgcATQwATgBPAQAFMjR4MjQBAAthdmF0YXIyNHgyNAEABTMyeDMyAQALYXZhdGFyMzJ4MzIBAAU0OHg0OAEAC2F2YXRhcjQ4eDQ4AQAD4oCcAQACPT0BAAPigJ0BAAEnAQAD4oCTAQABLQEAA+KAmQEAA+KAmAEAAicnAQAD4oCmAQADLi4uAQAD4oCiAQACLScBACh0cmFuc2xhdGVKc29uL3RyYW5zbGF0ZUpzb250cmFuc2xhdGVKU09OAQAQamF2YS9sYW5nL09iamVjdAEAE2phdmEvbGFuZy9FeGNlcHRpb24BABBqYXZhL2xhbmcvU3RyaW5nAQAHcmVwbGFjZQEARChMamF2YS9sYW5nL0NoYXJTZXF1ZW5jZTtMamF2YS9sYW5nL0NoYXJTZXF1ZW5jZTspTGphdmEvbGFuZy9TdHJpbmc7ACEAGwAcAAAAAgAEAB0AHgAAAAQAHwAeAAAABgABACAAIQABACIAAAAdAAEAAQAAAAUqtAABsAAAAAEAIwAAAAYAAQAAAAkAAQAkACUAAQAiAAAAIgACAAIAAAAGKiu1AAGxAAAAAQAjAAAACgACAAAADAAFAA0AAQAmACEAAQAiAAAAHQABAAEAAAAFKrQAArAAAAABACMAAAAGAAEAAAAPAAEAJwAlAAEAIgAAACIAAgACAAAABiortQACsQAAAAEAIwAAAAoAAgAAABIABQATAAEAKAApAAEAIgAAADUAAgABAAAAESq3AAMqEgS1AAEqEgS1AAKxAAAAAQAjAAAAEgAEAAAAFQAEAAYACgAHABAAFgABACoAKQACACIAAAD5AAQAAQAAALUqKrQAARIFEga2AAe1AAEqKrQAARIIEgm2AAe1AAEqKrQAARIKEgu2AAe1AAEqKrQAARIMEg22AAe1AAEqKrQAARIOEg+2AAe1AAEqKrQAARIQEg+2AAe1AAEqKrQAARIREgS2AAe1AAEqKrQAARISEhO2AAe1AAEqKrQAARIUEhG2AAe1AAEqKrQAARIVEha2AAe1AAEqKrQAARIXEhi2AAe1AAEqKrQAARIZEhq2AAe1AAKxAAAAAQAjAAAAMgAMAAAAHQAPAB8AHgAhAC0AIwA8ACUASwAnAFoAKQBpACsAeAAtAIcALwCWADEApQAzACsAAAAEAAEALAABAC0AAAACAC4=</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <in_var_1>
+                    <xsl:value-of select="$Start/root/inputString"/>
+                </in_var_1>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>translateJSON</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>translateJSON</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

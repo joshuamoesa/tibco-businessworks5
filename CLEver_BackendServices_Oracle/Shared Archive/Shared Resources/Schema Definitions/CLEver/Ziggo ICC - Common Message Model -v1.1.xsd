@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This schema is the generic Common Message Model that is the envelope of all messages on the Tibco ESB.
+
+Version: 1.0
+Date    : <not released yet>
+
+History:
+2011-12-08: Pascal Rottier
+Fixed the type of "serviceVersion". This was incorrectly set to string and should be positiveInteger.
+
+2011-12-06: Stephan Ansems
+Applied some changes to the schema after discussion with Pascal.
+
+2011-12-02: Stephan Ansems
+First complete version
+
+2012-01-11: Stephan Ansems
+Modified optionality of sequence in \CMM\header\auditContext for processingTime and processingSequence because Tibco BPM doesn't support optional sequences
+
+-->
+<xsd:schema xmlns:bi="http://www.ziggo.nl/Integration/ESB/Generic/CMM/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ziggo.nl/Integration/ESB/Generic/CMM/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:element name="CMM">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="header" type="bi:MessageHeader"/>
+				<xsd:element name="body" type="bi:body" minOccurs="0"/>
+				<xsd:element name="resultStatus" type="bi:ResultStatus" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="body">
+				<xsd:sequence>
+					<xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>				
+	</xsd:complexType>
+	<xsd:complexType name="MessageHeader">
+		<xsd:sequence>
+			<xsd:element name="cmmVersion" type="xsd:positiveInteger" fixed="1"/>
+			<xsd:element name="messageContext" type="bi:MessageContext"/>
+			<xsd:element name="messageControl" type="bi:MessageControl"/>
+			<xsd:element name="serviceContext" type="bi:ServiceContext"/>
+			<xsd:element name="sourceContext" type="bi:SourceContext"/>
+			<xsd:element name="businessContext" type="bi:BusinessContext" minOccurs="0"/>
+			<xsd:element name="bpmContext" type="bi:BpmContext" minOccurs="0"/>
+			<xsd:element name="auditContext" type="bi:AuditContext" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MessageContext">
+		<xsd:sequence>
+			<xsd:element name="messageID" type="xsd:string"/>
+			<xsd:element name="correlationID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="conversationID" type="xsd:string"/>
+			<xsd:element name="businessTransactionID" type="xsd:string"/>
+			<xsd:element name="externalCorrelationID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="timestamp" type="xsd:dateTime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MessageControl">
+		<xsd:sequence>
+			<xsd:element name="priority" default="4" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:nonNegativeInteger">
+						<xsd:pattern value="\d"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="expiration" type="xsd:dateTime" minOccurs="0"/>
+			<xsd:element name="queued" type="xsd:boolean" default="false" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceContext">
+		<xsd:sequence>
+			<xsd:element name="serviceName" type="xsd:string"/>
+			<xsd:element name="serviceVersion" type="xsd:positiveInteger"/>
+			<xsd:element name="messageType">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="REQUEST"/>
+						<xsd:enumeration value="RESPONSE"/>
+						<xsd:enumeration value="NOTIFICATION"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SourceContext">
+		<xsd:sequence>
+			<xsd:element name="host" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="application" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="operation" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="version" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="step" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BusinessContext">
+		<xsd:sequence>
+			<xsd:element name="channel" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="marketSegment" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="keyFields" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="keyField" type="bi:KeyField" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="user" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userID" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="groupIDs" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="groupID" type="xsd:string" maxOccurs="unbounded"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="roleIDs" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="roleID" type="xsd:string" maxOccurs="unbounded"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BpmContext">
+		<xsd:sequence>
+			<xsd:element name="instanceID" type="xsd:string"/>
+			<xsd:element name="processName" type="xsd:string"/>
+			<xsd:element name="processStep" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AuditContext">
+		<xsd:sequence>
+			<xsd:element name="receivedTimestamp" type="xsd:dateTime" minOccurs="0"/>
+			<xsd:element name="responseTimestamp" type="xsd:dateTime" minOccurs="0"/>
+			<xsd:sequence minOccurs="1">
+				<xsd:element name="processingTime" type="xsd:decimal" minOccurs="0"/>
+				<xsd:element name="processingDuration" type="xsd:duration" minOccurs="0"/>
+			</xsd:sequence>
+			<xsd:element name="endOfProcess" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="remarks" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="remark" type="bi:Remark" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ResultStatus">
+		<xsd:sequence>
+			<xsd:element name="status" type="xsd:string"/>
+			<xsd:element name="error" type="bi:Error" minOccurs="0"/>
+			<xsd:element name="errorStack" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="error" type="bi:Error" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Error">
+		<xsd:sequence>
+			<xsd:element name="errorCode" type="xsd:string"/>
+			<xsd:element name="errorSubCode" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="errorMessage" type="xsd:string"/>
+			<xsd:element name="description" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="stackTrace" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="inputData" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="sequence" type="xsd:positiveInteger"/>
+			<xsd:element name="sourceContext" type="bi:SourceContext"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="KeyField">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="value" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Remark">
+		<xsd:sequence>
+			<xsd:element name="type" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="code" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="status" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="text" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

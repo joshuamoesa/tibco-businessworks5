@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0008_RemoveCustomerReferences/1.0/Request" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0008_RemoveCustomerReferences/1.0/Request" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="customerRole_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITIONS:
+The Customer Role further specifies the role of a customer. There is a limited number of possible roles for a customer.
+
+TYPE:
+String(2) enumeration
+
+VALUES:
+- "??" for payment agent
+- "??" for contract owner
+- "??" for user
+- "??" for ???
+
+
+NOTES:
+- Valid values need to be added to this definition.</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="2" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="externalCustomerReference_type">
+    <xs:annotation>
+      <xs:documentation>Mandatory</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BODY">
+    <xs:annotation>
+      <xs:documentation>This is the BODY object for KPN EAI service number 0008 - RemoveCustomerReferences version 1.0 Request message.</xs:documentation>
+      <xs:documentation>Automatically generated schema for service:'RemoveCustomerReferences', version:'1.0'</xs:documentation>
+      <xs:documentation>Generated on 2007-03-29 17:15:00Z</xs:documentation>
+      <xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+      <xs:documentation>Service ID is:'0008'</xs:documentation>
+      <xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+      <xs:documentation>KPN EAI message body class.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="1" maxOccurs="1" name="CUSTOMER_REFERENCE">
+          <xs:annotation>
+            <xs:documentation>CDM CLASS
+ExternalCustomerReference
+</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="1" maxOccurs="1" name="EXTERNAL_CUSTOMER_REFERENCE">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="1" maxOccurs="1" name="REF_NAME" type="tns:externalCustomerReference_type">
+                      <xs:annotation>
+                        <xs:documentation>Mandatory</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="1" maxOccurs="1" name="ROLE" type="tns:customerRole_type" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

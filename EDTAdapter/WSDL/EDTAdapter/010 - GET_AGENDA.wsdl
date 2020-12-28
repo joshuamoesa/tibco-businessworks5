@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_AGENDA" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_AGENDA">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_AGENDA">
+            <xsd:element name="GetAgenda" type="s:KSD_GetAgenda"/>
+            <xsd:complexType name="KSD_GetAgenda">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="researchDepartmentCode" type="xsd:string"/>
+                    <xsd:element name="researchEmployeeCode" type="xsd:string"/><!-- EAI00001243 from date to string -->
+                    <xsd:element name="startDate" type="xsd:string"/><!-- EAI00001243 from date to string -->
+                    <xsd:element name="endDate" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="GetAgendaResponse" type="s:KSD_Agenda"/>
+            <xsd:complexType name="KSD_Agenda">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="ServiceVisits" type="s:ServiceVisit"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ServiceVisit">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="ServiceVisit" type="s:ServiceVisitType"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ServiceVisitType">
+                <xsd:sequence><!-- EAI00001243 from integer to string -->
+                    <xsd:element name="index" type="xsd:string"/><!-- EAI00001243 from date to string -->
+                    <xsd:element name="date" type="xsd:string"/><!-- EAI00001243 from time to string -->
+                    <xsd:element name="startTime" type="xsd:string"/><!-- EAI00001243 from time to string -->
+                    <xsd:element name="endTime" type="xsd:string"/><!-- EAI00001243 from integer to string -->
+                    <xsd:element name="availableAppointments" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="GetAgendaRequestMsg">
+        <part name="parameters" element="s:GetAgenda"/>
+    </message>
+    <message name="GetAgendaResponseMsg">
+        <part name="parameters" element="s:GetAgendaResponse"/>
+    </message>
+    <portType name="GET_AGENDAPortType">
+        <operation name="GetAgenda">
+            <input message="s:GetAgendaRequestMsg"/>
+            <output message="s:GetAgendaResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="GET_AGENDASoapBinding" type="s:GET_AGENDAPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetAgenda">
+            <soap:operation soapAction="urn:GET_AGENDA/GetAgenda" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GET_AGENDA_SERVICE">
+        <port name="GET_AGENDASoap" binding="s:GET_AGENDASoapBinding">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/GetAgenda"/>
+        </port>
+    </service>
+</definitions>

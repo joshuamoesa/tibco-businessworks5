@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/CRMServices/Publish/UpsertAccountWithReferencing.xsd" xmlns:pfx2="http://xmlns.kpn.com/EAI/fixed/0420_UpsertAccountWithReferencing/1.0/Publish" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/CRMServices/Request/UpserAccount.xsd" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx5="http://xmlns.kpn.com/eai/common/errors" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/fixed/CRMServices/Publish/_FlatAccountHierarchy.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0420_UpsertAccountWithReferencing/1.0/Publish" schemaLocation="/XSDSchemas/CRMServices/Imported/0420_UpsertAccountWithReferencing_1.0_Publish_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Publish/UpsertAccountWithReferencing.xsd" schemaLocation="/XSDSchemas/CRMServices/Publish/UpsertAccountWithReferencing.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Publish/_FlatAccountHierarchy.xsd" schemaLocation="/XSDSchemas/CRMServices/Publish/FlatAccountHierarchy.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/Sub_UpserAccountWithReferencing.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:UpsertAccountWithReferencingPublish"/>
+    <pd:startX>51</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>586</pd:endX>
+    <pd:endY>70</pd:endY>
+    <pd:errorSchemas>
+        <Schema0 ref="pfx5:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="FlattenAccountHierarchy">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>207</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <element ref="ns3:FlatAccountHierarchy"/>
+        </config>
+        <pd:inputBindings>
+            <ns3:FlatAccountHierarchy>
+                <ns:CMH>
+                    <ns:ID>
+                        <xsl:value-of select="&quot;1056&quot;"/>
+                    </ns:ID>
+                    <ns:NAME>
+                        <xsl:value-of select="&quot;_UpsertAccountWithReferences&quot;"/>
+                    </ns:NAME>
+                    <ns:MID>
+                        <xsl:value-of select="&quot;1056.20&quot;"/>
+                    </ns:MID>
+                    <ns:PARADIGM>
+                        <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                    </ns:PARADIGM>
+                    <ns:OBJECT>
+                        <xsl:value-of select="&quot;FLAT_SIEBEL_ACCOUNT_HIERARCHY&quot;"/>
+                    </ns:OBJECT>
+                    <ns:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns:VERSION>
+                    <ns:FROM>
+                        <xsl:attribute name="ns:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/CRMServices/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/CRMServices/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns:FROM>
+                    <ns:TO>
+                        <xsl:attribute name="ns:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/Env,&quot;.FIXED.Operations.&quot;,$_globalVariables/ns2:GlobalVariables/CRMServices/ComponentId,&quot;._UpsertAccountWithReferences.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns:TO>
+                    <ns:TRACKING>
+                        <ns:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx:UpsertAccountWithReferencingPublish/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                        </ns:MESSAGE_ID>
+                        <xsl:if test="$Start/pfx:UpsertAccountWithReferencingPublish/ns:CMH/ns:TRACKING/ns:EXTERNAL_REF">
+                            <ns:EXTERNAL_REF>
+                                <xsl:value-of select="$Start/pfx:UpsertAccountWithReferencingPublish/ns:CMH/ns:TRACKING/ns:EXTERNAL_REF"/>
+                            </ns:EXTERNAL_REF>
+                        </xsl:if>
+                        <xsl:copy-of select="$Start/pfx:UpsertAccountWithReferencingPublish/ns:CMH/ns:TRACKING/ns:ITEM"/>
+                        <ns:ITEM>
+                            <xsl:attribute name="ns:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns2:GlobalVariables/CRMServices/ComponentId)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:EVENT">
+                                <xsl:value-of select="&quot;_UpsertAccountWithReferencing&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns:ITEM>
+                    </ns:TRACKING>
+                </ns:CMH>
+                <xsl:if test="$Start/pfx:UpsertAccountWithReferencingPublish/pfx2:BODY/pfx2:RecursiveProcessing">
+                    <ns3:RecursiveProcessing>
+                        <xsl:value-of select="$Start/pfx:UpsertAccountWithReferencingPublish/pfx2:BODY/pfx2:RecursiveProcessing"/>
+                    </ns3:RecursiveProcessing>
+                </xsl:if>
+                <xsl:for-each select="$Start/pfx:UpsertAccountWithReferencingPublish/pfx2:BODY//pfx2:SiebelAccount">
+                    <ns3:SiebelAccount>
+                        <xsl:if test="pfx2:AccountHierarchyLevel">
+                            <pfx2:AccountHierarchyLevel>
+                                <xsl:value-of select="pfx2:AccountHierarchyLevel"/>
+                            </pfx2:AccountHierarchyLevel>
+                        </xsl:if>
+                        <xsl:if test="pfx2:AccountStatus">
+                            <pfx2:AccountStatus>
+                                <xsl:value-of select="pfx2:AccountStatus"/>
+                            </pfx2:AccountStatus>
+                        </xsl:if>
+                        <xsl:if test="pfx2:AccountTypeCode">
+                            <pfx2:AccountTypeCode>
+                                <xsl:value-of select="pfx2:AccountTypeCode"/>
+                            </pfx2:AccountTypeCode>
+                        </xsl:if>
+                        <xsl:if test="pfx2:Alias">
+                            <pfx2:Alias>
+                                <xsl:value-of select="pfx2:Alias"/>
+                            </pfx2:Alias>
+                        </xsl:if>
+                        <xsl:if test="pfx2:CAUpdateFlag">
+                            <pfx2:CAUpdateFlag>
+                                <xsl:value-of select="pfx2:CAUpdateFlag"/>
+                            </pfx2:CAUpdateFlag>
+                        </xsl:if>
+                        <xsl:if test="pfx2:CAUpdateType">
+                            <pfx2:CAUpdateType>
+                                <xsl:value-of select="pfx2:CAUpdateType"/>
+                            </pfx2:CAUpdateType>
+                        </xsl:if>
+                        <xsl:if test="pfx2:CSN">
+                            <pfx2:CSN>
+                                <xsl:value-of select="pfx2:CSN"/>
+                            </pfx2:CSN>
+                        </xsl:if>
+                        <xsl:if test="pfx2:DisableMailings">
+                            <pfx2:DisableMailings>
+                                <xsl:value-of select="pfx2:DisableMailings"/>
+                            </pfx2:DisableMailings>
+                        </xsl:if>
+                        <xsl:if test="pfx2:DontCall">
+                            <pfx2:DontCall>
+                                <xsl:value-of select="pfx2:DontCall"/>
+                            </pfx2:DontCall>
+                        </xsl:if>
+                        <xsl:if test="pfx2:DontShare">
+                            <pfx2:DontShare>
+                                <xsl:value-of select="pfx2:DontShare"/>
+                            </pfx2:DontShare>
+                        </xsl:if>
+                        <xsl:if test="pfx2:HomePage">
+                            <pfx2:HomePage>
+                                <xsl:value-of select="pfx2:HomePage"/>
+                            </pfx2:HomePage>
+                        </xsl:if>
+                        <xsl:if test="pfx2:Id">
+                            <pfx2:Id>
+                                <xsl:value-of select="pfx2:Id"/>
+                            </pfx2:Id>
+                        </xsl:if>
+                        <xsl:if test="pfx2:IntegrationId">
+                            <pfx2:IntegrationId>
+                                <xsl:value-of select="pfx2:IntegrationId"/>
+                            </pfx2:IntegrationId>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNBlockedTelephone">
+                            <pfx2:KPNBlockedTelephone>
+                                <xsl:value-of select="pfx2:KPNBlockedTelephone"/>
+                            </pfx2:KPNBlockedTelephone>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNBranchCode">
+                            <pfx2:KPNBranchCode>
+                                <xsl:value-of select="pfx2:KPNBranchCode"/>
+                            </pfx2:KPNBranchCode>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNBranchFlag">
+                            <pfx2:KPNBranchFlag>
+                                <xsl:value-of select="pfx2:KPNBranchFlag"/>
+                            </pfx2:KPNBranchFlag>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNCOCNR">
+                            <pfx2:KPNCOCNR>
+                                <xsl:value-of select="pfx2:KPNCOCNR"/>
+                            </pfx2:KPNCOCNR>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNCODRV">
+                            <pfx2:KPNCODRV>
+                                <xsl:value-of select="pfx2:KPNCODRV"/>
+                            </pfx2:KPNCODRV>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNFinancialStatus">
+                            <pfx2:KPNFinancialStatus>
+                                <xsl:value-of select="pfx2:KPNFinancialStatus"/>
+                            </pfx2:KPNFinancialStatus>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNFraudIndicator">
+                            <pfx2:KPNFraudIndicator>
+                                <xsl:value-of select="pfx2:KPNFraudIndicator"/>
+                            </pfx2:KPNFraudIndicator>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNMoveCKRnrOld">
+                            <pfx2:KPNMoveCKRnrOld>
+                                <xsl:value-of select="pfx2:KPNMoveCKRnrOld"/>
+                            </pfx2:KPNMoveCKRnrOld>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNMoveIndicator">
+                            <pfx2:KPNMoveIndicator>
+                                <xsl:value-of select="pfx2:KPNMoveIndicator"/>
+                            </pfx2:KPNMoveIndicator>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNRELNUM">
+                            <pfx2:KPNRELNUM>
+                                <xsl:value-of select="pfx2:KPNRELNUM"/>
+                            </pfx2:KPNRELNUM>
+                        </xsl:if>
+                        <xsl:if test="pfx2:KPNSalesDistrictCode">
+                            <pfx2:KPNSalesDistrictCode>
+                                <xsl:value-of select="pfx2:KPNSalesDistrictCode"/>
+                            </pfx2:KPNSalesDistrictCode>
+                        </xsl:if>
+                        <xsl:if test="pfx2:Location">
+                            <pfx2:Location>
+                                <xsl:value-of select="pfx2:Location"/>
+                            </pfx2:Location>
+                        </xsl:if>
+                        <xsl:if test="pfx2:MainEmailAddress">
+                            <pfx2:MainEmailAddress>
+                                <xsl:value-of select="pfx2:MainEmailAddress"/>
+                            </pfx2:MainEmailAddress>
+                        </xsl:if>
+                        <xsl:if test="pfx2:MainFaxNumber">
+                            <pfx2:MainFaxNumber>
+                                <xsl:value-of select="pfx2:MainFaxNumber"/>
+                            </pfx2:MainFaxNumber>
+                        </xsl:if>
+                        <xsl:if test="pfx2:MainPhoneNumber">
+                            <pfx2:MainPhoneNumber>
+                                <xsl:value-of select="pfx2:MainPhoneNumber"/>
+                            </pfx2:MainPhoneNumber>
+                        </xsl:if>
+                        <xsl:if test="pfx2:MarketClass">
+                            <pfx2:MarketClass>
+                                <xsl:value-of select="pfx2:MarketClass"/>
+                            </pfx2:MarketClass>
+                        </xsl:if>
+                        <xsl:if test="pfx2:MarketType">
+                            <pfx2:MarketType>
+                                <xsl:value-of select="pfx2:MarketType"/>
+                            </pfx2:MarketType>
+                        </xsl:if>
+                        <xsl:if test="pfx2:MasterAccountIntegrationId">
+                            <pfx2:MasterAccountIntegrationId>
+                                <xsl:value-of select="pfx2:MasterAccountIntegrationId"/>
+                            </pfx2:MasterAccountIntegrationId>
+                        </xsl:if>
+                        <xsl:if test="pfx2:Name">
+                            <pfx2:Name>
+                                <xsl:value-of select="pfx2:Name"/>
+                            </pfx2:Name>
+                        </xsl:if>
+                        <xsl:if test="pfx2:OCRMOperation">
+                            <pfx2:OCRMOperation>
+                                <xsl:value-of select="pfx2:OCRMOperation"/>
+                            </pfx2:OCRMOperation>
+                        </xsl:if>
+                        <xsl:if test="pfx2:ParentAccountId">
+                            <pfx2:ParentAccountId>
+                                <xsl:value-of select="pfx2:ParentAccountId"/>
+                            </pfx2:ParentAccountId>
+                        </xsl:if>
+                        <xsl:if test="pfx2:ParentAccountIntegrationId">
+                            <pfx2:ParentAccountIntegrationId>
+                                <xsl:value-of select="pfx2:ParentAccountIntegrationId"/>
+                            </pfx2:ParentAccountIntegrationId>
+                        </xsl:if>
+                        <xsl:if test="pfx2:PrimaryContactUCMRowId">
+                            <pfx2:PrimaryContactUCMRowId>
+                                <xsl:value-of select="pfx2:PrimaryContactUCMRowId"/>
+                            </pfx2:PrimaryContactUCMRowId>
+                        </xsl:if>
+                        <xsl:if test="pfx2:Type">
+                            <pfx2:Type>
+                                <xsl:value-of select="pfx2:Type"/>
+                            </pfx2:Type>
+                        </xsl:if>
+                        <xsl:if test="pfx2:UCMRowId">
+                            <pfx2:UCMRowId>
+                                <xsl:value-of select="pfx2:UCMRowId"/>
+                            </pfx2:UCMRowId>
+                        </xsl:if>
+                        <xsl:if test="pfx2:UUID">
+                            <pfx2:UUID>
+                                <xsl:value-of select="pfx2:UUID"/>
+                            </pfx2:UUID>
+                        </xsl:if>
+                        <xsl:for-each select="pfx2:Account_Affiliation">
+                            <pfx2:Account_Affiliation>
+                                <xsl:if test="pfx2:AffiliationId">
+                                    <pfx2:AffiliationId>
+                                        <xsl:value-of select="pfx2:AffiliationId"/>
+                                    </pfx2:AffiliationId>
+                                </xsl:if>
+                                <xsl:if test="pfx2:AffiliationIntegrationId">
+                                    <pfx2:AffiliationIntegrationId>
+                                        <xsl:value-of select="pfx2:AffiliationIntegrationId"/>
+                                    </pfx2:AffiliationIntegrationId>
+                                </xsl:if>
+                                <xsl:if test="pfx2:AffiliationType">
+                                    <pfx2:AffiliationType>
+                                        <xsl:value-of select="pfx2:AffiliationType"/>
+                                    </pfx2:AffiliationType>
+                                </xsl:if>
+                                <xsl:if test="pfx2:AffiliationUUID">
+                                    <pfx2:AffiliationUUID>
+                                        <xsl:value-of select="pfx2:AffiliationUUID"/>
+                                    </pfx2:AffiliationUUID>
+                                </xsl:if>
+                            </pfx2:Account_Affiliation>
+                        </xsl:for-each>
+                        <xsl:for-each select="pfx2:Contact">
+                            <pfx2:Contact>
+                                <xsl:if test="pfx2:BirthDate">
+                                    <pfx2:BirthDate>
+                                        <xsl:value-of select="pfx2:BirthDate"/>
+                                    </pfx2:BirthDate>
+                                </xsl:if>
+                                <xsl:if test="pfx2:EmailAddress">
+                                    <pfx2:EmailAddress>
+                                        <xsl:value-of select="pfx2:EmailAddress"/>
+                                    </pfx2:EmailAddress>
+                                </xsl:if>
+                                <xsl:if test="pfx2:FaxPhone">
+                                    <pfx2:FaxPhone>
+                                        <xsl:value-of select="pfx2:FaxPhone"/>
+                                    </pfx2:FaxPhone>
+                                </xsl:if>
+                                <xsl:if test="pfx2:FirstName">
+                                    <pfx2:FirstName>
+                                        <xsl:value-of select="pfx2:FirstName"/>
+                                    </pfx2:FirstName>
+                                </xsl:if>
+                                <xsl:if test="pfx2:IntegrationId">
+                                    <pfx2:IntegrationId>
+                                        <xsl:value-of select="pfx2:IntegrationId"/>
+                                    </pfx2:IntegrationId>
+                                </xsl:if>
+                                <xsl:if test="pfx2:KPNAcademicTitle">
+                                    <pfx2:KPNAcademicTitle>
+                                        <xsl:value-of select="pfx2:KPNAcademicTitle"/>
+                                    </pfx2:KPNAcademicTitle>
+                                </xsl:if>
+                                <xsl:if test="pfx2:LastName">
+                                    <pfx2:LastName>
+                                        <xsl:value-of select="pfx2:LastName"/>
+                                    </pfx2:LastName>
+                                </xsl:if>
+                                <xsl:if test="pfx2:MiddleName">
+                                    <pfx2:MiddleName>
+                                        <xsl:value-of select="pfx2:MiddleName"/>
+                                    </pfx2:MiddleName>
+                                </xsl:if>
+                                <xsl:if test="pfx2:OCRMOperation">
+                                    <pfx2:OCRMOperation>
+                                        <xsl:value-of select="pfx2:OCRMOperation"/>
+                                    </pfx2:OCRMOperation>
+                                </xsl:if>
+                                <xsl:if test="pfx2:PrefferedName">
+                                    <pfx2:PrefferedName>
+                                        <xsl:value-of select="pfx2:PrefferedName"/>
+                                    </pfx2:PrefferedName>
+                                </xsl:if>
+                                <xsl:if test="pfx2:Suffix">
+                                    <pfx2:Suffix>
+                                        <xsl:value-of select="pfx2:Suffix"/>
+                                    </pfx2:Suffix>
+                                </xsl:if>
+                                <xsl:if test="pfx2:SuppressAllEmails">
+                                    <pfx2:SuppressAllEmails>
+                                        <xsl:value-of select="pfx2:SuppressAllEmails"/>
+                                    </pfx2:SuppressAllEmails>
+                                </xsl:if>
+                                <xsl:if test="pfx2:UCMRowId">
+                                    <pfx2:UCMRowId>
+                                        <xsl:value-of select="pfx2:UCMRowId"/>
+                                    </pfx2:UCMRowId>
+                                </xsl:if>
+                                <xsl:if test="pfx2:UUID">
+                                    <pfx2:UUID>
+                                        <xsl:value-of select="pfx2:UUID"/>
+                                    </pfx2:UUID>
+                                </xsl:if>
+                                <xsl:if test="pfx2:WorkPhone">
+                                    <pfx2:WorkPhone>
+                                        <xsl:value-of select="pfx2:WorkPhone"/>
+                                    </pfx2:WorkPhone>
+                                </xsl:if>
+                            </pfx2:Contact>
+                        </xsl:for-each>
+                        <xsl:for-each select="pfx2:BusinessAddress">
+                            <pfx2:BusinessAddress>
+                                <xsl:if test="@IsPrimaryMVG">
+                                    <xsl:attribute name="IsPrimaryMVG">
+                                        <xsl:value-of select="@IsPrimaryMVG"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="pfx2:AddressDescription">
+                                    <pfx2:AddressDescription>
+                                        <xsl:value-of select="pfx2:AddressDescription"/>
+                                    </pfx2:AddressDescription>
+                                </xsl:if>
+                                <xsl:if test="pfx2:AddressName">
+                                    <pfx2:AddressName>
+                                        <xsl:value-of select="pfx2:AddressName"/>
+                                    </pfx2:AddressName>
+                                </xsl:if>
+                                <xsl:if test="pfx2:AddressType">
+                                    <pfx2:AddressType>
+                                        <xsl:value-of select="pfx2:AddressType"/>
+                                    </pfx2:AddressType>
+                                </xsl:if>
+                                <xsl:if test="pfx2:City">
+                                    <pfx2:City>
+                                        <xsl:value-of select="pfx2:City"/>
+                                    </pfx2:City>
+                                </xsl:if>
+                                <xsl:if test="pfx2:Country">
+                                    <pfx2:Country>
+                                        <xsl:value-of select="pfx2:Country"/>
+                                    </pfx2:Country>
+                                </xsl:if>
+                                <xsl:if test="pfx2:FuturePrimaryFlg">
+                                    <pfx2:FuturePrimaryFlg>
+                                        <xsl:value-of select="pfx2:FuturePrimaryFlg"/>
+                                    </pfx2:FuturePrimaryFlg>
+                                </xsl:if>
+                                <xsl:if test="pfx2:KPNEndDate">
+                                    <pfx2:KPNEndDate>
+                                        <xsl:value-of select="pfx2:KPNEndDate"/>
+                                    </pfx2:KPNEndDate>
+                                </xsl:if>
+                                <xsl:if test="pfx2:KPNPrimaryPOBoxFlag">
+                                    <pfx2:KPNPrimaryPOBoxFlag>
+                                        <xsl:value-of select="pfx2:KPNPrimaryPOBoxFlag"/>
+                                    </pfx2:KPNPrimaryPOBoxFlag>
+                                </xsl:if>
+                                <xsl:if test="pfx2:KPNSpecialAddrDescription">
+                                    <pfx2:KPNSpecialAddrDescription>
+                                        <xsl:value-of select="pfx2:KPNSpecialAddrDescription"/>
+                                    </pfx2:KPNSpecialAddrDescription>
+                                </xsl:if>
+                                <xsl:if test="pfx2:KPNStartDate">
+                                    <pfx2:KPNStartDate>
+                                        <xsl:value-of select="pfx2:KPNStartDate"/>
+                                    </pfx2:KPNStartDate>
+                                </xsl:if>
+                                <xsl:if test="pfx2:KPNZipcodeSuffix">
+                                    <pfx2:KPNZipcodeSuffix>
+                                        <xsl:value-of select="pfx2:KPNZipcodeSuffix"/>
+                                    </pfx2:KPNZipcodeSuffix>
+                                </xsl:if>
+                                <xsl:if test="pfx2:PostalCode">
+                                    <pfx2:PostalCode>
+                                        <xsl:value-of select="pfx2:PostalCode"/>
+                                    </pfx2:PostalCode>
+                                </xsl:if>
+                                <xsl:if test="pfx2:State">
+                                    <pfx2:State>
+                                        <xsl:value-of select="pfx2:State"/>
+                                    </pfx2:State>
+                                </xsl:if>
+                                <xsl:if test="pfx2:Status">
+                                    <pfx2:Status>
+                                        <xsl:value-of select="pfx2:Status"/>
+                                    </pfx2:Status>
+                                </xsl:if>
+                                <xsl:if test="pfx2:StreetAddress">
+                                    <pfx2:StreetAddress>
+                                        <xsl:value-of select="pfx2:StreetAddress"/>
+                                    </pfx2:StreetAddress>
+                                </xsl:if>
+                                <xsl:if test="pfx2:StreetNumber">
+                                    <pfx2:StreetNumber>
+                                        <xsl:value-of select="pfx2:StreetNumber"/>
+                                    </pfx2:StreetNumber>
+                                </xsl:if>
+                                <xsl:if test="pfx2:StreetNumberExtension">
+                                    <pfx2:StreetNumberExtension>
+                                        <xsl:value-of select="pfx2:StreetNumberExtension"/>
+                                    </pfx2:StreetNumberExtension>
+                                </xsl:if>
+                            </pfx2:BusinessAddress>
+                        </xsl:for-each>
+                        <xsl:for-each select="pfx2:CifAccountReference">
+                            <pfx2:CifAccountReference>
+                                <xsl:if test="pfx2:AccountId">
+                                    <pfx2:AccountId>
+                                        <xsl:value-of select="pfx2:AccountId"/>
+                                    </pfx2:AccountId>
+                                </xsl:if>
+                                <xsl:if test="pfx2:CIFSystemId">
+                                    <pfx2:CIFSystemId>
+                                        <xsl:value-of select="pfx2:CIFSystemId"/>
+                                    </pfx2:CIFSystemId>
+                                </xsl:if>
+                                <xsl:if test="pfx2:ExternalId1">
+                                    <pfx2:ExternalId1>
+                                        <xsl:value-of select="pfx2:ExternalId1"/>
+                                    </pfx2:ExternalId1>
+                                </xsl:if>
+                                <xsl:if test="pfx2:SystemName">
+                                    <pfx2:SystemName>
+                                        <xsl:value-of select="pfx2:SystemName"/>
+                                    </pfx2:SystemName>
+                                </xsl:if>
+                                <xsl:if test="pfx2:SystemNumber">
+                                    <pfx2:SystemNumber>
+                                        <xsl:value-of select="pfx2:SystemNumber"/>
+                                    </pfx2:SystemNumber>
+                                </xsl:if>
+                            </pfx2:CifAccountReference>
+                        </xsl:for-each>
+                    </ns3:SiebelAccount>
+                </xsl:for-each>
+            </ns3:FlatAccountHierarchy>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="PublishToInternalQueue">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>480</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Transports/Sub_NotifierJMS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TransportNotIn>
+                <Destination>
+                    <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/Env,&quot;.FIXED.Operations.&quot;,$_globalVariables/ns2:GlobalVariables/CRMServices/ComponentId,&quot;._UpsertAccountWithReferences.1&quot;)"/>
+                </Destination>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($FlattenAccountHierarchy/ns3:FlatAccountHierarchy, false(),true())"/>
+                </Body>
+                <MessageId>
+                    <xsl:value-of select="$FlattenAccountHierarchy/ns3:FlatAccountHierarchy/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                </MessageId>
+            </TransportNotIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>317</pd:x>
+        <pd:y>227</pd:y>
+        <config>
+            <faultName>Schema0</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="$_error_PublishToInternalQueue">
+                            <pfx5:Errors>
+                                <xsl:copy-of select="$_error_PublishToInternalQueue/pfx5:Error"/>
+                            </pfx5:Errors>
+                        </xsl:when>
+                        <xsl:when test="count($FlattenAccountHierarchy/ns3:FlatAccountHierarchy/ns3:SiebelAccount) > 50">
+                            <pfx5:Errors>
+                                <pfx5:Error>
+                                    <pfx5:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03001&quot;"/>
+                                    </pfx5:MsgCode>
+                                    <xsl:if test="$Start/pfx:UpsertAccountWithReferencingPublish/ns:CMH/ns:TRACKING/ns:MESSAGE_ID">
+                                        <pfx5:MsgId>
+                                            <xsl:value-of select="$Start/pfx:UpsertAccountWithReferencingPublish/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                                        </pfx5:MsgId>
+                                    </xsl:if>
+                                </pfx5:Error>
+                            </pfx5:Errors>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx5:Errors>
+                                <pfx5:Error>
+                                    <pfx5:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                    </pfx5:MsgCode>
+                                    <pfx5:Params>
+                                        <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                                    </pfx5:Params>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport"/>
+                                </pfx5:Error>
+                            </pfx5:Errors>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </pfx4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>PublishToInternalQueue</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PublishToInternalQueue</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>FlattenAccountHierarchy</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FlattenAccountHierarchy</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>Account count greater than 50</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($FlattenAccountHierarchy/ns3:FlatAccountHierarchy/ns3:SiebelAccount) &gt; 50</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FlattenAccountHierarchy</pd:from>
+        <pd:to>PublishToInternalQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

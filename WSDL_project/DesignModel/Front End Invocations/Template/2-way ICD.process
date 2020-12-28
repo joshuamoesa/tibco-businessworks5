@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.kpn.com/m2c/gtx/MPASendBundleMessageRequest.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://www.kpn.com/m2c/gtx/MPASendBundleMessageReply.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://xmlns.kpn.com/mobile/m2c/cdm/ERROR_CODE_type.xsd" xmlns:pfx3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx4="http://www.kpn.com/m2c/gtx/GetAddOnBundlesReply.xsd" xmlns:pfx5="http://www.kpn.com/m2c/gtx/GTXFASampleReply.xsd" xmlns:pfx1="http://www.kpn.com/m2c/gtx/GetAddOnBundlesRequest.xsd" xmlns:pfx6="http://www.tibco.com/ns/no_namespace_schema_location/DesignModel/Common/XSDSchemas/Common/ProcessPropertyType.xsd" xmlns:ns0="http://www.kpn.com/m2c/gtx/GTXFASampleRequest.xsd">
+    <xsd:import namespace="http://www.kpn.com/m2c/gtx/MPASendBundleMessageRequest.xsd" schemaLocation="/DesignModel/Common/ExternalSchemas/GTXFA/MPASendBundleMessageRequest.xsd"/>
+    <xsd:import namespace="http://www.kpn.com/m2c/gtx/MPASendBundleMessageReply.xsd" schemaLocation="/DesignModel/Common/ExternalSchemas/GTXFA/MPASendBundleMessageReply.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/ERROR_CODE_type.xsd" schemaLocation="/DesignModel/Common/XSDSchemas/Common/ERROR_CODE_Type.xsd"/>
+    <xsd:import namespace="http://www.kpn.com/m2c/gtx/GetAddOnBundlesReply.xsd" schemaLocation="/DesignModel/Common/ExternalSchemas/GTXFA/GetAddOnBundlesReply.xsd"/>
+    <xsd:import namespace="http://www.kpn.com/m2c/gtx/GTXFASampleReply.xsd" schemaLocation="/DesignModel/Common/ExternalSchemas/GTXFA/v0/GTXFASampleReply.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/DesignModel/Common/XSDSchemas/Common/ProcessPropertyType.xsd" schemaLocation="/DesignModel/Common/XSDSchemas/Common/ProcessPropertyType.xsd"/>
+    <pd:name>DesignModel/Front End Invocations/Template/2-way ICD.process</pd:name>
+    <pd:description>This service ...&lt;br&gt;</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startDescription>The request message for this service ...
+&lt;p&gt;
+The &lt;code&gt;FILED&lt;/code&gt; ...</pd:startDescription>
+    <pd:startX>48</pd:startX>
+    <pd:startY>215</pd:startY>
+    <pd:returnBindings>
+        <pfx:MPASendBundleMessageReply>
+            <RESULTSTATUSSTACK>
+                <xsl:attribute name="STATUS_CODE">
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/CommonDetails/StatusCodeOk"/>
+                </xsl:attribute>
+            </RESULTSTATUSSTACK>
+        </pfx:MPASendBundleMessageReply>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endDescription>Service only returns non-functional status information.&lt;br&gt;</pd:endDescription>
+    <pd:endType/>
+    <pd:endX>704</pd:endX>
+    <pd:endY>220</pd:endY>
+    <pd:errorSchemas>
+        <Errors>
+            <xsd:element name="Errors">
+                <xsd:complexType>
+                    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                        <xsd:element name="Error_01-Service_not_available" type="pfx2:Error_01-Service_not_available" minOccurs="0"/>
+                        <xsd:element name="Error_02-Key_not_found_during_retrieval" type="pfx2:Error_02-Key_not_found_during_retrieval" minOccurs="0"/>
+                        <xsd:element name="Error_06-Invalid_Service_Request" type="pfx2:Error_06-Invalid_Service_Request" minOccurs="0"/>
+                        <xsd:element name="Error_09-Non_specific_error" type="pfx2:Error_09-Non_specific_error" minOccurs="0"/>
+                        <xsd:element name="Error_10-Backend_system_unavailable" type="pfx2:Error_10-Backend_system_unavailable" minOccurs="0"/>
+                    </xsd:choice>
+                </xsd:complexType>
+            </xsd:element>
+        </Errors>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <ProcessInfo ref="pfx6:ProcessProperties"/>
+    </pd:processVariables>
+    <pd:group name="1 Regular Usage">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:description>Eample for a successful invocation.</pd:description>
+        <pd:x>230</pd:x>
+        <pd:y>16</pd:y>
+        <pd:width>327</pd:width>
+        <pd:height>175</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <serializable>false</serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>1a Regular Invocation</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>1b Return Mapping</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>1a Regular Invocation</pd:from>
+            <pd:to>1b Return Mapping</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="1a Regular Invocation">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:description>Invocation example for front-end usage.
+&lt;p&gt;
+The field &lt;code&gt;RUNTIME_PARAMETER&lt;/code&gt; ...
+</pd:description>
+            <pd:x>333</pd:x>
+            <pd:y>94</pd:y>
+            <config>
+                <processName>/DesignModel/Front End Adapters/GTXFA/GTXSample.1.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns0:GTXFASampleRequest>
+                    <ns0:GTXHEADER>
+                        <ns0:SERVICE>
+                            <xsl:value-of select="&quot;GTX...&quot;"/>
+                        </ns0:SERVICE>
+                        <ns0:VERSION>
+                            <xsl:value-of select="1"/>
+                        </ns0:VERSION>
+                        <ns0:SYSTEM>
+                            <xsl:value-of select="&quot;civic&quot;"/>
+                        </ns0:SYSTEM>
+                        <ns0:USERNAME>
+                            <xsl:value-of select="&quot;civic&quot;"/>
+                        </ns0:USERNAME>
+                        <ns0:PASSWORD>
+                            <xsl:value-of select="&quot;&lt;password>&quot;"/>
+                        </ns0:PASSWORD>
+                    </ns0:GTXHEADER>
+                    <ns0:BODY/>
+                </ns0:GTXFASampleRequest>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="1b Return Mapping">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:description>A successful completion is indicated by a 
+&lt;code&gt;STATUS_CODE&lt;/code&gt; of &lt;code&gt;0&lt;/code&gt;.</pd:description>
+            <pd:x>444</pd:x>
+            <pd:y>86</pd:y>
+            <config>
+                <element ref="pfx5:GTXSampleReply"/>
+            </config>
+            <pd:inputBindings>
+                <pfx5:GTXSampleReply>
+                    <pfx5:RESULTSTATUSSTACK>
+                        <xsl:attribute name="STATUS_CODE">
+                            <xsl:value-of select="0"/>
+                        </xsl:attribute>
+                    </pfx5:RESULTSTATUSSTACK>
+                </pfx5:GTXSampleReply>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="2 Usage with Error">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:description>Example for an unsuccessful service invocation.
+&lt;p&gt;
+Details for the various errors will be given.
+&lt;p&gt;
+An unsuccessful completion is indicated by a 
+&lt;code&gt;STATUS_CODE&lt;/code&gt; of &lt;code&gt;1&lt;/code&gt;.</pd:description>
+        <pd:x>215</pd:x>
+        <pd:y>208</pd:y>
+        <pd:width>350</pd:width>
+        <pd:height>516</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <serializable>false</serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>2a Other Invocation</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2e Error Mapping #9</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2c Error Mapping #1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2h Error Mapping #21</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2d Error Mapping #6</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2f Error Mapping #10</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2a Other Invocation</pd:from>
+            <pd:to>2c Error Mapping #1</pd:to>
+            <pd:xpathDescription>Error #1</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$a-Other-Invocation/pfx5:GTXSampleReply/pfx5:RESULTSTATUSSTACK/pfx5:ERROR/@ERROR_CODE = 1</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2a Other Invocation</pd:from>
+            <pd:to>2b Canonicals Error</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-3407872</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2a Other Invocation</pd:from>
+            <pd:to>2d Error Mapping #6</pd:to>
+            <pd:xpathDescription>Error #6</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$a-Other-Invocation/pfx5:GTXSampleReply/pfx5:RESULTSTATUSSTACK/pfx5:ERROR/@ERROR_CODE= 6</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2a Other Invocation</pd:from>
+            <pd:to>2e Error Mapping #9</pd:to>
+            <pd:xpathDescription>Error 9</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$a-Other-Invocation/pfx5:GTXSampleReply/pfx5:RESULTSTATUSSTACK/pfx5:ERROR/@ERROR_CODE = 9</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2a Other Invocation</pd:from>
+            <pd:to>2f Error Mapping #10</pd:to>
+            <pd:xpathDescription>Error #10</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$a-Other-Invocation/pfx5:GTXSampleReply/pfx5:RESULTSTATUSSTACK/pfx5:ERROR/@ERROR_CODE = 10</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>2a Other Invocation</pd:from>
+            <pd:to>2h Error Mapping #21</pd:to>
+            <pd:xpathDescription>Error #21</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$a-Other-Invocation/pfx5:GTXSampleReply/pfx5:RESULTSTATUSSTACK/pfx5:ERROR/@ERROR_CODE= 21</pd:xpath>
+        </pd:transition>
+        <pd:activity name="2a Other Invocation">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:description>Invocation example causing an error.&lt;p&gt;</pd:description>
+            <pd:x>299</pd:x>
+            <pd:y>356</pd:y>
+            <config>
+                <processName>/DesignModel/Front End Adapters/GTXFA/GTXSample.1.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns0:GTXFASampleRequest>
+                    <ns0:GTXHEADER>
+                        <ns0:SERVICE>
+                            <xsl:value-of select="&quot;MPASendBundleMessage&quot;"/>
+                        </ns0:SERVICE>
+                        <ns0:VERSION>
+                            <xsl:value-of select="1"/>
+                        </ns0:VERSION>
+                        <ns0:SYSTEM>
+                            <xsl:value-of select="&quot;civic&quot;"/>
+                        </ns0:SYSTEM>
+                        <ns0:USERNAME>
+                            <xsl:value-of select="&quot;civic&quot;"/>
+                        </ns0:USERNAME>
+                        <ns0:PASSWORD>
+                            <xsl:value-of select="&quot;&lt;password>&quot;"/>
+                        </ns0:PASSWORD>
+                    </ns0:GTXHEADER>
+                    <ns0:BODY/>
+                </ns0:GTXFASampleRequest>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="2c Error Mapping #1">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:description>&lt;code&gt;Error #1&lt;/code&gt; signalizes that the service is currently
+technically not available.
+&lt;p&gt;
+Examples:&lt;br&gt;
+</pd:description>
+            <pd:x>439</pd:x>
+            <pd:y>270</pd:y>
+            <config>
+                <element ref="pfx5:GTXSampleReply"/>
+            </config>
+            <pd:inputBindings>
+                <pfx5:GTXSampleReply>
+                    <pfx5:RESULTSTATUSSTACK>
+                        <xsl:attribute name="STATUS_CODE">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                        <pfx5:ERROR>
+                            <xsl:attribute name="ERROR_CODE">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="SERVICE_NAME">
+                                <xsl:value-of select="&quot;GTX....1&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ERROR_DESCRIPTION">
+                                <xsl:value-of select="&quot;Service not available&quot;"/>
+                            </xsl:attribute>
+                        </pfx5:ERROR>
+                    </pfx5:RESULTSTATUSSTACK>
+                </pfx5:GTXSampleReply>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="2d Error Mapping #6">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:description>&lt;code&gt;Error #6&lt;/code&gt; indicates that the request message is invalid. 
+Either it didn’t pass the schema check, or one or more functional 
+checks failed.
+&lt;p&gt;
+Examples:&lt;br&gt;
+</pd:description>
+            <pd:x>415</pd:x>
+            <pd:y>345</pd:y>
+            <config>
+                <element ref="pfx5:GTXSampleReply"/>
+            </config>
+            <pd:inputBindings>
+                <pfx5:GTXSampleReply>
+                    <pfx5:RESULTSTATUSSTACK>
+                        <xsl:attribute name="STATUS_CODE">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                        <pfx5:ERROR>
+                            <xsl:attribute name="ERROR_CODE">
+                                <xsl:value-of select="6"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ERROR_DESCRIPTION">
+                                <xsl:value-of select="&quot;Invalid service request.&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="SERVICE_NAME">
+                                <xsl:value-of select="&quot;GTX....1&quot;"/>
+                            </xsl:attribute>
+                        </pfx5:ERROR>
+                    </pfx5:RESULTSTATUSSTACK>
+                </pfx5:GTXSampleReply>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="2e Error Mapping #9">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:description>&lt;code&gt;Error #9&lt;/code&gt; indicates that some problem occurred that is 
+not covered by any of the other error messages.
+&lt;p&gt;
+Examples:&lt;br&gt;
+
+</pd:description>
+            <pd:x>460</pd:x>
+            <pd:y>421</pd:y>
+            <config>
+                <element ref="pfx5:GTXSampleReply"/>
+            </config>
+            <pd:inputBindings>
+                <pfx5:GTXSampleReply>
+                    <pfx5:RESULTSTATUSSTACK>
+                        <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="STATUS_CODE">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                        <pfx5:ERROR>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ERROR_CODE">
+                                <xsl:value-of select="9"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="SERVICE_NAME">
+                                <xsl:value-of select="&quot;MPASendBundleMessage.1&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ERROR_DESCRIPTION">
+                                <xsl:value-of select="&quot;Non-specific error&quot;"/>
+                            </xsl:attribute>
+                        </pfx5:ERROR>
+                        <xsl:copy-of select="$a-Other-Invocation/pfx5:GTXSampleReply/pfx5:RESULTSTATUSSTACK/pfx5:ERROR"/>
+                    </pfx5:RESULTSTATUSSTACK>
+                </pfx5:GTXSampleReply>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="2f Error Mapping #10">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:description>&lt;code&gt;Error #10&lt;/code&gt; indicates that the backend is not available. 
+Typically, this means either the connection to the backend was severed 
+or could not be established or it means the backend did not response 
+within a specified amount of time.
+&lt;p&gt;
+Examples:&lt;br&gt;
+</pd:description>
+            <pd:x>457</pd:x>
+            <pd:y>484</pd:y>
+            <config>
+                <element ref="pfx:MPASendBundleMessageReply"/>
+            </config>
+            <pd:inputBindings>
+                <pfx:MPASendBundleMessageReply>
+                    <RESULTSTATUSSTACK>
+                        <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="STATUS_CODE">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                        <ERROR>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ERROR_CODE">
+                                <xsl:value-of select="10"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="SERVICE_NAME">
+                                <xsl:value-of select="&quot;MPASendBundleMessage.1&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ERROR_DESCRIPTION">
+                                <xsl:value-of select="&quot;Backend not available&quot;"/>
+                            </xsl:attribute>
+                        </ERROR>
+                    </RESULTSTATUSSTACK>
+                </pfx:MPASendBundleMessageReply>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="2h Error Mapping #21">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:description>&lt;code&gt;Error #21&lt;/code&gt; indicates an error with the translation of any of 
+the fields in the request message.
+&lt;p&gt;
+If the lookup service is unable to translate an enumerator field from one 
+value to another, then the following response is created.</pd:description>
+            <pd:x>365</pd:x>
+            <pd:y>657</pd:y>
+            <config>
+                <element ref="pfx5:GTXSampleReply"/>
+            </config>
+            <pd:inputBindings>
+                <pfx5:GTXSampleReply>
+                    <pfx5:RESULTSTATUSSTACK>
+                        <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="STATUS_CODE">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                        <pfx5:ERROR>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ERROR_CODE">
+                                <xsl:value-of select="21"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="SERVICE_NAME">
+                                <xsl:value-of select="&quot;MPASendBundleMessage.1&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="ERROR_DESCRIPTION">
+                                <xsl:value-of select="&quot;Lookup failure&quot;"/>
+                            </xsl:attribute>
+                        </pfx5:ERROR>
+                        <xsl:copy-of select="$a-Other-Invocation/pfx5:GTXSampleReply/pfx5:RESULTSTATUSSTACK/pfx5:ERROR"/>
+                    </pfx5:RESULTSTATUSSTACK>
+                </pfx5:GTXSampleReply>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="2b Canonicals Error">
+            <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+            <pd:resourceType>ae.activities.throw</pd:resourceType>
+            <pd:description>There are a few possibilities for this invocation to fail due to technical 
+problems. In this case, the &lt;code&gt;STATUS_CODE&lt;/code&gt; attribute of 
+the &lt;code&gt;RESULTSTATUSSTACK&lt;/code&gt; will contain the value
+&lt;code&gt;1&lt;/code&gt;.&lt;p&gt;
+
+ The &lt;code&gt;ERROR_CODE&lt;/code&gt; (see list below), the (optional)
+&lt;code&gt;ERROR_DESCRIPTION&lt;/code&gt; and the
+&lt;code&gt;SERVICE_NAME&lt;/code&gt; will be set . None of this information 
+is intended to be presented for end users.</pd:description>
+            <pd:x>292</pd:x>
+            <pd:y>596</pd:y>
+            <config>
+                <faultName>Errors</faultName>
+            </config>
+            <pd:inputBindings>
+                <pfx3:ActivityInput>
+                    <data>
+                        <Errors>
+                            <Error_01-Service_not_available>
+                                <xsl:value-of select="&quot;Error #1 signalizes that the service is currently technically not available.&quot;"/>
+                            </Error_01-Service_not_available>
+                            <Error_02-Key_not_found_during_retrieval>
+                                <xsl:value-of select="&quot;Error #2 indicates that the mobile number specified in the request does not seem to be a registered connection.&quot;"/>
+                            </Error_02-Key_not_found_during_retrieval>
+                            <Error_06-Invalid_Service_Request>
+                                <xsl:value-of select="&quot;Error #6 indicates that the request message is invalid.  Either it didn’t pass the schema check, or one or more functional  checks failed.&quot;"/>
+                            </Error_06-Invalid_Service_Request>
+                            <Error_09-Non_specific_error>
+                                <xsl:value-of select="&quot;Error #9 indicates that some problem occurred that is not covered by any of the other error messages.&quot;"/>
+                            </Error_09-Non_specific_error>
+                            <Error_10-Backend_system_unavailable>
+                                <xsl:value-of select="&quot;Error #10 indicates that the backend is not available.&quot;"/>
+                            </Error_10-Backend_system_unavailable>
+                        </Errors>
+                    </data>
+                </pfx3:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Process Info">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:description>History	Comment	Author
+dd.mm.yyyy	created	StHa</pd:description>
+        <pd:x>45</pd:x>
+        <pd:y>772</pd:y>
+        <config>
+            <variableName>ProcessInfo</variableName>
+        </config>
+        <pd:inputBindings>
+            <ProcessProperties>
+                <LastDesigner>
+                    <xsl:value-of select="&quot;&lt;designer>&quot;"/>
+                </LastDesigner>
+                <LastUpdate>
+                    <xsl:value-of select="&quot;2007-01-01&quot;"/>
+                </LastUpdate>
+            </ProcessProperties>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>1 Regular Usage</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>1 Regular Usage</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>2 Usage with Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>2 Usage with Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Process Info</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-1</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

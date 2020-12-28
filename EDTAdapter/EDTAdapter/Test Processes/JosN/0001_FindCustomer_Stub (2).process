@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086699531715" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086704149425" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.example.com/unique/default/namespace/1086701905499" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1086705918259" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" xmlns:ns3="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/FindCustomer.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <pd:name>EDTAdapter/Test Processes/0001_FindCustomer_Stub (2).process</pd:name>
+    <pd:startName>FindCustomer Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="FindCustomer Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>90</pd:x>
+        <pd:y>82</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Order.CKRAdapter.Request.FindCustomer.2</subject>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/EDTAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx3:FindCustomer"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>406</pd:endX>
+    <pd:endY>74</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to FindCustomer Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>267</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>FindCustomer Subscriber</eventSource>
+            <xsdString ref="pfx4:FindCustomer"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="&quot;001&quot;"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$FindCustomer-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <ns:MID>
+                            <xsl:value-of select="&quot;001.10&quot;"/>
+                        </ns:MID>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="&quot;REPLY&quot;"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="$FindCustomer-Subscriber/ActivityOutput/body/ns:CMH/ns:OBJECT"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="$FindCustomer-Subscriber/ActivityOutput/body/ns:CMH/ns:VERSION"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$FindCustomer-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$FindCustomer-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <xsl:copy-of select="$FindCustomer-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING"/>
+                    </ns:CMH>
+                    <ns4:RESULT_STATUS>
+                        <xsl:attribute name="ns3:STATUS">
+                            <xsl:value-of select="&quot;2&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns3:MSG_CODE">
+                            <xsl:value-of select="&quot;Some error occured&quot;"/>
+                        </xsl:attribute>
+                    </ns4:RESULT_STATUS>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>FindCustomer Subscriber</pd:from>
+        <pd:to>Reply to FindCustomer Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to FindCustomer Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

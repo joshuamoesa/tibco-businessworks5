@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.siebel.com/xml/KZM%20Order%20Account%20Data%20Export" xmlns:pfx2="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Imported/Order.xsd" xmlns:pfx4="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/2.0/Response" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Imported/Order.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Imported/Order.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Common/Product.xsd"/>
+    <xsd:import namespace="http://www.siebel.com/xml/KZM%20Order%20Account%20Data%20Export" schemaLocation="/WSDL/GetBusinessSegmentOrders.2.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/2.0/Response" schemaLocation="/XSDSchemas/SiebelZMAdapter/Imported/0365_GetBusinessSegmentOrders_2.0_Response_EAI_BUS_SIDE.xsd"/>
+    <pd:name>SiebelZMAdapter/Processes/Inbound/Sub/GetBusinessSegmentOrders.2/CreateOrder.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="OrderEntry-Orders" type="pfx:OrderEntry-Orders" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>48</pd:startX>
+    <pd:startY>202</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$CreateOrder/ORDER"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="ORDER" type="pfx4:ORDER"/>
+    </pd:endType>
+    <pd:endX>833</pd:endX>
+    <pd:endY>202</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Map first OrderEntry-LineItems to ORDER_ITEMs">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>102</pd:x>
+        <pd:y>351</pd:y>
+        <pd:width>328</pd:width>
+        <pd:height>221</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/Input/OrderEntry-Orders/pfx:ListOfOrderEntry-LineItems/pfx:OrderEntry-LineItems</pd:over>
+            <pd:iterationElementSlot>orderItemIterator</pd:iterationElementSlot>
+            <pd:indexSlot>orderItemIndex</pd:indexSlot>
+            <pd:outSlot>OrderItemList</pd:outSlot>
+            <pd:activityOutputName>CreateOrderItem from first OrderEntry-LineItems</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CreateOrderItem from first OrderEntry-LineItems</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CreateOrderItem from first OrderEntry-LineItems</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CreateOrderItem from first OrderEntry-LineItems">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>254</pd:x>
+            <pd:y>479</pd:y>
+            <config>
+                <processName>/SiebelZMAdapter/Processes/Inbound/Sub/GetBusinessSegmentOrders.2/CreateOrderItem.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <OrderEntry-LineItems>
+                        <xsl:copy-of select="$orderItemIterator/pfx:OrderEntry-LineItems/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$orderItemIterator/pfx:OrderEntry-LineItems/@*"/>
+                        <xsl:copy-of select="$orderItemIterator/pfx:OrderEntry-LineItems/node()"/>
+                    </OrderEntry-LineItems>
+                    <ListOfAccount>
+                        <xsl:copy-of select="$Start/Input/OrderEntry-Orders/pfx:ListOfAccount/pfx:Account"/>
+                    </ListOfAccount>
+                    <ListOfKzm-BillingAccount>
+                        <xsl:copy-of select="$Start/Input/OrderEntry-Orders/pfx:ListOfKzm-BillingAccount/pfx:Kzm-BillingAccount"/>
+                    </ListOfKzm-BillingAccount>
+                    <ListOfKzm-ServiceAccount>
+                        <xsl:copy-of select="$Start/Input/OrderEntry-Orders/pfx:ListOfKzm-ServiceAccount/pfx:Kzm-ServiceAccount"/>
+                    </ListOfKzm-ServiceAccount>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="CreateOrder">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>702</pd:x>
+        <pd:y>203</pd:y>
+        <config>
+            <element>
+                <xsd:element name="ORDER" type="pfx4:ORDER"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <ORDER>
+                <pfx4:ORDER_HEADER>
+                    <pfx4:ORDER_TYPE>
+                        <xsl:value-of select="$Start/Input/OrderEntry-Orders/pfx:OrderType"/>
+                    </pfx4:ORDER_TYPE>
+                    <xsl:if test="$Start/Input/OrderEntry-Orders/pfx:OrderNumber">
+                        <pfx4:ORDER_ID>
+                            <xsl:value-of select="$Start/Input/OrderEntry-Orders/pfx:OrderNumber"/>
+                        </pfx4:ORDER_ID>
+                    </xsl:if>
+                    <xsl:if test="exists($Start/Input/OrderEntry-Orders/pfx:CKRNumber) and $Start/Input/OrderEntry-Orders/pfx:CKRNumber!=&quot;&quot;">
+                        <pfx4:CUSTOMER_ID>
+                            <xsl:if test="$Start/Input/OrderEntry-Orders/pfx:CKRNumber">
+                                <pfx4:ID_CKR>
+                                    <xsl:value-of select="tib:left($Start/Input/OrderEntry-Orders/pfx:CKRNumber, 8)"/>
+                                </pfx4:ID_CKR>
+                            </xsl:if>
+                        </pfx4:CUSTOMER_ID>
+                    </xsl:if>
+                    <pfx4:ORDER_STATUS>
+                        <xsl:if test="$Start/Input/OrderEntry-Orders/pfx:Status">
+                            <pfx4:ORDER_STATUS>
+                                <xsl:value-of select="$Start/Input/OrderEntry-Orders/pfx:Status"/>
+                            </pfx4:ORDER_STATUS>
+                        </xsl:if>
+                        <xsl:if test="$Start/Input/OrderEntry-Orders/pfx:SubStatus">
+                            <pfx4:ORDER_SUB_STATUS>
+                                <xsl:value-of select="$Start/Input/OrderEntry-Orders/pfx:SubStatus"/>
+                            </pfx4:ORDER_SUB_STATUS>
+                        </xsl:if>
+                    </pfx4:ORDER_STATUS>
+                    <xsl:if test="exists($Start/Input/OrderEntry-Orders/pfx:AccountName) and $Start/Input/OrderEntry-Orders/pfx:AccountName!=&quot;&quot;&#xA;or&#xA;exists($Start/Input/OrderEntry-Orders/pfx:AccountId) and $Start/Input/OrderEntry-Orders/pfx:AccountId!=&quot;&quot;">
+                        <pfx4:CUSTOMER_ACCOUNT>
+                            <xsl:if test="$Start/Input/OrderEntry-Orders/pfx:AccountName">
+                                <pfx4:ACCOUNT_NAME>
+                                    <xsl:value-of select="$Start/Input/OrderEntry-Orders/pfx:AccountName"/>
+                                </pfx4:ACCOUNT_NAME>
+                            </xsl:if>
+                            <xsl:if test="$Start/Input/OrderEntry-Orders/pfx:AccountId">
+                                <pfx4:ACCOUNT_ID>
+                                    <xsl:value-of select="$Start/Input/OrderEntry-Orders/pfx:AccountId"/>
+                                </pfx4:ACCOUNT_ID>
+                            </xsl:if>
+                        </pfx4:CUSTOMER_ACCOUNT>
+                    </xsl:if>
+                </pfx4:ORDER_HEADER>
+                <xsl:choose>
+                    <xsl:when test="count($Start/Input/OrderEntry-Orders/pfx:ListOfOrderEntry-LineItems/pfx:OrderEntry-LineItems)>0">
+                        <xsl:for-each select="$OrderItemList/AccumulatedOutput/ORDER_ITEM">
+                            <pfx4:ORDER_ITEM>
+                                <pfx4:PRODUCT_CATEGORY>
+                                    <xsl:value-of select="current()/pfx4:PRODUCT_CATEGORY"/>
+                                </pfx4:PRODUCT_CATEGORY>
+                                <xsl:copy-of select="current()/pfx4:ORDER_ITEM_HEADER"/>
+                                <xsl:copy-of select="current()/pfx4:PRODUCT"/>
+                            </pfx4:ORDER_ITEM>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx4:ORDER_ITEM>
+                            <pfx4:PRODUCT_CATEGORY>
+                                <xsl:value-of select="&quot;ZIPB/ZIZB IP&quot;"/>
+                            </pfx4:PRODUCT_CATEGORY>
+                            <pfx4:ORDER_ITEM_HEADER>
+                                <pfx4:ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="&quot;ZIPB/ZIZB IP&quot;"/>
+                                </pfx4:ORDER_ITEM_TYPE>
+                            </pfx4:ORDER_ITEM_HEADER>
+                            <pfx4:PRODUCT>
+                                <xsl:for-each select="$Start/Input/OrderEntry-Orders/pfx:ListOfAccount/pfx:Account">
+                                    <pfx4:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                                        <pfx4:PRODUCT_INVOLVEMENT_ROLE>
+                                            <xsl:value-of select="&quot;Contractor&quot;"/>
+                                        </pfx4:PRODUCT_INVOLVEMENT_ROLE>
+                                        <pfx4:CURRENCY_CODE>
+                                            <xsl:value-of select="current()/pfx:CurrencyCode"/>
+                                        </pfx4:CURRENCY_CODE>
+                                        <pfx4:GROUP_TYPE_CODE>
+                                            <xsl:value-of select="current()/pfx:GroupTypeCode"/>
+                                        </pfx4:GROUP_TYPE_CODE>
+                                        <pfx4:TYPE>
+                                            <xsl:value-of select="current()/pfx:Type"/>
+                                        </pfx4:TYPE>
+                                        <pfx4:PARTY_ROLE>
+                                            <pfx4:PRIVACY_SETTING>
+                                                <xsl:value-of select="current()/pfx:PrivacyCode"/>
+                                            </pfx4:PRIVACY_SETTING>
+                                            <xsl:if test="exists(current()/pfx:CKRNumber)and current()/pfx:CKRNumber!=&quot;&quot;">
+                                                <pfx4:PARTY_ROLE_ID>
+                                                    <pfx4:ID_CKR>
+                                                        <xsl:value-of select="tib:left(current()/pfx:CKRNumber, 8)"/>
+                                                    </pfx4:ID_CKR>
+                                                </pfx4:PARTY_ROLE_ID>
+                                            </xsl:if>
+                                            <pfx4:PARTY>
+                                                <pfx4:FULL_PARTY_NAME>
+                                                    <xsl:value-of select="current()/pfx:Name"/>
+                                                </pfx4:FULL_PARTY_NAME>
+                                                <pfx4:PARTY_ID>
+                                                    <xsl:value-of select="current()/pfx:PartyUId"/>
+                                                </pfx4:PARTY_ID>
+                                                <pfx4:PARTY_TYPE>
+                                                    <xsl:value-of select="current()/pfx:PartyTypeCode"/>
+                                                </pfx4:PARTY_TYPE>
+                                                <pfx4:LEGAL_FORM_CODE>
+                                                    <xsl:value-of select="current()/pfx:LegalForm"/>
+                                                </pfx4:LEGAL_FORM_CODE>
+                                                <xsl:choose>
+                                                    <xsl:when test="current()/pfx:InternalOrgFlag=('Internal','Ja', 'Yes','Y','J','KPN')">
+                                                        <pfx4:IS_INTERNAL>
+                                                            <xsl:value-of select="&quot;true&quot;"/>
+                                                        </pfx4:IS_INTERNAL>
+                                                    </xsl:when>
+                                                    <xsl:when test="current()/pfx:InternalOrgFlag=('Not Internal','Nee','No','N','External')">
+                                                        <pfx4:IS_INTERNAL>
+                                                            <xsl:value-of select="&quot;false&quot;"/>
+                                                        </pfx4:IS_INTERNAL>
+                                                    </xsl:when>
+                                                </xsl:choose>
+                                                <xsl:if test="current()/pfx:PriceList!=&quot;&quot;">
+                                                    <pfx4:PRICE_LIST>
+                                                        <xsl:value-of select="current()/pfx:PriceList"/>
+                                                    </pfx4:PRICE_LIST>
+                                                </xsl:if>
+                                                <xsl:if test="count(current()/pfx:ListOfAccountContactAffiliation/pfx:AccountContactAffiliation)>0">
+                                                    <xsl:for-each select="current()/pfx:ListOfAccountContactAffiliation/pfx:AccountContactAffiliation">
+                                                        <pfx4:CONTACT_PERSON>
+                                                            <pfx4:LAST_NAME>
+                                                                <xsl:value-of select="current()/pfx:LastName"/>
+                                                            </pfx4:LAST_NAME>
+                                                            <xsl:if test="current()/pfx:FirstName!=&quot;&quot; and exists(current()/pfx:FirstName)">
+                                                                <pfx4:FIRST_NAME>
+                                                                    <xsl:value-of select="current()/pfx:FirstName"/>
+                                                                </pfx4:FIRST_NAME>
+                                                            </xsl:if>
+                                                            <xsl:if test="current()/pfx:MiddleName!=&quot;&quot; and exists(current()/pfx:MiddleName)">
+                                                                <pfx4:MIDDLE_NAME>
+                                                                    <xsl:value-of select="current()/pfx:MiddleName"/>
+                                                                </pfx4:MIDDLE_NAME>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:ListOfAccountContactAffiliationDetail)">
+                                                                <xsl:for-each select="current()/pfx:ListOfAccountContactAffiliationDetail/pfx:AccountContactAffiliationDetail">
+                                                                    <pfx4:CONTACT_ROLE>
+                                                                        <xsl:value-of select="current()/pfx:Role"/>
+                                                                    </pfx4:CONTACT_ROLE>
+                                                                </xsl:for-each>
+                                                            </xsl:if>
+                                                            <xsl:choose>
+                                                                <xsl:when test="current()/pfx:MF=&quot;M&quot;">
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;MALE&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:when>
+                                                                <xsl:when test="current()/pfx:MF=&quot;F&quot;">
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;FEMALE&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:when>
+                                                                <xsl:otherwise>
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;UNKNOWN&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:otherwise>
+                                                            </xsl:choose>
+                                                            <pfx4:TITLE>
+                                                                <xsl:value-of select="current()/pfx:MM"/>
+                                                            </pfx4:TITLE>
+                                                            <xsl:if test="exists(current()/pfx:EmailAddress) and current()/pfx:EmailAddress!=&quot;&quot;">
+                                                                <pfx4:EMAIL_ADDRESS>
+                                                                    <xsl:value-of select="current()/pfx:EmailAddress"/>
+                                                                </pfx4:EMAIL_ADDRESS>
+                                                            </xsl:if>
+                                                            <xsl:if test="current()/pfx:StartDate!=&quot;&quot;">
+                                                                <pfx4:VALIDITY_PERIOD>
+                                                                    <pfx4:FROM>
+                                                                        <xsl:value-of select="current()/pfx:StartDate"/>
+                                                                    </pfx4:FROM>
+                                                                    <xsl:if test="exists(current()/pfx:EndDate) and current()/pfx:EndDate!=&quot;&quot;">
+                                                                        <pfx4:UNTIL>
+                                                                            <xsl:value-of select="current()/pfx:EndDate"/>
+                                                                        </pfx4:UNTIL>
+                                                                    </xsl:if>
+                                                                </pfx4:VALIDITY_PERIOD>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:WorkPhone)">
+                                                                <pfx4:WORK_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:WorkPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:WORK_NUMBER>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:FaxPhone)">
+                                                                <pfx4:FAX_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:FaxPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:FAX_NUMBER>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:CellularPhone)">
+                                                                <pfx4:MOBILE_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:CellularPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:MOBILE_NUMBER>
+                                                            </xsl:if>
+                                                        </pfx4:CONTACT_PERSON>
+                                                    </xsl:for-each>
+                                                </xsl:if>
+                                            </pfx4:PARTY>
+                                        </pfx4:PARTY_ROLE>
+                                    </pfx4:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Start/Input/OrderEntry-Orders/pfx:ListOfKzm-BillingAccount/pfx:Kzm-BillingAccount">
+                                    <pfx4:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                                        <pfx4:PRODUCT_INVOLVEMENT_ROLE>
+                                            <xsl:value-of select="&quot;Billing Agent&quot;"/>
+                                        </pfx4:PRODUCT_INVOLVEMENT_ROLE>
+                                        <pfx4:CURRENCY_CODE>
+                                            <xsl:value-of select="current()/pfx:CurrencyCode"/>
+                                        </pfx4:CURRENCY_CODE>
+                                        <pfx4:GROUP_TYPE_CODE>
+                                            <xsl:value-of select="current()/pfx:GroupTypeCode"/>
+                                        </pfx4:GROUP_TYPE_CODE>
+                                        <pfx4:TYPE>
+                                            <xsl:value-of select="current()/pfx:Type"/>
+                                        </pfx4:TYPE>
+                                        <pfx4:PARTY_ROLE>
+                                            <pfx4:PRIVACY_SETTING>
+                                                <xsl:value-of select="current()/pfx:PrivacyCode"/>
+                                            </pfx4:PRIVACY_SETTING>
+                                            <xsl:if test="exists(current()/pfx:CKRNumber) and current()/pfx:CKRNumber!=&quot;&quot;">
+                                                <pfx4:PARTY_ROLE_ID>
+                                                    <pfx4:ID_CKR>
+                                                        <xsl:value-of select="tib:left(current()/pfx:CKRNumber, 8)"/>
+                                                    </pfx4:ID_CKR>
+                                                </pfx4:PARTY_ROLE_ID>
+                                            </xsl:if>
+                                            <pfx4:PARTY>
+                                                <pfx4:FULL_PARTY_NAME>
+                                                    <xsl:value-of select="current()/pfx:Name"/>
+                                                </pfx4:FULL_PARTY_NAME>
+                                                <pfx4:PARTY_ID>
+                                                    <xsl:value-of select="current()/pfx:PartyUId"/>
+                                                </pfx4:PARTY_ID>
+                                                <pfx4:PARTY_TYPE>
+                                                    <xsl:value-of select="current()/pfx:PartyTypeCode"/>
+                                                </pfx4:PARTY_TYPE>
+                                                <pfx4:LEGAL_FORM_CODE>
+                                                    <xsl:value-of select="current()/pfx:LegalForm"/>
+                                                </pfx4:LEGAL_FORM_CODE>
+                                                <xsl:choose>
+                                                    <xsl:when test="current()/pfx:InternalOrgFlag=('Internal','Ja', 'Yes','Y','J','KPN')">
+                                                        <pfx4:IS_INTERNAL>
+                                                            <xsl:value-of select="&quot;true&quot;"/>
+                                                        </pfx4:IS_INTERNAL>
+                                                    </xsl:when>
+                                                    <xsl:when test="current()/pfx:InternalOrgFlag=('Not Internal','Nee','No','N','External')">
+                                                        <pfx4:IS_INTERNAL>
+                                                            <xsl:value-of select="&quot;false&quot;"/>
+                                                        </pfx4:IS_INTERNAL>
+                                                    </xsl:when>
+                                                </xsl:choose>
+                                                <xsl:if test="exists(current()/pfx:PriceList) and current()/pfx:PriceList!=&quot;&quot;">
+                                                    <pfx4:PRICE_LIST>
+                                                        <xsl:value-of select="current()/pfx:PriceList"/>
+                                                    </pfx4:PRICE_LIST>
+                                                </xsl:if>
+                                                <xsl:if test="count(current()/pfx:ListOfKzm-Eai-BillingAccountContactAffiliation/pfx:Kzm-Eai-BillingAccountContactAffiliation)>0">
+                                                    <xsl:for-each select="current()/pfx:ListOfKzm-Eai-BillingAccountContactAffiliation/pfx:Kzm-Eai-BillingAccountContactAffiliation">
+                                                        <pfx4:CONTACT_PERSON>
+                                                            <pfx4:LAST_NAME>
+                                                                <xsl:value-of select="current()/pfx:LastName"/>
+                                                            </pfx4:LAST_NAME>
+                                                            <xsl:if test="exists(current()/pfx:FirstName)and current()/pfx:FirstName!=&quot;&quot;">
+                                                                <pfx4:FIRST_NAME>
+                                                                    <xsl:value-of select="current()/pfx:FirstName"/>
+                                                                </pfx4:FIRST_NAME>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:MiddleName) and current()/pfx:MiddleName!=&quot;&quot;">
+                                                                <pfx4:MIDDLE_NAME>
+                                                                    <xsl:value-of select="current()/pfx:MiddleName"/>
+                                                                </pfx4:MIDDLE_NAME>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:ListOfKzm-Eai-BillingAccountContactAffiliationDetail/pfx:Kzm-Eai-BillingAccountContactAffiliationDetail)">
+                                                                <xsl:for-each select="current()/pfx:ListOfKzm-Eai-BillingAccountContactAffiliationDetail/pfx:Kzm-Eai-BillingAccountContactAffiliationDetail">
+                                                                    <pfx4:CONTACT_ROLE>
+                                                                        <xsl:value-of select="current()/pfx:Role"/>
+                                                                    </pfx4:CONTACT_ROLE>
+                                                                </xsl:for-each>
+                                                            </xsl:if>
+                                                            <xsl:choose>
+                                                                <xsl:when test="current()/pfx:MF=&quot;M&quot;">
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;MALE&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:when>
+                                                                <xsl:when test="current()/pfx:MF=&quot;F&quot;">
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;FEMALE&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:when>
+                                                                <xsl:otherwise>
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;UNKNOWN&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:otherwise>
+                                                            </xsl:choose>
+                                                            <pfx4:TITLE>
+                                                                <xsl:value-of select="current()/pfx:MM"/>
+                                                            </pfx4:TITLE>
+                                                            <xsl:if test="exists(current()/pfx:EmailAddress) and current()/pfx:EmailAddress!=&quot;&quot;">
+                                                                <pfx4:EMAIL_ADDRESS>
+                                                                    <xsl:value-of select="current()/pfx:EmailAddress"/>
+                                                                </pfx4:EMAIL_ADDRESS>
+                                                            </xsl:if>
+                                                            <xsl:if test="current()/pfx:StartDate!=&quot;&quot;">
+                                                                <pfx4:VALIDITY_PERIOD>
+                                                                    <pfx4:FROM>
+                                                                        <xsl:value-of select="current()/pfx:StartDate"/>
+                                                                    </pfx4:FROM>
+                                                                    <xsl:if test="exists(current()/pfx:EndDate) and current()/pfx:EndDate!=&quot;&quot;">
+                                                                        <pfx4:UNTIL>
+                                                                            <xsl:value-of select="current()/pfx:EndDate"/>
+                                                                        </pfx4:UNTIL>
+                                                                    </xsl:if>
+                                                                </pfx4:VALIDITY_PERIOD>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:WorkPhone)">
+                                                                <pfx4:WORK_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:WorkPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:WORK_NUMBER>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:FaxPhone)">
+                                                                <pfx4:FAX_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:FaxPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:FAX_NUMBER>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:CellularPhone)">
+                                                                <pfx4:MOBILE_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:CellularPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:MOBILE_NUMBER>
+                                                            </xsl:if>
+                                                        </pfx4:CONTACT_PERSON>
+                                                    </xsl:for-each>
+                                                </xsl:if>
+                                            </pfx4:PARTY>
+                                        </pfx4:PARTY_ROLE>
+                                    </pfx4:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Start/Input/OrderEntry-Orders/pfx:ListOfKzm-ServiceAccount/pfx:Kzm-ServiceAccount">
+                                    <pfx4:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                                        <pfx4:PRODUCT_INVOLVEMENT_ROLE>
+                                            <xsl:value-of select="&quot;User&quot;"/>
+                                        </pfx4:PRODUCT_INVOLVEMENT_ROLE>
+                                        <pfx4:CURRENCY_CODE>
+                                            <xsl:value-of select="current()/pfx:CurrencyCode"/>
+                                        </pfx4:CURRENCY_CODE>
+                                        <pfx4:GROUP_TYPE_CODE>
+                                            <xsl:value-of select="current()/pfx:GroupTypeCode"/>
+                                        </pfx4:GROUP_TYPE_CODE>
+                                        <pfx4:TYPE>
+                                            <xsl:value-of select="current()/pfx:Type"/>
+                                        </pfx4:TYPE>
+                                        <pfx4:PARTY_ROLE>
+                                            <pfx4:PRIVACY_SETTING>
+                                                <xsl:value-of select="current()/pfx:PrivacyCode"/>
+                                            </pfx4:PRIVACY_SETTING>
+                                            <xsl:if test="exists(current()/pfx:CKRNumber) and current()/pfx:CKRNumber!=&quot;&quot;">
+                                                <pfx4:PARTY_ROLE_ID>
+                                                    <pfx4:ID_CKR>
+                                                        <xsl:value-of select="tib:left(current()/pfx:CKRNumber, 8)"/>
+                                                    </pfx4:ID_CKR>
+                                                </pfx4:PARTY_ROLE_ID>
+                                            </xsl:if>
+                                            <pfx4:PARTY>
+                                                <pfx4:FULL_PARTY_NAME>
+                                                    <xsl:value-of select="current()/pfx:Name"/>
+                                                </pfx4:FULL_PARTY_NAME>
+                                                <pfx4:PARTY_ID>
+                                                    <xsl:value-of select="current()/pfx:PartyUId"/>
+                                                </pfx4:PARTY_ID>
+                                                <pfx4:PARTY_TYPE>
+                                                    <xsl:value-of select="current()/pfx:PartyTypeCode"/>
+                                                </pfx4:PARTY_TYPE>
+                                                <pfx4:LEGAL_FORM_CODE>
+                                                    <xsl:value-of select="current()/pfx:LegalForm"/>
+                                                </pfx4:LEGAL_FORM_CODE>
+                                                <xsl:choose>
+                                                    <xsl:when test="current()/pfx:InternalOrgFlag=('Internal','Ja', 'Yes','Y','J','KPN')">
+                                                        <pfx4:IS_INTERNAL>
+                                                            <xsl:value-of select="&quot;true&quot;"/>
+                                                        </pfx4:IS_INTERNAL>
+                                                    </xsl:when>
+                                                    <xsl:when test="current()/pfx:InternalOrgFlag=('Not Internal','Nee','No','N','External')">
+                                                        <pfx4:IS_INTERNAL>
+                                                            <xsl:value-of select="&quot;false&quot;"/>
+                                                        </pfx4:IS_INTERNAL>
+                                                    </xsl:when>
+                                                </xsl:choose>
+                                                <xsl:if test="exists(current()/pfx:PriceList) and current()/pfx:PriceList!=&quot;&quot;">
+                                                    <pfx4:PRICE_LIST>
+                                                        <xsl:value-of select="current()/pfx:PriceList"/>
+                                                    </pfx4:PRICE_LIST>
+                                                </xsl:if>
+                                                <xsl:if test="count(current()/pfx:ListOfKzm-Eai-ServiceAccountContactAffiliation/pfx:Kzm-Eai-ServiceAccountContactAffiliation)>0">
+                                                    <xsl:for-each select="current()/pfx:ListOfKzm-Eai-ServiceAccountContactAffiliation/pfx:Kzm-Eai-ServiceAccountContactAffiliation">
+                                                        <pfx4:CONTACT_PERSON>
+                                                            <pfx4:LAST_NAME>
+                                                                <xsl:value-of select="current()/pfx:LastName"/>
+                                                            </pfx4:LAST_NAME>
+                                                            <xsl:if test="exists(current()/pfx:FirstName) and current()/pfx:FirstName!=&quot;&quot;">
+                                                                <pfx4:FIRST_NAME>
+                                                                    <xsl:value-of select="current()/pfx:FirstName"/>
+                                                                </pfx4:FIRST_NAME>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:MiddleName) and current()/pfx:MiddleName!=&quot;&quot;">
+                                                                <pfx4:MIDDLE_NAME>
+                                                                    <xsl:value-of select="current()/pfx:MiddleName"/>
+                                                                </pfx4:MIDDLE_NAME>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:ListOfKzm-Eai-ServiceAccountContactAffiliationDetail/pfx:Kzm-Eai-ServiceAccountContactAffiliationDetail)">
+                                                                <xsl:for-each select="current()/pfx:ListOfKzm-Eai-ServiceAccountContactAffiliationDetail/pfx:Kzm-Eai-ServiceAccountContactAffiliationDetail">
+                                                                    <pfx4:CONTACT_ROLE>
+                                                                        <xsl:value-of select="current()/pfx:Role"/>
+                                                                    </pfx4:CONTACT_ROLE>
+                                                                </xsl:for-each>
+                                                            </xsl:if>
+                                                            <xsl:choose>
+                                                                <xsl:when test="current()/pfx:MF=&quot;M&quot;">
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;MALE&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:when>
+                                                                <xsl:when test="current()/pfx:MF=&quot;F&quot;">
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;FEMALE&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:when>
+                                                                <xsl:otherwise>
+                                                                    <pfx4:GENDER>
+                                                                        <xsl:value-of select="&quot;UNKNOWN&quot;"/>
+                                                                    </pfx4:GENDER>
+                                                                </xsl:otherwise>
+                                                            </xsl:choose>
+                                                            <pfx4:TITLE>
+                                                                <xsl:value-of select="current()/pfx:MM"/>
+                                                            </pfx4:TITLE>
+                                                            <xsl:if test="exists(current()/pfx:EmailAddress) and current()/pfx:EmailAddress!=&quot;&quot;">
+                                                                <pfx4:EMAIL_ADDRESS>
+                                                                    <xsl:value-of select="current()/pfx:EmailAddress"/>
+                                                                </pfx4:EMAIL_ADDRESS>
+                                                            </xsl:if>
+                                                            <xsl:if test="current()/pfx:StartDate!=&quot;&quot;">
+                                                                <pfx4:VALIDITY_PERIOD>
+                                                                    <pfx4:FROM>
+                                                                        <xsl:value-of select="current()/pfx:StartDate"/>
+                                                                    </pfx4:FROM>
+                                                                    <xsl:if test="exists(current()/pfx:EndDate) and current()/pfx:EndDate!=&quot;&quot;">
+                                                                        <pfx4:UNTIL>
+                                                                            <xsl:value-of select="current()/pfx:EndDate"/>
+                                                                        </pfx4:UNTIL>
+                                                                    </xsl:if>
+                                                                </pfx4:VALIDITY_PERIOD>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:WorkPhone)">
+                                                                <pfx4:WORK_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:WorkPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:WORK_NUMBER>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:FaxPhone)">
+                                                                <pfx4:FAX_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:FaxPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:FAX_NUMBER>
+                                                            </xsl:if>
+                                                            <xsl:if test="exists(current()/pfx:CellularPhone)">
+                                                                <pfx4:MOBILE_NUMBER>
+                                                                    <pfx4:UNFORMATTED>
+                                                                        <xsl:value-of select="current()/pfx:CellularPhone"/>
+                                                                    </pfx4:UNFORMATTED>
+                                                                </pfx4:MOBILE_NUMBER>
+                                                            </xsl:if>
+                                                        </pfx4:CONTACT_PERSON>
+                                                    </xsl:for-each>
+                                                </xsl:if>
+                                            </pfx4:PARTY>
+                                        </pfx4:PARTY_ROLE>
+                                    </pfx4:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                                </xsl:for-each>
+                            </pfx4:PRODUCT>
+                        </pfx4:ORDER_ITEM>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ORDER>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map first OrderEntry-LineItems to ORDER_ITEMs</pd:to>
+        <pd:xpathDescription>OrderEntry-LineItems Exist</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Start/Input/OrderEntry-Orders/pfx:ListOfOrderEntry-LineItems/pfx:OrderEntry-LineItems)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map first OrderEntry-LineItems to ORDER_ITEMs</pd:from>
+        <pd:to>CreateOrder</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateOrder</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CreateOrder</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2006 U (http://www.altova.com) by test (JK) -->
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:UPGRADE_FORMULA" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:UPGRADE_FORMULA">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:UPGRADE_FORMULA">
+			<xsd:element name="UpgradeFormulaRequest" type="s:KSD_UpgradeFormula"/>
+			<xsd:complexType name="KSD_UpgradeFormula">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="troubleReportDetectionTime" nillable="true" type="xsd:dateTime"/>
+					<xsd:element name="formulaId" nillable="true" type="xsd:string"/>
+					<xsd:element name="expectedResolutionDateTime" nillable="true" type="xsd:dateTime"/>
+					<xsd:element name="deadlineDateTime" nillable="true" type="xsd:dateTime"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="UpgradeFormulaResponse" type="s:KSD_Formula"/>
+			<xsd:complexType name="KSD_Formula">
+				<xsd:sequence>
+					<xsd:element name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element name="deadlineDateTime" nillable="true" type="xsd:dateTime"/>
+					<xsd:element name="formulaId" nillable="true" type="xsd:string"/>
+					<xsd:element name="TroubleReports" nillable="true" type="s:TroubleReport"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TroubleReport">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="TroubleReport" type="s:TroubleReportType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TroubleReportType">
+				<xsd:sequence>
+					<xsd:element name="formulaCode" nillable="true" type="xsd:string"/>
+					<xsd:element name="formulaDescription" nillable="true" type="xsd:string"/>
+					<xsd:element name="formulaLevel" nillable="true" type="xsd:integer"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="UpgradeFormulaRequestMsg">
+		<part name="parameters" element="s:UpgradeFormulaRequest"/>
+	</message>
+	<message name="UpgradeFormulaResponseMsg">
+		<part name="parameters" element="s:UpgradeFormulaResponse"/>
+	</message>
+	<portType name="UPGRADE_FORMULAPortType">
+		<operation name="UpgradeFormulaRequest">
+			<input message="s:UpgradeFormulaRequestMsg"/>
+			<output message="s:UpgradeFormulaResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="UPGRADE_FORMULASoapBinding" type="s:UPGRADE_FORMULAPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="UpgradeFormulaRequest">
+			<soap:operation soapAction="urn:UPGRADE_FORMULA/UpgradeFormula" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="UPGRADE_FORMULA_SERVICE">
+		<wsdl:documentation>versie 2.0</wsdl:documentation>
+		<port name="UPGRADE_FORMULASoap" binding="s:UPGRADE_FORMULASoapBinding">
+			<soap:address location="http://localhost:9190/ExpertDeskAdapter"/>
+		</port>
+	</service>
+</wsdl:definitions>

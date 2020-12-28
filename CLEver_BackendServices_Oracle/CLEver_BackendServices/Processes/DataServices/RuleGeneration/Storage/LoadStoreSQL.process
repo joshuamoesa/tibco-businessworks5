@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ExceptionRuleXslt="java://XSLTTransform" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/CLEver/HistoryRetain" xmlns:ns="http://www.tibco.com/CLEver/Rule" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes">
+    <pd:name>Processes/DataServices/RuleGeneration/Storage/LoadStoreSQL.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns1:HistoryRetainsFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>45</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>427</pd:endX>
+    <pd:endY>97</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Construct Restriction">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>169</pd:x>
+        <pd:y>105</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/ConstructRestrictions.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$Start/Input/ns1:HistoryRetainsFull"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetDeleteStatement">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>310</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <variableConfig>/Processes/DataServices/RuleGeneration/Storage/DeleteStatements.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$Construct-Restriction/output/Statement">
+                    <DeleteStatements>
+                        <xsl:value-of select="."/>
+                    </DeleteStatements>
+                </xsl:for-each>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Construct Restriction</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetDeleteStatement</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Construct Restriction</pd:from>
+        <pd:to>SetDeleteStatement</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

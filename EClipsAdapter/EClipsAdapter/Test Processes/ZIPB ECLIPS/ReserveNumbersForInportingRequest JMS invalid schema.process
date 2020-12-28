@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/CreateSubscriberRequest.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://xmlns.kpn.com/EAI/fixed/0292_CreateSubscriber/1.0/Request" xmlns:pfx2="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/ReserveNumbersRequest.xsd" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0299_ReserveNumbers/1.0/Request" xmlns:pfx3="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/ReserveNumbersForInportingRequest.xsd" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0300_ReserveNumbersForInporting/1.0/Request" xmlns:pfx4="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" xmlns:ns6="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/CreateSubscriberRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/CreateSubscriber.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/ReserveNumbersRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/ReserveNumbers.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/ReserveNumbersForInportingRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/ReserveNumbersForInporting.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/SubmitOrder.xsd"/>
+    <pd:name>EClipsAdapter/Test Processes/ZIPB ECLIPS/ReserveNumbersForInportingRequest JMS invalid schema.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>76</pd:startX>
+    <pd:startY>93</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>459</pd:endX>
+    <pd:endY>89</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>196</pd:x>
+        <pd:y>93</pd:y>
+        <config>
+            <element>
+                <xsd:element name="submitorder">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="test" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <submitorder>
+                <test>
+                    <xsl:value-of select="&quot;testing&quot;"/>
+                </test>
+            </submitorder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>327</pd:x>
+        <pd:y>90</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.%%EClipsAdapter/ComponentDomain%%.%%EClipsAdapter/ComponentId%%.Request.ReserveNumbersForInporting.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/submitorder, false(), true())"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

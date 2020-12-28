@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/SFAAdapter/Request/UpserAccount.xsd" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://xmlns.kpn.com/fixed/SFAAdapter/Response/UpserAccount.xsd" xmlns:ns3="http://xmlns.kpn.com/EAI/fixed/0421_UpserAccount/1.0/Response" xmlns:ns22="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns23="http://xmlns.kpn.com/EAI/fixed/0422_AddAccountReference/1.0/Request" xmlns:ns12="http://xmlns.kpn.com/fixed/UCMAdapter/Request/AddAccountReference.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns4="http://xmlns.kpn.com/fixed/UCMAdapter/Response/AddAccountReference.xsd" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0422_AddAccountReference/1.0/Response" xmlns:ns6="http://www.tibco.com/pe/EngineTypes">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Request/UpserAccount.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Request/UpsertAccount.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <pd:name>CRMServices/Processes/SubProcesses/_Sub_UpsertAccountIntoSFA_UCM.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:UpserAccountRequest"/>
+    <pd:startX>38</pd:startX>
+    <pd:startY>203</pd:startY>
+    <pd:returnBindings>
+        <xsl:choose>
+            <xsl:when test="$CallAddAccountReferenceForContact/ns4:AddAccountReferenceResponse/ns5:BODY">
+                <Tracking>
+                    <xsl:copy-of select="$CallAddAccountReferenceForContact/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$CallAddAccountReferenceForContact/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/@*"/>
+                    <xsl:copy-of select="$CallAddAccountReferenceForContact/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/node()"/>
+                </Tracking>
+            </xsl:when>
+            <xsl:when test="$CallAddAccountReferenceForAccount/ns4:AddAccountReferenceResponse/ns5:BODY">
+                <Tracking>
+                    <xsl:copy-of select="$CallAddAccountReferenceForAccount/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$CallAddAccountReferenceForAccount/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/@*"/>
+                    <xsl:copy-of select="$CallAddAccountReferenceForAccount/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/node()"/>
+                </Tracking>
+            </xsl:when>
+            <xsl:when test="$Call-UpsertAccount/ns2:UpserAccountResponse/ns3:BODY">
+                <Tracking>
+                    <xsl:copy-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/@*"/>
+                    <xsl:copy-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/node()"/>
+                </Tracking>
+            </xsl:when>
+            <xsl:otherwise>
+                <Tracking>
+                    <xsl:copy-of select="$Start/pfx:UpserAccountRequest/ns22:CMH/ns22:TRACKING/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Start/pfx:UpserAccountRequest/ns22:CMH/ns22:TRACKING/@*"/>
+                    <xsl:copy-of select="$Start/pfx:UpserAccountRequest/ns22:CMH/ns22:TRACKING/node()"/>
+                </Tracking>
+            </xsl:otherwise>
+        </xsl:choose>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Tracking" type="ns22:TrackingInfo"/>
+    </pd:endType>
+    <pd:endX>869</pd:endX>
+    <pd:endY>182</pd:endY>
+    <pd:errorSchemas>
+        <Schema0 ref="pfx2:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Call UpsertAccount">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>186</pd:x>
+        <pd:y>191</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/Sub_UpsertAccount.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/pfx:UpserAccountRequest"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="loop over Account X-refs">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>254</pd:x>
+        <pd:y>112</pd:y>
+        <pd:width>180</pd:width>
+        <pd:height>140</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Call-UpsertAccount/ns2:UpserAccountResponse/ns3:BODY/ns3:SiebelAccount[ns3:OCRMOperation="Create"]/ns3:CifAccountReference</pd:over>
+            <pd:iterationElementSlot>Account-Xref</pd:iterationElementSlot>
+            <pd:indexSlot>AXref</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallAddAccountReferenceForAccount</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallAddAccountReferenceForAccount</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallAddAccountReferenceForAccount">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>333</pd:x>
+            <pd:y>176</pd:y>
+            <config>
+                <processName>/CRMServices/Processes/SubProcesses/Sub_AddAccountReference.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns12:AddAccountReferenceRequest>
+                    <ns22:CMH>
+                        <ns22:ID>
+                            <xsl:value-of select="&quot;1056&quot;"/>
+                        </ns22:ID>
+                        <ns22:NAME>
+                            <xsl:value-of select="&quot;AddAccountReference&quot;"/>
+                        </ns22:NAME>
+                        <xsl:if test="$Call-UpsertAccount/ns2:UpserAccountResponse/ns3:BODY/ns3:SiebelAccount/ns3:UUID">
+                            <ns22:FID>
+                                <xsl:value-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns3:BODY/ns3:SiebelAccount/ns3:UUID"/>
+                            </ns22:FID>
+                        </xsl:if>
+                        <ns22:MID>
+                            <xsl:value-of select="&quot;1056.20&quot;"/>
+                        </ns22:MID>
+                        <ns22:PARADIGM>
+                            <xsl:value-of select="&quot;REQUEST&quot;"/>
+                        </ns22:PARADIGM>
+                        <ns22:OBJECT>
+                            <xsl:value-of select="&quot;SIEBEL_ACCOUNT_ID&quot;"/>
+                        </ns22:OBJECT>
+                        <ns22:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns22:VERSION>
+                        <ns22:FROM>
+                            <xsl:attribute name="ns22:COMPONENT_ID">
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/CRMServices/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns22:COMPONENT_VERSION">
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/CRMServices/ComponentVersion"/>
+                            </xsl:attribute>
+                        </ns22:FROM>
+                        <ns22:TO>
+                            <xsl:attribute name="ns22:DESTINATION">
+                                <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env,&quot;.FIXED.CRM.UCMAdapter.Request.AddAccountReference.1&quot;)"/>
+                            </xsl:attribute>
+                        </ns22:TO>
+                        <ns22:TRACKING>
+                            <ns22:MESSAGE_ID>
+                                <xsl:value-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/ns22:MESSAGE_ID"/>
+                            </ns22:MESSAGE_ID>
+                            <ns22:EXTERNAL_REF>
+                                <xsl:value-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/ns22:EXTERNAL_REF"/>
+                            </ns22:EXTERNAL_REF>
+                            <xsl:copy-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/ns22:ITEM"/>
+                            <ns22:ITEM>
+                                <xsl:attribute name="ns22:APPINFO">
+                                    <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns1:GlobalVariables/CRMServices/ComponentId)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns22:EVENT">
+                                    <xsl:value-of select="&quot;AddAccountReference&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns22:TIMESTAMP">
+                                    <xsl:value-of select="tib:timestamp()"/>
+                                </xsl:attribute>
+                            </ns22:ITEM>
+                        </ns22:TRACKING>
+                        <ns22:ATTRIBUTE>
+                            <xsl:attribute name="ns22:NAME">
+                                <xsl:value-of select="&quot;IntObjectName&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns22:VALUE">
+                                <xsl:value-of select="&quot;UCMAccountExternalID&quot;"/>
+                            </xsl:attribute>
+                        </ns22:ATTRIBUTE>
+                    </ns22:CMH>
+                    <ns23:BODY>
+                        <ns23:SIEBEL_ACCOUNT_ID>
+                            <xsl:value-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns3:BODY/ns3:SiebelAccount/ns3:UUID"/>
+                        </ns23:SIEBEL_ACCOUNT_ID>
+                        <ns23:EXTENAL_REFERENCE>
+                            <ns23:REFERENCE>
+                                <xsl:value-of select="$Account-Xref/ns3:CifAccountReference/ns3:ExternalId1"/>
+                            </ns23:REFERENCE>
+                            <ns23:ORIGIN>
+                                <xsl:value-of select="$Account-Xref/ns3:CifAccountReference/ns3:SystemName"/>
+                            </ns23:ORIGIN>
+                            <ns23:ORIGIN_ID>
+                                <xsl:value-of select="$Account-Xref/ns3:CifAccountReference/ns3:SystemNumber"/>
+                            </ns23:ORIGIN_ID>
+                        </ns23:EXTENAL_REFERENCE>
+                    </ns23:BODY>
+                </ns12:AddAccountReferenceRequest>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="loop over Contacts">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>467</pd:x>
+        <pd:y>68</pd:y>
+        <pd:width>282</pd:width>
+        <pd:height>211</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Call-UpsertAccount/ns2:UpserAccountResponse/ns3:BODY/ns3:SiebelAccount/ns3:Contact</pd:over>
+            <pd:iterationElementSlot>Contact</pd:iterationElementSlot>
+            <pd:indexSlot>iC</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>loop over Contact X-refs</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>loop over Contact X-refs</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:group name="loop over Contact X-refs">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>534</pd:x>
+            <pd:y>108</pd:y>
+            <pd:width>180</pd:width>
+            <pd:height>140</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$Contact/ns3:Contact[ns3:OCRMOperation="Create"]/ns3:CifContactReference</pd:over>
+                <pd:iterationElementSlot>Contact-Xref</pd:iterationElementSlot>
+                <pd:indexSlot>Xref</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>CallAddAccountReferenceForContact</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>CallAddAccountReferenceForContact</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="CallAddAccountReferenceForContact">
+                <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+                <pd:resourceType>ae.process.subprocess</pd:resourceType>
+                <pd:x>613</pd:x>
+                <pd:y>172</pd:y>
+                <config>
+                    <processName>/CRMServices/Processes/SubProcesses/Sub_AddAccountReference.process</processName>
+                </config>
+                <pd:inputBindings>
+                    <ns12:AddAccountReferenceRequest>
+                        <ns22:CMH>
+                            <ns22:ID>
+                                <xsl:value-of select="&quot;1056&quot;"/>
+                            </ns22:ID>
+                            <ns22:NAME>
+                                <xsl:value-of select="&quot;AddAccountReference&quot;"/>
+                            </ns22:NAME>
+                            <ns22:FID>
+                                <xsl:value-of select="$Contact/ns3:Contact/ns3:UUID"/>
+                            </ns22:FID>
+                            <ns22:MID>
+                                <xsl:value-of select="&quot;1056.20&quot;"/>
+                            </ns22:MID>
+                            <ns22:PARADIGM>
+                                <xsl:value-of select="&quot;REQUEST&quot;"/>
+                            </ns22:PARADIGM>
+                            <ns22:OBJECT>
+                                <xsl:value-of select="&quot;SIEBEL_ACCOUNT_ID&quot;"/>
+                            </ns22:OBJECT>
+                            <ns22:VERSION>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns22:VERSION>
+                            <ns22:FROM>
+                                <xsl:attribute name="ns22:COMPONENT_ID">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/CRMServices/ComponentId"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns22:COMPONENT_VERSION">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/CRMServices/ComponentVersion"/>
+                                </xsl:attribute>
+                            </ns22:FROM>
+                            <ns22:TO>
+                                <xsl:attribute name="ns22:DESTINATION">
+                                    <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env,&quot;.FIXED.CRM.UCMAdapter.Request.AddAccountReference.1&quot;)"/>
+                                </xsl:attribute>
+                            </ns22:TO>
+                            <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                                <xsl:when test="exists($CallAddAccountReferenceForAccount/ns4:AddAccountReferenceResponse/ns5:BODY)">
+                                    <ns22:TRACKING>
+                                        <ns22:MESSAGE_ID>
+                                            <xsl:value-of select="$CallAddAccountReferenceForAccount/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/ns22:MESSAGE_ID"/>
+                                        </ns22:MESSAGE_ID>
+                                        <ns22:EXTERNAL_REF>
+                                            <xsl:value-of select="$CallAddAccountReferenceForAccount/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/ns22:EXTERNAL_REF"/>
+                                        </ns22:EXTERNAL_REF>
+                                        <xsl:copy-of select="$CallAddAccountReferenceForAccount/ns4:AddAccountReferenceResponse/ns22:CMH/ns22:TRACKING/ns22:ITEM"/>
+                                        <ns22:ITEM>
+                                            <xsl:attribute name="ns22:APPINFO">
+                                                <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns1:GlobalVariables/CRMServices/ComponentId)"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns22:EVENT">
+                                                <xsl:value-of select="&quot;AddAccountReference&quot;"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns22:TIMESTAMP">
+                                                <xsl:value-of select="tib:timestamp()"/>
+                                            </xsl:attribute>
+                                        </ns22:ITEM>
+                                    </ns22:TRACKING>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <ns22:TRACKING>
+                                        <ns22:MESSAGE_ID>
+                                            <xsl:value-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/ns22:MESSAGE_ID"/>
+                                        </ns22:MESSAGE_ID>
+                                        <ns22:EXTERNAL_REF>
+                                            <xsl:value-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/ns22:EXTERNAL_REF"/>
+                                        </ns22:EXTERNAL_REF>
+                                        <xsl:copy-of select="$Call-UpsertAccount/ns2:UpserAccountResponse/ns22:CMH/ns22:TRACKING/ns22:ITEM"/>
+                                        <ns22:ITEM>
+                                            <xsl:attribute name="ns22:APPINFO">
+                                                <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns1:GlobalVariables/CRMServices/ComponentId)"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns22:EVENT">
+                                                <xsl:value-of select="&quot;AddAccountReference&quot;"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns22:TIMESTAMP">
+                                                <xsl:value-of select="tib:timestamp()"/>
+                                            </xsl:attribute>
+                                        </ns22:ITEM>
+                                    </ns22:TRACKING>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <ns22:ATTRIBUTE>
+                                <xsl:attribute name="ns22:NAME">
+                                    <xsl:value-of select="&quot;IntObjectName&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns22:VALUE">
+                                    <xsl:value-of select="&quot;UCMContactExternalID&quot;"/>
+                                </xsl:attribute>
+                            </ns22:ATTRIBUTE>
+                        </ns22:CMH>
+                        <ns23:BODY>
+                            <xsl:if test="$Contact/ns3:Contact/ns3:UUID">
+                                <ns23:SIEBEL_ACCOUNT_ID>
+                                    <xsl:value-of select="$Contact/ns3:Contact/ns3:UUID"/>
+                                </ns23:SIEBEL_ACCOUNT_ID>
+                            </xsl:if>
+                            <ns23:EXTENAL_REFERENCE>
+                                <ns23:REFERENCE>
+                                    <xsl:value-of select="$Contact-Xref/ns3:CifContactReference/ns3:ExternalId1"/>
+                                </ns23:REFERENCE>
+                                <ns23:ORIGIN>
+                                    <xsl:value-of select="$Contact-Xref/ns3:CifContactReference/ns3:SystemName"/>
+                                </ns23:ORIGIN>
+                                <ns23:ORIGIN_ID>
+                                    <xsl:value-of select="$Contact-Xref/ns3:CifContactReference/ns3:SystemNumber"/>
+                                </ns23:ORIGIN_ID>
+                            </ns23:EXTENAL_REFERENCE>
+                        </ns23:BODY>
+                    </ns12:AddAccountReferenceRequest>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+    </pd:group>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>426</pd:x>
+        <pd:y>462</pd:y>
+        <config>
+            <faultName>Schema0</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="$_error_Call-UpsertAccount">
+                            <xsl:copy-of select="$_error_Call-UpsertAccount/pfx2:Errors"/>
+                        </xsl:when>
+                        <xsl:when test="$_error_CallAddAccountReferenceForAccount">
+                            <xsl:copy-of select="$_error_CallAddAccountReferenceForAccount/pfx2:Errors"/>
+                        </xsl:when>
+                        <xsl:when test="$_error_CallAddAccountReferenceForContact">
+                            <xsl:copy-of select="$_error_CallAddAccountReferenceForContact/pfx2:Errors"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx2:Errors>
+                                <pfx2:Error>
+                                    <pfx2:MsgCode>
+                                        <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                    </pfx2:MsgCode>
+                                    <pfx2:Params>
+                                        <xsl:value-of select="$_error/ns6:ErrorReport/Msg"/>
+                                    </pfx2:Params>
+                                    <xsl:copy-of select="$_error/ns6:ErrorReport"/>
+                                </pfx2:Error>
+                            </pfx2:Errors>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call UpsertAccount</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call UpsertAccount</pd:from>
+        <pd:to>loop over Account X-refs</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>loop over Account X-refs</pd:from>
+        <pd:to>loop over Contacts</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>loop over Contacts</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call UpsertAccount</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>loop over Account X-refs</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>loop over Contacts</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

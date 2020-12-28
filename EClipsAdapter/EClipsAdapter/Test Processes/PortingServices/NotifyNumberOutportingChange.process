@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:NotifyNumberInportingComplete" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:FindCustomer" xmlns:pfx3="http://wsdl.kpn.com/fixed/ckradapter/FindCustomer.wsdl" xmlns:pfx4="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" xmlns:ns="EcPsXsd_V0.2" xmlns:pfx5="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd">
+    <wsdl:import namespace="urn:NotifyNumberInportingComplete" location="/WSDL/NotifyNumberInportingComplete.wsdl"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" location="/WSDL/EcnsPortingServices.wsdl"/>
+    <pd:name>EClipsAdapter/Test Processes/PortingServices/NotifyNumberOutportingChange.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>59</pd:x>
+        <pd:y>39</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <service>pfx4:EcnsPortingServices</service>
+            <operation>ReceiveChangeRequestOperation</operation>
+            <attachmentStyle>none</attachmentStyle>
+            <wsdlNamespaceRoot>http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl/ReceiveChangeRequestOperationImpl</wsdlNamespaceRoot>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>/ProcessDefinitions/V0.2/ReceiveChangeRequestServer</soapAction>
+            <sharedChannel>/EClipsAdapter/Test Processes/Resources/HTTP Connection.sharedhttp</sharedChannel>
+            <portAddressPrefix/>
+            <useBasicAuthentication>%%EClipsAdapter/BasicAuthentication%%</useBasicAuthentication>
+            <sharedChannels>
+                <httpChannel>
+                    <useBasicAuthentication>false</useBasicAuthentication>
+                </httpChannel>
+            </sharedChannels>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>423</pd:endX>
+    <pd:endY>34</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>228</pd:x>
+        <pd:y>36</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <ns:EcnsReceiveChangeRequestResp>
+                    <ns:ReceiveChangeRequestRespStruct>
+                        <ns:StatusResponsePS>
+                            <ns:ResultCode>
+                                <xsl:value-of select="0"/>
+                            </ns:ResultCode>
+                        </ns:StatusResponsePS>
+                    </ns:ReceiveChangeRequestRespStruct>
+                </ns:EcnsReceiveChangeRequestResp>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

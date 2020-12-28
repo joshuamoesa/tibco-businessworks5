@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0290_GetOfferAttributes/1.0/Response" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0290_GetOfferAttributes/1.0/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="marketingCampaignId_type">
+    <xs:annotation>
+      <xs:documentation>Campaign code. The frontend CME uses this. If this field, being mandatory, is returned empty, this will prevent the CME data integration for 1 day.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="productOfferingType_type">
+    <xs:annotation>
+      <xs:documentation>Type of the offer can be: product, dienst, contract, informatief.
+The english translation would be: product, service, contract, informational. Informational indicates a logical improvement to the customers situation, such as changing subscription type etc.
+</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="4" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="productOfferingName_type">
+    <xs:annotation>
+      <xs:documentation>The title shown in the UI for the tab with the 4 offers.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="30" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="productOfferingDescription_type">
+    <xs:annotation>
+      <xs:documentation>Offer name.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="254" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="productOfferingId_type">
+    <xs:annotation>
+      <xs:documentation>KPN dot COM offer id.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="productOfferingStatus_type">
+    <xs:annotation>
+      <xs:documentation>Possible acceptance levels of offer. </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="75" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="units_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>The unit of measure for the quantity, such as meters, cubic yards, kilograms, points, euro's.</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>1000 length string limitation added by KPN EAI defaults.Increase size in Rose if required.</xs:documentation>
+      </xs:annotation>
+      <xs:enumeration value="Kg" />
+      <xs:enumeration value="m" />
+      <xs:enumeration value="Points" />
+      <xs:enumeration value="EUR" />
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="amount_type">
+    <xs:restriction base="xs:positiveInteger" />
+  </xs:simpleType>
+  <xs:simpleType name="serverId_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BODY">
+    <xs:annotation>
+      <xs:documentation>This is the BODY object for KPN EAI service number 0290 - GetOfferAttributes version 1.0 Response message.</xs:documentation>
+      <xs:documentation>Automatically generated schema for service:'GetOfferAttributes', version:'1.0'</xs:documentation>
+      <xs:documentation>Generated on 2007-04-20 11:12:23Z</xs:documentation>
+      <xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+      <xs:documentation>Service ID is:'0290'</xs:documentation>
+      <xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+      <xs:documentation>KPN EAI message body class.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="OFFER">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="1" maxOccurs="1" name="MARKETING_CAMPAIGN">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="1" maxOccurs="1" name="ID" type="tns:marketingCampaignId_type">
+                      <xs:annotation>
+                        <xs:documentation>Campaign code. The frontend CME uses this. If this field, being mandatory, is returned empty, this will prevent the CME data integration for 1 day.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="1" maxOccurs="1" name="PRODUCT_OFFERING">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="1" maxOccurs="1" name="BONUS">
+                      <xs:annotation>
+                        <xs:documentation>Bonus points, in amounts of units (eur or points)</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="UNITS" type="tns:units_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="AMOUNT" type="tns:amount_type" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="16" name="SALES_TEXT">
+                      <xs:annotation>
+                        <xs:documentation>This object has the following possible values:'Samenvatting,OverigeInformatie,Juridisch,Voordelen,Verkoopbruggetjes,Verkooptekst,Tegenwerping,Script,Links,Gesprektips,BesparingIndicatie,AC_CurrentAgentRemark,AC_CurrentResponseReason,AC_CurrentStage,AC_ResponseReasons,URI'</xs:documentation>
+                        <xs:documentation>This object has the following possible values:''</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="1" maxOccurs="1" name="NAME" type="xs:string" />
+                          <xs:element minOccurs="1" maxOccurs="1" name="VALUE" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="IMAGE_LOCATION" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Path pointer to an image for this offering.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="LAST_MODIFIED_DATE" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Indicator when the Epiphany environment has last had modifications to the campaign.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="PROMO_ITEM" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>maxlength 100. Weight value of the offer.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="TYPE" type="tns:productOfferingType_type">
+                      <xs:annotation>
+                        <xs:documentation>Type of the offer can be: product, dienst, contract, informatief.
+The english translation would be: product, service, contract, informational. Informational indicates a logical improvement to the customers situation, such as changing subscription type etc.
+</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="TITLE" type="tns:productOfferingName_type">
+                      <xs:annotation>
+                        <xs:documentation>The title shown in the UI for the tab with the 4 offers.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="1" maxOccurs="1" name="NAME" type="tns:productOfferingDescription_type">
+                      <xs:annotation>
+                        <xs:documentation>Offer name.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="ID" type="tns:productOfferingId_type">
+                      <xs:annotation>
+                        <xs:documentation>KPN dot COM offer id.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="SCORE" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Benefit or likelihood of offer.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="STATUS" type="tns:productOfferingStatus_type">
+                      <xs:annotation>
+                        <xs:documentation>Possible acceptance levels of offer. </xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="1" maxOccurs="1" name="RUNTIME_PARAMETER">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="SERVER_ID" type="tns:serverId_type" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="RUNTIME_PARAMETER">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="1" name="NUMBER_OF_OFFERS" type="xs:integer">
+                <xs:annotation>
+                  <xs:documentation>Number of offers in response.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

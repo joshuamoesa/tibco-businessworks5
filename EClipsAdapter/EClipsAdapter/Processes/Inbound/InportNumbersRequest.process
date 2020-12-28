@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns5="http://xmlns.kpn.com/fixed/EClipsAdapter/Response/CreateSubscriberResponse.xsd" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns7="http://xmlns.kpn.com/fixed/EClipsAdapter/Response/DeleteSubscribersResponse.xsd" xmlns:ns8="http://xmlns.kpn.com/fixed/EClipsAdapter/Response/InportNumbersResponse.xsd" xmlns:ns9="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:ns10="http://xmlns.kpn.com/imported/ordermessage.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Response/CreateSubscriberResponse.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Response/CreateSubscriber.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Response/DeleteSubscribersResponse.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Response/DeleteSubscribers.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Response/InportNumbersResponse.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Response/InportNumbers.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Response/UpdateOrderStatus.xsd"/>
+    <pd:name>EClipsAdapter/Processes/Inbound/InportNumbersRequest.process</pd:name>
+    <pd:startName>Receive JMS Publication</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive JMS Publication">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>54</pd:x>
+        <pd:y>189</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>%%Common/JMS/JmsMaxSessions%%</maxSessions>
+                <destination>%%Env%%.FIXED.%%EClipsAdapter/ComponentDomain%%.%%EClipsAdapter/ComponentId%%.Request.InportNumbers.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>868</pd:endX>
+    <pd:endY>179</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Confirm JMS Publication">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>723</pd:x>
+        <pd:y>187</pd:y>
+        <config>
+            <ConfirmEvent>Receive JMS Publication</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Process Publication">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>393</pd:x>
+        <pd:y>189</pd:y>
+        <config>
+            <processName>/EClipsAdapter/Processes/Inbound/Sub/Sub_ProcessInportNumbersRequest.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <Body>
+                    <xsl:value-of select="$Receive-JMS-Publication/ns2:ActivityOutput/Body"/>
+                </Body>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log JMS Publication">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>219</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04052&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="eai:getMessageId($Receive-JMS-Publication/ns2:ActivityOutput/Body)"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSHeaders/ns2:JMSDestination"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="concat(tib:render-xml($Receive-JMS-Publication/ns2:ActivityOutput/JMSHeaders, true(), true()),'&#xA;', tib:render-xml($Receive-JMS-Publication/ns2:ActivityOutput/JMSProperties, true(), true()),'&#xA;', tib:render-xml($Receive-JMS-Publication/ns2:ActivityOutput/OtherProperties, true(), true()))"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$Receive-JMS-Publication/ns2:ActivityOutput/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ErrorReply">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:description>This error reply sends asynchornous reply to Module 697.11 </pd:description>
+        <pd:x>711</pd:x>
+        <pd:y>400</pd:y>
+        <config>
+            <processName>/EClipsAdapter/Processes/Inbound/Sub/Sub_ReplyException.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$_error_Process-Publication/ns4:ErrorReply/ns4:Body/*" element="ns9:UpdateOrderStatus"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <ThrowExceptionIn>
+                <Destination>
+                    <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env , &quot;.FIXED.&quot;, $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentDomain,   &quot;.&quot; ,     $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId   , &quot;.Response.InportNumbers.1&quot;)"/>
+                </Destination>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_Process-Publication/ns4:ErrorReply/ns4:Errors/ns4:Error/ns4:MsgCode)">
+                        <xsl:copy-of select="$_error_Process-Publication/ns4:ErrorReply/ns4:Errors/ns4:Error"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ns4:Error>
+                            <ns4:MsgCode>
+                                <xsl:value-of select="&quot;EAI-03057&quot;"/>
+                            </ns4:MsgCode>
+                            <ns4:Params>
+                                <xsl:value-of select="&quot;ReceiveDeactivation&quot;"/>
+                            </ns4:Params>
+                            <xsl:if test="$Receive-JMS-Publication/ns2:ActivityOutput/Body">
+                                <ns4:MsgId>
+                                    <xsl:value-of select="eai:getMessageId($Receive-JMS-Publication/ns2:ActivityOutput/Body)"/>
+                                </ns4:MsgId>
+                            </xsl:if>
+                        </ns4:Error>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <XMLBody>
+                    <ns9:UpdateOrderStatus>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns1:CMH)">
+                                <xsl:for-each select="$_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns1:CMH">
+                                    <ns1:CMH>
+                                        <ns1:ID>
+                                            <xsl:value-of select="ns1:ID"/>
+                                        </ns1:ID>
+                                        <ns1:NAME>
+                                            <xsl:value-of select="ns1:NAME"/>
+                                        </ns1:NAME>
+                                        <xsl:if test="ns1:FID">
+                                            <ns1:FID>
+                                                <xsl:value-of select="ns1:FID"/>
+                                            </ns1:FID>
+                                        </xsl:if>
+                                        <xsl:if test="ns1:MID">
+                                            <ns1:MID>
+                                                <xsl:value-of select="ns1:MID"/>
+                                            </ns1:MID>
+                                        </xsl:if>
+                                        <ns1:PARADIGM>
+                                            <xsl:value-of select="ns1:PARADIGM"/>
+                                        </ns1:PARADIGM>
+                                        <ns1:OBJECT>
+                                            <xsl:value-of select="ns1:OBJECT"/>
+                                        </ns1:OBJECT>
+                                        <ns1:VERSION>
+                                            <xsl:value-of select="ns1:VERSION"/>
+                                        </ns1:VERSION>
+                                        <xsl:for-each select="ns1:FROM">
+                                            <ns1:FROM>
+                                                <xsl:attribute name="ns1:COMPONENT_ID">
+                                                    <xsl:value-of select="@ns1:COMPONENT_ID"/>
+                                                </xsl:attribute>
+                                                <xsl:if test="@ns1:COMPONENT_VERSION">
+                                                    <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                                        <xsl:value-of select="@ns1:COMPONENT_VERSION"/>
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:if test="@ns1:END_USER_INFO">
+                                                    <xsl:attribute name="ns1:END_USER_INFO">
+                                                        <xsl:value-of select="@ns1:END_USER_INFO"/>
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:if test="@ns1:SOURCE_ADDRESS">
+                                                    <xsl:attribute name="ns1:SOURCE_ADDRESS">
+                                                        <xsl:value-of select="@ns1:SOURCE_ADDRESS"/>
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                            </ns1:FROM>
+                                        </xsl:for-each>
+                                        <xsl:for-each select="ns1:TO">
+                                            <ns1:TO>
+                                                <xsl:attribute name="ns1:DESTINATION">
+                                                    <xsl:value-of select="@ns1:DESTINATION"/>
+                                                </xsl:attribute>
+                                            </ns1:TO>
+                                        </xsl:for-each>
+                                        <xsl:for-each select="ns1:TRACKING">
+                                            <ns1:TRACKING>
+                                                <ns1:MESSAGE_ID>
+                                                    <xsl:value-of select="ns1:MESSAGE_ID"/>
+                                                </ns1:MESSAGE_ID>
+                                                <xsl:if test="ns1:EXTERNAL_REF">
+                                                    <ns1:EXTERNAL_REF>
+                                                        <xsl:value-of select="ns1:EXTERNAL_REF"/>
+                                                    </ns1:EXTERNAL_REF>
+                                                </xsl:if>
+                                                <xsl:for-each select="ns1:ITEM">
+                                                    <ns1:ITEM>
+                                                        <xsl:attribute name="ns1:APPINFO">
+                                                            <xsl:value-of select="@ns1:APPINFO"/>
+                                                        </xsl:attribute>
+                                                        <xsl:attribute name="ns1:EVENT">
+                                                            <xsl:value-of select="@ns1:EVENT"/>
+                                                        </xsl:attribute>
+                                                        <xsl:attribute name="ns1:TIMESTAMP">
+                                                            <xsl:value-of select="@ns1:TIMESTAMP"/>
+                                                        </xsl:attribute>
+                                                    </ns1:ITEM>
+                                                </xsl:for-each>
+                                                <xsl:for-each select="ns1:SEQUENCE_NO">
+                                                    <ns1:SEQUENCE_NO>
+                                                        <xsl:value-of select="."/>
+                                                    </ns1:SEQUENCE_NO>
+                                                </xsl:for-each>
+                                            </ns1:TRACKING>
+                                        </xsl:for-each>
+                                        <xsl:for-each select="ns1:ATTRIBUTE">
+                                            <ns1:ATTRIBUTE>
+                                                <xsl:attribute name="ns1:NAME">
+                                                    <xsl:value-of select="@ns1:NAME"/>
+                                                </xsl:attribute>
+                                                <xsl:attribute name="ns1:VALUE">
+                                                    <xsl:value-of select="@ns1:VALUE"/>
+                                                </xsl:attribute>
+                                            </ns1:ATTRIBUTE>
+                                        </xsl:for-each>
+                                    </ns1:CMH>
+                                </xsl:for-each>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <ns1:CMH>
+                                    <ns1:ID>
+                                        <xsl:value-of select="&quot;0302&quot;"/>
+                                    </ns1:ID>
+                                    <ns1:NAME>
+                                        <xsl:value-of select="&quot;InportNumbers&quot;"/>
+                                    </ns1:NAME>
+                                    <ns1:MID>
+                                        <xsl:value-of select="&quot;707.31&quot;"/>
+                                    </ns1:MID>
+                                    <ns1:PARADIGM>
+                                        <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                                    </ns1:PARADIGM>
+                                    <ns1:OBJECT>
+                                        <xsl:value-of select="&quot;CreateMultiMediaAccount&quot;"/>
+                                    </ns1:OBJECT>
+                                    <ns1:VERSION>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </ns1:VERSION>
+                                    <ns1:FROM>
+                                        <xsl:attribute name="ns1:COMPONENT_ID">
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentVersion"/>
+                                        </xsl:attribute>
+                                    </ns1:FROM>
+                                    <ns1:TO>
+                                        <xsl:attribute name="ns1:DESTINATION">
+                                            <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env , &quot;.FIXED.&quot;, $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentDomain,   &quot;.&quot; ,     $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId   , &quot;.Response.InportNumbers.1&quot;)"/>
+                                        </xsl:attribute>
+                                    </ns1:TO>
+                                    <ns1:TRACKING>
+                                        <xsl:choose>
+                                            <xsl:when test="exists($Receive-JMS-Publication/ns2:ActivityOutput/Body)">
+                                                <ns1:MESSAGE_ID>
+                                                    <xsl:value-of select="eai:getMessageId($Receive-JMS-Publication/ns2:ActivityOutput/Body)"/>
+                                                </ns1:MESSAGE_ID>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <ns1:MESSAGE_ID>
+                                                    <xsl:value-of select="eai:createGUID()"/>
+                                                </ns1:MESSAGE_ID>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </ns1:TRACKING>
+                                </ns1:CMH>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <ns10:BODY>
+                            <ORDER>
+                                <ORDER_HEADER>
+                                    <xsl:choose>
+                                        <xsl:when test="exists($_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns10:BODY/ORDER/ORDER_HEADER/ORDER_TYPE)">
+                                            <ORDER_TYPE>
+                                                <xsl:value-of select="$_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns10:BODY/ORDER/ORDER_HEADER/ORDER_TYPE"/>
+                                            </ORDER_TYPE>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <ORDER_TYPE>
+                                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ReplyParameters/InportNumbers/ORDER_TYPE"/>
+                                            </ORDER_TYPE>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    <ORDER_STATUS>
+                                        <ORDER_STATUS>
+                                            <xsl:value-of select="$Result-Status/root/@ns6:STATUS"/>
+                                        </ORDER_STATUS>
+                                        <ERROR_DESCRIPTION>
+                                            <xsl:value-of select="$Result-Status/root/@ns6:ERROR_DESCRIPTION"/>
+                                        </ERROR_DESCRIPTION>
+                                    </ORDER_STATUS>
+                                    <xsl:choose>
+                                        <xsl:when test="exists($_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns10:BODY/ORDER/ORDER_HEADER/CREATION_DATE)">
+                                            <CREATION_DATE>
+                                                <xsl:value-of select="$_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns10:BODY/ORDER/ORDER_HEADER/CREATION_DATE"/>
+                                            </CREATION_DATE>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <CREATION_DATE>
+                                                <xsl:value-of select="current-dateTime()"/>
+                                            </CREATION_DATE>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ORDER_HEADER>
+                                <ORDER_ITEM>
+                                    <ORDER_ITEM_HEADER>
+                                        <xsl:choose>
+                                            <xsl:when test="exists($_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns10:BODY/ORDER/ORDER_ITEM/ORDER_ITEM_HEADER/ORDER_ITEM_TYPE)">
+                                                <ORDER_ITEM_TYPE>
+                                                    <xsl:value-of select="$_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns10:BODY/ORDER/ORDER_ITEM[1]/ORDER_ITEM_HEADER/ORDER_ITEM_TYPE"/>
+                                                </ORDER_ITEM_TYPE>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <ORDER_ITEM_TYPE>
+                                                    <xsl:value-of select="&quot;PRODUCT&quot;"/>
+                                                </ORDER_ITEM_TYPE>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </ORDER_ITEM_HEADER>
+                                    <xsl:choose>
+                                        <xsl:when test="exists($_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns10:BODY/ORDER/ORDER_ITEM/PRODUCT_CATEGORY)">
+                                            <PRODUCT_CATEGORY>
+                                                <xsl:value-of select="$_error_Process-Publication/ns4:ErrorReply/ns4:Body/ns9:UpdateOrderStatus/ns10:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                                            </PRODUCT_CATEGORY>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <PRODUCT_CATEGORY>
+                                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ReplyParameters/InportNumbers/PRODUCT_CATEGORY"/>
+                                            </PRODUCT_CATEGORY>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ORDER_ITEM>
+                            </ORDER>
+                        </ns10:BODY>
+                    </ns9:UpdateOrderStatus>
+                </XMLBody>
+                <JMS>
+                    <JMSHeaders>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSHeaders/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSHeaders/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSHeaders/node()"/>
+                    </JMSHeaders>
+                    <JMSProperties>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSProperties/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSProperties/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSProperties/node()"/>
+                    </JMSProperties>
+                    <OtherProperties>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/OtherProperties/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/OtherProperties/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/OtherProperties/node()"/>
+                    </OtherProperties>
+                </JMS>
+            </ThrowExceptionIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Result Status">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>598</pd:x>
+        <pd:y>397</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root" type="ns6:ResultStatus"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="exists($_error_Process-Publication/ns4:ErrorReply)">
+                    <xsl:choose>
+                        <xsl:when test="$_error_Process-Publication/ns4:ErrorReply/ns4:Errors/ns4:Error/ns4:MsgCode =&quot;EClips-03002&quot;">
+                            <root>
+                                <xsl:attribute name="ns6:STATUS">
+                                    <xsl:value-of select="3"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                                    <xsl:value-of select="&quot;Incorrect data supplied in message&quot;"/>
+                                </xsl:attribute>
+                            </root>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <root>
+                                <xsl:attribute name="ns6:STATUS">
+                                    <xsl:value-of select="1"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                                    <xsl:value-of select="&quot;General un-attributable error&quot;"/>
+                                </xsl:attribute>
+                            </root>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <root>
+                        <xsl:attribute name="ns6:STATUS">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                            <xsl:value-of select="&quot;General un-attributable error&quot;"/>
+                        </xsl:attribute>
+                    </root>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>197</pd:x>
+        <pd:y>384</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <ns4:Errors>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Process-Publication/ns4:ErrorReply)">
+                            <ns4:Error>
+                                <xsl:if test="$_error_Process-Publication/ns4:ErrorReply/ns4:Errors/ns4:Error[1]/ns4:MsgCode">
+                                    <ns4:MsgCode>
+                                        <xsl:value-of select="$_error_Process-Publication/ns4:ErrorReply/ns4:Errors/ns4:Error[1]/ns4:MsgCode"/>
+                                    </ns4:MsgCode>
+                                </xsl:if>
+                                <xsl:for-each select="$_error_Process-Publication/ns4:ErrorReply/ns4:Errors/ns4:Error/ns4:Params">
+                                    <ns4:Params>
+                                        <xsl:value-of select="."/>
+                                    </ns4:Params>
+                                </xsl:for-each>
+                                <ns4:MsgId>
+                                    <xsl:value-of select="eai:getMessageId($Receive-JMS-Publication/ns2:ActivityOutput/Body)"/>
+                                </ns4:MsgId>
+                                <ns3:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </ns3:ErrorReport>
+                            </ns4:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns4:Error>
+                                <ns4:MsgCode>
+                                    <xsl:value-of select="&quot;EAI-03057&quot;"/>
+                                </ns4:MsgCode>
+                                <ns4:Params>
+                                    <xsl:value-of select="&quot;InportNumbers&quot;"/>
+                                </ns4:Params>
+                                <xsl:if test="$Receive-JMS-Publication/ns2:ActivityOutput/Body">
+                                    <ns4:MsgId>
+                                        <xsl:value-of select="eai:getMessageId($Receive-JMS-Publication/ns2:ActivityOutput/Body)"/>
+                                    </ns4:MsgId>
+                                </xsl:if>
+                            </ns4:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns4:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error Flag">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:description>Null activity for Technical or Functional Error</pd:description>
+        <pd:x>404</pd:x>
+        <pd:y>388</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>557</pd:x>
+        <pd:y>290</pd:y>
+        <config>
+            <processName>/EClipsAdapter/Processes/Inbound/Sub/Sub_ThrowException.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ThrowExceptionIn>
+                <ComponentId>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId"/>
+                </ComponentId>
+                <ComponentVersion>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentVersion"/>
+                </ComponentVersion>
+                <ns4:Errors>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Process-Publication)">
+                            <xsl:copy-of select="$_error_Process-Publication/ns4:ErrorReply/ns4:Errors/ns4:Error"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns4:Error>
+                                <ns4:MsgCode>
+                                    <xsl:value-of select="&quot;EAI-03057&quot;"/>
+                                </ns4:MsgCode>
+                                <ns4:Params>
+                                    <xsl:value-of select="&quot;InPortNumber&quot;"/>
+                                </ns4:Params>
+                                <xsl:if test="$Receive-JMS-Publication/ns2:ActivityOutput/Body">
+                                    <ns4:MsgId>
+                                        <xsl:value-of select="eai:getMessageId($Receive-JMS-Publication/ns2:ActivityOutput/Body)"/>
+                                    </ns4:MsgId>
+                                </xsl:if>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                            </ns4:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns4:Errors>
+                <TextBody>
+                    <xsl:value-of select="$Receive-JMS-Publication/ns2:ActivityOutput/Body"/>
+                </TextBody>
+                <JMS>
+                    <JMSHeaders>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSHeaders/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSHeaders/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSHeaders/node()"/>
+                    </JMSHeaders>
+                    <JMSProperties>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSProperties/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSProperties/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/JMSProperties/node()"/>
+                    </JMSProperties>
+                    <OtherProperties>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/OtherProperties/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/OtherProperties/@*"/>
+                        <xsl:copy-of select="$Receive-JMS-Publication/ns2:ActivityOutput/OtherProperties/node()"/>
+                    </OtherProperties>
+                </JMS>
+            </ThrowExceptionIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm JMS Publication</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JMS Publication</pd:from>
+        <pd:to>Process Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process Publication</pd:from>
+        <pd:to>Confirm JMS Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process Publication</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorReply</pd:from>
+        <pd:to>Confirm JMS Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Result Status</pd:from>
+        <pd:to>ErrorReply</pd:to>
+        <pd:xpathDescription>ProcessPublicationError</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($_error_Process-Publication)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Publication</pd:from>
+        <pd:to>Log JMS Publication</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("EAI-04052")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Publication</pd:from>
+        <pd:to>Process Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Receive JMS Publication</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Result Status</pd:from>
+        <pd:to>Confirm JMS Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-10066330</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>Error Flag</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Flag</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:xpathDescription>Technical Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error_Process-Publication/ns4:ErrorReply/ns4:Errors/ns4:Error/ns4:MsgCode = "EClips-03006"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Flag</pd:from>
+        <pd:to>Result Status</pd:to>
+        <pd:xpathDescription>Functional Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Throw Exception</pd:from>
+        <pd:to>Confirm JMS Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

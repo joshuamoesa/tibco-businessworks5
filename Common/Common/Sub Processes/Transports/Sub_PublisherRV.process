@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:pfx="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions">
+    <xsd:import namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>Common/Sub Processes/Transports/Sub_PublisherRV.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="TransportPubIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Destination" type="xsd:string"/>
+                    <xsd:element name="ReplyToDestination" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="Body" type="xsd:string"/>
+                    <xsd:element name="MessageId" type="xsd:string"/>
+                    <xsd:element name="AdditionalLogID" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="JMS" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Selector" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Expiration" type="xsd:long" minOccurs="0"/>
+                                <xsd:element name="Priority" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="CorrelationId" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupSeq" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="Trace" minOccurs="0">
+                                    <xsd:complexType>
+                                        <xsd:choice>
+                                            <xsd:element name="header" type="xsd:anyType"/>
+                                            <xsd:element name="full" type="xsd:anyType"/>
+                                        </xsd:choice>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>65</pd:startX>
+    <pd:startY>67</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>380</pd:endX>
+    <pd:endY>66</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="RVCM Publisher">
+        <pd:type>com.tibco.plugin.tibrv.RVPubActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVPubActivity</pd:resourceType>
+        <pd:x>274</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <sharedChannel>/Common/Shared Resources/RVCM Transport.rvtransport</sharedChannel>
+            <xmlEncoding>false</xmlEncoding>
+            <xsdString ref="ns1:msg"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <subject>
+                    <xsl:value-of select="$Start/TransportPubIn/Destination"/>
+                </subject>
+                <xsl:if test="$Start/TransportPubIn/ReplyToDestination">
+                    <replySubject>
+                        <xsl:value-of select="$Start/TransportPubIn/ReplyToDestination"/>
+                    </replySubject>
+                </xsl:if>
+                <body>
+                    <ns1:field>
+                        <ns1:name>
+                            <xsl:value-of select="&quot;xml&quot;"/>
+                        </ns1:name>
+                        <ns1:id>
+                            <xsl:value-of select="0"/>
+                        </ns1:id>
+                        <ns1:simple xsi:type="ns1:tibrvXml">
+                            <xsl:value-of select="$Start/TransportPubIn/Body"/>
+                        </ns1:simple>
+                    </ns1:field>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>169</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04001&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Start/TransportPubIn/MessageId"/>
+                </MsgId>
+                <xsl:if test="$Start/TransportPubIn/AdditionalLogID">
+                    <additionalLogID>
+                        <xsl:value-of select="$Start/TransportPubIn/AdditionalLogID"/>
+                    </additionalLogID>
+                </xsl:if>
+                <Parameter>
+                    <xsl:value-of select="$Start/TransportPubIn/Destination"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$Start/TransportPubIn/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>170</pd:x>
+        <pd:y>291</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="eai:getMessageText(&quot;EAI-03050&quot;)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;EAI-03050&quot;"/>
+                </messageCode>
+                <data>
+                    <pfx:Error>
+                        <pfx:MsgCode>
+                            <xsl:value-of select="&quot;EAI-03050&quot;"/>
+                        </pfx:MsgCode>
+                        <pfx:MsgId>
+                            <xsl:value-of select="$Start/TransportPubIn/MessageId"/>
+                        </pfx:MsgId>
+                        <ns:ErrorReport>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/node()"/>
+                        </ns:ErrorReport>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error_RVCM-Publisher)">
+                                <pfx:ActivityError>
+                                    <xsl:copy-of select="$_error_RVCM-Publisher/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_RVCM-Publisher/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_RVCM-Publisher/ActivityErrors/node()"/>
+                                </pfx:ActivityError>
+                            </xsl:when>
+                        </xsl:choose>
+                    </pfx:Error>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log Message</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("EAI-04001")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RVCM Publisher</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Message</pd:from>
+        <pd:to>RVCM Publisher</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Message</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RVCM Publisher</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65535</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RVCM Publisher</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

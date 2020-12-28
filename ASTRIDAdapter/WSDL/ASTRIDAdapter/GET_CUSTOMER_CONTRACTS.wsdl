@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_CUSTOMER_CONTRACTS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_CUSTOMER_CONTRACTS">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_CUSTOMER_CONTRACTS">
+			<xsd:element name="GetCustomerContractsRequest" type="s:KSD_GetCustomerContracts"/>
+			<xsd:complexType name="KSD_GetCustomerContracts">
+				<xsd:sequence>
+					<xsd:element name="GUID" type="xsd:string"/>
+					<xsd:element name="houseNumber" type="xsd:string"/>
+					<xsd:element name="houseNumberExtension" type="xsd:string"/>
+					<xsd:element name="dutchPostcodeNums" type="xsd:string"/>
+					<xsd:element name="dutchPostcodeChars" type="xsd:string"/>
+					<xsd:element name="centralCustomerId" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetCustomerContractsResponse" type="s:KSD_CustomerContracts"/>
+			<xsd:complexType name="KSD_CustomerContracts">
+				<xsd:sequence>
+					<xsd:element name="GUID" type="xsd:string"/>
+					<xsd:element name="SLAs" type="s:SLA"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="SLA">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="SLA" type="s:SLAType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="SLAType">
+				<xsd:sequence>
+					<xsd:element name="index" type="xsd:integer"/>
+					<xsd:element name="configuratieID" type="xsd:string"/>
+					<xsd:element name="configuratieOMS" type="xsd:string"/>
+					<xsd:element name="contractSoortCode" type="xsd:string"/>
+					<xsd:element name="contractSoortOms" type="xsd:string"/>
+					<xsd:element name="contractWerktijdCode" type="xsd:string"/>
+					<xsd:element name="contractResponseHours" type="xsd:integer"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<message name="GetCustomerContractsRequestMsg">
+		<part name="parameters" element="s:GetCustomerContractsRequest"/>
+	</message>
+	<message name="GetCustomerContractsResponseMsg">
+		<part name="parameters" element="s:GetCustomerContractsResponse"/>
+	</message>
+	<portType name="GET_CUSTOMER_CONTRACTSPortType">
+		<operation name="GetCustomerContractsRequest">
+			<input message="s:GetCustomerContractsRequestMsg"/>
+			<output message="s:GetCustomerContractsResponseMsg"/>
+		</operation>
+	</portType>
+	<binding name="GET_CUSTOMER_CONTRACTSSoapBinding" type="s:GET_CUSTOMER_CONTRACTSPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="GetCustomerContractsRequest">
+			<soap:operation soapAction="urn:GET_CUSTOMER_CONTRACTS/GetCustomerContractsRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="GET_CUSTOMER_CONTRACTS_SERVICE">
+		<port name="GET_CUSTOMER_CONTRACTSSoap" binding="s:GET_CUSTOMER_CONTRACTSSoapBinding">
+			<soap:address location="http://eaiprd.telecom.ptt.nl:9190/ExpertDeskAdapter"/>
+		</port>
+	</service>
+</wsdl:definitions>

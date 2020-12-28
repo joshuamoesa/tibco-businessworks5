@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/CreateSubscriberRequest.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://xmlns.kpn.com/EAI/fixed/0292_CreateSubscriber/1.0/Request" xmlns:pfx2="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/InportNumbersRequest.xsd" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0302_InportNumbers/1.0/Request" xmlns:pfx3="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" xmlns:ns5="http://xmlns.kpn.com/imported/ordermessage.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/CreateSubscriberRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/CreateSubscriber.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/InportNumbersRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/InportNumbers.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/SubmitOrder.xsd"/>
+    <pd:name>EClipsAdapter/Test Processes/ZIPB ECLIPS/InportNumbersRequest JMS.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>76</pd:startX>
+    <pd:startY>93</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>459</pd:endX>
+    <pd:endY>89</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>196</pd:x>
+        <pd:y>93</pd:y>
+        <config>
+            <element ref="pfx3:SubmitOrder"/>
+        </config>
+        <pd:inputBindings>
+            <pfx3:SubmitOrder>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;707&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;InPortNumber&quot;"/>
+                    </ns1:NAME>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;707.30&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;PhoneNumbers&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env, &quot;.FIXED.&quot; , $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentDomain, &quot;.&quot;, $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId,  &quot;.Request.InportNumbers.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                </ns1:CMH>
+                <ns5:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="&quot;InportNumbers&quot;"/>
+                            </ORDER_TYPE>
+                            <CUSTOMER_ID>
+                                <ID_PACKAGER>
+                                    <INTERNAL>
+                                        <xsl:value-of select="&quot;INT&quot;"/>
+                                    </INTERNAL>
+                                    <EXTERNAL>
+                                        <xsl:value-of select="&quot;02&quot;"/>
+                                    </EXTERNAL>
+                                </ID_PACKAGER>
+                            </CUSTOMER_ID>
+                            <EXTERNAL_REFERENCE>
+                                <xsl:value-of select="&quot;ext&quot;"/>
+                            </EXTERNAL_REFERENCE>
+                            <CREATION_DATE>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </CREATION_DATE>
+                            <OTHER_REFERENCE>
+                                <ORIGIN>
+                                    <xsl:value-of select="&quot;zSNI_RFO_ID&quot;"/>
+                                </ORIGIN>
+                                <REFERENCE>
+                                    <xsl:value-of select="&quot;sni_ref_id&quot;"/>
+                                </REFERENCE>
+                            </OTHER_REFERENCE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="&quot;oitem&quot;"/>
+                                </ORDER_ITEM_TYPE>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="&quot;PRODUCT&quot;"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT>
+                                <MULTI_MEDIA_PRODUCT>
+                                    <SERVICES>
+                                        <MULTI_MEDIA_SERVICE>
+                                            <VOIP_PLATFORM_CODE>
+                                                <xsl:value-of select="&quot;aaa&quot;"/>
+                                            </VOIP_PLATFORM_CODE>
+                                        </MULTI_MEDIA_SERVICE>
+                                        <PORTING_SERVICE>
+                                            <DONOR_SERVICE_PROVIDER_ID>
+                                                <xsl:value-of select="&quot;123&quot;"/>
+                                            </DONOR_SERVICE_PROVIDER_ID>
+                                            <RECIPIENT_SERVICE_PROVIDER_ID>
+                                                <xsl:value-of select="&quot;657&quot;"/>
+                                            </RECIPIENT_SERVICE_PROVIDER_ID>
+                                            <PORTING_WISH_DATE_TIME>
+                                                <xsl:value-of select="current-dateTime()"/>
+                                            </PORTING_WISH_DATE_TIME>
+                                            <SUPPORTS_AUTOMATIC_SYNCHRONISATION>
+                                                <xsl:value-of select="1"/>
+                                            </SUPPORTS_AUTOMATIC_SYNCHRONISATION>
+                                            <ACCESS_LOCATION>
+                                                <STREET_NAME>
+                                                    <xsl:value-of select="&quot;seepz&quot;"/>
+                                                </STREET_NAME>
+                                                <HOUSE_NUMBER>
+                                                    <xsl:value-of select="&quot;123&quot;"/>
+                                                </HOUSE_NUMBER>
+                                                <HOUSE_NUMBER_EXTENSION>
+                                                    <xsl:value-of select="&quot;AA&quot;"/>
+                                                </HOUSE_NUMBER_EXTENSION>
+                                                <DUTCH_POSTCODE>
+                                                    <xsl:value-of select="&quot;9999AA&quot;"/>
+                                                </DUTCH_POSTCODE>
+                                                <CITY_NAME>
+                                                    <xsl:value-of select="&quot;mumbai&quot;"/>
+                                                </CITY_NAME>
+                                            </ACCESS_LOCATION>
+                                        </PORTING_SERVICE>
+                                    </SERVICES>
+                                    <RESOURCES>
+                                        <PHONE_NUMBER_SERIES>
+                                            <NUMBER_HIGH>
+                                                <xsl:value-of select="&quot;123&quot;"/>
+                                            </NUMBER_HIGH>
+                                            <NUMBER_LOW>
+                                                <xsl:value-of select="&quot;12&quot;"/>
+                                            </NUMBER_LOW>
+                                        </PHONE_NUMBER_SERIES>
+                                    </RESOURCES>
+                                </MULTI_MEDIA_PRODUCT>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns5:BODY>
+            </pfx3:SubmitOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>327</pd:x>
+        <pd:y>90</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.%%EClipsAdapter/ComponentDomain%%.%%EClipsAdapter/ComponentId%%.Request.InportNumbers.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx3:SubmitOrder, false(), true())"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

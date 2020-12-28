@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/TangoAdapter/Imported/ProductGroup_Tango.xsd" xmlns:eai="java://com.kpn.eai.tools.Tools" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/OrderServices/Subscribe/UpdateOrderStatus.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/imported/ordermessage.xsd" schemaLocation="/XSDSchemas/OrderServices/Imported/ProductGroup_CCO.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/TangoAdapter/Imported/ProductGroup_Tango.xsd" schemaLocation="/XSDSchemas/TangoAdapter/Imported/ProductGroup_Tango.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/ProvisioningWorkOrder/ProvisioningWorkOrderNotification_Driver_Repeat.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>252</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <element ref="pfx:UpdateOrderStatus"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:UpdateOrderStatus>
+                <ns:CMH>
+                    <ns:ID>
+                        <xsl:value-of select="'997'"/>
+                    </ns:ID>
+                    <ns:NAME>
+                        <xsl:value-of select="'ProvisioningWorkorderNotification'"/>
+                    </ns:NAME>
+                    <ns:FID>
+                        <xsl:value-of select="'FID'"/>
+                    </ns:FID>
+                    <ns:MID>
+                        <xsl:value-of select="'997.30'"/>
+                    </ns:MID>
+                    <ns:PARADIGM>
+                        <xsl:value-of select="'Publish'"/>
+                    </ns:PARADIGM>
+                    <ns:OBJECT>
+                        <xsl:value-of select="'OBJ'"/>
+                    </ns:OBJECT>
+                    <ns:VERSION>
+                        <xsl:value-of select="'1.0'"/>
+                    </ns:VERSION>
+                    <ns:FROM>
+                        <xsl:attribute name="ns:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns:FROM>
+                    <ns:TO>
+                        <xsl:attribute name="ns:DESTINATION">
+                            <xsl:value-of select="&quot;FAT.FIXED.Operations.ASTRIDAdapter.Subscribe.ProvisioningWorkOrderNotification.1&quot;"/>
+                        </xsl:attribute>
+                    </ns:TO>
+                    <ns:TRACKING>
+                        <ns:MESSAGE_ID>
+                            <xsl:value-of select="eai:createGUID()"/>
+                        </ns:MESSAGE_ID>
+                        <ns:ITEM>
+                            <xsl:attribute name="ns:APPINFO">
+                                <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:EVENT">
+                                <xsl:value-of select="'ProvisioningWorkorderNotification'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns:ITEM>
+                    </ns:TRACKING>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;managed_object_class&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="&quot;CreateTicket&quot;"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;managed_object_class_extension&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="1"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;managed_object_class_version&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="&quot;managed_object_class_version&quot;"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;message_origination_it_domain&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="&quot;TANGO&quot;"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;message_instance&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="&quot;message_instance&quot;"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;message_creation_time&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="current-dateTime()"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;message_originating_it_domain&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="&quot;Tango&quot;"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                    <ns:ATTRIBUTE>
+                        <xsl:attribute name="ns:NAME">
+                            <xsl:value-of select="&quot;message_destination_it_domain&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns:VALUE">
+                            <xsl:value-of select="&quot;Astrid&quot;"/>
+                        </xsl:attribute>
+                    </ns:ATTRIBUTE>
+                </ns:CMH>
+                <ns2:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="&quot;STATUS_UPDATE&quot;"/>
+                            </ORDER_TYPE>
+                            <COMMERCIAL_PRODUCT_CATEGORY>
+                                <xsl:value-of select="&quot;CM_TT&quot;"/>
+                            </COMMERCIAL_PRODUCT_CATEGORY>
+                            <EXTERNAL_REFERENCE>
+                                <xsl:value-of select="&quot;alarm_report_identifier&quot;"/>
+                            </EXTERNAL_REFERENCE>
+                            <ORDER_STATUS>
+                                <ORDER_STATUS>
+                                    <xsl:value-of select="&quot;CONFIRMATION&quot;"/>
+                                </ORDER_STATUS>
+                            </ORDER_STATUS>
+                            <CREATION_DATE>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </CREATION_DATE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="&quot;ORDER-ITEM_TYPE&quot;"/>
+                                </ORDER_ITEM_TYPE>
+                                <ORDER_ITEM_STATUS>
+                                    <xsl:value-of select="&quot;Order_item_status&quot;"/>
+                                </ORDER_ITEM_STATUS>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="'TROUBLE_SERVICE_VISIT_PRODUCT'"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT xsi:type="ns1:Product_Type">
+                                <TROUBLE_SERVICE_VISIT_PRODUCT>
+                                    <OBLIGATION>
+                                        <APPOINTMENT>
+                                            <ID>
+                                                <xsl:value-of select="&quot;ID&quot;"/>
+                                            </ID>
+                                        </APPOINTMENT>
+                                    </OBLIGATION>
+                                    <INCIDENT>
+                                        <PROGRESS>
+                                            <INITIATED_BY>
+                                                <xsl:value-of select="&quot;Initated&quot;"/>
+                                            </INITIATED_BY>
+                                            <DESCRIPTION>
+                                                <xsl:value-of select="&quot;desc&quot;"/>
+                                            </DESCRIPTION>
+                                            <STATUS>
+                                                <xsl:value-of select="&quot;status&quot;"/>
+                                            </STATUS>
+                                        </PROGRESS>
+                                        <HOURS>
+                                            <TRAVEL>
+                                                <xsl:value-of select="current-dateTime()"/>
+                                            </TRAVEL>
+                                            <WORK>
+                                                <xsl:value-of select="current-dateTime()"/>
+                                            </WORK>
+                                        </HOURS>
+                                        <GROUP>
+                                            <xsl:value-of select="&quot;Group&quot;"/>
+                                        </GROUP>
+                                        <ALLOCATED>
+                                            <xsl:value-of select="&quot;allocated&quot;"/>
+                                        </ALLOCATED>
+                                        <STATUS>
+                                            <xsl:value-of select="&quot;status&quot;"/>
+                                        </STATUS>
+                                        <CLOSUREDESCRIPTION>
+                                            <xsl:value-of select="&quot;closureDesc&quot;"/>
+                                        </CLOSUREDESCRIPTION>
+                                        <ACTION>
+                                            <xsl:value-of select="&quot;Action&quot;"/>
+                                        </ACTION>
+                                        <PROCESSCODE>
+                                            <xsl:value-of select="&quot;processCode&quot;"/>
+                                        </PROCESSCODE>
+                                    </INCIDENT>
+                                    <ROOT_CAUSE>
+                                        <LEVEL>
+                                            <xsl:value-of select="&quot;LEVEL&quot;"/>
+                                        </LEVEL>
+                                        <TECHNICAL_LEVEL>
+                                            <xsl:value-of select="&quot;TECHNICAL_LEVEL&quot;"/>
+                                        </TECHNICAL_LEVEL>
+                                    </ROOT_CAUSE>
+                                    <ROOT_CAUSE>
+                                        <LEVEL>
+                                            <xsl:value-of select="&quot;LEVEL&quot;"/>
+                                        </LEVEL>
+                                        <TECHNICAL_LEVEL>
+                                            <xsl:value-of select="&quot;TECHNICAL_LEVEL1&quot;"/>
+                                        </TECHNICAL_LEVEL>
+                                    </ROOT_CAUSE>
+                                    <ROOT_CAUSE>
+                                        <LEVEL>
+                                            <xsl:value-of select="&quot;LEVEL&quot;"/>
+                                        </LEVEL>
+                                        <TECHNICAL_LEVEL>
+                                            <xsl:value-of select="&quot;TECHNICAL_LEVEL2&quot;"/>
+                                        </TECHNICAL_LEVEL>
+                                    </ROOT_CAUSE>
+                                    <ROOT_CAUSE>
+                                        <LEVEL>
+                                            <xsl:value-of select="&quot;LEVEL&quot;"/>
+                                        </LEVEL>
+                                        <TECHNICAL_LEVEL>
+                                            <xsl:value-of select="&quot;TECHNICAL_LEVEL3&quot;"/>
+                                        </TECHNICAL_LEVEL>
+                                    </ROOT_CAUSE>
+                                    <ENGINEER>
+                                        <NAME>
+                                            <xsl:value-of select="&quot;Ename&quot;"/>
+                                        </NAME>
+                                        <ID>
+                                            <xsl:value-of select="&quot;Eid&quot;"/>
+                                        </ID>
+                                        <PHONENUMBER>
+                                            <xsl:value-of select="&quot;Phonenumber&quot;"/>
+                                        </PHONENUMBER>
+                                        <USER_NAME>
+                                            <xsl:value-of select="&quot;UserName&quot;"/>
+                                        </USER_NAME>
+                                    </ENGINEER>
+                                    <APPOINTMENT>
+                                        <ACTUAL>
+                                            <choice>
+                                                <END_DATETIME>
+                                                    <xsl:value-of select="current-dateTime()"/>
+                                                </END_DATETIME>
+                                            </choice>
+                                            <START_DATETIME>
+                                                <xsl:value-of select="current-dateTime()"/>
+                                            </START_DATETIME>
+                                        </ACTUAL>
+                                        <PLANNED>
+                                            <choice>
+                                                <END_DATETIME>
+                                                    <xsl:value-of select="current-dateTime()"/>
+                                                </END_DATETIME>
+                                            </choice>
+                                            <START_DATETIME>
+                                                <xsl:value-of select="current-dateTime()"/>
+                                            </START_DATETIME>
+                                        </PLANNED>
+                                    </APPOINTMENT>
+                                    <ROOT_CAUSE_LATEST_LEVEL>
+                                        <ROOT_CAUSE>
+                                            <xsl:value-of select="&quot;RootCause&quot;"/>
+                                        </ROOT_CAUSE>
+                                        <ROOT_CAUSE_ID>
+                                            <xsl:value-of select="&quot;RootCauseID&quot;"/>
+                                        </ROOT_CAUSE_ID>
+                                        <TECHNICAL_ROOT_CAUSE>
+                                            <xsl:value-of select="&quot;TEchinicalRootCause&quot;"/>
+                                        </TECHNICAL_ROOT_CAUSE>
+                                        <TECHNICAL_ROOT_CAUSE_ID>
+                                            <xsl:value-of select="&quot;TechinicalRootCauseId&quot;"/>
+                                        </TECHNICAL_ROOT_CAUSE_ID>
+                                    </ROOT_CAUSE_LATEST_LEVEL>
+                                    <ATTACHMENTS>
+                                        <ATTACHMENT>
+                                            <DATA>
+                                                <xsl:value-of select="tib:string-to-base64(&quot;Hello&quot;)"/>
+                                            </DATA>
+                                            <SIZE>
+                                                <xsl:value-of select="100"/>
+                                            </SIZE>
+                                            <NAME>
+                                                <xsl:value-of select="&quot;AttachmentName&quot;"/>
+                                            </NAME>
+                                        </ATTACHMENT>
+                                    </ATTACHMENTS>
+                                    <COSTS>
+                                        <TYPE>
+                                            <xsl:value-of select="&quot;Meerwerk&quot;"/>
+                                        </TYPE>
+                                        <AMOUNT>
+                                            <xsl:value-of select="1000"/>
+                                        </AMOUNT>
+                                        <CURRENCY>
+                                            <xsl:value-of select="'AMD'"/>
+                                        </CURRENCY>
+                                        <VAT_RATE>
+                                            <xsl:value-of select="12"/>
+                                        </VAT_RATE>
+                                        <DESCRIPTION>
+                                            <xsl:value-of select="'Description'"/>
+                                        </DESCRIPTION>
+                                    </COSTS>
+                                    <COSTS>
+                                        <TYPE>
+                                            <xsl:value-of select="&quot;Meerwerk&quot;"/>
+                                        </TYPE>
+                                        <AMOUNT>
+                                            <xsl:value-of select="10002"/>
+                                        </AMOUNT>
+                                        <CURRENCY>
+                                            <xsl:value-of select="'AMD'"/>
+                                        </CURRENCY>
+                                        <VAT_RATE>
+                                            <xsl:value-of select="123"/>
+                                        </VAT_RATE>
+                                        <DESCRIPTION>
+                                            <xsl:value-of select="'Description'"/>
+                                        </DESCRIPTION>
+                                    </COSTS>
+                                </TROUBLE_SERVICE_VISIT_PRODUCT>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns2:BODY>
+            </pfx:UpdateOrderStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>348</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.Operations.ASTRIDAdapter.Subscribe.ProvisioningWorkOrderNotification.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInput>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="true()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx:UpdateOrderStatus, false(),true())"/>
+                </Body>
+            </pfx2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

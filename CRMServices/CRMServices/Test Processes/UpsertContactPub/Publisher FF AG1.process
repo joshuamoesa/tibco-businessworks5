@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/UCMAdapter/Publish/0429_UpsertContactPub.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://xmlns.kpn.com/EAI/fixed/0429_UpsertContactPub/1.0/Publish" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/UCMAdapter/Publish/0429_UpsertContactPub.xsd" schemaLocation="/XSDSchemas/CRMServices/Publish/0429_UpsertContactPub.xsd"/>
+    <pd:name>CRMServices/Test Processes/UpsertContactPub/Publisher FF AG1.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>618</pd:endX>
+    <pd:endY>58</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="JMS Topic Publisher">
+        <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
+        <pd:x>459</pd:x>
+        <pd:y>85</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+            <ConnectionReference>/Common/Shared Resources/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <destinationTopic>
+                    <xsl:value-of select="$Map-Data/pfx:UpsertContactPub/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                </destinationTopic>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx:UpsertContactPub,false(),true())"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <element ref="pfx:UpsertContactPub"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:UpsertContactPub>
+                <ns:CMH>
+                    <ns:ID>ID</ns:ID>
+                    <ns:NAME>NAME</ns:NAME>
+                    <ns:FID>FID</ns:FID>
+                    <ns:MID>MID</ns:MID>
+                    <ns:PARADIGM>PARADIGM</ns:PARADIGM>
+                    <ns:OBJECT>OBJECT</ns:OBJECT>
+                    <ns:VERSION>VERSION</ns:VERSION>
+                    <ns:FROM ns:COMPONENT_ID="COMPONENT_ID" ns:COMPONENT_VERSION="COMPONENT_VERSION" ns:END_USER_INFO="END_USER_INFO" ns:SOURCE_ADDRESS="SOURCE_ADDRESS"/>
+                    <ns:TO>
+                        <xsl:attribute name="ns:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env,&quot;.FIXED.Operations.CRMServices.Publish.UpsertContactPub.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns:TO>
+                    <ns:TRACKING>
+                        <ns:MESSAGE_ID>MESSAGE_ID</ns:MESSAGE_ID>
+                        <ns:EXTERNAL_REF>EXTERNAL_REF</ns:EXTERNAL_REF>
+                        <ns:ITEM ns:APPINFO="APPINFO" ns:EVENT="EVENT" ns:TIMESTAMP="8895375161224770506"/>
+                        <ns:SEQUENCE_NO>SEQUENCE_NO</ns:SEQUENCE_NO>
+                    </ns:TRACKING>
+                    <ns:ATTRIBUTE ns:NAME="NAME" ns:VALUE="VALUE"/>
+                </ns:CMH>
+                <ns3:BODY>
+                    <ns3:CONTACT_PERSON>
+                        <ns3:OVERRIDE_VALIDATION>true</ns3:OVERRIDE_VALIDATION>
+                        <ns3:VALIDATION_WARNING_COUNT>0</ns3:VALIDATION_WARNING_COUNT>
+                        <ns3:VALIDATION_ERROR_COUNT>161859652</ns3:VALIDATION_ERROR_COUNT>
+                        <ns3:VALIDATION_TOTAL_WARNING_COUNT>1906812331</ns3:VALIDATION_TOTAL_WARNING_COUNT>
+                        <ns3:VALIDATION_TOTAL_ERROR_COUNT>0</ns3:VALIDATION_TOTAL_ERROR_COUNT>
+                        <ns3:CONTACT_PERSON_ID>CONTACT_PERSON_ID</ns3:CONTACT_PERSON_ID>
+                        <ns3:INITIALS>INITIALS</ns3:INITIALS>
+                        <ns3:FAMILY_NAME_PREFIX>FAMILY_NAME_PREFIX</ns3:FAMILY_NAME_PREFIX>
+                        <ns3:FAMILY_NAME>FAMILY_NAME</ns3:FAMILY_NAME>
+                        <ns3:FAMILY_NAME_POSTFIX>FAMILY_NAME_POSTFIX</ns3:FAMILY_NAME_POSTFIX>
+                        <ns3:PREFERRED_NAME>PREFERRED_NAME</ns3:PREFERRED_NAME>
+                        <ns3:DATE_OF_BIRTH>2008-10-20</ns3:DATE_OF_BIRTH>
+                        <ns3:ACADEMIC_TITLE>ACADEMIC_TITLE</ns3:ACADEMIC_TITLE>
+                        <ns3:CONTACT_MEDIUM>
+                            <ns3:TELEPHONE>TELEPHONE</ns3:TELEPHONE>
+                            <ns3:FAX>FAX</ns3:FAX>
+                            <ns3:EMAIL_ADDRESS>EMAIL_ADDRESS</ns3:EMAIL_ADDRESS>
+                            <ns3:USAGE>
+                                <ns3:SUPPRESS_ALL_EMAILS>false</ns3:SUPPRESS_ALL_EMAILS>
+                            </ns3:USAGE>
+                        </ns3:CONTACT_MEDIUM>
+                        <ns3:VALIDATION_RESULT>
+                            <ns3:SEVERITY>SEVERITY</ns3:SEVERITY>
+                            <ns3:CODE>CODE</ns3:CODE>
+                            <ns3:DESCRIPTION>DESCRIPTION</ns3:DESCRIPTION>
+                        </ns3:VALIDATION_RESULT>
+                        <ns3:ADDRESS language="nl">
+                            <ns3:OVERRIDE_VALIDATION>true</ns3:OVERRIDE_VALIDATION>
+                            <ns3:VALIDATION_WARNING_COUNT>869962161</ns3:VALIDATION_WARNING_COUNT>
+                            <ns3:VALIDATION_ERROR_COUNT>0</ns3:VALIDATION_ERROR_COUNT>
+                            <ns3:STREET_NAME namingConvention="PROPRIETARY">STREET_NAME</ns3:STREET_NAME>
+                            <ns3:HOUSE_NUMBER>HOUSE_NUMBER</ns3:HOUSE_NUMBER>
+                            <ns3:HOUSE_NUMBER_EXTENSION>HOUSE_NUMBER_EXTENSION</ns3:HOUSE_NUMBER_EXTENSION>
+                            <ns3:POSTCODE>POSTCODE</ns3:POSTCODE>
+                            <ns3:CITY_NAME>CITY_NAME</ns3:CITY_NAME>
+                            <ns3:COUNTRY>COUNTRY</ns3:COUNTRY>
+                            <ns3:COUNTRY_CODE>COUNTRY_CODE</ns3:COUNTRY_CODE>
+                            <ns3:ADDRESS_TYPE>ADDRESS_TYPE</ns3:ADDRESS_TYPE>
+                            <ns3:LOCATION_DESCRIPTION>LOCATION_DESCRIPTION</ns3:LOCATION_DESCRIPTION>
+                            <ns3:UNFORMATTED_ADDRESS>
+                                <ns3:ADDRESS_LINE sequenceNumber="852868953">ADDRESS_LINE</ns3:ADDRESS_LINE>
+                            </ns3:UNFORMATTED_ADDRESS>
+                            <ns3:RUNTIME_PARAMETERS>
+                                <ns3:SPECIAL_DESCRIPTION>SPECIAL_DESCRIPTION</ns3:SPECIAL_DESCRIPTION>
+                                <ns3:POSTCODE_SUFFIX>POSTCODE_SUFFIX</ns3:POSTCODE_SUFFIX>
+                                <ns3:IS_FUTURE_PRIMARY_ADDRESS>true</ns3:IS_FUTURE_PRIMARY_ADDRESS>
+                                <ns3:IS_PRIMARY_LOGICAL_ADDRESS>false</ns3:IS_PRIMARY_LOGICAL_ADDRESS>
+                                <ns3:IS_PRIMARY_MULTI_VALUE_GROUP>false</ns3:IS_PRIMARY_MULTI_VALUE_GROUP>
+                            </ns3:RUNTIME_PARAMETERS>
+                            <ns3:VALIDITY>
+                                <ns3:ADDRESS_STATUS>ADDRESS_STATUS</ns3:ADDRESS_STATUS>
+                                <ns3:VALID_FROM_DATE>2008-10-20</ns3:VALID_FROM_DATE>
+                                <ns3:VALID_UNTIL_DATE>2008-10-20</ns3:VALID_UNTIL_DATE>
+                            </ns3:VALIDITY>
+                            <ns3:VALIDATION_RESULT>
+                                <ns3:SEVERITY>SEVERITY</ns3:SEVERITY>
+                                <ns3:CODE>CODE</ns3:CODE>
+                                <ns3:DESCRIPTION>DESCRIPTION</ns3:DESCRIPTION>
+                            </ns3:VALIDATION_RESULT>
+                        </ns3:ADDRESS>
+                        <ns3:ADDRESS language="nl">
+                            <ns3:OVERRIDE_VALIDATION>true</ns3:OVERRIDE_VALIDATION>
+                            <ns3:VALIDATION_WARNING_COUNT>869962161</ns3:VALIDATION_WARNING_COUNT>
+                            <ns3:VALIDATION_ERROR_COUNT>0</ns3:VALIDATION_ERROR_COUNT>
+                            <ns3:STREET_NAME namingConvention="PROPRIETARY">STREET_NAME1</ns3:STREET_NAME>
+                            <ns3:HOUSE_NUMBER>HOUSE_NUMBER</ns3:HOUSE_NUMBER>
+                            <ns3:HOUSE_NUMBER_EXTENSION>HOUSE_NUMBER_EXTENSION</ns3:HOUSE_NUMBER_EXTENSION>
+                            <ns3:POSTCODE>POSTCODE</ns3:POSTCODE>
+                            <ns3:CITY_NAME>CITY_NAME</ns3:CITY_NAME>
+                            <ns3:COUNTRY>COUNTRY</ns3:COUNTRY>
+                            <ns3:COUNTRY_CODE>COUNTRY_CODE</ns3:COUNTRY_CODE>
+                            <ns3:ADDRESS_TYPE>ADDRESS_TYPE</ns3:ADDRESS_TYPE>
+                            <ns3:LOCATION_DESCRIPTION>LOCATION_DESCRIPTION</ns3:LOCATION_DESCRIPTION>
+                            <ns3:UNFORMATTED_ADDRESS>
+                                <ns3:ADDRESS_LINE sequenceNumber="852868953">ADDRESS_LINE</ns3:ADDRESS_LINE>
+                            </ns3:UNFORMATTED_ADDRESS>
+                            <ns3:RUNTIME_PARAMETERS>
+                                <ns3:SPECIAL_DESCRIPTION>SPECIAL_DESCRIPTION</ns3:SPECIAL_DESCRIPTION>
+                                <ns3:POSTCODE_SUFFIX>POSTCODE_SUFFIX</ns3:POSTCODE_SUFFIX>
+                                <ns3:IS_FUTURE_PRIMARY_ADDRESS>true</ns3:IS_FUTURE_PRIMARY_ADDRESS>
+                                <ns3:IS_PRIMARY_LOGICAL_ADDRESS>false</ns3:IS_PRIMARY_LOGICAL_ADDRESS>
+                                <ns3:IS_PRIMARY_MULTI_VALUE_GROUP>false</ns3:IS_PRIMARY_MULTI_VALUE_GROUP>
+                            </ns3:RUNTIME_PARAMETERS>
+                            <ns3:VALIDITY>
+                                <ns3:ADDRESS_STATUS>ADDRESS_STATUS</ns3:ADDRESS_STATUS>
+                                <ns3:VALID_FROM_DATE>2008-10-20</ns3:VALID_FROM_DATE>
+                                <ns3:VALID_UNTIL_DATE>2008-10-20</ns3:VALID_UNTIL_DATE>
+                            </ns3:VALIDITY>
+                            <ns3:VALIDATION_RESULT>
+                                <ns3:SEVERITY>SEVERITY</ns3:SEVERITY>
+                                <ns3:CODE>CODE</ns3:CODE>
+                                <ns3:DESCRIPTION>DESCRIPTION</ns3:DESCRIPTION>
+                            </ns3:VALIDATION_RESULT>
+                        </ns3:ADDRESS>
+                        <ns3:ADDRESS language="nl">
+                            <ns3:OVERRIDE_VALIDATION>true</ns3:OVERRIDE_VALIDATION>
+                            <ns3:VALIDATION_WARNING_COUNT>869962161</ns3:VALIDATION_WARNING_COUNT>
+                            <ns3:VALIDATION_ERROR_COUNT>0</ns3:VALIDATION_ERROR_COUNT>
+                            <ns3:STREET_NAME namingConvention="PROPRIETARY">STREET_NAME2</ns3:STREET_NAME>
+                            <ns3:HOUSE_NUMBER>HOUSE_NUMBER</ns3:HOUSE_NUMBER>
+                            <ns3:HOUSE_NUMBER_EXTENSION>HOUSE_NUMBER_EXTENSION</ns3:HOUSE_NUMBER_EXTENSION>
+                            <ns3:POSTCODE>POSTCODE</ns3:POSTCODE>
+                            <ns3:CITY_NAME>CITY_NAME</ns3:CITY_NAME>
+                            <ns3:COUNTRY>COUNTRY</ns3:COUNTRY>
+                            <ns3:COUNTRY_CODE>COUNTRY_CODE</ns3:COUNTRY_CODE>
+                            <ns3:ADDRESS_TYPE>ADDRESS_TYPE</ns3:ADDRESS_TYPE>
+                            <ns3:LOCATION_DESCRIPTION>LOCATION_DESCRIPTION</ns3:LOCATION_DESCRIPTION>
+                            <ns3:UNFORMATTED_ADDRESS>
+                                <ns3:ADDRESS_LINE sequenceNumber="852868953">ADDRESS_LINE</ns3:ADDRESS_LINE>
+                            </ns3:UNFORMATTED_ADDRESS>
+                            <ns3:RUNTIME_PARAMETERS>
+                                <ns3:SPECIAL_DESCRIPTION>SPECIAL_DESCRIPTION</ns3:SPECIAL_DESCRIPTION>
+                                <ns3:POSTCODE_SUFFIX>POSTCODE_SUFFIX</ns3:POSTCODE_SUFFIX>
+                                <ns3:IS_FUTURE_PRIMARY_ADDRESS>true</ns3:IS_FUTURE_PRIMARY_ADDRESS>
+                                <ns3:IS_PRIMARY_LOGICAL_ADDRESS>false</ns3:IS_PRIMARY_LOGICAL_ADDRESS>
+                                <ns3:IS_PRIMARY_MULTI_VALUE_GROUP>false</ns3:IS_PRIMARY_MULTI_VALUE_GROUP>
+                            </ns3:RUNTIME_PARAMETERS>
+                            <ns3:VALIDITY>
+                                <ns3:ADDRESS_STATUS>ADDRESS_STATUS</ns3:ADDRESS_STATUS>
+                                <ns3:VALID_FROM_DATE>2008-10-20</ns3:VALID_FROM_DATE>
+                                <ns3:VALID_UNTIL_DATE>2008-10-20</ns3:VALID_UNTIL_DATE>
+                            </ns3:VALIDITY>
+                            <ns3:VALIDATION_RESULT>
+                                <ns3:SEVERITY>SEVERITY</ns3:SEVERITY>
+                                <ns3:CODE>CODE</ns3:CODE>
+                                <ns3:DESCRIPTION>DESCRIPTION</ns3:DESCRIPTION>
+                            </ns3:VALIDATION_RESULT>
+                        </ns3:ADDRESS>
+                        <ns3:SIEBEL_ACCOUNT_REFERENCE>
+                            <ns3:SIEBEL_ACCOUNT_ID>SIEBEL_ACCOUNT_ID</ns3:SIEBEL_ACCOUNT_ID>
+                            <ns3:UCM_ROW_ID>UCM_ROW_ID</ns3:UCM_ROW_ID>
+                            <ns3:INTEGRATION_ID>INTEGRATION_ID</ns3:INTEGRATION_ID>
+                        </ns3:SIEBEL_ACCOUNT_REFERENCE>
+                        <ns3:RUNTIME_PARAMETERS>
+                            <ns3:IS_PRIMARY_MULTI_VALUE_GROUP>true</ns3:IS_PRIMARY_MULTI_VALUE_GROUP>
+                            <ns3:INTEGRATION_ID>INTEGRATION_ID</ns3:INTEGRATION_ID>
+                            <ns3:UCM_ROW_ID>UCM_ROW_ID</ns3:UCM_ROW_ID>
+                            <ns3:ID>ID</ns3:ID>
+                        </ns3:RUNTIME_PARAMETERS>
+                        <ns3:CROSS_REFERENCE>
+                            <ns3:CONTACT_ID>CONTACT_ID</ns3:CONTACT_ID>
+                            <ns3:CIF_SYSTEM_ID>CIF_SYSTEM_ID</ns3:CIF_SYSTEM_ID>
+                            <ns3:EXTERNAL_ID1>EXTERNAL_ID1</ns3:EXTERNAL_ID1>
+                            <ns3:SYSTEM_NAME>SYSTEM_NAME</ns3:SYSTEM_NAME>
+                            <ns3:SYSTEM_NUMBER>SYSTEM_NUMBER</ns3:SYSTEM_NUMBER>
+                        </ns3:CROSS_REFERENCE>
+                    </ns3:CONTACT_PERSON>
+                </ns3:BODY>
+            </pfx:UpsertContactPub>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Topic Publisher</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Topic Publisher</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://java.sun.com/products/oss/xml/ServiceActivation" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:ns1="http://java.sun.com/products/oss/xml/Common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://Enterprise.BVoIPOSSJ.VoIP.BuildingBlocks.ServiceLibrary" xmlns:pfx3="http://xmlns.kpn.com/eai/common/errors" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://java.sun.com/products/oss/xml/ServiceActivation" schemaLocation="/XSDSchemas/xAuthority/XmlServiceActivationSchema.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Inbound/Subprocesses/Requests/getOrderByKeyRequest.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="correlationID" type="xsd:string"/>
+                    <xsd:element name="type" type="xsd:string"/>
+                    <xsd:element name="primaryKey" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>59</pd:startX>
+    <pd:startY>92</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:for-each select="$Wait/getOrderTypesResponse/pfx:getOrderTypesResponse">
+                <pfx:getOrderTypesResponse>
+                    <xsl:for-each select="pfx:orderTypes">
+                        <pfx:orderTypes>
+                            <xsl:for-each select="ns1:item">
+                                <ns1:item>
+                                    <xsl:copy-of select="./@xsi:nil"/>
+                                    <xsl:value-of select="."/>
+                                </ns1:item>
+                            </xsl:for-each>
+                        </pfx:orderTypes>
+                    </xsl:for-each>
+                </pfx:getOrderTypesResponse>
+            </xsl:for-each>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>526</pd:endX>
+    <pd:endY>96</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx3:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Publish getOrderByKey Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>408</pd:x>
+        <pd:y>105</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Subprocesses/PublisherJMS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <correlationID>
+                    <xsl:value-of select="$Start/input/correlationID"/>
+                </correlationID>
+                <body>
+                    <xsl:value-of select="$Render-getOrderByKey-Request/xmlString"/>
+                </body>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map to OSS">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>159</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <element ref="pfx:getOrderByKeyRequest"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:getOrderByKeyRequest>
+                <pfx:orderKey>
+                    <ns1:applicationDN>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/xAuthorityAdapter/OSSTechnicalMessages/ApplicationDN"/>
+                    </ns1:applicationDN>
+                    <ns1:type>
+                        <xsl:value-of select="$Start/input/type"/>
+                    </ns1:type>
+                    <pfx:primaryKey>
+                        <xsl:value-of select="$Start/input/primaryKey"/>
+                    </pfx:primaryKey>
+                </pfx:orderKey>
+                <pfx:attributeName xsi:nil="true"/>
+            </pfx:getOrderByKeyRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Render getOrderByKey Request">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>285</pd:x>
+        <pd:y>103</pd:y>
+        <config>
+            <renderAsText>text</renderAsText>
+            <validateInput>false</validateInput>
+            <textEncoding>UTF-8</textEncoding>
+            <term ref="pfx:getOrderByKeyRequest"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:for-each select="$Map-to-OSS/pfx:getOrderByKeyRequest">
+                <pfx:getOrderByKeyRequest>
+                    <xsl:for-each select="pfx:orderKey">
+                        <pfx:orderKey>
+                            <xsl:for-each select="ns1:applicationContext">
+                                <ns1:applicationContext>
+                                    <ns1:factoryClass>
+                                        <xsl:value-of select="ns1:factoryClass"/>
+                                    </ns1:factoryClass>
+                                    <ns1:url>
+                                        <xsl:value-of select="ns1:url"/>
+                                    </ns1:url>
+                                    <xsl:for-each select="ns1:systemProperties">
+                                        <ns1:systemProperties>
+                                            <xsl:for-each select="ns1:property">
+                                                <ns1:property>
+                                                    <ns1:name>
+                                                        <xsl:value-of select="ns1:name"/>
+                                                    </ns1:name>
+                                                    <ns1:value>
+                                                        <xsl:value-of select="ns1:value"/>
+                                                    </ns1:value>
+                                                </ns1:property>
+                                            </xsl:for-each>
+                                        </ns1:systemProperties>
+                                    </xsl:for-each>
+                                </ns1:applicationContext>
+                            </xsl:for-each>
+                            <ns1:applicationDN>
+                                <xsl:value-of select="ns1:applicationDN"/>
+                            </ns1:applicationDN>
+                            <ns1:type>
+                                <xsl:value-of select="ns1:type"/>
+                            </ns1:type>
+                            <pfx:primaryKey>
+                                <xsl:value-of select="pfx:primaryKey"/>
+                            </pfx:primaryKey>
+                        </pfx:orderKey>
+                    </xsl:for-each>
+                    <xsl:for-each select="pfx:attributeName">
+                        <pfx:attributeName>
+                            <xsl:for-each select="ns1:item">
+                                <ns1:item>
+                                    <xsl:copy-of select="./@xsi:nil"/>
+                                    <xsl:value-of select="."/>
+                                </ns1:item>
+                            </xsl:for-each>
+                        </pfx:attributeName>
+                    </xsl:for-each>
+                </pfx:getOrderByKeyRequest>
+            </xsl:for-each>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>288</pd:x>
+        <pd:y>238</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;XAuth-03010&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="eai:getMessageText(&quot;XAuth-03010&quot;)"/>
+                </messageCode>
+                <data>
+                    <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                        <xsl:when test="exists($_error_Render-getOrderByKey-Request)">
+                            <pfx3:Error>
+                                <pfx3:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03011&quot;"/>
+                                </pfx3:MsgCode>
+                                <pfx3:Params>
+                                    <xsl:value-of select="&quot;getOrderByKeyRequest&quot;"/>
+                                </pfx3:Params>
+                            </pfx3:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Publish-getOrderByKey-Request)">
+                            <pfx3:Error>
+                                <pfx3:MsgCode>
+                                    <xsl:value-of select="$_error_Publish-getOrderByKey-Request/pfx3:Error/pfx3:MsgCode"/>
+                                </pfx3:MsgCode>
+                                <xsl:for-each select="$_error_Publish-getOrderByKey-Request/pfx3:Error/pfx3:Params">
+                                    <pfx3:Params>
+                                        <xsl:value-of select="."/>
+                                    </pfx3:Params>
+                                </xsl:for-each>
+                                <xsl:copy-of select="$_error_Publish-getOrderByKey-Request/pfx3:Error/ns3:ErrorReport"/>
+                            </pfx3:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx3:Error>
+                                <pfx3:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03010&quot;"/>
+                                </pfx3:MsgCode>
+                                <pfx3:Params>
+                                    <xsl:value-of select="&quot;getOrderByKeyRequest&quot;"/>
+                                </pfx3:Params>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                            </pfx3:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map to OSS</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish getOrderByKey Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map to OSS</pd:from>
+        <pd:to>Render getOrderByKey Request</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render getOrderByKey Request</pd:from>
+        <pd:to>Publish getOrderByKey Request</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map to OSS</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render getOrderByKey Request</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish getOrderByKey Request</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://www.tibco.com/CLEver/Configuration/HistoryRetain" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/CLEver/FrontendServices/Configuration/HistoryRetain/HistoryRetainInterfaceSpecs" xmlns:ns2="http://www.tibco.com/CLEver/HistoryRetain" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns12="http://www.tibco.com/CLEver/Exception" xmlns:ns4="http://www.tibco.com/CLEver/InternalException" xmlns:ns22="http://www.tibco.com/CLEver/Configuration/BusinessDomain" xmlns:ns13="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:CleverUtils="java://Clever.CleverUtils">
+    <wsdl:import namespace="http://www.tibco.com/CLEver/Configuration/HistoryRetain" location="/Processes/FrontendServices/Configuration/HistoryRetain/HistoryRetain.wsdl"/>
+    <pd:name>Processes/FrontendServices/Configuration/HistoryRetain/HistoryRetainRetrieveParameters.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:Retrieve_HistoryRetainParameters_Input"/>
+    <pd:startX>119</pd:startX>
+    <pd:startY>153</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:Retrieve_HistoryRetainParameters_Output>
+            <part1>
+                <ns1:Retrieve_HistoryRetainParameters_Output>
+                    <xsl:copy-of select="$RetrieveParameters/pfx:Parameters"/>
+                </ns1:Retrieve_HistoryRetainParameters_Output>
+            </part1>
+        </wsdlPfx:Retrieve_HistoryRetainParameters_Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:Retrieve_HistoryRetainParameters_Output"/>
+    <pd:endX>435</pd:endX>
+    <pd:endY>156</pd:endY>
+    <pd:errorSchemas>
+        <Fault wsMsgRef="wsdlPfx:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="RetrieveParameters">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>157</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/HistoryRetain/RetrieveParameters.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/HistoryRetain/RetrieveParameters.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:if test="$Start/wsdlPfx:Retrieve_HistoryRetainParameters_Input/part1/ns1:Retrieve_HistoryRetainParameters_Input/pfx:ID">
+                    <ID>
+                        <xsl:value-of select="$Start/wsdlPfx:Retrieve_HistoryRetainParameters_Input/part1/ns1:Retrieve_HistoryRetainParameters_Input/pfx:ID"/>
+                    </ID>
+                </xsl:if>
+                <Version>
+                    <xsl:value-of select="$Start/wsdlPfx:Retrieve_HistoryRetainParameters_Input/part1/ns1:Retrieve_HistoryRetainParameters_Input/pfx:Version"/>
+                </Version>
+                <xsl:copy-of select="$Start/wsdlPfx:Retrieve_HistoryRetainParameters_Input/part1/ns1:Retrieve_HistoryRetainParameters_Input/pfx:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>48</pd:x>
+        <pd:y>255</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>276</pd:y>
+        <config>
+            <faultName>Fault</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns13:ActivityInput>
+                <data>
+                    <wsdlPfx:Exception>
+                        <part1>
+                            <ns4:ExceptionEnvelope>
+                                <ns4:Exception>
+                                    <Service>
+                                        <xsl:value-of select="substring-after(substring-before($_error/ns3:ErrorReport/ProcessStack, '.'), 'FrontendServices/')"/>
+                                    </Service>
+                                    <ErrorMessage>
+                                        <xsl:value-of select="$FormatError/Output/ErrorMessage"/>
+                                    </ErrorMessage>
+                                    <ErrorCode>
+                                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                                    </ErrorCode>
+                                    <ns4:Error>
+                                        <ns4:ErrorReport>
+                                            <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                            <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                        </ns4:ErrorReport>
+                                    </ns4:Error>
+                                </ns4:Exception>
+                            </ns4:ExceptionEnvelope>
+                        </part1>
+                    </wsdlPfx:Exception>
+                </data>
+            </ns13:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FormatError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>176</pd:x>
+        <pd:y>271</pd:y>
+        <config>
+            <processName>/Processes/InternalServices/Exception Handler/FormatErrorHumanReadable.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ns4:Exception>
+                    <Service>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionSeverity/Name,'.',$_globalVariables/ns:GlobalVariables/StaticVariables/Operations/Create)"/>
+                    </Service>
+                    <ErrorMessage>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                    </ErrorMessage>
+                    <ErrorCode>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                    </ErrorCode>
+                    <ns4:Error>
+                        <ns4:ErrorReport>
+                            <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                        </ns4:ErrorReport>
+                    </ns4:Error>
+                </ns4:Exception>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RetrieveParameters</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RetrieveParameters</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>FormatError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FormatError</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

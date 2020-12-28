@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="http://test.com/jms/persistence">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://test.com/jms/persistence" schemaLocation="/Schemas/Persistence.xsd"/>
+    <pd:name>Processes/Send Request.process</pd:name>
+    <pd:startName>Receive Notification</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive Notification">
+        <pd:type>com.tibco.plugin.waitnotify.WaitEventSource</pd:type>
+        <pd:resourceType>ae.activities.waitStarter</pd:resourceType>
+        <pd:x>60</pd:x>
+        <pd:y>133</pd:y>
+        <config>
+            <sharedConfig>/Notifications/RequestNotification.sharednotify</sharedConfig>
+            <_customId>Request/identifier</_customId>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>524</pd:endX>
+    <pd:endY>124</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1231245588281</pd:targetNamespace>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>233</pd:x>
+        <pd:y>124</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>JMS_PERSISTENCE_TEST</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Transports/JMS/JMS Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Transports/JMS/JMS Application Properties.sharedjmsapp</ApplicationProperties>
+            <InDataxsdString ref="pfx:Persistence"/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <JMSCorrelationID>
+                    <xsl:value-of select="$Receive-Notification/Request/identifier"/>
+                </JMSCorrelationID>
+                <OtherProperties>
+                    <identifier>
+                        <xsl:value-of select="$Receive-Notification/Request/identifier"/>
+                    </identifier>
+                </OtherProperties>
+                <Body>
+                    <pfx:Persistence>
+                        <pfx:identifier>
+                            <xsl:value-of select="$Receive-Notification/Request/identifier"/>
+                        </pfx:identifier>
+                        <pfx:action>
+                            <xsl:value-of select="$Receive-Notification/Request/action"/>
+                        </pfx:action>
+                        <pfx:requester>
+                            <xsl:value-of select="$Receive-Notification/Request/requester"/>
+                        </pfx:requester>
+                    </pfx:Persistence>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Notify Response">
+        <pd:type>com.tibco.plugin.waitnotify.NotifyActivity</pd:type>
+        <pd:resourceType>ae.activities.notifyActivity</pd:resourceType>
+        <pd:x>403</pd:x>
+        <pd:y>124</pd:y>
+        <config>
+            <sharedConfig>/Notifications/ResponseNotification.sharednotify</sharedConfig>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <Response>
+                    <identifier>
+                        <xsl:value-of select="$Receive-Notification/Request/identifier"/>
+                    </identifier>
+                    <status>
+                        <xsl:value-of select="&quot;COMPLETED&quot;"/>
+                    </status>
+                </Response>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Receive Notification</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>Notify Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Notify Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

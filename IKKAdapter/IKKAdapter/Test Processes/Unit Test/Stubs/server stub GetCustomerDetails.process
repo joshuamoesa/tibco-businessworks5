@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/request/AddCustomerReference.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/ckradapter/response/AddCustomerReference.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/ckradapter/common/Customer.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/ckradapter/request/GetCustomerDetails.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/ckradapter/response/GetCustomerDetails.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/OrganizationName.xsd" xmlns:pfx7="http://xmlns.kpn.com/fixed/ckradapter/common/IndividualName.xsd" xmlns:pfx8="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:pfx9="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx11="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Services/GetCustomerDetails.xsd" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx12="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Request/GetCustomerDetails.xsd" xmlns:pfx13="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Response/GetCustomerDetails.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/AddCustomerReference.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/AddCustomerReference.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/AddCustomerReference.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/AddCustomerReference.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/FindCustomer.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/CKRAdapter/Services/GetCustomerDetails.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Services/GetCustomerDetails.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/GetCustomerDetails.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/GetCustomerDetails.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/GetCustomerDetails.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/GetCustomerDetails.xsd"/>
+    <pd:name>IKKAdapter/Test Processes/Unit Test/Stubs/server stub GetCustomerDetails.process</pd:name>
+    <pd:description>Test server stub. </pd:description>
+    <pd:startName>Rendezvous Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Rendezvous Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>122</pd:x>
+        <pd:y>152</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <xmlEncoding>true</xmlEncoding>
+            <subject>%%Env%%.FIXED.Order.CKRAdapter.Request.GetCustomerDetails.2</subject>
+            <sharedChannel>/IKKAdapter/Shared Resources/EAI Rendezvous Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx5:GetCustomerDetails"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>539</pd:endX>
+    <pd:endY>145</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply To Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>433</pd:x>
+        <pd:y>153</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>Rendezvous Subscriber</eventSource>
+            <xsdString ref="pfx6:GetCustomerDetails"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <xsl:if test="$Rendezvous-Subscriber/ActivityOutput/replySubject">
+                    <replySubject>
+                        <xsl:value-of select="$Rendezvous-Subscriber/ActivityOutput/replySubject"/>
+                    </replySubject>
+                </xsl:if>
+                <body>
+                    <xsl:for-each select="$Rendezvous-Subscriber/ActivityOutput/body/ns:CMH">
+                        <ns:CMH>
+                            <ns:ID>
+                                <xsl:value-of select="ns:ID"/>
+                            </ns:ID>
+                            <ns:NAME>
+                                <xsl:value-of select="ns:NAME"/>
+                            </ns:NAME>
+                            <xsl:if test="ns:FID">
+                                <ns:FID>
+                                    <xsl:value-of select="ns:FID"/>
+                                </ns:FID>
+                            </xsl:if>
+                            <xsl:if test="ns:MID">
+                                <ns:MID>
+                                    <xsl:value-of select="ns:MID"/>
+                                </ns:MID>
+                            </xsl:if>
+                            <ns:PARADIGM>
+                                <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                            </ns:PARADIGM>
+                            <ns:OBJECT>
+                                <xsl:value-of select="ns:OBJECT"/>
+                            </ns:OBJECT>
+                            <ns:VERSION>
+                                <xsl:value-of select="ns:VERSION"/>
+                            </ns:VERSION>
+                            <xsl:for-each select="ns:FROM">
+                                <ns:FROM>
+                                    <xsl:attribute name="ns:COMPONENT_ID">
+                                        <xsl:value-of select="@ns:COMPONENT_ID"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="@ns:COMPONENT_VERSION">
+                                        <xsl:attribute name="ns:COMPONENT_VERSION">
+                                            <xsl:value-of select="@ns:COMPONENT_VERSION"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="@ns:END_USER_INFO">
+                                        <xsl:attribute name="ns:END_USER_INFO">
+                                            <xsl:value-of select="@ns:END_USER_INFO"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="@ns:SOURCE_ADDRESS">
+                                        <xsl:attribute name="ns:SOURCE_ADDRESS">
+                                            <xsl:value-of select="@ns:SOURCE_ADDRESS"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </ns:FROM>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns:TO">
+                                <ns:TO>
+                                    <xsl:attribute name="ns:DESTINATION">
+                                        <xsl:value-of select="@ns:DESTINATION"/>
+                                    </xsl:attribute>
+                                </ns:TO>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns:TRACKING">
+                                <ns:TRACKING>
+                                    <ns:MESSAGE_ID>
+                                        <xsl:value-of select="ns:MESSAGE_ID"/>
+                                    </ns:MESSAGE_ID>
+                                    <xsl:if test="ns:EXTERNAL_REF">
+                                        <ns:EXTERNAL_REF>
+                                            <xsl:value-of select="ns:EXTERNAL_REF"/>
+                                        </ns:EXTERNAL_REF>
+                                    </xsl:if>
+                                    <xsl:for-each select="ns:ITEM">
+                                        <ns:ITEM>
+                                            <xsl:attribute name="ns:APPINFO">
+                                                <xsl:value-of select="@ns:APPINFO"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns:EVENT">
+                                                <xsl:value-of select="@ns:EVENT"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns:TIMESTAMP">
+                                                <xsl:value-of select="@ns:TIMESTAMP"/>
+                                            </xsl:attribute>
+                                        </ns:ITEM>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns:SEQUENCE_NO">
+                                        <ns:SEQUENCE_NO>
+                                            <xsl:value-of select="."/>
+                                        </ns:SEQUENCE_NO>
+                                    </xsl:for-each>
+                                </ns:TRACKING>
+                            </xsl:for-each>
+                            <xsl:for-each select="ns:ATTRIBUTE">
+                                <ns:ATTRIBUTE>
+                                    <xsl:attribute name="ns:NAME">
+                                        <xsl:value-of select="@ns:NAME"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:VALUE">
+                                        <xsl:value-of select="@ns:VALUE"/>
+                                    </xsl:attribute>
+                                </ns:ATTRIBUTE>
+                            </xsl:for-each>
+                        </ns:CMH>
+                    </xsl:for-each>
+                    <ns2:RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;msg code&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:ERROR_CODE">
+                            <xsl:value-of select="&quot;error code&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:ERROR_DESCRIPTION">
+                            <xsl:value-of select="&quot;error description&quot;"/>
+                        </xsl:attribute>
+                    </ns2:RESULT_STATUS>
+                    <pfx6:CUSTOMER>
+                        <ns3:CENTRAL_CUSTOMER_ID>
+                            <xsl:value-of select="&quot;centrol customer id&quot;"/>
+                        </ns3:CENTRAL_CUSTOMER_ID>
+                        <ns3:IS_ACTIVE>
+                            <xsl:value-of select="&quot;is active&quot;"/>
+                        </ns3:IS_ACTIVE>
+                        <ns3:PARTY>
+                            <VALID_FROM_DATE>
+                                <xsl:value-of select="&quot;2000-01-01&quot;"/>
+                            </VALID_FROM_DATE>
+                            <VALID_UNTIL_DATE>
+                                <xsl:value-of select="&quot;2000-02-02&quot;"/>
+                            </VALID_UNTIL_DATE>
+                            <PARTY_ID>
+                                <xsl:value-of select="&quot;aprty id&quot;"/>
+                            </PARTY_ID>
+                            <PARTY_NAME>
+                                <xsl:value-of select="&quot;party name&quot;"/>
+                            </PARTY_NAME>
+                            <PARTY_NAME_DIACRITICS>
+                                <xsl:value-of select="&quot;party name discritics&quot;"/>
+                            </PARTY_NAME_DIACRITICS>
+                            <BRANCH_NAME>
+                                <xsl:value-of select="&quot;branch name&quot;"/>
+                            </BRANCH_NAME>
+                            <BRANCH_NAME_DIACRITICS>
+                                <xsl:value-of select="&quot;branch name diacritics&quot;"/>
+                            </BRANCH_NAME_DIACRITICS>
+                            <LEGAL_FORM_CODE>
+                                <xsl:value-of select="&quot;legal form code&quot;"/>
+                            </LEGAL_FORM_CODE>
+                            <LEGAL_FORM_NAME>
+                                <xsl:value-of select="&quot;legal form name&quot;"/>
+                            </LEGAL_FORM_NAME>
+                            <DATE_OF_BIRTH>
+                                <xsl:value-of select="&quot;2000-01-01&quot;"/>
+                            </DATE_OF_BIRTH>
+                            <CENTRAL_CUSTOMER_ID>
+                                <xsl:value-of select="&quot;central customer id&quot;"/>
+                            </CENTRAL_CUSTOMER_ID>
+                            <KVK_NUMBER>
+                                <xsl:value-of select="&quot;kvk number&quot;"/>
+                            </KVK_NUMBER>
+                            <IS_ACTIVE>
+                                <xsl:value-of select="1"/>
+                            </IS_ACTIVE>
+                            <ORGANIZATION_NAME>
+                                <ns4:TRADING_NAME>
+                                    <xsl:value-of select="&quot;trading name&quot;"/>
+                                </ns4:TRADING_NAME>
+                            </ORGANIZATION_NAME>
+                            <INDIVIDUAL_NAME>
+                                <pfx7:ACADEMIC_TITLE>
+                                    <xsl:value-of select="&quot; acdamic title&quot;"/>
+                                </pfx7:ACADEMIC_TITLE>
+                                <pfx7:INITIALS>
+                                    <xsl:value-of select="&quot;initials&quot;"/>
+                                </pfx7:INITIALS>
+                                <pfx7:ARISTOCRATIC_TITLE>
+                                    <xsl:value-of select="&quot;artistocratic title&quot;"/>
+                                </pfx7:ARISTOCRATIC_TITLE>
+                                <pfx7:FAMILY_NAME_PREFIX>
+                                    <xsl:value-of select="&quot;family name prefix&quot;"/>
+                                </pfx7:FAMILY_NAME_PREFIX>
+                                <pfx7:FAMILY_NAME>
+                                    <xsl:value-of select="&quot;family name&quot;"/>
+                                </pfx7:FAMILY_NAME>
+                                <pfx7:COMPLETE_NAME>
+                                    <xsl:value-of select="&quot;complete name&quot;"/>
+                                </pfx7:COMPLETE_NAME>
+                            </INDIVIDUAL_NAME>
+                            <PROPERTY_ADDRESS>
+                                <pfx8:STREET_NAME>
+                                    <xsl:value-of select="&quot;street name&quot;"/>
+                                </pfx8:STREET_NAME>
+                                <pfx8:HOUSE_NUMBER>
+                                    <xsl:value-of select="&quot;house number&quot;"/>
+                                </pfx8:HOUSE_NUMBER>
+                                <pfx8:HOUSE_NUMBER_EXTENSION>
+                                    <xsl:value-of select="&quot;house number extenstion&quot;"/>
+                                </pfx8:HOUSE_NUMBER_EXTENSION>
+                                <pfx8:CITY_NAME>
+                                    <xsl:value-of select="&quot;city name&quot;"/>
+                                </pfx8:CITY_NAME>
+                                <pfx8:CITY_CODE>
+                                    <xsl:value-of select="&quot;city code&quot;"/>
+                                </pfx8:CITY_CODE>
+                                <pfx8:COUNTRY>
+                                    <xsl:value-of select="&quot;country&quot;"/>
+                                </pfx8:COUNTRY>
+                                <pfx8:DUTCH_POSTCODE_LETTERS>
+                                    <xsl:value-of select="&quot;dutch postcode letters&quot;"/>
+                                </pfx8:DUTCH_POSTCODE_LETTERS>
+                                <pfx8:DUTCH_POSTCODE_NUMBERS>
+                                    <xsl:value-of select="&quot;dutch postcode numbers&quot;"/>
+                                </pfx8:DUTCH_POSTCODE_NUMBERS>
+                                <pfx8:ZIPCODE_BEFORE>
+                                    <xsl:value-of select="&quot;zipcode before&quot;"/>
+                                </pfx8:ZIPCODE_BEFORE>
+                                <pfx8:ZIPCODE_AFTER>
+                                    <xsl:value-of select="&quot;zipcode after&quot;"/>
+                                </pfx8:ZIPCODE_AFTER>
+                                <pfx8:ADDRESS_STATUS>
+                                    <xsl:value-of select="&quot;address status&quot;"/>
+                                </pfx8:ADDRESS_STATUS>
+                                <pfx8:ADDRESS_CREATION_DATE>
+                                    <xsl:value-of select="&quot;2000-01-01&quot;"/>
+                                </pfx8:ADDRESS_CREATION_DATE>
+                                <pfx8:ADDRESS_LAST_CHANGED_DATE>
+                                    <xsl:value-of select="&quot;2000-02-01&quot;"/>
+                                </pfx8:ADDRESS_LAST_CHANGED_DATE>
+                            </PROPERTY_ADDRESS>
+                        </ns3:PARTY>
+                        <ns3:PROPERTY_ADDRESS>
+                            <pfx8:STREET_NAME>
+                                <xsl:value-of select="&quot;street name&quot;"/>
+                            </pfx8:STREET_NAME>
+                            <pfx8:HOUSE_NUMBER>
+                                <xsl:value-of select="&quot;house number&quot;"/>
+                            </pfx8:HOUSE_NUMBER>
+                            <pfx8:HOUSE_NUMBER_EXTENSION>
+                                <xsl:value-of select="&quot;house number extenstion&quot;"/>
+                            </pfx8:HOUSE_NUMBER_EXTENSION>
+                            <pfx8:CITY_NAME>
+                                <xsl:value-of select="&quot;city name&quot;"/>
+                            </pfx8:CITY_NAME>
+                            <pfx8:CITY_CODE>
+                                <xsl:value-of select="&quot;city code&quot;"/>
+                            </pfx8:CITY_CODE>
+                            <pfx8:COUNTRY>
+                                <xsl:value-of select="&quot;country&quot;"/>
+                            </pfx8:COUNTRY>
+                            <pfx8:DUTCH_POSTCODE_LETTERS>
+                                <xsl:value-of select="&quot;dutch postcode letters&quot;"/>
+                            </pfx8:DUTCH_POSTCODE_LETTERS>
+                            <pfx8:DUTCH_POSTCODE_NUMBERS>
+                                <xsl:value-of select="&quot;dutch postcode numbers&quot;"/>
+                            </pfx8:DUTCH_POSTCODE_NUMBERS>
+                            <pfx8:ZIPCODE_BEFORE>
+                                <xsl:value-of select="&quot;zipcode before&quot;"/>
+                            </pfx8:ZIPCODE_BEFORE>
+                            <pfx8:ZIPCODE_AFTER>
+                                <xsl:value-of select="&quot;zipcode after&quot;"/>
+                            </pfx8:ZIPCODE_AFTER>
+                            <pfx8:ADDRESS_STATUS>
+                                <xsl:value-of select="&quot;address status&quot;"/>
+                            </pfx8:ADDRESS_STATUS>
+                            <pfx8:ADDRESS_CREATION_DATE>
+                                <xsl:value-of select="&quot;2000-01-01&quot;"/>
+                            </pfx8:ADDRESS_CREATION_DATE>
+                            <pfx8:ADDRESS_LAST_CHANGED_DATE>
+                                <xsl:value-of select="&quot;2000-01-01&quot;"/>
+                            </pfx8:ADDRESS_LAST_CHANGED_DATE>
+                        </ns3:PROPERTY_ADDRESS>
+                        <ns3:MARKET_GROUP_CODE>
+                            <xsl:value-of select="&quot;market group code&quot;"/>
+                        </ns3:MARKET_GROUP_CODE>
+                        <ns3:MARKET_SEGMENT_CODE>
+                            <xsl:value-of select="&quot;market segment code&quot;"/>
+                        </ns3:MARKET_SEGMENT_CODE>
+                        <ns3:TELECOM_REGION_CODE>
+                            <xsl:value-of select="&quot;telecom region code&quot;"/>
+                        </ns3:TELECOM_REGION_CODE>
+                        <ns3:CUSTOMER_CREDIT_PROFILE>
+                            <BIK_CODE>
+                                <xsl:value-of select="&quot;bik code&quot;"/>
+                            </BIK_CODE>
+                            <BIK_DESCRIPTION>
+                                <xsl:value-of select="&quot;bik description&quot;"/>
+                            </BIK_DESCRIPTION>
+                            <CUSTOMER_SIZE_GROUP>
+                                <xsl:value-of select="&quot;customer size group&quot;"/>
+                            </CUSTOMER_SIZE_GROUP>
+                            <CUSTOMER_SIZE_GROUP_DESCRIPTION>
+                                <xsl:value-of select="&quot;customer size group description&quot;"/>
+                            </CUSTOMER_SIZE_GROUP_DESCRIPTION>
+                            <KVK_REGISTRATION_TYPE>
+                                <xsl:value-of select="&quot;kvk registration type&quot;"/>
+                            </KVK_REGISTRATION_TYPE>
+                            <FINANCIAL_STATUS>
+                                <xsl:value-of select="&quot;financial status&quot;"/>
+                            </FINANCIAL_STATUS>
+                        </ns3:CUSTOMER_CREDIT_PROFILE>
+                        <ns3:CUSTOMER_REFERENCE>
+                            <pfx9:ROLE>
+                                <xsl:value-of select="&quot;role&quot;"/>
+                            </pfx9:ROLE>
+                            <pfx9:APPLICATION_ID>
+                                <xsl:value-of select="&quot;application id&quot;"/>
+                            </pfx9:APPLICATION_ID>
+                            <pfx9:EXTERNAL_CUSTOMER_REFERENCE>
+                                <pfx10:REF_NAME>
+                                    <xsl:value-of select="&quot;rref name&quot;"/>
+                                </pfx10:REF_NAME>
+                            </pfx9:EXTERNAL_CUSTOMER_REFERENCE>
+                        </ns3:CUSTOMER_REFERENCE>
+                        <ns3:ADDRESS_STATUS>
+                            <xsl:value-of select="&quot;address status&quot;"/>
+                        </ns3:ADDRESS_STATUS>
+                    </pfx6:CUSTOMER>
+                    <pfx6:IS_MOVE>
+                        <xsl:value-of select="&quot;is move&quot;"/>
+                    </pfx6:IS_MOVE>
+                    <pfx6:IS_PART_OF_ACCOUNT>
+                        <xsl:value-of select="&quot;is part of account&quot;"/>
+                    </pfx6:IS_PART_OF_ACCOUNT>
+                    <pfx6:HAS_RESPONSIBLE_SALESPERSON>
+                        <xsl:value-of select="&quot;has responsible salespersion&quot;"/>
+                    </pfx6:HAS_RESPONSIBLE_SALESPERSON>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RendeXML">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>229</pd:x>
+        <pd:y>144</pd:y>
+        <config>
+            <renderAsText>text</renderAsText>
+            <validateInput>true</validateInput>
+            <renderDefaultPrefix>false</renderDefaultPrefix>
+            <textEncoding>UTF-8</textEncoding>
+            <term ref="pfx5:GetCustomerDetails"/>
+        </config>
+        <pd:inputBindings>
+            <pfx5:GetCustomerDetails>
+                <xsl:copy-of select="$Rendezvous-Subscriber/ActivityOutput/body/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$Rendezvous-Subscriber/ActivityOutput/body/@*"/>
+                <xsl:copy-of select="$Rendezvous-Subscriber/ActivityOutput/body/node()"/>
+            </pfx5:GetCustomerDetails>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteFile">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>327</pd:x>
+        <pd:y>145</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <createMissingDirectories>true</createMissingDirectories>
+            <append>false</append>
+        </config>
+        <pd:inputBindings>
+            <ns6:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat($_globalVariables/ns5:GlobalVariables/IKKAdapter/AppSetting/TestRootPath, &quot;267&quot;,&quot; - GetCustomerDetails/RvRequest.xml&quot;)"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="$RendeXML/xmlString"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+            </ns6:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Reply To Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rendezvous Subscriber</pd:from>
+        <pd:to>RendeXML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RendeXML</pd:from>
+        <pd:to>WriteFile</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteFile</pd:from>
+        <pd:to>Reply To Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

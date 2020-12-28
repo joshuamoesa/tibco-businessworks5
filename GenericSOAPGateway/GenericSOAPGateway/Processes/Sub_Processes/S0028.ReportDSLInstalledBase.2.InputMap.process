@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:pfx2="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/BaanAdapter/Request/ReportDSLInstalledBase.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://xmlns.kpn.com/fixed/BaanAdapter/common/Dsl.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/BaanAdapter/Request/ReportDSLInstalledBase.xsd" schemaLocation="/XSDSchemas/BaanAdapter/Request/ReportDSLInstalledBase.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/BaanAdapter/common/Dsl.xsd" schemaLocation="/XSDSchemas/BaanAdapter/Common/Dsl.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0028.ReportDSLInstalledBase.2.InputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:Input"/>
+    <pd:startX>95</pd:startX>
+    <pd:startY>71</pd:startY>
+    <pd:returnBindings>
+        <pfx2:Output>
+            <pfx2:Destination>
+                <xsl:value-of select="$Map-Data/pfx3:ReportDSLInstalledBaseRequest/ns1:CMH/ns1:TO/@ns1:DESTINATION"/>
+            </pfx2:Destination>
+            <pfx2:BodyContainer>
+                <xsl:copy-of select="$Map-Data/pfx3:ReportDSLInstalledBaseRequest"/>
+            </pfx2:BodyContainer>
+        </pfx2:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:Output"/>
+    <pd:endX>469</pd:endX>
+    <pd:endY>71</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>278</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <element ref="pfx3:ReportDSLInstalledBaseRequest"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx:Input/pfx:BodyContainer/*" element="ns2:DSL"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx3:ReportDSLInstalledBaseRequest>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="'O003_001'"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="'ReportDSLInstalledBase'"/>
+                    </ns1:NAME>
+                    <ns1:MID>
+                        <xsl:value-of select="1175.10"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="'CO_Service'"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="2.0"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/GenericSOAPGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/GenericSOAPGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env,&quot;.FIXED.Order.BaanDSLAdapter.Request.GetDSLInstalledBase.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx:Input/pfx:TrackingId"/>
+                        </ns1:MESSAGE_ID>
+                        <ns1:ITEM>
+                            <xsl:attribute name="ns1:APPINFO">
+                                <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/GenericSOAPGateway/ComponentDomain,'/',$_globalVariables/ns:GlobalVariables/GenericSOAPGateway/ComponentId,'/',$_globalVariables/ns:GlobalVariables/GenericSOAPGateway/ComponentVersion)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:EVENT">
+                                <xsl:value-of select="'ReportDSLInstalledBase'"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:TIMESTAMP">
+                                <xsl:value-of select="tib:timestamp()"/>
+                            </xsl:attribute>
+                        </ns1:ITEM>
+                    </ns1:TRACKING>
+                </ns1:CMH>
+                <pfx3:DSL>
+                    <xsl:copy-of select="$Start/pfx:Input/pfx:BodyContainer/ns2:DSL/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Start/pfx:Input/pfx:BodyContainer/ns2:DSL/@*"/>
+                    <xsl:copy-of select="$Start/pfx:Input/pfx:BodyContainer/ns2:DSL/node()"/>
+                </pfx3:DSL>
+            </pfx3:ReportDSLInstalledBaseRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

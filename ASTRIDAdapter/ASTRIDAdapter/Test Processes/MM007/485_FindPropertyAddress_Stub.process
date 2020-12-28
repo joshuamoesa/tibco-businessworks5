@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798248097" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802778671" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1087395513868" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/request/FindPropertyAddress.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/response/FindPropertyAddress.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086798248097" schemaLocation="/XSDSchemas/EnginAdapter/Request/CheckAppointment.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802778671" schemaLocation="/XSDSchemas/EnginAdapter/Response/CheckAppointment.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindPropertyAddress.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindPropertyAddress.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ckradapter/response/FindPropertyAddress.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/FindPropertyAddress.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/485_FindPropertyAddress_Stub.process</pd:name>
+    <pd:startName>FindPropertyAddress Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="FindPropertyAddress Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>111</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Order.CKRAdapter.Request.FindPropertyAddress.1</subject>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx3:FIndPropertyAddress"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>51</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to FindPropertyAddress Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>276</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>FindPropertyAddress Subscriber</eventSource>
+            <xsdString ref="pfx4:FindPropertyAddress"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:ID"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <xsl:if test="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:FID">
+                            <ns:FID>
+                                <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:FID"/>
+                            </ns:FID>
+                        </xsl:if>
+                        <xsl:if test="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:MID">
+                            <ns:MID>
+                                <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:MID"/>
+                            </ns:MID>
+                        </xsl:if>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:PARADIGM"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:OBJECT"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="&quot;last&quot;"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <ns:TRACKING>
+                            <ns:MESSAGE_ID>
+                                <xsl:value-of select="$FindPropertyAddress-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                            </ns:MESSAGE_ID>
+                            <ns:ITEM>
+                                <xsl:attribute name="ns:APPINFO">
+                                    <xsl:value-of select="&quot;expertdesk_stub_checkappointment&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:EVENT">
+                                    <xsl:value-of select="&quot;very eventful&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:TIMESTAMP">
+                                    <xsl:value-of select="tib:timestamp()"/>
+                                </xsl:attribute>
+                            </ns:ITEM>
+                        </ns:TRACKING>
+                    </ns:CMH>
+                    <ns3:RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;No problem&quot;"/>
+                        </xsl:attribute>
+                    </ns3:RESULT_STATUS>
+                    <pfx4:PROPERTY_ADDRESS>
+                        <pfx4:CITY_NAME>
+                            <xsl:value-of select="&quot;city_name&quot;"/>
+                        </pfx4:CITY_NAME>
+                    </pfx4:PROPERTY_ADDRESS>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>FindPropertyAddress Subscriber</pd:from>
+        <pd:to>Reply to FindPropertyAddress Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to FindPropertyAddress Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

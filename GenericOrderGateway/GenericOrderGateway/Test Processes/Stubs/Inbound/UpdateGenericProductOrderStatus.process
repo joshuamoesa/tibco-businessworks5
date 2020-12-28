@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://kpn.com/eai/generic/order/weak/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pfx3="http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl">
+    <wsdl:import namespace="http://kpn.com/eai/generic/order/weak/wsdl"/>
+    <wsdl:import namespace="http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl" location="/WSDL/GenericOrderGateway/WeakOrder.wsdl"/>
+    <pd:name>GenericOrderGateway/Test Processes/Stubs/Inbound/UpdateGenericProductOrderStatus.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>126</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <service>pfx3:WeakOrderServices</service>
+            <wsdlNamespaceRoot>http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl/UpdateWeakOrderStatusImpl</wsdlNamespaceRoot>
+            <operation>UpdateWeakOrderStatus</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>/GenericOrderGateway/Test Processes/Stubs/Inbound/UpdateGenericProductOrderStatus</soapAction>
+            <sharedChannel>/GenericOrderGateway/Test Processes/Shared Resources/Test HTTP Server Connection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <inputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPSendReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SOAPSendReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

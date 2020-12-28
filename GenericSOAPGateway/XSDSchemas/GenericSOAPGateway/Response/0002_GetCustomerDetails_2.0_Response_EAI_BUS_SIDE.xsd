@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0002_GetCustomerDetails/2.0/Response" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0002_GetCustomerDetails/2.0/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="centralCustomerId_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z,0-9]{8}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="telecomRegionCode_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITIONS:
+KPN has divided the Netherlands into telecom regions which are (also) defined in the CKR code table this division is depricated, but still widely used within KPN.
+
+TYPE:
+String (2) enumerated, numerics
+
+VALUES:
+See attached file, under 'Oude Telecomregio's'.
+
+NOTES:
+- This attributes uses the numeric code for each region, there is another field that uses the abbreveated text version of the region (telecomRegionCodeName).
+- KPN no longer actively uses the regions and has switched to rayons instead. Many systems still depend on the attribute.</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="2" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="marketGroupCode_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="3" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="marketSegmentCode_type">
+    <xs:restriction base="xs:string">
+      <xs:length value="4" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="partyId_type">
+    <xs:annotation>
+      <xs:documentation>Might be filled with spaces if the requesting application has not been authorized to receive this information.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dateOfBirth_type">
+    <xs:restriction base="xs:date" />
+  </xs:simpleType>
+  <xs:simpleType name="legalFormCode_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITIONS:
+[generic] The legal form code identifies the legal representation of a party in the legaslatory sense.
+
+TYPE:
+String (2) (enumerated)
+
+VALUES: (taken from CKR's coderingsBoekje)
+00	onbekend (kvk)
+01	eenmanszaak met 1 eigenaar
+02	eenmanszaak met 2 eigenaren
+03	eenmanszaak NV/BV IO A-formulier
+05	rederij
+10	vennootschap onder firma (VOF)
+11	vennootschap onder firma
+12	NV/BV IO B-formulier
+20	commanditaire vennootschap (CV)
+21	1 beherende vennoot
+22	meer beh. vennoten
+23	NV/BV IO D-formulier
+40	besloten vennootschap (BV)
+41	gewone structuur
+42	struct. vennootschap
+50	naamloze vennootschap (NV)
+51	gewone structuur
+52	structuurvennootschap
+53	beleggings mij verand kap
+54	BM/struct. venn. sch.
+60	cooperatieve vereniging
+61	UA gewone structuur
+62	UA structuur vennootschap
+63	WA gewone structuur
+64	WA structuurvennootschap
+65	BA gewone structuur
+66	BA structuurvennootschap
+70	vereniging (ingeschreven)
+71	met volle rechtsbevoegdheid
+72	met beperkte rechtsbevoegdh
+73	kerkgenootschap
+74	stichting
+80	onderlinge waarborg maatschappij
+81	UA gewone structuur
+82	UA structuurvennootschap
+83	WA gewone structuur
+84	WA structuurvennootschap
+85	BA gewone structuur
+86	BA structuurvennootschap
+90	nevenv van een buitenl hoofdzaak
+91	buitenlandse RV/onderneming
+92	nevenvest met vest buiten NL
+93	Europees econ samenw. verb
+94	Buitenl EG vennootschap met onderneming in NL
+95	Buitenl EG vennootschap met hoofdvestiging in NL
+96	Buitenl op EG vennootschap lijkende onderneming in NL
+97	Buitenl op EG vennootschap lijkende vennootschap met hoofdvest in NL
+BT	buitenl rechtspersoon z vest in NL
+KG	kerkgenootschap
+MT	maatschap
+NP	natuurlijk persoon
+PR	publiekrechtelijk lichaam (overheid+ambassades etc.)
+SV	samenwerkingsverband
+VG	vereniging, niet ingeschreven
+</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+      </xs:annotation>
+      <xs:enumeration value="00" />
+      <xs:enumeration value="01" />
+      <xs:enumeration value="02" />
+      <xs:enumeration value="03" />
+      <xs:enumeration value="05" />
+      <xs:enumeration value="10" />
+      <xs:enumeration value="11" />
+      <xs:enumeration value="12" />
+      <xs:enumeration value="20" />
+      <xs:enumeration value="21" />
+      <xs:enumeration value="22" />
+      <xs:enumeration value="23" />
+      <xs:enumeration value="40" />
+      <xs:enumeration value="41" />
+      <xs:enumeration value="42" />
+      <xs:enumeration value="50" />
+      <xs:enumeration value="51" />
+      <xs:enumeration value="52" />
+      <xs:enumeration value="53" />
+      <xs:enumeration value="54" />
+      <xs:enumeration value="60" />
+      <xs:enumeration value="61" />
+      <xs:enumeration value="62" />
+      <xs:enumeration value="63" />
+      <xs:enumeration value="64" />
+      <xs:enumeration value="65" />
+      <xs:enumeration value="66" />
+      <xs:enumeration value="70" />
+      <xs:enumeration value="71" />
+      <xs:enumeration value="72" />
+      <xs:enumeration value="73" />
+      <xs:enumeration value="74" />
+      <xs:enumeration value="80" />
+      <xs:enumeration value="81" />
+      <xs:enumeration value="82" />
+      <xs:enumeration value="83" />
+      <xs:enumeration value="84" />
+      <xs:enumeration value="85" />
+      <xs:enumeration value="86" />
+      <xs:enumeration value="90" />
+      <xs:enumeration value="91" />
+      <xs:enumeration value="92" />
+      <xs:enumeration value="93" />
+      <xs:enumeration value="94" />
+      <xs:enumeration value="95" />
+      <xs:enumeration value="96" />
+      <xs:enumeration value="97" />
+      <xs:enumeration value="BT" />
+      <xs:enumeration value="KG" />
+      <xs:enumeration value="MT" />
+      <xs:enumeration value="NP" />
+      <xs:enumeration value="PR" />
+      <xs:enumeration value="SV" />
+      <xs:enumeration value="VG" />
+      <xs:maxLength value="2" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kvkNumber_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="13" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="validFromDate_type">
+    <xs:restriction base="xs:date" />
+  </xs:simpleType>
+  <xs:simpleType name="validUntilDate_type">
+    <xs:restriction base="xs:date" />
+  </xs:simpleType>
+  <xs:simpleType name="partyName_type">
+    <xs:annotation>
+      <xs:documentation>Not used in NEN</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="132" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="tradingName_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="132" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="academicTitle_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="initials_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="6" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="aristocraticTitle_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="familyNamePrefix_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="familyName_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="70" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="bikCode_type">
+    <xs:restriction base="xs:string">
+      <xs:length value="6" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="customerSizeGroup_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITIONS:
+The customer size group is a relative indication of 'the size' of a customer. It is among others used to determine the sales prospects for that customer.
+
+SYNONYMS:
+- klassegrootte
+
+TYPE:
+String (2) enumerated
+
+VALUES:
+[undefined]
+
+NOTES:
+Valid values are missing!
+</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="2" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kvkRegistrationType_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITIONS:
+Within the Chamber of Commerce of the Netherlands (KvK) each registration is marked by an indicator specifying whether it is a single registration, headoffice or a branch office.
+
+TYPE:
+String (1) enumerated
+
+VALUES:
+"H"=Hoofdvestiging
+"F"=Filiaal
+"A"=Alleenstaande inschr
+</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+      </xs:annotation>
+      <xs:enumeration value="H" />
+      <xs:enumeration value="F" />
+      <xs:enumeration value="A" />
+      <xs:maxLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="financialStatus_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITIONS:
+The financial status is an indicator ...
+
+TYPE:
+String (1) enumerated
+
+VALUES:
+&lt;i&gt;(space)&lt;/i&gt; Healthy
+S = Surceance
+F = Bankrupt
+
+NOTES:
+Definition not complete.</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+      </xs:annotation>
+      <xs:enumeration value=" " />
+      <xs:enumeration value="S" />
+      <xs:enumeration value="F" />
+      <xs:maxLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cityCode_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="6" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cityName_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="24" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dutchPostcodeLetters_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-zA-Z]{2}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dutchPostcodeNumbers_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="houseNumber_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="houseNumberExtension_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="6" />
+      <xs:minLength value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="streetName_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="24" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BODY">
+    <xs:annotation>
+      <xs:documentation>This is the BODY object for KPN EAI service number 0002 - GetCustomerDetails version 2.0 Response message.</xs:documentation>
+      <xs:documentation>Automatically generated schema for service:'GetCustomerDetails', version:'2.0'</xs:documentation>
+      <xs:documentation>Generated on 2007-03-29 12:49:22Z</xs:documentation>
+      <xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+      <xs:documentation>Service ID is:'0002'</xs:documentation>
+      <xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+      <xs:documentation>KPN EAI message body class.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" maxOccurs="1" name="CUSTOMER">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="1" name="PARTY">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="ORGANIZATION_NAME">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="TRADING_NAME" type="tns:tradingName_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="INDIVIDUAL_NAME">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="ACADEMIC_TITLE" type="tns:academicTitle_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="INITIALS" type="tns:initials_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="ARISTOCRATIC_TITLE" type="tns:aristocraticTitle_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="FAMILY_NAME_PREFIX" type="tns:familyNamePrefix_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="FAMILY_NAME" type="tns:familyName_type">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="COMPLETE_NAME" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="PARTY_ID" type="tns:partyId_type">
+                      <xs:annotation>
+                        <xs:documentation>Might be filled with spaces if the requesting application has not been authorized to receive this information.</xs:documentation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="DATE_OF_BIRTH" type="tns:dateOfBirth_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="LEGAL_FORM_CODE" type="tns:legalFormCode_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="KVK_NUMBER" type="tns:kvkNumber_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="VALID_FROM_DATE" type="tns:validFromDate_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="VALID_UNTIL_DATE" type="tns:validUntilDate_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="BRANCH_NAME" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="CENTRAL_CUSTOMER_ID" type="tns:centralCustomerId_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="PARTY_NAME" type="tns:partyName_type">
+                      <xs:annotation>
+                        <xs:documentation>Not used in NEN</xs:documentation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="CUSTOMER_CREDIT_PROFILE">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="BIK_CODE" type="tns:bikCode_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="CUSTOMER_SIZE_GROUP" type="tns:customerSizeGroup_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="KVK_REGISTRATION_TYPE" type="tns:kvkRegistrationType_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="FINANCIAL_STATUS" type="tns:financialStatus_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="PROPERTY_ADDRESS">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="CITY_CODE" type="tns:cityCode_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="CITY_NAME" type="tns:cityName_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="COUNTRY" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="DUTCH_POSTCODE_LETTERS" type="tns:dutchPostcodeLetters_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="DUTCH_POSTCODE_NUMBERS" type="tns:dutchPostcodeNumbers_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER" type="tns:houseNumber_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="STREET_NAME" type="tns:streetName_type">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="ZIPCODE_AFTER" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="ZIPCODE_BEFORE" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="CENTRAL_CUSTOMER_ID" type="tns:centralCustomerId_type">
+                <xs:annotation>
+                  <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="TELECOM_REGION_CODE" type="tns:telecomRegionCode_type">
+                <xs:annotation>
+                  <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="MARKET_GROUP_CODE" type="tns:marketGroupCode_type">
+                <xs:annotation>
+                  <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="MARKET_SEGMENT_CODE" type="tns:marketSegmentCode_type">
+                <xs:annotation>
+                  <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="ADDRESS_STATUS" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="HAS_RESPONSIBLE_SALESPERSON" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="IS_PART_OF_ACCOUNT" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="IS_MOVE" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

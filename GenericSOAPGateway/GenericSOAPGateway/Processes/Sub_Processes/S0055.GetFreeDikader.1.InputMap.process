@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1113208057015" xmlns:ns5="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0055_GetFreeDikader_1.0_Request_EAI_BUS_SIDE.xsd" xmlns:ns6="http://xmlns.kpn.com/fixed/common/PropertyAddress.xsd" xmlns:pfx5="http://xmlns.example.com/unique/default/namespace/1111410238843" xmlns:pfx6="http://xmlns.kpn.com/fixed/common/PhoneNumber.xsd" xmlns:ns7="http://xmlns.kpn.com/EAI/fixed/0055_GetFreeDikader/1.0/Request" xmlns:pfx7="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:pfx8="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1113208057015" schemaLocation="/XSDSchemas/KanvasContractAdapter/Request/GetFreeDikader.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0055_GetFreeDikader/1.0/Request" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0055_GetFreeDikader_1.0_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0055.GetFreeDikader.1.InputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx7:Input"/>
+    <pd:startX>155</pd:startX>
+    <pd:startY>163</pd:startY>
+    <pd:returnBindings>
+        <pfx8:Output>
+            <pfx8:Destination>
+                <xsl:value-of select="$Map-Data/pfx4:GetFreeDikader/ns2:CMH/ns2:TO/@ns2:DESTINATION"/>
+            </pfx8:Destination>
+            <pfx8:BodyContainer>
+                <xsl:copy-of select="$Map-Data/pfx4:GetFreeDikader"/>
+            </pfx8:BodyContainer>
+        </pfx8:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx8:Output"/>
+    <pd:endX>522</pd:endX>
+    <pd:endY>163</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>329</pd:x>
+        <pd:y>168</pd:y>
+        <config>
+            <element ref="pfx4:GetFreeDikader"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx7:Input/pfx7:BodyContainer/*" element="ns7:BODY"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx4:GetFreeDikader>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="&quot;670&quot;"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="&quot;GetFreeDikader&quot;"/>
+                    </ns2:NAME>
+                    <ns2:FID>
+                        <xsl:value-of select="concat($Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/LOCATION/CENTRAL_AREA_CODE,&quot;|&quot;, $Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/DUTCH_POSTCODE_NUMBERS, $Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/DUTCH_POSTCODE_LETTERS,&quot;|&quot;, $Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/HOUSE_NUMBER,&quot;|&quot;, $Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/HOUSE_NUMBER_EXTENSION,&quot;|&quot;, $Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/INVOERKABEL_SEQUENCE_NUMBER,&quot;|&quot;, $Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/DIKADER_NUMBER,&quot;|&quot;, $Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PHONENUMBER/AREA_CODE,&quot;|&quot;, $Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PHONENUMBER/SUBSCRIBER_NUMBER)"/>
+                    </ns2:FID>
+                    <ns2:MID>
+                        <xsl:value-of select="&quot;670.10&quot;"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="&quot;CO_GetFreeDikader&quot;"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="1.0"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.Operations.KanvasRouter.Request.GetFreeDikader.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:TrackingId"/>
+                        </ns2:MESSAGE_ID>
+                    </ns2:TRACKING>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;originatingApplicationID&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:ApplicationId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;districtCode&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/Kanvas/districtCode"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;endUserName&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:UserId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                </ns2:CMH>
+                <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/INVOERKABEL_SEQUENCE_NUMBER">
+                    <pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                        <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/INVOERKABEL_SEQUENCE_NUMBER"/>
+                    </pfx4:INVOERKABEL_SEQUENCE_NUMBER>
+                </xsl:if>
+                <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/DIKADER_NUMBER">
+                    <pfx4:DIKADER_NUMBER>
+                        <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/DIKADER_NUMBER"/>
+                    </pfx4:DIKADER_NUMBER>
+                </xsl:if>
+                <pfx4:PROPERTY_ADDRESS>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/HOUSE_NUMBER">
+                        <ns6:HOUSE_NUMBER>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/HOUSE_NUMBER"/>
+                        </ns6:HOUSE_NUMBER>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/HOUSE_NUMBER_EXTENSION">
+                        <ns6:HOUSE_NUMBER_EXTENSION>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/HOUSE_NUMBER_EXTENSION"/>
+                        </ns6:HOUSE_NUMBER_EXTENSION>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/DUTCH_POSTCODE_LETTERS">
+                        <ns6:DUTCH_POSTCODE_LETTERS>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/DUTCH_POSTCODE_LETTERS"/>
+                        </ns6:DUTCH_POSTCODE_LETTERS>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/DUTCH_POSTCODE_NUMBERS">
+                        <ns6:DUTCH_POSTCODE_NUMBERS>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PROPERTY_ADDRESS/DUTCH_POSTCODE_NUMBERS"/>
+                        </ns6:DUTCH_POSTCODE_NUMBERS>
+                    </xsl:if>
+                </pfx4:PROPERTY_ADDRESS>
+                <pfx4:LOCATION>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/LOCATION/CENTRAL_AREA_CODE">
+                        <pfx5:CENTRAL_AREA_CODE>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/LOCATION/CENTRAL_AREA_CODE"/>
+                        </pfx5:CENTRAL_AREA_CODE>
+                    </xsl:if>
+                </pfx4:LOCATION>
+                <pfx4:PHONE_NUMBER>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PHONENUMBER/AREA_CODE">
+                        <pfx6:AREA_CODE>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PHONENUMBER/AREA_CODE"/>
+                        </pfx6:AREA_CODE>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PHONENUMBER/SUBSCRIBER_NUMBER">
+                        <pfx6:SUBSCRIBER_NUMBER>
+                            <xsl:value-of select="$Start/pfx7:Input/pfx7:BodyContainer/ns7:BODY/PHONENUMBER/SUBSCRIBER_NUMBER"/>
+                        </pfx6:SUBSCRIBER_NUMBER>
+                    </xsl:if>
+                </pfx4:PHONE_NUMBER>
+            </pfx4:GetFreeDikader>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Import the build xsd here in InputEditor and design xsd after clicking the coersion button in Input tab</pd:description>
+        <pd:x>302</pd:x>
+        <pd:y>86</pd:y>
+        <pd:width>155</pd:width>
+        <pd:height>76</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

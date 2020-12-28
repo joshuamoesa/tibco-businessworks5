@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GET_DYNAMICSTRUCTURE" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:GenericMessageRequest">
+    <wsdl:import namespace="urn:GET_DYNAMICSTRUCTURE" location="/WSDL/ASTRIDAdapter/getdynamicstructure.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/0045_SOAP_GetPbxFacilities.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>47</pd:startX>
+    <pd:startY>83</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>321</pd:endX>
+    <pd:endY>85</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>179</pd:x>
+        <pd:y>83</pd:y>
+        <config>
+            <timeout>%%ASTRIDAdapter/Test/Timeout%%</timeout>
+            <service>pfx:GET_DYNAMICSTRUCTURE_SERVICE</service>
+            <servicePort>GET_DYNAMICSTRUCTURESoap</servicePort>
+            <operation>GetDynamicStructure</operation>
+            <soapAction>urn:GET_DYNAMICSTRUCTURE/GetDynamicStructure</soapAction>
+            <endpointURL>%%ASTRIDAdapter/Test/GenericRequestServicesEndpoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:GetStructureRequest>
+                    <pfx:GUID>
+                        <xsl:value-of select="&quot;GUID-GetPbxFacilities&quot;"/>
+                    </pfx:GUID>
+                    <pfx:RequestType>
+                        <xsl:value-of select="&quot;GetPbxFacilities&quot;"/>
+                    </pfx:RequestType>
+                    <pfx:Request>
+                        <pfx:Request>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;CURRENT_FUTURE_FLAG&quot;"/>
+                            </pfx:Name>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;string&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;CURRENT_FUTURE_FLAG&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;PBX_NUMBER&quot;"/>
+                            </pfx:Name>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;string&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;PBX_NUMBER&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;FACILITY_CODE_OFFSET&quot;"/>
+                            </pfx:Name>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;string&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;FACILITY_CODE_OFFSET&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;PBX_GROUP_NUMBER&quot;"/>
+                            </pfx:Name>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;string&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;PBX_GROUP_NUMBER&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;NUMBER_OFFSET&quot;"/>
+                            </pfx:Name>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;string&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;NUMBER_OFFSET&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;AREA_CODE&quot;"/>
+                            </pfx:Name>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;string&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;AREA_CODE&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;CALL_NUMBER&quot;"/>
+                            </pfx:Name>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;string&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;CALL_NUMBER&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                        <pfx:Request>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;NODE_NAME&quot;"/>
+                            </pfx:Name>
+                            <pfx:Type>
+                                <xsl:value-of select="&quot;string&quot;"/>
+                            </pfx:Type>
+                            <pfx:Value>
+                                <xsl:value-of select="&quot;NODE_NAME&quot;"/>
+                            </pfx:Value>
+                        </pfx:Request>
+                    </pfx:Request>
+                </pfx:GetStructureRequest>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

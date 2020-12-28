@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes" xmlns:pfx2="http://www.tibco.com/CLEver/Rule" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/CLEver/BusinessDomain" xmlns:ns1="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:ns2="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns3="http://www.tibco.com/CLEver/ExceptionType" xmlns:ns4="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns5="http://www.tibco.com/CLEver/Policy" xmlns:ns6="http://www.tibco.com/CLEver/Notification" xmlns:ns7="http://www.tibco.com/CLEver/Resolution" xmlns:ns8="http://www.tibco.com/CLEver/Schedule" xmlns:ExceptionRuleXslt="java://XSLTTransform">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Policy" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Policy.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <pd:name>Processes/DataServices/RuleGeneration/Exception/Sub/RenderXslt.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Rules">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Always" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Policy">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element ref="ns5:PolicyFull"/>
+                                            <xsd:element name="Test" type="xsd:string"/>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                                <xsd:element name="Test" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="WithPrio" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Prio" type="xsd:string"/>
+                                <xsd:element name="Rule" minOccurs="0" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="Policy">
+                                                <xsd:complexType>
+                                                    <xsd:sequence>
+                                                        <xsd:element ref="ns5:PolicyFull"/>
+                                                        <xsd:element name="Test" type="xsd:string"/>
+                                                    </xsd:sequence>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                            <xsd:element name="Test" type="xsd:string"/>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>47</pd:startX>
+    <pd:startY>164</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <Result>
+                <xsl:value-of select="$GenerateXsltBaseDocument/Output/xsltDocument"/>
+            </Result>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Result" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>670</pd:endX>
+    <pd:endY>154</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ChildXSLT>
+            <xsd:element name="XSLTElement" type="xsd:string"/>
+        </ChildXSLT>
+    </pd:processVariables>
+    <pd:group name="GenerateXSLTforPrio">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>164</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>254</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/Rules/WithPrio</pd:over>
+            <pd:iterationElementSlot>PrioRules</pd:iterationElementSlot>
+            <pd:indexSlot>j</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GenerateXsltChooseStructure</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GenerateXsltChooseStructure</pd:from>
+            <pd:to>Assign</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GenerateXsltChooseStructure">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>245</pd:x>
+            <pd:y>72</pd:y>
+            <config>
+                <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/XsltChooseStructure.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <xsl:for-each select="$PrioRules/WithPrio/Rule">
+                        <When>
+                            <Test>
+                                <xsl:value-of select="if (string-length(Test)>0 and string-length(Policy/Test)>0) then&#xA;&#x9;concat(Test,' and ' ,Policy/Test)&#xA;else&#xA;if (string-length(Test)>0 and string-length(Policy/Test=0)) then&#xA;&#x9;Test&#xA;else&#xA;if (string-length(Test)=0 and string-length(Policy/Test>0)) then&#xA;&#x9;Policy/Test&#xA;else&#xA;&#x9;'(1=1)'"/>
+                            </Test>
+                            <Content>
+                                <xsl:value-of select="tib:render-xml(Policy/ns5:PolicyFull,1)"/>
+                            </Content>
+                        </When>
+                    </xsl:for-each>
+                    <Otherwise>
+                        <xsl:value-of select="$ChildXSLT/XSLTElement"/>
+                    </Otherwise>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>349</pd:x>
+            <pd:y>72</pd:y>
+            <config>
+                <variableName>ChildXSLT</variableName>
+            </config>
+            <pd:inputBindings>
+                <XSLTElement>
+                    <xsl:value-of select="$GenerateXsltChooseStructure/Output/xsltCode"/>
+                </XSLTElement>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="AddAlways">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>273</pd:x>
+        <pd:y>244</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/XsltChooseStructure.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:for-each select="$Start/Rules/Always">
+                    <When>
+                        <Test>
+                            <xsl:value-of select="if (string-length(Test)>0 and string-length(Policy/Test)>0) then&#xA;&#x9;concat(Test,' and ' ,Policy/Test)&#xA;else&#xA;if (string-length(Test)>0 and string-length(Policy/Test=0)) then&#xA;&#x9;Test&#xA;else&#xA;if (string-length(Test)=0 and string-length(Policy/Test>0)) then&#xA;&#x9;Policy/Test&#xA;else&#xA;&#x9;'(1=1)'"/>
+                        </Test>
+                        <Content>
+                            <xsl:value-of select="tib:render-xml(Policy/ns5:PolicyFull,1)"/>
+                        </Content>
+                    </When>
+                </xsl:for-each>
+                <Otherwise>
+                    <xsl:value-of select="''"/>
+                </Otherwise>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GenerateXsltBaseDocument">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>531</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/General/XsltGeneration/XsltBaseDocument.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsltElements>
+                    <xsl:value-of select="concat($AddAlways/Output/xsltCode,$ChildXSLT/XSLTElement)"/>
+                </xsltElements>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>AddAlways</pd:from>
+        <pd:to>GenerateXsltBaseDocument</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GenerateXSLTforPrio</pd:from>
+        <pd:to>GenerateXsltBaseDocument</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GenerateXsltBaseDocument</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GenerateXSLTforPrio</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>AddAlways</pd:to>
+        <pd:xpathDescription>Always Rules occur</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Start/Rules/Always)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GenerateXsltBaseDocument</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

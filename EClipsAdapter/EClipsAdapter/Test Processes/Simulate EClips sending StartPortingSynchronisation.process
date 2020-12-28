@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:StartNumberInporting" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:NotifyNumberInportingComplete" xmlns:pfx3="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberInportingComplete" xmlns:pfx4="urn:RequestPlannedNumberActivation" xmlns:pfx5="urn:RequestPlannedNumberDeactivation" xmlns:pfx6="urn:RequestNumberTariffChange" xmlns:pfx7="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberInPortingComplete" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx8="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:pfx9="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" xmlns:ns3="EcPsXsd_V0.2">
+    <wsdl:import namespace="urn:RequestPlannedNumberDeactivation" location="/WSDL/RequestPlannedNumberDeactivation.wsdl"/>
+    <wsdl:import namespace="urn:RequestNumberTariffChange" location="/WSDL/RequestNumberTariffChange.wsdl"/>
+    <wsdl:import namespace="urn:RequestPlannedNumberActivation" location="/WSDL/RequestPlannedNumberActivation.wsdl"/>
+    <wsdl:import namespace="urn:StartNumberInporting" location="/WSDL/StartNumberInporting.wsdl"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" location="/WSDL/EcnsPortingServices.wsdl"/>
+    <pd:name>EClipsAdapter/Test Processes/Simulate EClips sending StartPortingSynchronisation.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>28</pd:startX>
+    <pd:startY>35</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>375</pd:endX>
+    <pd:endY>34</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>163</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <timeout>%%EClipsAdapter/Inbound/SOAP/Timeout%%</timeout>
+            <service>pfx9:EcnsPortingServicesService</service>
+            <servicePort>StartPortingSynchronizationHttpPort</servicePort>
+            <operation>StartPortingSynchronisationOperation</operation>
+            <endpointURL>https://host/EClipsAdapter/Processes/StartPortingSynchronisation</endpointURL>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity>/EClipsAdapter/Test Processes/Resources/Identity.id</basicHttpAuthIdentity>
+            <soapAction/>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/EClipsAdapter/Test Processes/trusted/.folder</ns0:cert>
+                <ns0:verifyHostName>false</ns0:verifyHostName>
+            </ns0:ssl>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns2:_configData>
+                    <xsl:choose>
+                        <xsl:when test="$_globalVariables/ns:GlobalVariables/EClipsAdapter/UseSSL=&quot;true&quot;">
+                            <endpointURL>
+                                <xsl:value-of select="concat(&quot;https://&quot;,$_globalVariables/ns:GlobalVariables/EClipsAdapter/Outbound/SOAP/ServerHost,&quot;:&quot;,$_globalVariables/ns:GlobalVariables/EClipsAdapter/Outbound/SOAP/ServerPort,&quot;/EClipsAdapter/Processes/StartPortingSynchronisation&quot;)"/>
+                            </endpointURL>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <endpointURL>
+                                <xsl:value-of select="concat(&quot;http://&quot;,$_globalVariables/ns:GlobalVariables/EClipsAdapter/Outbound/SOAP/ServerHost,&quot;:&quot;,$_globalVariables/ns:GlobalVariables/EClipsAdapter/Outbound/SOAP/ServerPort,&quot;/EClipsAdapter/Processes/StartPortingSynchronisation&quot;)"/>
+                            </endpointURL>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns2:_configData>
+                <ns3:EcnsStartPortingSynchronisationReq>
+                    <ns3:StartPortingSynchronisationReqStruct>
+                        <ns3:PortingId>
+                            <xsl:value-of select="&quot;MMN1-PTT-06112866745&quot;"/>
+                        </ns3:PortingId>
+                    </ns3:StartPortingSynchronisationReqStruct>
+                </ns3:EcnsStartPortingSynchronisationReq>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

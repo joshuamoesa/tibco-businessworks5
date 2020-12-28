@@ -1,0 +1,980 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/ContactManagementAdapter/Common/OrderAndLineItems.xsd" xmlns:ns="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/ContactPerson.xsd" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/ContactManagementAdapter/Common/KzmServiceAccount.xsd" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/ContactManagementAdapter/Common/Account.xsd" xmlns:pfx5="http://www.siebel.com/xml/KZM%20Order%20Account%20Data%20Export" xmlns:pfx6="http://www.siebel.com/xml/KZM%20Installed%20Assets" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx7="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx8="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx9="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/ContactManagementAdapter/Common/OrderAndLineItems.xsd" schemaLocation="/XSDSchemas/ContactManagementAdapter/Common/OrderAndLineItems.xsd"/>
+    <xsd:import namespace="http://www.siebel.com/xml/KZM%20Order%20Account%20Data%20Export" schemaLocation="/WSDL/GetBusinessSegmentOrders.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Common/Product.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://www.siebel.com/xml/KZM%20Installed%20Assets" schemaLocation="/WSDL/GetBusinessSegmentInstalledBase.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" schemaLocation="/SiebelZMAdapter/Test Processes/ErrorMessage.xsd"/>
+    <pd:name>SiebelZMAdapter/Processes/SubProcesses/GetBusinessSegmentInstalledBase/RenderProduct.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="AssetMgmt-Asset" type="pfx6:AssetMgmt-Asset"/>
+                    <xsd:element name="ListOfAccount" type="pfx6:ListOfAccount" minOccurs="0"/>
+                    <xsd:element name="ListOfKzm-BillingAccount" type="pfx6:ListOfKzm-BillingAccount" minOccurs="0"/>
+                    <xsd:element name="ListOfKzm-ServiceAccount" type="pfx6:ListOfKzm-ServiceAccount" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>64</pd:startX>
+    <pd:startY>139</pd:startY>
+    <pd:returnBindings>
+        <output>
+            <xsl:copy-of select="$From-generic-to-specific-PRODUCT/pfx:PRODUCT"/>
+        </output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:PRODUCT"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>708</pd:endX>
+    <pd:endY>142</pd:endY>
+    <pd:errorSchemas>
+        <Schema0 ref="pfx9:ErrorMessage"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Do rest of OrderEntry-LineItem">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>431</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <element>
+                <xsd:element name="PRODUCT" type="pfx:type_Product"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <PRODUCT>
+                <pfx:PRODUCT_INSTANCE_ID>
+                    <xsl:value-of select="$Start/input/AssetMgmt-Asset/pfx6:AssetNumber"/>
+                </pfx:PRODUCT_INSTANCE_ID>
+                <xsl:if test="$Start/input/AssetMgmt-Asset/pfx6:ServiceId">
+                    <pfx:SERVICE_ID>
+                        <xsl:value-of select="$Start/input/AssetMgmt-Asset/pfx6:ServiceId"/>
+                    </pfx:SERVICE_ID>
+                </xsl:if>
+                <xsl:if test="$Map-PRODUCTLIST">
+                    <xsl:copy-of select="$Map-PRODUCTLIST/output/pfx:PRODUCTLIST"/>
+                </xsl:if>
+                <xsl:if test="exists($Start/input/AssetMgmt-Asset/pfx6:MRCCxTotal) and $Start/input/AssetMgmt-Asset/pfx6:MRCCxTotal!=&quot;&quot;">
+                    <pfx:MONTHLY_RECURRING_CHARGE>
+                        <pfx:CURRENCY_CODE>
+                            <xsl:value-of select="'EUR'"/>
+                        </pfx:CURRENCY_CODE>
+                        <pfx:AMOUNT>
+                            <xsl:value-of select="number($Start/input/AssetMgmt-Asset/pfx6:MRCCxTotal)"/>
+                        </pfx:AMOUNT>
+                    </pfx:MONTHLY_RECURRING_CHARGE>
+                </xsl:if>
+                <xsl:if test="exists($Start/input/AssetMgmt-Asset/pfx6:NRCCxTotal) and $Start/input/AssetMgmt-Asset/pfx6:NRCCxTotal!=&quot;&quot;">
+                    <pfx:ONE_TIME_CHARGE>
+                        <pfx:CURRENCY_CODE>
+                            <xsl:value-of select="'EUR'"/>
+                        </pfx:CURRENCY_CODE>
+                        <pfx:AMOUNT>
+                            <xsl:value-of select="number($Start/input/AssetMgmt-Asset/pfx6:NRCCxTotal)"/>
+                        </pfx:AMOUNT>
+                    </pfx:ONE_TIME_CHARGE>
+                </xsl:if>
+                <pfx:PRODUCT_STATUS>
+                    <pfx:STATUS>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx:STATUS>
+                </pfx:PRODUCT_STATUS>
+                <xsl:if test="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa">
+                    <pfx:PRODUCT_SPECIFICATIONS>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Access Type']">
+                            <pfx:ACCESS_TYPE>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:ACCESS_TYPE>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='AccountId']">
+                            <pfx:ACCOUNT_ID>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:ACCOUNT_ID>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Carrier']">
+                            <pfx:CARRIER>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:CARRIER>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Classificatie']">
+                            <pfx:CLASSIFICATION>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:CLASSIFICATION>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Aansluiting']">
+                            <pfx:CONNECTION_LINE_TYPE>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:CONNECTION_LINE_TYPE>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Contractsperiode']">
+                            <pfx:CONTRACT_DURATION>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:CONTRACT_DURATION>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Domeinextensie']">
+                            <pfx:DOMAIN_EXTENSION>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:DOMAIN_EXTENSION>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Domeinnaam']">
+                            <pfx:DOMAIN_NAME>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:DOMAIN_NAME>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Last_IP' or pfx6:Name='LastIP']">
+                            <pfx:END>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:END>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Equipment_type']">
+                            <pfx:EQUIPMENT_TYPE>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:EQUIPMENT_TYPE>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='MonteursInstallatie']">
+                            <pfx:INSTALLATION_BY_ENGINEER>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:INSTALLATION_BY_ENGINEER>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Aansluittype']">
+                            <pfx:LINE_SHARING>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:LINE_SHARING>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Managed']">
+                            <pfx:MANAGED>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:MANAGED>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='MigrateTelco']">
+                            <pfx:MIGRATE_TELCO>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:MIGRATE_TELCO>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='NumberOfConcurrentCalls']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:NUMBER_OF_CONCURRENT_CALLS>
+                                    <xsl:value-of select="number(pfx6:Value)"/>
+                                </pfx:NUMBER_OF_CONCURRENT_CALLS>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='PackageName']">
+                            <pfx:PACKAGE_NAME>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:PACKAGE_NAME>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='OverbookingFactor']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:OVERBOOKING_FACTOR>
+                                    <xsl:value-of select="number(pfx6:Value)"/>
+                                </pfx:OVERBOOKING_FACTOR>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Password']">
+                            <pfx:PASSWORD>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:PASSWORD>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Porteringsverklaring']">
+                            <pfx:PORTING_REQUESTED>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:PORTING_REQUESTED>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Porteren']">
+                            <pfx:PORTING_REQUIRED>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:PORTING_REQUIRED>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Quantity']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:QUANTITY>
+                                    <xsl:value-of select="pfx6:Value"/>
+                                </pfx:QUANTITY>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='RelationQuantitySize']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:RELATION_QUANTITY_SIZE>
+                                    <xsl:value-of select="number(pfx6:Value)"/>
+                                </pfx:RELATION_QUANTITY_SIZE>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='RouterType']">
+                            <pfx:ROUTER_TYPE>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:ROUTER_TYPE>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='SetUplink']">
+                            <pfx:SET_UPLINK>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:SET_UPLINK>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Postversturing']">
+                            <pfx:SHIPMENT>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:SHIPMENT>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='NumberInRange' or pfx6:Name='NumberOfIPAddresses' ]">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:SIZE>
+                                    <xsl:value-of select="number(pfx6:Value)"/>
+                                </pfx:SIZE>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='First_IP' or pfx6:Name='FirstIP']">
+                            <pfx:START>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:START>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='TerminateVoice']">
+                            <pfx:TERMINATE_VOICE>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:TERMINATE_VOICE>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Algemene voorwaarden']">
+                            <pfx:TERMS_OF_USE>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:TERMS_OF_USE>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Ticket1']">
+                            <pfx:TICKET_1>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:TICKET_1>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Ticket2']">
+                            <pfx:TICKET_2>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:TICKET_2>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Ticket3']">
+                            <pfx:TICKET_3>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:TICKET_3>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='UserName']">
+                            <pfx:USERNAME>
+                                <xsl:value-of select="pfx6:Value"/>
+                            </pfx:USERNAME>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='WNL']">
+                            <pfx:WHOLESALE_NEW_LINE>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:WHOLESALE_NEW_LINE>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='WIFISupport']">
+                            <pfx:WIFI_ENABLED>
+                                <xsl:value-of select="if (current()/pfx6:Value='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:Value='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:Value='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:Value='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                            </pfx:WIFI_ENABLED>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='DownloadSpeed']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:DOWNLOAD_SPEED>
+                                    <pfx:UNIT>
+                                        <xsl:value-of select="&quot;MiB/s&quot;"/>
+                                    </pfx:UNIT>
+                                    <pfx:AMOUNT>
+                                        <xsl:value-of select="number(pfx6:Value)"/>
+                                    </pfx:AMOUNT>
+                                </pfx:DOWNLOAD_SPEED>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Mailboxgrootte']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:MAILBOX_SIZE>
+                                    <pfx:UNIT>
+                                        <xsl:value-of select="&quot;MB&quot;"/>
+                                    </pfx:UNIT>
+                                    <pfx:AMOUNT>
+                                        <xsl:value-of select="number(pfx6:Value)"/>
+                                    </pfx:AMOUNT>
+                                </pfx:MAILBOX_SIZE>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Size']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:BACKUP_CAPACITY>
+                                    <pfx:UNIT>
+                                        <xsl:value-of select="&quot;MB&quot;"/>
+                                    </pfx:UNIT>
+                                    <pfx:AMOUNT>
+                                        <xsl:value-of select="number(pfx6:Value)"/>
+                                    </pfx:AMOUNT>
+                                </pfx:BACKUP_CAPACITY>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Telefoonnummer']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:PHONE_NUMBER>
+                                    <pfx:UNFORMATTED>
+                                        <xsl:value-of select="pfx6:Value"/>
+                                    </pfx:UNFORMATTED>
+                                </pfx:PHONE_NUMBER>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa">
+                            <xsl:if test="current()/pfx6:Name!=&quot;Access Type&quot; and current()/pfx6:Name !=&quot;AccountId&quot; and current()/pfx6:Name!=&quot;Carrier&quot; and current()/pfx6:Name!=&quot;Classificatie&quot; and current()/pfx6:Name!=&quot;Aansluiting&quot; and current()/pfx6:Name !=&quot;Contractsperiode&quot; and current()/pfx6:Name!=&quot;Domeinextensie&quot; and current()/pfx6:Name!=&quot;Domeinnaam&quot; and current()/pfx6:Name!=&quot;Last_IP&quot; and current()/pfx6:Name!=&quot;Equipment_type&quot; and current()/pfx6:Name!=&quot;MonteursInstallatie&quot; and current()/pfx6:Name!=&quot;Aansluittype&quot; and current()/pfx6:Name!=&quot;Managed&quot; and current()/pfx6:Name!=&quot;MigrateTelco&quot; and current()/pfx6:Name!=&quot;NumberOfConcurrentCalls&quot; and current()/pfx6:Name!=&quot;OverbookingFactor&quot; and current()/pfx6:Name!=&quot;PackageName&quot; and current()/pfx6:Name!=&quot;Password&quot; and current()/pfx6:Name!=&quot;Porterings verklaring&quot; and current()/pfx6:Name!=&quot;Porteren&quot; and current()/pfx6:Name!=&quot;Quantity&quot; and current()/pfx6:Name!=&quot;RelationQuantitySize&quot; and current()/pfx6:Name!=&quot;RouterType&quot; and current()/pfx6:Name!=&quot;SetUplink&quot; and current()/pfx6:Name!=&quot;Postversturing&quot; and current()/pfx6:Name!=&quot;NumberOfIPAddresses&quot; and current()/pfx6:Name!=&quot;NumberInRange&quot; and current()/pfx6:Name!=&quot;First_IP&quot; and current()/pfx6:Name!=&quot;TerminateVoice&quot; and current()/pfx6:Name!=&quot;Algemene voorwaarden&quot; and current()/pfx6:Name!=&quot;Ticket1&quot; and current()/pfx6:Name!=&quot;Ticket2&quot; and current()/pfx6:Name!=&quot;Ticket3&quot; and current()/pfx6:Name!=&quot;UserName&quot; and current()/pfx6:Name!=&quot;WNL&quot; and current()/pfx6:Name!=&quot;WIFISupport&quot; and current()/pfx6:Name!=&quot;DownloadSpeed&quot; and current()/pfx6:Name!=&quot;Mailboxgrootte&quot; and current()/pfx6:Name!=&quot;Size&quot; and current()/pfx6:Name!=&quot;Telefoonnummer&quot; and current()/pfx6:Name!=&quot;UpoadSpeed&quot; and current()/pfx6:Name!=&quot;MinimalDownloadSpeed&quot; and current()/pfx6:Name!=&quot;MinimalUpoadSpeed&quot; and current()/pfx6:Name!=&quot;Webspace&quot;">
+                                <pfx:UNKNOWN_SPECIFICATION>
+                                    <pfx:NAME>
+                                        <xsl:value-of select="pfx6:Name"/>
+                                    </pfx:NAME>
+                                    <pfx:VALUE>
+                                        <xsl:value-of select="pfx6:Value"/>
+                                    </pfx:VALUE>
+                                </pfx:UNKNOWN_SPECIFICATION>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='UpoadSpeed']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:UPLOAD_SPEED>
+                                    <pfx:UNIT>
+                                        <xsl:value-of select="&quot;MiB/s&quot;"/>
+                                    </pfx:UNIT>
+                                    <pfx:AMOUNT>
+                                        <xsl:value-of select="number(pfx6:Value)"/>
+                                    </pfx:AMOUNT>
+                                </pfx:UPLOAD_SPEED>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='MinimalDownloadSpeed']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:MINIMAL_DOWNLOAD_SPEED>
+                                    <pfx:UNIT>
+                                        <xsl:value-of select="&quot;MiB/s&quot;"/>
+                                    </pfx:UNIT>
+                                    <pfx:AMOUNT>
+                                        <xsl:value-of select="number(pfx6:Value)"/>
+                                    </pfx:AMOUNT>
+                                </pfx:MINIMAL_DOWNLOAD_SPEED>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='MinimalUpoadSpeed']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:MINIMAL_UPLOAD_SPEED>
+                                    <pfx:UNIT>
+                                        <xsl:value-of select="&quot;MiB/s&quot;"/>
+                                    </pfx:UNIT>
+                                    <pfx:AMOUNT>
+                                        <xsl:value-of select="number(pfx6:Value)"/>
+                                    </pfx:AMOUNT>
+                                </pfx:MINIMAL_UPLOAD_SPEED>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:ListOfAssetMgmt-AssetXa/pfx6:AssetMgmt-AssetXa[pfx6:Name='Webspace']">
+                            <xsl:if test="pfx6:Value!=&quot;&quot;">
+                                <pfx:WEBSPACE_SIZE>
+                                    <pfx:UNIT>
+                                        <xsl:value-of select="&quot;MB&quot;"/>
+                                    </pfx:UNIT>
+                                    <pfx:AMOUNT>
+                                        <xsl:value-of select="number(pfx6:Value)"/>
+                                    </pfx:AMOUNT>
+                                </pfx:WEBSPACE_SIZE>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </pfx:PRODUCT_SPECIFICATIONS>
+                </xsl:if>
+                <xsl:for-each select="$Start/input/ListOfAccount/pfx6:Account">
+                    <pfx:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                        <pfx:PRODUCT_INVOLVEMENT_ROLE>
+                            <xsl:value-of select="&quot;Contractor&quot;"/>
+                        </pfx:PRODUCT_INVOLVEMENT_ROLE>
+                        <pfx:PARTY_ROLE>
+                            <xsl:if test="pfx6:PrivacyCode!=&quot;&quot;">
+                                <pfx:PRIVACY_SETTING>
+                                    <xsl:value-of select="pfx6:PrivacyCode"/>
+                                </pfx:PRIVACY_SETTING>
+                            </xsl:if>
+                            <pfx:PARTY_ROLE_ID>
+                                <pfx:ID_CKR>
+                                    <xsl:value-of select="tib:trim(pfx6:CKRNumber)"/>
+                                </pfx:ID_CKR>
+                            </pfx:PARTY_ROLE_ID>
+                            <pfx:PARTY>
+                                <pfx:FULL_PARTY_NAME>
+                                    <xsl:value-of select="pfx6:Name"/>
+                                </pfx:FULL_PARTY_NAME>
+                                <pfx:PARTY_ID>
+                                    <xsl:value-of select="pfx6:PartyUId"/>
+                                </pfx:PARTY_ID>
+                                <xsl:if test="pfx6:LegalForm!=&quot;&quot;">
+                                    <pfx:LEGAL_FORM_CODE>
+                                        <xsl:value-of select="pfx6:LegalForm"/>
+                                    </pfx:LEGAL_FORM_CODE>
+                                </xsl:if>
+                                <pfx:IS_INTERNAL>
+                                    <xsl:value-of select="if (current()/pfx6:InternalOrgFlag='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:InternalOrgFlag='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                                </pfx:IS_INTERNAL>
+                                <pfx:PRICE_LIST>
+                                    <xsl:value-of select="pfx6:PriceList"/>
+                                </pfx:PRICE_LIST>
+                                <xsl:for-each select="pfx6:ListOfAccountContactAffiliation/pfx6:AccountContactAffiliation">
+                                    <pfx:CONTACT_PERSON>
+                                        <ns:LAST_NAME>
+                                            <xsl:value-of select="pfx6:LastName"/>
+                                        </ns:LAST_NAME>
+                                        <xsl:for-each select="pfx6:ListOfAccountContactAffiliationDetail/pfx6:AccountContactAffiliationDetail/pfx6:Role">
+                                            <ns:CONTACT_ROLE>
+                                                <xsl:value-of select="."/>
+                                            </ns:CONTACT_ROLE>
+                                        </xsl:for-each>
+                                        <xsl:if test="pfx6:FirstName">
+                                            <ns:FIRST_NAME>
+                                                <xsl:value-of select="pfx6:FirstName"/>
+                                            </ns:FIRST_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="pfx6:MiddleName">
+                                            <ns:MIDDLE_NAME>
+                                                <xsl:value-of select="pfx6:MiddleName"/>
+                                            </ns:MIDDLE_NAME>
+                                        </xsl:if>
+                                        <ns:PRIMARY_CONTACT_ROLE>
+                                            <xsl:value-of select="../../pfx6:Type"/>
+                                        </ns:PRIMARY_CONTACT_ROLE>
+                                        <ns:GENDER>
+                                            <xsl:value-of select="if (current()/pfx6:MF='M')then&#xA;'MALE'&#xA;else&#xA;if(current()/pfx6:MF='F')then&#xA;'FEMALE'&#xA;else&#xA;'UNKNOWN'"/>
+                                        </ns:GENDER>
+                                        <ns:TITLE>
+                                            <xsl:value-of select="pfx6:MM"/>
+                                        </ns:TITLE>
+                                        <xsl:if test="pfx6:EmailAddress">
+                                            <ns:EMAIL_ADDRESS>
+                                                <xsl:value-of select="pfx6:EmailAddress"/>
+                                            </ns:EMAIL_ADDRESS>
+                                        </xsl:if>
+                                        <xsl:if test="pfx6:StartDate!=&quot;&quot;">
+                                            <ns:VALIDITY_PERIOD>
+                                                <ns:FROM>
+                                                    <xsl:value-of select="current()/pfx6:StartDate"/>
+                                                </ns:FROM>
+                                                <xsl:if test="exists(pfx6:EndDate) and pfx6:EndDate!=&quot;&quot;">
+                                                    <ns:UNTIL>
+                                                        <xsl:value-of select="current()/pfx6:EndDate"/>
+                                                    </ns:UNTIL>
+                                                </xsl:if>
+                                            </ns:VALIDITY_PERIOD>
+                                        </xsl:if>
+                                        <ns:WORK_NUMBER>
+                                            <ns:WORK_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:WorkPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:WORK_NUMBER>
+                                        </ns:WORK_NUMBER>
+                                        <ns:FAX_NUMBER>
+                                            <ns:FAX_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:FaxPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:FAX_NUMBER>
+                                        </ns:FAX_NUMBER>
+                                        <ns:MOBILE_NUMBER>
+                                            <ns:MOBILE_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:CellularPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:MOBILE_NUMBER>
+                                        </ns:MOBILE_NUMBER>
+                                    </pfx:CONTACT_PERSON>
+                                </xsl:for-each>
+                            </pfx:PARTY>
+                        </pfx:PARTY_ROLE>
+                    </pfx:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                </xsl:for-each>
+                <xsl:for-each select="$Start/input/ListOfKzm-BillingAccount/pfx6:Kzm-BillingAccount">
+                    <pfx:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                        <pfx:PRODUCT_INVOLVEMENT_ROLE>
+                            <xsl:value-of select="&quot;Billing Agent&quot;"/>
+                        </pfx:PRODUCT_INVOLVEMENT_ROLE>
+                        <pfx:PARTY_ROLE>
+                            <xsl:if test="pfx6:PrivacyCode!=&quot;&quot;">
+                                <pfx:PRIVACY_SETTING>
+                                    <xsl:value-of select="pfx6:PrivacyCode"/>
+                                </pfx:PRIVACY_SETTING>
+                            </xsl:if>
+                            <pfx:PARTY_ROLE_ID>
+                                <pfx:ID_CKR>
+                                    <xsl:value-of select="tib:trim(pfx6:CKRNumber)"/>
+                                </pfx:ID_CKR>
+                            </pfx:PARTY_ROLE_ID>
+                            <pfx:PARTY>
+                                <pfx:FULL_PARTY_NAME>
+                                    <xsl:value-of select="pfx6:Name"/>
+                                </pfx:FULL_PARTY_NAME>
+                                <pfx:PARTY_ID>
+                                    <xsl:value-of select="pfx6:PartyUId"/>
+                                </pfx:PARTY_ID>
+                                <xsl:if test="pfx6:LegalForm!=&quot;&quot;">
+                                    <xsl:if test="pfx6:LegalForm">
+                                        <pfx:LEGAL_FORM_CODE>
+                                            <xsl:value-of select="pfx6:LegalForm"/>
+                                        </pfx:LEGAL_FORM_CODE>
+                                    </xsl:if>
+                                </xsl:if>
+                                <pfx:IS_INTERNAL>
+                                    <xsl:value-of select="if (current()/pfx6:InternalOrgFlag='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:InternalOrgFlag='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                                </pfx:IS_INTERNAL>
+                                <xsl:if test="pfx6:PriceList">
+                                    <pfx:PRICE_LIST>
+                                        <xsl:value-of select="pfx6:PriceList"/>
+                                    </pfx:PRICE_LIST>
+                                </xsl:if>
+                                <xsl:for-each select="pfx6:ListOfKzm-Eai-BillingAccountContactAffiliation/pfx6:Kzm-Eai-BillingAccountContactAffiliation">
+                                    <pfx:CONTACT_PERSON>
+                                        <ns:LAST_NAME>
+                                            <xsl:value-of select="pfx6:LastName"/>
+                                        </ns:LAST_NAME>
+                                        <xsl:for-each select="pfx6:ListOfKzm-Eai-BillingAccountContactAffiliationDetail/pfx6:Kzm-Eai-BillingAccountContactAffiliationDetail/pfx6:Role">
+                                            <ns:CONTACT_ROLE>
+                                                <xsl:value-of select="."/>
+                                            </ns:CONTACT_ROLE>
+                                        </xsl:for-each>
+                                        <xsl:if test="pfx6:FirstName">
+                                            <ns:FIRST_NAME>
+                                                <xsl:value-of select="pfx6:FirstName"/>
+                                            </ns:FIRST_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="pfx6:MiddleName">
+                                            <ns:MIDDLE_NAME>
+                                                <xsl:value-of select="pfx6:MiddleName"/>
+                                            </ns:MIDDLE_NAME>
+                                        </xsl:if>
+                                        <ns:PRIMARY_CONTACT_ROLE>
+                                            <xsl:value-of select="../../pfx6:Type"/>
+                                        </ns:PRIMARY_CONTACT_ROLE>
+                                        <ns:GENDER>
+                                            <xsl:value-of select="if (current()/pfx6:MF='M')then&#xA;'MALE'&#xA;else&#xA;if(current()/pfx6:MF='F')then&#xA;'FEMALE'&#xA;else&#xA;'UNKNOWN'"/>
+                                        </ns:GENDER>
+                                        <ns:TITLE>
+                                            <xsl:value-of select="pfx6:MM"/>
+                                        </ns:TITLE>
+                                        <xsl:if test="pfx6:EmailAddress">
+                                            <ns:EMAIL_ADDRESS>
+                                                <xsl:value-of select="pfx6:EmailAddress"/>
+                                            </ns:EMAIL_ADDRESS>
+                                        </xsl:if>
+                                        <xsl:if test="pfx6:StartDate!=&quot;&quot;">
+                                            <ns:VALIDITY_PERIOD>
+                                                <ns:FROM>
+                                                    <xsl:value-of select="current()/pfx6:StartDate"/>
+                                                </ns:FROM>
+                                                <xsl:if test="exists(pfx6:EndDate) and pfx6:EndDate!=&quot;&quot;">
+                                                    <ns:UNTIL>
+                                                        <xsl:value-of select="current()/pfx6:EndDate"/>
+                                                    </ns:UNTIL>
+                                                </xsl:if>
+                                            </ns:VALIDITY_PERIOD>
+                                        </xsl:if>
+                                        <ns:WORK_NUMBER>
+                                            <ns:WORK_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:WorkPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:WORK_NUMBER>
+                                        </ns:WORK_NUMBER>
+                                        <ns:FAX_NUMBER>
+                                            <ns:FAX_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:FaxPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:FAX_NUMBER>
+                                        </ns:FAX_NUMBER>
+                                        <ns:MOBILE_NUMBER>
+                                            <ns:MOBILE_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:CellularPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:MOBILE_NUMBER>
+                                        </ns:MOBILE_NUMBER>
+                                    </pfx:CONTACT_PERSON>
+                                </xsl:for-each>
+                            </pfx:PARTY>
+                        </pfx:PARTY_ROLE>
+                    </pfx:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                </xsl:for-each>
+                <xsl:for-each select="$Start/input/ListOfKzm-ServiceAccount/pfx6:Kzm-ServiceAccount">
+                    <pfx:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                        <pfx:PRODUCT_INVOLVEMENT_ROLE>
+                            <xsl:value-of select="&quot;User&quot;"/>
+                        </pfx:PRODUCT_INVOLVEMENT_ROLE>
+                        <pfx:PARTY_ROLE>
+                            <xsl:if test="pfx6:PrivacyCode!=&quot;&quot;">
+                                <pfx:PRIVACY_SETTING>
+                                    <xsl:value-of select="pfx6:PrivacyCode"/>
+                                </pfx:PRIVACY_SETTING>
+                            </xsl:if>
+                            <pfx:PARTY_ROLE_ID>
+                                <pfx:ID_CKR>
+                                    <xsl:value-of select="tib:trim(pfx6:CKRNumber)"/>
+                                </pfx:ID_CKR>
+                            </pfx:PARTY_ROLE_ID>
+                            <pfx:PARTY>
+                                <pfx:FULL_PARTY_NAME>
+                                    <xsl:value-of select="pfx6:Name"/>
+                                </pfx:FULL_PARTY_NAME>
+                                <pfx:PARTY_ID>
+                                    <xsl:value-of select="pfx6:PartyUId"/>
+                                </pfx:PARTY_ID>
+                                <xsl:if test="pfx6:LegalForm!=&quot;&quot;">
+                                    <xsl:if test="pfx6:LegalForm">
+                                        <pfx:LEGAL_FORM_CODE>
+                                            <xsl:value-of select="pfx6:LegalForm"/>
+                                        </pfx:LEGAL_FORM_CODE>
+                                    </xsl:if>
+                                </xsl:if>
+                                <pfx:IS_INTERNAL>
+                                    <xsl:value-of select="if (current()/pfx6:InternalOrgFlag='Shared') then &#xA;&#x9;true()&#xA; else if(current()/pfx6:InternalOrgFlag='Non Shared') then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Ja')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Nee')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Yes')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='No')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='Y')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='N')then&#xA;&#x9;false()&#xA;else if(current()/pfx6:InternalOrgFlag='J')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Managed')then&#xA;&#x9;true()&#xA;else if(current()/pfx6:InternalOrgFlag='Unmanaged')then&#xA;&#x9;false()&#xA;else false()"/>
+                                </pfx:IS_INTERNAL>
+                                <xsl:if test="pfx6:PriceList">
+                                    <pfx:PRICE_LIST>
+                                        <xsl:value-of select="pfx6:PriceList"/>
+                                    </pfx:PRICE_LIST>
+                                </xsl:if>
+                                <xsl:for-each select="pfx6:ListOfKzm-Eai-ServiceAccountContactAffiliation/pfx6:Kzm-Eai-ServiceAccountContactAffiliation">
+                                    <pfx:CONTACT_PERSON>
+                                        <ns:LAST_NAME>
+                                            <xsl:value-of select="pfx6:LastName"/>
+                                        </ns:LAST_NAME>
+                                        <xsl:for-each select="pfx6:ListOfKzm-Eai-ServiceAccountContactAffiliationDetail/pfx6:Kzm-Eai-ServiceAccountContactAffiliationDetail/pfx6:Role">
+                                            <ns:CONTACT_ROLE>
+                                                <xsl:value-of select="."/>
+                                            </ns:CONTACT_ROLE>
+                                        </xsl:for-each>
+                                        <xsl:if test="pfx6:FirstName">
+                                            <ns:FIRST_NAME>
+                                                <xsl:value-of select="pfx6:FirstName"/>
+                                            </ns:FIRST_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="pfx6:MiddleName">
+                                            <ns:MIDDLE_NAME>
+                                                <xsl:value-of select="pfx6:MiddleName"/>
+                                            </ns:MIDDLE_NAME>
+                                        </xsl:if>
+                                        <ns:PRIMARY_CONTACT_ROLE>
+                                            <xsl:value-of select="../../pfx6:Type"/>
+                                        </ns:PRIMARY_CONTACT_ROLE>
+                                        <ns:GENDER>
+                                            <xsl:value-of select="if (current()/pfx6:MF='M')then&#xA;'MALE'&#xA;else&#xA;if(current()/pfx6:MF='F')then&#xA;'FEMALE'&#xA;else&#xA;'UNKNOWN'"/>
+                                        </ns:GENDER>
+                                        <ns:TITLE>
+                                            <xsl:value-of select="pfx6:MM"/>
+                                        </ns:TITLE>
+                                        <xsl:if test="pfx6:EmailAddress">
+                                            <ns:EMAIL_ADDRESS>
+                                                <xsl:value-of select="pfx6:EmailAddress"/>
+                                            </ns:EMAIL_ADDRESS>
+                                        </xsl:if>
+                                        <xsl:if test="pfx6:StartDate!=&quot;&quot;">
+                                            <ns:VALIDITY_PERIOD>
+                                                <ns:FROM>
+                                                    <xsl:value-of select="current()/pfx6:StartDate"/>
+                                                </ns:FROM>
+                                                <xsl:if test="exists(pfx6:EndDate) and pfx6:EndDate!=&quot;&quot;">
+                                                    <ns:UNTIL>
+                                                        <xsl:value-of select="current()/pfx6:EndDate"/>
+                                                    </ns:UNTIL>
+                                                </xsl:if>
+                                            </ns:VALIDITY_PERIOD>
+                                        </xsl:if>
+                                        <ns:WORK_NUMBER>
+                                            <ns:WORK_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:WorkPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:WORK_NUMBER>
+                                        </ns:WORK_NUMBER>
+                                        <ns:FAX_NUMBER>
+                                            <ns:FAX_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:FaxPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:FAX_NUMBER>
+                                        </ns:FAX_NUMBER>
+                                        <ns:MOBILE_NUMBER>
+                                            <ns:MOBILE_NUMBER>
+                                                <ns:UNFORMATTED>
+                                                    <xsl:value-of select="pfx6:CellularPhone"/>
+                                                </ns:UNFORMATTED>
+                                            </ns:MOBILE_NUMBER>
+                                        </ns:MOBILE_NUMBER>
+                                    </pfx:CONTACT_PERSON>
+                                </xsl:for-each>
+                            </pfx:PARTY>
+                        </pfx:PARTY_ROLE>
+                    </pfx:PARTY_ROLE_PRODUCT_INVOLVEMENT>
+                </xsl:for-each>
+            </PRODUCT>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="End of recursion">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>243</pd:x>
+        <pd:y>223</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Map PRODUCTLIST">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>242</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/SiebelZMAdapter/Processes/SubProcesses/GetBusinessSegmentInstalledBase/RenderProductList.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <xsl:for-each select="$Start/input/AssetMgmt-Asset/pfx6:AssetMgmt-Asset">
+                    <AssetMgmt-Asset>
+                        <xsl:copy-of select="./ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="./@*"/>
+                        <xsl:copy-of select="./node()"/>
+                    </AssetMgmt-Asset>
+                </xsl:for-each>
+                <xsl:copy-of select="$Start/input/ListOfAccount"/>
+                <xsl:copy-of select="$Start/input/ListOfKzm-BillingAccount"/>
+                <xsl:copy-of select="$Start/input/ListOfKzm-ServiceAccount"/>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="From generic to specific PRODUCT">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>562</pd:x>
+        <pd:y>138</pd:y>
+        <config>
+            <element ref="pfx:PRODUCT"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:PRODUCT>
+                <xsl:choose>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Aansluiting'">
+                        <pfx:ACCESS_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:ACCESS_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Domein'">
+                        <pfx:DOMAIN_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:DOMAIN_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Emailadressen'">
+                        <pfx:EMAILBOX_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:EMAILBOX_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Gidsvermelding'">
+                        <pfx:DIRECTORY_LISTING_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:DIRECTORY_LISTING_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Hardphone'">
+                        <pfx:HARD_PHONE_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:HARD_PHONE_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Installatie'">
+                        <pfx:INSTALLATION_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:INSTALLATION_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='IP Addressen'">
+                        <pfx:IP_RANGE_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:IP_RANGE_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Mailboxgrootte'">
+                        <pfx:EMAIL_BOX_CAPACITY_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:EMAIL_BOX_CAPACITY_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Nummerblok'">
+                        <pfx:PHONE_NUMBER_RANGE_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:PHONE_NUMBER_RANGE_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Online Remote Backup'">
+                        <pfx:ONLINE_REMOTE_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:ONLINE_REMOTE_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='PBX'">
+                        <pfx:PBX_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:PBX_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='PINoIP'">
+                        <pfx:EFT_OVER_IP_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:EFT_OVER_IP_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Router'">
+                        <pfx:ROUTER_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:ROUTER_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Seat'">
+                        <pfx:SEAT_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:SEAT_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Seat Features'">
+                        <pfx:SEAT_FEATURES_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:SEAT_FEATURES_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Service'">
+                        <pfx:SERVICE_LEVEL_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:SERVICE_LEVEL_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Site Features'">
+                        <pfx:SITE_FEATURES_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:SITE_FEATURES_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Snelheid'">
+                        <pfx:INTERNET_ACCESS_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:INTERNET_ACCESS_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Soft phone'">
+                        <pfx:SOFT_PHONE_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:SOFT_PHONE_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='ZIPB IP'">
+                        <pfx:ZIPB_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:ZIPB_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Wifi'">
+                        <pfx:WIFI_EQUIPMENT_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:WIFI_EQUIPMENT_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Wifi'">
+                        <pfx:WIFI_EQUIPMENT_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:WIFI_EQUIPMENT_PRODUCT>
+                    </xsl:when>
+                    <xsl:when test="$Start/input/AssetMgmt-Asset/pfx6:ProductName='Voicekanalen'">
+                        <pfx:VOICE_CAPACITY_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:VOICE_CAPACITY_PRODUCT>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx:UNKNOWN_PRODUCT>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/@*"/>
+                            <xsl:copy-of select="$Do-rest-of-OrderEntry-LineItem/PRODUCT/node()"/>
+                        </pfx:UNKNOWN_PRODUCT>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </pfx:PRODUCT>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map PRODUCTLIST</pd:to>
+        <pd:xpathDescription>GO DEEPER</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Start/input/AssetMgmt-Asset/pfx6:AssetMgmt-Asset)!=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Do rest of OrderEntry-LineItem</pd:from>
+        <pd:to>From generic to specific PRODUCT</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End of recursion</pd:to>
+        <pd:xpathDescription>BOTTOM REACHED</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map PRODUCTLIST</pd:from>
+        <pd:to>Do rest of OrderEntry-LineItem</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>End of recursion</pd:from>
+        <pd:to>Do rest of OrderEntry-LineItem</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>From generic to specific PRODUCT</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,1 @@
+Example of a translation from XML to JavaObject using Xstream library.

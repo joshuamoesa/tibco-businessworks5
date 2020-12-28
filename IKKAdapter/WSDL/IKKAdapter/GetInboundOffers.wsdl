@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--WSDL created on 01-09-2006 -->
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:intf="http://www.kpn.com/EpiphanyBusinessConnector/GetInboundOffers" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://www.kpn.com/EpiphanyBusinessConnector/GetInboundOffers" targetNamespace="http://www.kpn.com/EpiphanyBusinessConnector/GetInboundOffers">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.kpn.com/EpiphanyBusinessConnector/GetInboundOffers">
+            <complexType name="type_GetInboundOffersRequest">
+                <sequence>
+                    <element name="SessionId" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="CkrNr" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="MobielNummer" nillable="true" type="xsd:string"/>
+                    <element name="ChannelType" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ChannelId" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="TeamId" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ContextString" nillable="true" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ServerId" nillable="true" type="xsd:string"/>
+                    <element name="FrontEndId" nillable="true" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <element name="GetInboundOffersRequest" type="impl:type_GetInboundOffersRequest"/>
+            <complexType name="type_status">
+                <sequence>
+                    <element name="STATUS_CODE" type="xsd:integer"/>
+                    <element maxOccurs="1" minOccurs="0" name="MSG_CODE" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ERROR_CODE" type="xsd:string"/>
+                    <element maxOccurs="1" minOccurs="0" name="ERROR_DESCRIPTION" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <complexType name="KeyValuePair">
+                <sequence>
+                    <element name="key" type="xsd:string"/>
+                    <element name="value" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <complexType name="ArrayOfKeyValuePair">
+                <sequence>
+                    <element maxOccurs="unbounded" minOccurs="0" name="item" type="impl:KeyValuePair"/>
+                </sequence>
+            </complexType>
+            <complexType name="type_offer">
+                <sequence>
+                    <element name="attributes" type="impl:ArrayOfKeyValuePair"/>
+                </sequence>
+            </complexType>
+            <complexType name="type_GetInboundOffersResponse">
+                <sequence>
+                    <element name="RESULT_STATUS" type="impl:type_status"/>
+                    <element maxOccurs="1" minOccurs="0" name="NUMBER_OF_OFFERS" type="xsd:integer"/>
+                    <element maxOccurs="unbounded" minOccurs="0" name="OFFER" type="impl:type_offer"/>
+                </sequence>
+            </complexType>
+            <element name="GetInboundOffersResponse" type="impl:type_GetInboundOffersResponse"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="GetInboundOffersRequest">
+        <wsdl:part element="impl:GetInboundOffersRequest" name="GetInboundOffersRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetInboundOffersResponse">
+        <wsdl:part element="impl:GetInboundOffersResponse" name="GetInboundOffersResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="GetInboundOffersPortType">
+        <wsdl:operation name="GetInboundOffers" parameterOrder="GetInboundOffersRequest">
+            <wsdl:input message="impl:GetInboundOffersRequest" name="GetInboundOffersRequest"/>
+            <wsdl:output message="impl:GetInboundOffersResponse" name="GetInboundOffersResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="GetInboundOffersSoapSoapBinding" type="impl:GetInboundOffersPortType">
+        <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="GetInboundOffers">
+            <wsdlsoap:operation soapAction=""/>
+            <wsdl:input name="GetInboundOffersRequest">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GetInboundOffersResponse">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="GetInboundOffersService">
+        <wsdl:port binding="impl:GetInboundOffersSoapSoapBinding" name="GetInboundOffersSoap">
+            <wsdlsoap:address location="http://hdxs7q.telecom.ptt.nl:9080/EBC/services/GetInboundOffersSoap"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

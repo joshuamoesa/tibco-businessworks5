@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/EclipsAdapter/GetNumberInfo.2/GetNumberInfo.2Impl/GetNumberInfoImpl/GetNumberInfoImpl/GetNumberInfoImpl/GetNumberInfoImpl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://xmlns.kpn.com/Eclips/Request/GetNumberInfo.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/EclipsAdapter/GetNumberInfo.2/GetNumberInfo.2Impl" xmlns:pfx3="http://webservices.kpn-lls.com/V0.2/EcnsNumbes.wsdl" xmlns:ns2="EcNuXsd_V0.2">
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/EclipsAdapter/GetNumberInfo.2/GetNumberInfo.2Impl" location="/WSDL/GetNumberInfo.wsdl"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsNumbes.wsdl" location="/WSDL/EcnsNumbes.wsdl"/>
+    <pd:name>EClipsAdapter/Test Processes/ZIPB ECLIPS/GetNumberInfo_SOAP.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>295</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx3:EcnsNumbesService</service>
+            <servicePort>GetNumberInfoHttpPort</servicePort>
+            <operation>GetNumberInfoOperation</operation>
+            <soapAction/>
+            <endpointURL>http://vm276:6070/EClipsAdapter/Processes/Outbound/GetNumberInfo</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns2:EcnsGetNumberInfoReq>
+                    <ns2:GetNumberInfoReqStruct>
+                        <ns2:Body>
+                            <ns2:PhoneNumber>
+                                <ns2:StartOfSerie>
+                                    <xsl:value-of select="&quot;030-4500000&quot;"/>
+                                </ns2:StartOfSerie>
+                            </ns2:PhoneNumber>
+                        </ns2:Body>
+                    </ns2:GetNumberInfoReqStruct>
+                </ns2:EcnsGetNumberInfoReq>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

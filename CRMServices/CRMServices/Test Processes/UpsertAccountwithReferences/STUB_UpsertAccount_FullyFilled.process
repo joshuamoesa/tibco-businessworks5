@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/SFAAdapter/Response/UpserAccount.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/SFAAdapter/Request/UpserAccount.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns1X="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3X="http://xmlns.kpn.com/EAI/fixed/0421_UpserAccount/1.0/Response">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Request/UpserAccount.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Request/UpsertAccount.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Response/UpserAccount.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Response/UpsertAccount.xsd"/>
+    <pd:name>CRMServices/Test Processes/UpsertAccountwithReferences/STUB_UpsertAccount_FullyFilled.process</pd:name>
+    <pd:startName>Rendezvous Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Rendezvous Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>173</pd:x>
+        <pd:y>212</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsRawRVObjectForOutput>false</wantsRawRVObjectForOutput>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/Common/Shared Resources/RVCMQ Transport.rvtransport</sharedChannel>
+            <subject>%%Env%%.FIXED.CRM.SFAAdapter.Request.UpsertAccount.1</subject>
+            <xsdString ref="pfx2:UpserAccountRequest"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>391</pd:x>
+        <pd:y>233</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>Rendezvous Subscriber</eventSource>
+            <xsdString ref="pfx:UpserAccountResponse"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <xsl:copy-of select="$Map-Data/pfx:UpserAccountResponse/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Map-Data/pfx:UpserAccountResponse/@*"/>
+                    <xsl:copy-of select="$Map-Data/pfx:UpserAccountResponse/node()"/>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>284</pd:x>
+        <pd:y>212</pd:y>
+        <config>
+            <element ref="pfx:UpserAccountResponse"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:UpserAccountResponse>
+                <ns1X:CMH>
+                    <ns1X:ID>ID</ns1X:ID>
+                    <ns1X:NAME>NAME</ns1X:NAME>
+                    <ns1X:FID>FID</ns1X:FID>
+                    <ns1X:MID>MID</ns1X:MID>
+                    <ns1X:PARADIGM>PARADIGM</ns1X:PARADIGM>
+                    <ns1X:OBJECT>OBJECT</ns1X:OBJECT>
+                    <ns1X:VERSION>VERSION</ns1X:VERSION>
+                    <ns1X:FROM ns1X:COMPONENT_ID="COMPONENT_ID" ns1X:COMPONENT_VERSION="COMPONENT_VERSION" ns1X:END_USER_INFO="END_USER_INFO" ns1X:SOURCE_ADDRESS="SOURCE_ADDRESS"/>
+                    <ns1X:TO ns1X:DESTINATION="DESTINATION"/>
+                    <ns1X:TRACKING>
+                        <ns1X:MESSAGE_ID>MESSAGE_ID</ns1X:MESSAGE_ID>
+                        <ns1X:EXTERNAL_REF>EXTERNAL_REF</ns1X:EXTERNAL_REF>
+                        <ns1X:ITEM ns1X:APPINFO="APPINFO" ns1X:EVENT="EVENT" ns1X:TIMESTAMP="-8592132702579986713"/>
+                        <ns1X:SEQUENCE_NO>SEQUENCE_NO</ns1X:SEQUENCE_NO>
+                    </ns1X:TRACKING>
+                    <ns1X:ATTRIBUTE ns1X:NAME="NAME" ns1X:VALUE="VALUE"/>
+                </ns1X:CMH>
+                <pfx:STATUS_RESULT ns:ERROR_CODE="ERROR_CODE" ns:ERROR_DESCRIPTION="ERROR_DESCRIPTION" ns:MSG_CODE="MSG_CODE" ns:STATUS="0"/>
+                <ns3X:BODY>
+                    <ns3X:SiebelAccount>
+                        <ns3X:AccountHierarchyLevel>AccountHierarchyLevel</ns3X:AccountHierarchyLevel>
+                        <ns3X:AccountStatus>AccountStatus</ns3X:AccountStatus>
+                        <ns3X:AccountTypeCode>
+                            <xsl:value-of select="&quot;ACCOUNTTYPECODE&quot;"/>
+                        </ns3X:AccountTypeCode>
+                        <ns3X:Alias>Alias</ns3X:Alias>
+                        <ns3X:CAUpdateFlag>CAUpdateFlag</ns3X:CAUpdateFlag>
+                        <ns3X:CAUpdateType>CAUpdateType</ns3X:CAUpdateType>
+                        <ns3X:CSN>CSN</ns3X:CSN>
+                        <ns3X:DisableMailings>DisableMailings</ns3X:DisableMailings>
+                        <ns3X:DontCall>DontCall</ns3X:DontCall>
+                        <ns3X:DontShare>DontShare</ns3X:DontShare>
+                        <ns3X:ErrorCounter>ErrorCounter</ns3X:ErrorCounter>
+                        <ns3X:HomePage>HomePage</ns3X:HomePage>
+                        <ns3X:Id>Id</ns3X:Id>
+                        <ns3X:IntegrationId>IntegrationId</ns3X:IntegrationId>
+                        <ns3X:KPNBlockedTelephone>KPNBlockedTelephone</ns3X:KPNBlockedTelephone>
+                        <ns3X:KPNBranchCode>KPNBranchCode</ns3X:KPNBranchCode>
+                        <ns3X:KPNBranchFlag>KPNBranchFlag</ns3X:KPNBranchFlag>
+                        <ns3X:KPNCOCNR>KPNCOCNR</ns3X:KPNCOCNR>
+                        <ns3X:KPNCODRV>KPNCODRV</ns3X:KPNCODRV>
+                        <ns3X:KPNFinancialStatus>KPNFinancialStatus</ns3X:KPNFinancialStatus>
+                        <ns3X:KPNFraudIndicator>KPNFraudIndicator</ns3X:KPNFraudIndicator>
+                        <ns3X:KPNMoveCKRnrOld>KPNMoveCKRnrOld</ns3X:KPNMoveCKRnrOld>
+                        <ns3X:KPNMoveIndicator>KPNMoveIndicator</ns3X:KPNMoveIndicator>
+                        <ns3X:KPNRELNUM>KPNRELNUM</ns3X:KPNRELNUM>
+                        <ns3X:KPNSalesDistrictCode>KPNSalesDistrictCode</ns3X:KPNSalesDistrictCode>
+                        <ns3X:Location>Location</ns3X:Location>
+                        <ns3X:MainEmailAddress>MainEmailAddress</ns3X:MainEmailAddress>
+                        <ns3X:MainFaxNumber>MainFaxNumber</ns3X:MainFaxNumber>
+                        <ns3X:MainPhoneNumber>MainPhoneNumber</ns3X:MainPhoneNumber>
+                        <ns3X:MarketClass>MarketClass</ns3X:MarketClass>
+                        <ns3X:MarketType>MarketType</ns3X:MarketType>
+                        <ns3X:MasterAccountIntegrationId>MasterAccountIntegrationId</ns3X:MasterAccountIntegrationId>
+                        <ns3X:Name>Name</ns3X:Name>
+                        <ns3X:OCRMOperation>Create</ns3X:OCRMOperation>
+                        <ns3X:ParentAccountId>ParentAccountId</ns3X:ParentAccountId>
+                        <ns3X:ParentAccountIntegrationId>ParentAccountIntegrationId</ns3X:ParentAccountIntegrationId>
+                        <ns3X:PrimaryContactUCMRowId>PrimaryContactUCMRowId</ns3X:PrimaryContactUCMRowId>
+                        <ns3X:Type>Type</ns3X:Type>
+                        <ns3X:UCMRowId>UCMRowId</ns3X:UCMRowId>
+                        <ns3X:UUID>UUID</ns3X:UUID>
+                        <ns3X:Account_Affiliation>
+                            <ns3X:AffiliationId>AffiliationId</ns3X:AffiliationId>
+                            <ns3X:AffiliationIntegrationId>AffiliationIntegrationId</ns3X:AffiliationIntegrationId>
+                            <ns3X:AffiliationType>AffiliationType</ns3X:AffiliationType>
+                            <ns3X:AffiliationUUID>AffiliationUUID</ns3X:AffiliationUUID>
+                        </ns3X:Account_Affiliation>
+                        <ns3X:Contact>
+                            <ns3X:BirthDate>BirthDate</ns3X:BirthDate>
+                            <ns3X:EmailAddress>EmailAddress</ns3X:EmailAddress>
+                            <ns3X:FaxPhone>FaxPhone</ns3X:FaxPhone>
+                            <ns3X:FirstName>FirstName</ns3X:FirstName>
+                            <ns3X:IntegrationId>IntegrationId</ns3X:IntegrationId>
+                            <ns3X:KPNAcademicTitle>KPNAcademicTitle</ns3X:KPNAcademicTitle>
+                            <ns3X:LastName>LastName</ns3X:LastName>
+                            <ns3X:MiddleName>MiddleName</ns3X:MiddleName>
+                            <ns3X:OCRMOperation>OCRMOperation</ns3X:OCRMOperation>
+                            <ns3X:PrefferedName>PrefferedName</ns3X:PrefferedName>
+                            <ns3X:Suffix>Suffix</ns3X:Suffix>
+                            <ns3X:SuppressAllEmails>SuppressAllEmails</ns3X:SuppressAllEmails>
+                            <ns3X:UCMRowId>UCMRowId</ns3X:UCMRowId>
+                            <ns3X:UUID>UUID</ns3X:UUID>
+                            <ns3X:WorkPhone>WorkPhone</ns3X:WorkPhone>
+                            <ns3X:CifContactReference>
+                                <ns3X:AccountId>AccountId</ns3X:AccountId>
+                                <ns3X:CIFSystemId>CIFSystemId</ns3X:CIFSystemId>
+                                <ns3X:ExternalId1>ExternalId1</ns3X:ExternalId1>
+                                <ns3X:SystemName>SystemName</ns3X:SystemName>
+                                <ns3X:SystemNumber>SystemNumber</ns3X:SystemNumber>
+                            </ns3X:CifContactReference>
+                            <ns3X:Error>
+                                <ns3X:Code>Code</ns3X:Code>
+                                <ns3X:Description>Description</ns3X:Description>
+                                <ns3X:Type>Type</ns3X:Type>
+                            </ns3X:Error>
+                        </ns3X:Contact>
+                        <ns3X:BusinessAddress IsPrimaryMVG="IsPrimaryMVG">
+                            <ns3X:AddressDescription>AddressDescription</ns3X:AddressDescription>
+                            <ns3X:AddressName>AddressName</ns3X:AddressName>
+                            <ns3X:AddressType>AddressType</ns3X:AddressType>
+                            <ns3X:City>City</ns3X:City>
+                            <ns3X:Country>Country</ns3X:Country>
+                            <ns3X:FuturePrimaryFlg>FuturePrimaryFlg</ns3X:FuturePrimaryFlg>
+                            <ns3X:KPNEndDate>KPNEndDate</ns3X:KPNEndDate>
+                            <ns3X:KPNPrimaryPOBoxFlag>KPNPrimaryPOBoxFlag</ns3X:KPNPrimaryPOBoxFlag>
+                            <ns3X:KPNSpecialAddrDescription>KPNSpecialAddrDescription</ns3X:KPNSpecialAddrDescription>
+                            <ns3X:KPNStartDate>KPNStartDate</ns3X:KPNStartDate>
+                            <ns3X:KPNZipcodeSuffix>KPNZipcodeSuffix</ns3X:KPNZipcodeSuffix>
+                            <ns3X:PostalCode>PostalCode</ns3X:PostalCode>
+                            <ns3X:State>State</ns3X:State>
+                            <ns3X:Status>Status</ns3X:Status>
+                            <ns3X:StreetAddress>StreetAddress</ns3X:StreetAddress>
+                            <ns3X:StreetNumber>StreetNumber</ns3X:StreetNumber>
+                            <ns3X:StreetNumberExtension>StreetNumberExtension</ns3X:StreetNumberExtension>
+                            <ns3X:Error>
+                                <ns3X:Code>Code</ns3X:Code>
+                                <ns3X:Description>Description</ns3X:Description>
+                                <ns3X:Type>Type</ns3X:Type>
+                            </ns3X:Error>
+                        </ns3X:BusinessAddress>
+                        <ns3X:CifAccountReference>
+                            <ns3X:AccountId>AccountId</ns3X:AccountId>
+                            <ns3X:CIFSystemId>CIFSystemId</ns3X:CIFSystemId>
+                            <ns3X:ExternalId1>ExternalId1</ns3X:ExternalId1>
+                            <ns3X:SystemName>SystemName</ns3X:SystemName>
+                            <ns3X:SystemNumber>SystemNumber</ns3X:SystemNumber>
+                            <ns3X:Error>
+                                <ns3X:Code>Code</ns3X:Code>
+                                <ns3X:Description>Description</ns3X:Description>
+                                <ns3X:Type>Type</ns3X:Type>
+                            </ns3X:Error>
+                        </ns3X:CifAccountReference>
+                    </ns3X:SiebelAccount>
+                </ns3X:BODY>
+            </pfx:UpserAccountResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Rendezvous Subscriber</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Reply to Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx4="http://xmlns.kpn.com/OrderServices/subscribe/UpdateOrderStatus.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/SiebelZM/UpdateOrderStatus.1" xmlns:ns5="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns6="http://www.siebel.com/xml/resultstatus.xsd" xmlns:pfx6="http://xmlns.kpn.com/Outbound/Publish/UpdateOrderStatus.xsd" xmlns:pfx7="http://xmlns.kpn.com/fixed/SiebelZM/UpdateCRMOrderStatus.1" xmlns:ns7="http://xmlns.kpn.com/wsdl/imported/ordermessage.xsd" xmlns:ns8="http://xmlns.tibco.com/encodings/mime">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent1/Publish/TestPublicationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/UpdateOrderStatus.1" schemaLocation="/WSDL/SiebelZMAdapter/UpdateOrderStatus.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Outbound/Publish/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/OrderServicesAdapter/Subscribe/UpdateOrderStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/UpdateCRMOrderStatus.1" schemaLocation="/WSDL/SiebelZMAdapter/UpdateCRMOrderStatus.wsdl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/UpdateOrderStatus.1" location="/WSDL/SiebelZMAdapter/UpdateOrderStatus.wsdl"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/SiebelZM/UpdateCRMOrderStatus.1" location="/WSDL/SiebelZMAdapter/UpdateCRMOrderStatus.wsdl"/>
+    <pd:name>SiebelZMAdapter/Processes/Sub_UpdateCRMOrderStatus.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>66</pd:startX>
+    <pd:startY>154</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>708</pd:endX>
+    <pd:endY>160</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse Publication">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>219</pd:x>
+        <pd:y>156</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx6:UpdateOrderStatus"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>339</pd:x>
+        <pd:y>336</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <pfx2:Errors>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error_Parse-Publication)">
+                                <pfx2:Error>
+                                    <pfx2:MsgCode>
+                                        <xsl:value-of select="&quot;SiebelZM-03004&quot;"/>
+                                    </pfx2:MsgCode>
+                                    <xsl:if test="$Start/ServiceIn/Body">
+                                        <pfx2:Params>
+                                            <xsl:value-of select="$Start/ServiceIn/Body"/>
+                                        </pfx2:Params>
+                                    </xsl:if>
+                                    <ns3:ErrorReport>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                    </ns3:ErrorReport>
+                                    <xsl:if test="$_error_Parse-Publication/ActivityErrors">
+                                        <pfx2:ActivityError>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/@*"/>
+                                            <xsl:copy-of select="$_error_Parse-Publication/ActivityErrors/node()"/>
+                                        </pfx2:ActivityError>
+                                    </xsl:if>
+                                </pfx2:Error>
+                            </xsl:when>
+                            <xsl:when test="exists($_error_SOAPRequestReply)">
+                                <pfx2:Error>
+                                    <pfx2:MsgCode>
+                                        <xsl:value-of select="&quot;SiebelZM-03002&quot;"/>
+                                    </pfx2:MsgCode>
+                                    <pfx2:Params>
+                                        <xsl:value-of select="tib:render-xml( $Parse-Publication/pfx6:UpdateOrderStatus,false(),true())"/>
+                                    </pfx2:Params>
+                                    <ns3:ErrorReport>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                    </ns3:ErrorReport>
+                                </pfx2:Error>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx2:Error>
+                                    <pfx2:MsgCode>
+                                        <xsl:value-of select="&quot;SiebelZM-03001&quot;"/>
+                                    </pfx2:MsgCode>
+                                    <xsl:if test="$Start/ServiceIn/Body">
+                                        <pfx2:Params>
+                                            <xsl:value-of select="$Start/ServiceIn/Body"/>
+                                        </pfx2:Params>
+                                    </xsl:if>
+                                    <ns3:ErrorReport>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                    </ns3:ErrorReport>
+                                </pfx2:Error>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </pfx2:Errors>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>346</pd:x>
+        <pd:y>157</pd:y>
+        <config>
+            <element ref="pfx7:Request"/>
+        </config>
+        <pd:inputBindings>
+            <pfx7:Request>
+                <ns7:BODY>
+                    <ns7:ORDER>
+                        <ns7:ORDER_HEADER>
+                            <xsl:for-each select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/OTHER_REFERENCE">
+                                <ns7:OTHER_REFERENCE>
+                                    <ns7:ORIGIN>
+                                        <xsl:value-of select="ORIGIN"/>
+                                    </ns7:ORIGIN>
+                                    <ns7:REFERENCE>
+                                        <xsl:value-of select="REFERENCE"/>
+                                    </ns7:REFERENCE>
+                                </ns7:OTHER_REFERENCE>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/PARENT_ORDER">
+                                <ns7:PARENT_ORDER>
+                                    <ns7:PARENT_ORDER_ID>
+                                        <xsl:value-of select="PARENT_ORDER_ID"/>
+                                    </ns7:PARENT_ORDER_ID>
+                                </ns7:PARENT_ORDER>
+                            </xsl:for-each>
+                            <xsl:if test="exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS) or&#xA;exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS) or&#xA;exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/UNFORMATTED_ADDRESS)">
+                                <ns7:DELIVERY_ADDRESS>
+                                    <xsl:choose>
+                                        <xsl:when test="exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS)">
+                                            <ns7:LOGICAL_ADDRESS>
+                                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/POBOX_NUMBER">
+                                                    <ns7:POBOX_NUMBER>
+                                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/POBOX_NUMBER"/>
+                                                    </ns7:POBOX_NUMBER>
+                                                </xsl:if>
+                                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/POBOX_NAME">
+                                                    <ns7:POBOX_NAME>
+                                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/POBOX_NAME"/>
+                                                    </ns7:POBOX_NAME>
+                                                </xsl:if>
+                                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/CITY_NAME">
+                                                    <ns7:CITY_NAME>
+                                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/CITY_NAME"/>
+                                                    </ns7:CITY_NAME>
+                                                </xsl:if>
+                                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/CITY_CODE">
+                                                    <ns7:CITY_CODE>
+                                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/CITY_CODE"/>
+                                                    </ns7:CITY_CODE>
+                                                </xsl:if>
+                                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/COUNTRY">
+                                                    <ns7:COUNTRY>
+                                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/COUNTRY"/>
+                                                    </ns7:COUNTRY>
+                                                </xsl:if>
+                                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/COUNTRY_CODE">
+                                                    <ns7:COUNTRY_CODE>
+                                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/COUNTRY_CODE"/>
+                                                    </ns7:COUNTRY_CODE>
+                                                </xsl:if>
+                                                <ns7:POSTCODE>
+                                                    <xsl:choose>
+                                                        <xsl:when test="exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/POSTCODE/DUTCH_POSTCODE)">
+                                                            <ns7:DUTCH_POSTCODE>
+                                                                <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/POSTCODE/DUTCH_POSTCODE"/>
+                                                            </ns7:DUTCH_POSTCODE>
+                                                        </xsl:when>
+                                                        <xsl:when test="exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/POSTCODE/UNFORMATTED_POSTCODE)">
+                                                            <ns7:UNFORMATTED_POSTCODE>
+                                                                <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/LOGICAL_ADDRESS/POSTCODE/UNFORMATTED_POSTCODE"/>
+                                                            </ns7:UNFORMATTED_POSTCODE>
+                                                        </xsl:when>
+                                                    </xsl:choose>
+                                                </ns7:POSTCODE>
+                                            </ns7:LOGICAL_ADDRESS>
+                                        </xsl:when>
+                                        <xsl:when test="exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS)">
+                                            <ns7:PROPERTY_ADDRESS>
+                                                <ns7:STREET_NAME>
+                                                    <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/STREET_NAME"/>
+                                                </ns7:STREET_NAME>
+                                                <ns7:HOUSE_NUMBER>
+                                                    <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/HOUSE_NUMBER"/>
+                                                </ns7:HOUSE_NUMBER>
+                                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/HOUSE_NUMBER_EXTENSION">
+                                                    <ns7:HOUSE_NUMBER_EXTENSION>
+                                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/HOUSE_NUMBER_EXTENSION"/>
+                                                    </ns7:HOUSE_NUMBER_EXTENSION>
+                                                </xsl:if>
+                                                <ns7:CITY_NAME>
+                                                    <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/CITY_NAME"/>
+                                                </ns7:CITY_NAME>
+                                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/COUNTRY_CODE">
+                                                    <ns7:COUNTRY_CODE>
+                                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/COUNTRY_CODE"/>
+                                                    </ns7:COUNTRY_CODE>
+                                                </xsl:if>
+                                                <ns7:POSTCODE>
+                                                    <xsl:choose>
+                                                        <xsl:when test="exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/POSTCODE/DUTCH_POSTCODE)">
+                                                            <ns7:DUTCH_POSTCODE>
+                                                                <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/POSTCODE/DUTCH_POSTCODE"/>
+                                                            </ns7:DUTCH_POSTCODE>
+                                                        </xsl:when>
+                                                        <xsl:when test="exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/POSTCODE/UNFORMATTED_POSTCODE)">
+                                                            <ns7:UNFORMATTED_POSTCODE>
+                                                                <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/PROPERTY_ADDRESS/POSTCODE/UNFORMATTED_POSTCODE"/>
+                                                            </ns7:UNFORMATTED_POSTCODE>
+                                                        </xsl:when>
+                                                    </xsl:choose>
+                                                </ns7:POSTCODE>
+                                            </ns7:PROPERTY_ADDRESS>
+                                        </xsl:when>
+                                        <xsl:when test="exists($Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/UNFORMATTED_ADDRESS)">
+                                            <ns7:UNFORMATTED_ADDRESS>
+                                                <xsl:for-each select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DELIVERY_ADDRESS/UNFORMATTED_ADDRESS/ADDRESS_LINE">
+                                                    <ns7:ADDRESS_LINE>
+                                                        <ns7:ADDRESS_LINE>
+                                                            <xsl:value-of select="ADDRESS_LINE"/>
+                                                        </ns7:ADDRESS_LINE>
+                                                    </ns7:ADDRESS_LINE>
+                                                </xsl:for-each>
+                                            </ns7:UNFORMATTED_ADDRESS>
+                                        </xsl:when>
+                                    </xsl:choose>
+                                </ns7:DELIVERY_ADDRESS>
+                            </xsl:if>
+                            <ns7:CUSTOMER_ID>
+                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_CKR">
+                                    <ns7:ID_CKR>
+                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_CKR"/>
+                                    </ns7:ID_CKR>
+                                </xsl:if>
+                                <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_MCCS">
+                                    <ns7:ID_MCCS>
+                                        <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_MCCS"/>
+                                    </ns7:ID_MCCS>
+                                </xsl:if>
+                                <ns7:ID_PACKAGER>
+                                    <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_PACKAGER/INTERNAL">
+                                        <ns7:INTERNAL>
+                                            <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_PACKAGER/INTERNAL"/>
+                                        </ns7:INTERNAL>
+                                    </xsl:if>
+                                    <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_PACKAGER/EXTERNAL">
+                                        <ns7:EXTERNAL>
+                                            <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_PACKAGER/EXTERNAL"/>
+                                        </ns7:EXTERNAL>
+                                    </xsl:if>
+                                </ns7:ID_PACKAGER>
+                            </ns7:CUSTOMER_ID>
+                            <xsl:for-each select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/ORDER_STATUS">
+                                <ns7:ORDER_STATUS>
+                                    <xsl:if test="ORDER_STATUS">
+                                        <ns7:ORDER_STATUS>
+                                            <xsl:value-of select="ORDER_STATUS"/>
+                                        </ns7:ORDER_STATUS>
+                                    </xsl:if>
+                                    <xsl:if test="ERROR_CODE">
+                                        <ns7:ERROR_CODE>
+                                            <xsl:value-of select="ERROR_CODE"/>
+                                        </ns7:ERROR_CODE>
+                                    </xsl:if>
+                                    <xsl:if test="ERROR_DESCRIPTION">
+                                        <ns7:ERROR_DESCRIPTION>
+                                            <xsl:value-of select="ERROR_DESCRIPTION"/>
+                                        </ns7:ERROR_DESCRIPTION>
+                                    </xsl:if>
+                                    <xsl:if test="DELIVERY_STATUS_CODE">
+                                        <ns7:DELIVERY_STATUS_CODE>
+                                            <xsl:value-of select="DELIVERY_STATUS_CODE"/>
+                                        </ns7:DELIVERY_STATUS_CODE>
+                                    </xsl:if>
+                                    <xsl:if test="DELIVERY_STATUS_DESCRIPTION">
+                                        <ns7:DELIVERY_STATUS_DESCRIPTION>
+                                            <xsl:value-of select="DELIVERY_STATUS_DESCRIPTION"/>
+                                        </ns7:DELIVERY_STATUS_DESCRIPTION>
+                                    </xsl:if>
+                                    <xsl:if test="DELIVERY_STATUS_ADDITIONAL_INFORMATION">
+                                        <ns7:DELIVERY_STATUS_ADDITIONAL_INFORMATION>
+                                            <xsl:value-of select="DELIVERY_STATUS_ADDITIONAL_INFORMATION"/>
+                                        </ns7:DELIVERY_STATUS_ADDITIONAL_INFORMATION>
+                                    </xsl:if>
+                                    <xsl:if test="STATUS_CODE">
+                                        <ns7:STATUS_CODE>
+                                            <xsl:value-of select="STATUS_CODE"/>
+                                        </ns7:STATUS_CODE>
+                                    </xsl:if>
+                                    <xsl:if test="STATUS_DESCRIPTION">
+                                        <ns7:STATUS_DESCRIPTION>
+                                            <xsl:value-of select="STATUS_DESCRIPTION"/>
+                                        </ns7:STATUS_DESCRIPTION>
+                                    </xsl:if>
+                                </ns7:ORDER_STATUS>
+                            </xsl:for-each>
+                            <ns7:ORDER_TYPE>
+                                <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/ORDER_TYPE"/>
+                            </ns7:ORDER_TYPE>
+                            <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/ORDER_ID">
+                                <ns7:ORDER_ID>
+                                    <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/ORDER_ID"/>
+                                </ns7:ORDER_ID>
+                            </xsl:if>
+                            <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE">
+                                <ns7:EXTERNAL_REFERENCE>
+                                    <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                                </ns7:EXTERNAL_REFERENCE>
+                            </xsl:if>
+                            <ns7:CREATION_DATE>
+                                <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/CREATION_DATE"/>
+                            </ns7:CREATION_DATE>
+                            <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DUE_DATE">
+                                <ns7:DUE_DATE>
+                                    <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/DUE_DATE"/>
+                                </ns7:DUE_DATE>
+                            </xsl:if>
+                            <xsl:if test="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/ORDER_PRIORITY">
+                                <ns7:ORDER_PRIORITY>
+                                    <xsl:value-of select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_HEADER/ORDER_PRIORITY"/>
+                                </ns7:ORDER_PRIORITY>
+                            </xsl:if>
+                        </ns7:ORDER_HEADER>
+                        <xsl:for-each select="$Parse-Publication/pfx6:UpdateOrderStatus/ns5:BODY/ORDER/ORDER_ITEM">
+                            <ns7:ORDER_ITEM>
+                                <ns7:ORDER_ITEM_HEADER>
+                                    <ns7:ORDER_ITEM_TYPE>
+                                        <xsl:value-of select="ORDER_ITEM_HEADER/ORDER_ITEM_TYPE"/>
+                                    </ns7:ORDER_ITEM_TYPE>
+                                    <xsl:if test="ORDER_ITEM_HEADER/ORDER_ITEM_ID">
+                                        <ns7:ORDER_ITEM_ID>
+                                            <xsl:value-of select="ORDER_ITEM_HEADER/ORDER_ITEM_ID"/>
+                                        </ns7:ORDER_ITEM_ID>
+                                    </xsl:if>
+                                    <xsl:if test="ORDER_ITEM_HEADER/EXTERNAL_REFERENCE">
+                                        <ns7:EXTERNAL_REFERENCE>
+                                            <xsl:value-of select="ORDER_ITEM_HEADER/EXTERNAL_REFERENCE"/>
+                                        </ns7:EXTERNAL_REFERENCE>
+                                    </xsl:if>
+                                    <xsl:if test="ORDER_ITEM_HEADER/ORDER_ITEM_STATUS">
+                                        <ns7:ORDER_ITEM_STATUS>
+                                            <xsl:value-of select="ORDER_ITEM_HEADER/ORDER_ITEM_STATUS"/>
+                                        </ns7:ORDER_ITEM_STATUS>
+                                    </xsl:if>
+                                    <xsl:if test="ORDER_ITEM_HEADER/DUE_DATE">
+                                        <ns7:DUE_DATE>
+                                            <xsl:value-of select="ORDER_ITEM_HEADER/DUE_DATE"/>
+                                        </ns7:DUE_DATE>
+                                    </xsl:if>
+                                    <xsl:for-each select="ORDER_ITEM_HEADER/REMARK">
+                                        <ns7:REMARK>
+                                            <ns7:TYPE>
+                                                <xsl:value-of select="TYPE"/>
+                                            </ns7:TYPE>
+                                            <ns7:REMARK>
+                                                <xsl:value-of select="REMARK"/>
+                                            </ns7:REMARK>
+                                        </ns7:REMARK>
+                                    </xsl:for-each>
+                                </ns7:ORDER_ITEM_HEADER>
+                                <ns7:PRODUCT_CATEGORY>
+                                    <xsl:value-of select="PRODUCT_CATEGORY"/>
+                                </ns7:PRODUCT_CATEGORY>
+                                <ns7:PRODUCT>
+                                    <xsl:copy-of select="PRODUCT/*"/>
+                                </ns7:PRODUCT>
+                                <ns7:CONTRACT>
+                                    <xsl:if test="CONTRACT/CONTRACT_NUMBER">
+                                        <ns7:CONTRACT_NUMBER>
+                                            <xsl:value-of select="CONTRACT/CONTRACT_NUMBER"/>
+                                        </ns7:CONTRACT_NUMBER>
+                                    </xsl:if>
+                                    <xsl:if test="CONTRACT/CONTRACT_VERSION">
+                                        <ns7:CONTRACT_VERSION>
+                                            <xsl:value-of select="CONTRACT/CONTRACT_VERSION"/>
+                                        </ns7:CONTRACT_VERSION>
+                                    </xsl:if>
+                                </ns7:CONTRACT>
+                            </ns7:ORDER_ITEM>
+                        </xsl:for-each>
+                    </ns7:ORDER>
+                </ns7:BODY>
+            </pfx7:Request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>511</pd:x>
+        <pd:y>157</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx7:UpdateCRMOrderStatus</service>
+            <servicePort>UpdateCRMOrderStatus.1.PortTypeEndpoint</servicePort>
+            <operation>UpdateCRMOrderStatus.1</operation>
+            <soapAction>UpdateCRMOrderStatus</soapAction>
+            <endpointURL>%%SiebelZMAdapter/Inbound/UpdateCRMOrderStatus/EndpointURL%%</endpointURL>
+            <useProxy>false</useProxy>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity/>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx7:Request>
+                    <xsl:copy-of select="$Map-Data/pfx7:Request/ns7:BODY"/>
+                </pfx7:Request>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log SOAP Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>510</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;SiebelZM-04006&quot;"/>
+                </MsgCode>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx7:Request/ns7:BODY, false(),true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log SOAP Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>703</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;SiebelZM-04007&quot;"/>
+                </MsgCode>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($SOAPRequestReply/outputMessage/pfx7:Response/ns6:UpdateCRMOrderStatusResponse,false(),true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Log SOAP Request</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("SiebelZM-04006")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log SOAP Request</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Log SOAP Response</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("SiebelZM-04007")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log SOAP Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

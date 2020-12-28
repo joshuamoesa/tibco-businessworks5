@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx2="http://tempuri.org" xmlns:pfx3="http://tempuri.org/GenericRequest" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="urn:GenericMessageRequest" xmlns:pfx5="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx9="http://xmlns.kpn.com/fixed/common/PropertyAddress.xsd" xmlns:ns3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx10="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns8="http://www.tibco.com/schemas/AstridAdapter/XSDSchemas/B2BRFAdapter/Publish/CustomerInteractionNotification.2.xsd" xmlns:ns22="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/2.0/Publish" xmlns:pfx31="http://xmlns.kpn.com/eai/common/errors" xmlns:ns41="http://xmlns.kpn.com/EAI/fixed/0355_CutomerInteractionNotification/2.1/Publish" xmlns:ns9="http://www.tibco.com/schemas/Publish/CustomerInteractionNotification.2.xsd" xmlns:ns2="http://www.tibco.com/schemas/Subscribe/CustomerInteractionNotification.2.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/Generic/CustomerInteractionNotification.2.xsd">
+    <xsd:import namespace="http://tempuri.org/GenericRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessage.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" schemaLocation="/XSDSchemas/Common/AnyXMLMessage.xsd"/>
+    <xsd:import namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/Publish/CustomerInteractionNotification.2.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Publish/CustomerInteractionNotification.2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/Generic/CustomerInteractionNotification.2.xsd" schemaLocation="/XSDSchemas/Generic/CustomerInteractionNotification.2.xsd"/>
+    <pd:name>ASTRIDAdapter/Processes/Sub_INCIDENT_REPORT_REQUEST.process</pd:name>
+    <pd:description>0083 TroubleReport publish service offered by ASTRID.</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="PublishGenericMessage">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="INTERACTION_TYPE" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="INTERACTION_INITIATION" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="INTERACTION_SUBTYPE" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="MESSAGE_DESTINATION_IT_DOMAIN" type="xsd:string" minOccurs="0"/>
+                    <xsd:element ref="pfx4:GenericMessage"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>39</pd:startX>
+    <pd:startY>43</pd:startY>
+    <pd:returnBindings>
+        <GUID>
+            <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:GUID"/>
+        </GUID>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="GUID" type="xsd:string"/>
+    </pd:endType>
+    <pd:endX>349</pd:endX>
+    <pd:endY>45</pd:endY>
+    <pd:errorSchemas>
+        <FunctionalError>
+            <xsd:element name="group">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ResultStatus" type="pfx10:ResultStatus"/>
+                        <xsd:element name="CHM" type="ns:CMHInfo"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </FunctionalError>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>200</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <faultName>FunctionalError</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns3:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;General Error&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-03300&quot;"/>
+                </messageCode>
+                <data>
+                    <group>
+                        <ResultStatus>
+                            <xsl:attribute name="pfx10:STATUS">
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx10:MSG_CODE">
+                                <xsl:value-of select="$_error/ns4:ErrorReport/MsgCode"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="pfx10:ERROR_DESCRIPTION">
+                                <xsl:value-of select="concat($_error/ns4:ErrorReport/Msg, &quot;,&quot;,  $_error/ns4:ErrorReport/StackTrace)"/>
+                            </xsl:attribute>
+                        </ResultStatus>
+                        <CHM>
+                            <ns:ID>
+                                <xsl:value-of select="&quot;192&quot;"/>
+                            </ns:ID>
+                            <ns:NAME>
+                                <xsl:value-of select="$Start/PublishGenericMessage/INTERACTION_TYPE"/>
+                            </ns:NAME>
+                            <ns:FID>
+                                <xsl:value-of select="concat($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:customer_service_incident_report_identifier, &quot;,&quot;, $Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier, &quot;,&quot;, $Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:alarm_report_identifier)"/>
+                            </ns:FID>
+                            <ns:MID>
+                                <xsl:value-of select="&quot;192.30&quot;"/>
+                            </ns:MID>
+                            <ns:PARADIGM>
+                                <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                            </ns:PARADIGM>
+                            <ns:OBJECT>
+                                <xsl:value-of select="&quot;TroubleReport&quot;"/>
+                            </ns:OBJECT>
+                            <ns:VERSION>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns:VERSION>
+                            <ns:FROM>
+                                <xsl:attribute name="ns:COMPONENT_ID">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:COMPONENT_VERSION">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                                </xsl:attribute>
+                            </ns:FROM>
+                            <ns:TO>
+                                <xsl:attribute name="ns:DESTINATION">
+                                    <xsl:value-of select="concat('ErrorLog.',$_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.&quot;,&#xA;    $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentDomain, &quot;.&quot;,&#xA;    $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId, &quot;.Publish.&quot;,&#xA;    $Start/PublishGenericMessage/INTERACTION_TYPE, '.2')"/>
+                                </xsl:attribute>
+                            </ns:TO>
+                            <ns:TRACKING>
+                                <ns:MESSAGE_ID>
+                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:GUID"/>
+                                </ns:MESSAGE_ID>
+                                <ns:ITEM>
+                                    <xsl:attribute name="ns:APPINFO">
+                                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentDomain, &quot;.&quot;, $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId, '.ERROR')"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:EVENT">
+                                        <xsl:value-of select="$Start/PublishGenericMessage/INTERACTION_TYPE"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:TIMESTAMP">
+                                        <xsl:value-of select="tib:timestamp()"/>
+                                    </xsl:attribute>
+                                </ns:ITEM>
+                            </ns:TRACKING>
+                        </CHM>
+                    </group>
+                </data>
+            </ns3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Publish message">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>198</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Publisher.process</processName>
+        </config>
+        <pd:inputBindings>
+            <PublisherIn>
+                <Destination>
+                    <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.CRM.BusinessInteraction.Publish.CustomerInteractionNotification.2&quot;)"/>
+                </Destination>
+                <Body>
+                    <ns5:CustomerInteractionNotification>
+                        <ns:CMH>
+                            <ns:ID>
+                                <xsl:value-of select="&quot;1094&quot;"/>
+                            </ns:ID>
+                            <ns:NAME>
+                                <xsl:value-of select="&quot;InteractionNotification&quot;"/>
+                            </ns:NAME>
+                            <ns:MID>
+                                <xsl:value-of select="&quot;1094.10&quot;"/>
+                            </ns:MID>
+                            <ns:PARADIGM>
+                                <xsl:value-of select="'PUBLISH'"/>
+                            </ns:PARADIGM>
+                            <ns:OBJECT>
+                                <xsl:value-of select="&quot;InteractionNotification&quot;"/>
+                            </ns:OBJECT>
+                            <ns:VERSION>
+                                <xsl:value-of select="'2.4'"/>
+                            </ns:VERSION>
+                            <ns:FROM>
+                                <xsl:attribute name="ns:COMPONENT_ID">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:COMPONENT_VERSION">
+                                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                                </xsl:attribute>
+                            </ns:FROM>
+                            <ns:TO>
+                                <xsl:attribute name="ns:DESTINATION">
+                                    <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.CRM.BusinessInteraction.Publish.CustomerInteractionNotification.2&quot;)"/>
+                                </xsl:attribute>
+                            </ns:TO>
+                            <ns:TRACKING>
+                                <ns:MESSAGE_ID>
+                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:GUID"/>
+                                </ns:MESSAGE_ID>
+                                <ns:ITEM>
+                                    <xsl:attribute name="ns:APPINFO">
+                                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentDomain,&quot;/&quot;, $_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentId,'/',$_globalVariables/ns1:GlobalVariables/ASTRIDAdapter/ComponentVersion)"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:TIMESTAMP">
+                                        <xsl:value-of select="tib:timestamp()"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="ns:EVENT">
+                                        <xsl:value-of select="&quot;INCIDENT_REPORT_REQUEST&quot;"/>
+                                    </xsl:attribute>
+                                </ns:ITEM>
+                            </ns:TRACKING>
+                            <ns:ATTRIBUTE>
+                                <xsl:attribute name="ns:NAME">
+                                    <xsl:value-of select="'MESSAGE_ORIGINATION_IT_DOMAIN'"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:VALUE">
+                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_origination_it_domain"/>
+                                </xsl:attribute>
+                            </ns:ATTRIBUTE>
+                            <ns:ATTRIBUTE>
+                                <xsl:attribute name="ns:NAME">
+                                    <xsl:value-of select="'MESSAGE_DESTINATION_IT_DOMAIN'"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:VALUE">
+                                    <xsl:value-of select="$Start/PublishGenericMessage/MESSAGE_DESTINATION_IT_DOMAIN"/>
+                                </xsl:attribute>
+                            </ns:ATTRIBUTE>
+                        </ns:CMH>
+                        <ns22:BODY>
+                            <CUSTOMER_INTERACTION_NOTIFICATION>
+                                <CUSTOMER_CONTRACT_ITEM>
+                                    <INTERACTION_ACTIVITY>
+                                        <ACTIVITY>
+                                            <xsl:value-of select="&quot;repair&quot;"/>
+                                        </ACTIVITY>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_repairstarttime!=&quot;&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_repairstarttime/@xsi:nil=(&quot;1&quot;)))">
+                                                <ACTIVITY_START>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_repairstarttime"/>
+                                                </ACTIVITY_START>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_repairendtime!=&quot;&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_repairendtime/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_repairendtime/@xsi:nil=(&quot;1&quot;)))">
+                                                <ACTIVITY_END>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_Object_Info/pfx2:mo_supported_service_repairendtime"/>
+                                                </ACTIVITY_END>
+                                            </xsl:if>
+                                        </xsl:if>
+                                    </INTERACTION_ACTIVITY>
+                                    <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_object_in_trouble_info/pfx2:moit_supported_service_class!=&quot;&quot;">
+                                        <SERVICE_NAME>
+                                            <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Managed_object_in_trouble_info/pfx2:moit_supported_service_class"/>
+                                        </SERVICE_NAME>
+                                    </xsl:if>
+                                </CUSTOMER_CONTRACT_ITEM>
+                                <INTERACTION_STATUS>
+                                    <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_state!=&quot;&quot;">
+                                        <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_state/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_state/@xsi:nil=(&quot;1&quot;)))">
+                                            <CUSTOMER_REQUEST_STATUS>
+                                                <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_state"/>
+                                            </CUSTOMER_REQUEST_STATUS>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </INTERACTION_STATUS>
+                                <CUSTOMER_ORGANIZATION>
+                                    <PROPERTY_ADDRESS>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_city!=&quot;&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_city/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_city/@xsi:nil=(&quot;1&quot;)))">
+                                                <CITY_NAME>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_city"/>
+                                                </CITY_NAME>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number!=&quot;&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number/@xsi:nil=(&quot;1&quot;)))">
+                                                <HOUSE_NUMBER>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number"/>
+                                                </HOUSE_NUMBER>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number_extension!=&quot;&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number_extension/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number_extension/@xsi:nil=(&quot;1&quot;)))">
+                                                <HOUSE_NUMBER_EXTENSION>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number_extension"/>
+                                                </HOUSE_NUMBER_EXTENSION>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_street!=&quot;&quot;">
+                                            <STREET_NAME>
+                                                <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_street"/>
+                                            </STREET_NAME>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_zip_code!=&quot;&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_zip_code/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_zip_code/@xsi:nil=(&quot;1&quot;)))">
+                                                <ZIP_CODE>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_zip_code"/>
+                                                </ZIP_CODE>
+                                            </xsl:if>
+                                        </xsl:if>
+                                    </PROPERTY_ADDRESS>
+                                    <xsl:if test="string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number)!=0&#xA;or&#xA;string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_house_number_extension)!=0&#xA;or&#xA;string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_street)!=0&#xA;or&#xA;string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_zip_code)!=0&#xA;or&#xA;string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_city)!=0&#xA;or&#xA;string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_contact_person)!=0&#xA;or&#xA;string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_contact_person_telephone_number)!=0">
+                                        <CONTACT_PERSON>
+                                            <xsl:choose>
+                                                <xsl:when test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_contact_person_telephone_number!=&quot;&quot;">
+                                                    <PHONE_NUMBER>
+                                                        <FORMATTED>
+                                                            <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_contact_person_telephone_number"/>
+                                                        </FORMATTED>
+                                                    </PHONE_NUMBER>
+                                                </xsl:when>
+                                                <xsl:otherwise/>
+                                            </xsl:choose>
+                                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_contact_person!=&quot;&quot;">
+                                                <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_contact_person/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_contact_person/@xsi:nil=(&quot;1&quot;)))">
+                                                    <FULL_NAME>
+                                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_contact_person"/>
+                                                    </FULL_NAME>
+                                                </xsl:if>
+                                            </xsl:if>
+                                            <CONTACT_ROLE>
+                                                <xsl:value-of select="&quot;Contact&quot;"/>
+                                            </CONTACT_ROLE>
+                                        </CONTACT_PERSON>
+                                    </xsl:if>
+                                    <xsl:if test="string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_incident_reporter)!=0&#xA;or&#xA;string-length($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_incident_reporter_telephone_number)!=0">
+                                        <CONTACT_PERSON>
+                                            <xsl:choose>
+                                                <xsl:when test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_incident_reporter_telephone_number!=&quot;&quot;">
+                                                    <PHONE_NUMBER>
+                                                        <FORMATTED>
+                                                            <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_incident_reporter_telephone_number"/>
+                                                        </FORMATTED>
+                                                    </PHONE_NUMBER>
+                                                </xsl:when>
+                                                <xsl:otherwise/>
+                                            </xsl:choose>
+                                            <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_incident_reporter!=&quot;&quot;">
+                                                <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_incident_reporter/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_incident_reporter/@xsi:nil=(&quot;1&quot;)))">
+                                                    <FULL_NAME>
+                                                        <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Customer_info/pfx2:co_incident_reporter"/>
+                                                    </FULL_NAME>
+                                                </xsl:if>
+                                            </xsl:if>
+                                            <CONTACT_ROLE>
+                                                <xsl:value-of select="&quot;Reporter&quot;"/>
+                                            </CONTACT_ROLE>
+                                        </CONTACT_PERSON>
+                                    </xsl:if>
+                                    <CUSTOMER_ORGANIZATION_NAME>
+                                        <xsl:value-of select="'KPN'"/>
+                                    </CUSTOMER_ORGANIZATION_NAME>
+                                </CUSTOMER_ORGANIZATION>
+                                <CUSTOMER_INTERACTION_REPORT>
+                                    <B2B_IDENTIFICATION>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier!=&quot;&quot;&#xA;and&#xA;$Start/PublishGenericMessage/MESSAGE_DESTINATION_IT_DOMAIN=&quot;REGGEFIBER&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier/@xsi:nil=(&quot;1&quot;)))">
+                                                <CUSTOMER_INTERACTION_SUPPLIER_REFERENCE_ID>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier"/>
+                                                </CUSTOMER_INTERACTION_SUPPLIER_REFERENCE_ID>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier!=&quot;&quot;&#xA;and&#xA;$Start/PublishGenericMessage/MESSAGE_DESTINATION_IT_DOMAIN=&quot;REGGEFIBER&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier/@xsi:nil=(&quot;1&quot;)))">
+                                                <CUSTOMER_INTERACTION_CONSUMER_ID>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier"/>
+                                                </CUSTOMER_INTERACTION_CONSUMER_ID>
+                                            </xsl:if>
+                                        </xsl:if>
+                                    </B2B_IDENTIFICATION>
+                                    <EAI_IDENTIFICATION>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier!=&quot;&quot;&#xA;and&#xA;$Start/PublishGenericMessage/MESSAGE_DESTINATION_IT_DOMAIN!=&quot;REGGEFIBER&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier/@xsi:nil=(&quot;1&quot;)))">
+                                                <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier">
+                                                    <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier/@xsi:nil=(&quot;1&quot;)))">
+                                                        <SRMO_TICKET_ID>
+                                                            <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_report_identifier"/>
+                                                        </SRMO_TICKET_ID>
+                                                    </xsl:if>
+                                                </xsl:if>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier!=&quot;&quot;&#xA;and&#xA;$Start/PublishGenericMessage/MESSAGE_DESTINATION_IT_DOMAIN!=&quot;REGGEFIBER&quot;">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier/@xsi:nil=(&quot;1&quot;)))">
+                                                <CRM_TICKET_ID>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:service_provider_trouble_report_identifier"/>
+                                                </CRM_TICKET_ID>
+                                            </xsl:if>
+                                        </xsl:if>
+                                    </EAI_IDENTIFICATION>
+                                    <xsl:for-each select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:Non_Generic_Field_List/pfx2:Non_Generic_Field">
+                                        <ADDITIONAL_INFORMATION>
+                                            <SOURCE>
+                                                <xsl:value-of select="pfx2:non_Generic_Field_name"/>
+                                            </SOURCE>
+                                            <ADDITIONAL_INFORMATION>
+                                                <xsl:value-of select="pfx2:non_Generic_Field_value"/>
+                                            </ADDITIONAL_INFORMATION>
+                                        </ADDITIONAL_INFORMATION>
+                                    </xsl:for-each>
+                                    <INTERACTION_INITIATION>
+                                        <xsl:value-of select="&quot;Reactive&quot;"/>
+                                    </INTERACTION_INITIATION>
+                                    <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:customer_service_incident_report_identifier!=&quot;&quot;">
+                                        <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:customer_service_incident_report_identifier/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:customer_service_incident_report_identifier/@xsi:nil=(&quot;1&quot;)))">
+                                            <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:customer_service_incident_report_identifier/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:customer_service_incident_report_identifier/@xsi:nil=(&quot;1&quot;)))">
+                                                <EXTERNAL_REFERENCE>
+                                                    <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:customer_service_incident_report_identifier"/>
+                                                </EXTERNAL_REFERENCE>
+                                            </xsl:if>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_creation_time!=&quot;&quot;">
+                                        <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_creation_time/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_creation_time/@xsi:nil=(&quot;1&quot;)))">
+                                            <INTERACTION_DATETIME>
+                                                <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:Header/pfx2:message_creation_time"/>
+                                            </INTERACTION_DATETIME>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:closure_service_type!=&quot;&quot;">
+                                        <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:closure_service_type/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:closure_service_type/@xsi:nil=(&quot;1&quot;)))">
+                                            <INTERACTION_REASON_CODE>
+                                                <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:closure_service_type"/>
+                                            </INTERACTION_REASON_CODE>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_description_long!=&quot;&quot;">
+                                        <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_description_long/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_description_long/@xsi:nil=(&quot;1&quot;)))">
+                                            <INTERACTION_DESCRIPTION_LONG>
+                                                <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:trouble_description_long"/>
+                                            </INTERACTION_DESCRIPTION_LONG>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <xsl:if test="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:analysis_information!=&quot;&quot;">
+                                        <xsl:if test="not(($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:analysis_information/@xsi:nil=(&quot;true&quot;)) or ($Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:analysis_information/@xsi:nil=(&quot;1&quot;)))">
+                                            <EXTENDED_INFORMATION>
+                                                <xsl:value-of select="$Start/PublishGenericMessage/pfx4:GenericMessage/pfx2:General/pfx2:analysis_information"/>
+                                            </EXTENDED_INFORMATION>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </CUSTOMER_INTERACTION_REPORT>
+                                <INTERACTION_CLASS>
+                                    <INTERACTION_TYPE>
+                                        <xsl:value-of select="$Start/PublishGenericMessage/INTERACTION_TYPE"/>
+                                    </INTERACTION_TYPE>
+                                    <xsl:if test="$Start/PublishGenericMessage/INTERACTION_SUBTYPE!=&quot;&quot;">
+                                        <xsl:if test="$Start/PublishGenericMessage/INTERACTION_SUBTYPE">
+                                            <INTERACTION_SUBTYPE>
+                                                <xsl:value-of select="$Start/PublishGenericMessage/INTERACTION_SUBTYPE"/>
+                                            </INTERACTION_SUBTYPE>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </INTERACTION_CLASS>
+                            </CUSTOMER_INTERACTION_NOTIFICATION>
+                        </ns22:BODY>
+                    </ns5:CustomerInteractionNotification>
+                </Body>
+                <JMS>
+                    <xsl:if test="$Start/PublishGenericMessage/MESSAGE_DESTINATION_IT_DOMAIN">
+                        <Selector>
+                            <xsl:value-of select="$Start/PublishGenericMessage/MESSAGE_DESTINATION_IT_DOMAIN"/>
+                        </Selector>
+                    </xsl:if>
+                </JMS>
+            </PublisherIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Publish message</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish message</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish message</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://www.tibco.com/pe/Inspector" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>ProcessDefinitions/SubProcess.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>74</pd:startX>
+    <pd:startY>80</pd:startY>
+    <pd:returnBindings>
+        <blah>
+            <xsl:value-of select="&quot;output sub&quot;"/>
+        </blah>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="blah" type="xsd:string"/>
+    </pd:endType>
+    <pd:endX>480</pd:endX>
+    <pd:endY>79</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1229510569265</pd:targetNamespace>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>205</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;Subprocess&quot;"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Inspector">
+        <pd:type>com.tibco.pe.core.InspectorActivity</pd:type>
+        <pd:resourceType>ae.activities.inspectorActivity</pd:resourceType>
+        <pd:x>342</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <input>All</input>
+            <stdout>false</stdout>
+        </config>
+        <pd:inputBindings>
+            <ns2:InspectActivityInputClass/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Inspector</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Inspector</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

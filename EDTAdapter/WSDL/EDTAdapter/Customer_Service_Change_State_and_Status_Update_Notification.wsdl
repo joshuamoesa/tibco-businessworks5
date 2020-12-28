@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:Customer_Service_Change_State_and_Status_Update_Notification" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Customer_Service_Change_State_and_Status_Update_Notification">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:Customer_Service_Change_State_and_Status_Update_Notification">
+			<xsd:import namespace="http://tempuri.org"/>
+			<xsd:element name="Create" type="ns0:Message"/>
+			<xsd:element name="CreateResponse" type="s:GetOutputMap"/>
+			<xsd:complexType name="GetOutputMap">
+				<xsd:sequence>
+					<xsd:element name="GUID" type="xsd:string"/>
+					<xsd:element name="error" type="xsd:string"/>
+					<xsd:element name="error_message" type="xsd:string"/>
+					<xsd:element name="error_status" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="AuthenticationInfo" type="s:AuthenticationInfo"/>
+			<xsd:complexType name="AuthenticationInfo">
+				<xsd:sequence>
+					<xsd:element name="userName" type="xsd:string"/>
+					<xsd:element name="password" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="authentication" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="locale" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="timeZone" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://tempuri.org" xmlns="http://tempuri.org" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:complexType name="Message">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="Header" type="HeaderType"/>
+					<xs:element minOccurs="0" name="General" type="GeneralType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="HeaderType">
+				<xs:sequence>
+					<xs:element name="GUID" type="xs:string"/>
+					<xs:element name="managed_object_class" type="xs:string"/>
+					<xs:element name="managed_object_class_extension" type="xs:string"/>
+					<xs:element name="managed_object_class_version" type="xs:string"/>
+					<xs:element name="message_origination_it_domain" type="xs:string"/>
+					<xs:element name="message_destination_it_domain" type="xs:string"/>
+					<xs:element name="message_instance" type="xs:string"/>
+					<xs:element name="message_creation_time" nillable="true" type="xs:dateTime"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GeneralType">
+				<xs:sequence>
+					<xs:element name="customer_service_change_reference_number" type="xs:string"/>
+					<xs:element name="customer_service_change_identifier" type="xs:string"/>
+					<xs:element name="change_identifier" type="xs:string"/>
+					<xs:element name="closure_service_type" type="xs:string"/>
+					<xs:element name="change_report_state" type="xs:string"/>
+					<xs:element name="event_time" nillable="true" type="xs:dateTime"/>
+					<xs:element name="analysis_information" type="xs:string"/>
+					<xs:element name="manager_contact_person" type="xs:string"/>
+					<xs:element name="manager_contact_person_telephone_number" type="xs:string"/>
+					<xs:element name="change_action_taken" type="xs:string"/>
+					<xs:element name="change_action_information_type" type="xs:string"/>
+					<xs:element name="change_action_information" type="xs:string"/>
+					<xs:element name="manager_organisation" type="xs:string"/>
+					<xs:element name="pause_reason" type="xs:string"/>
+					<xs:element name="pause_endtime" nillable="true" type="xs:dateTime"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Answer">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="GUID" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="error" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="error_message" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="error_status" nillable="true" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="ARAuthenticate">
+		<wsdl:part name="parameters" element="s:AuthenticationInfo"/>
+	</wsdl:message>
+	<wsdl:message name="CreateSoapIn">
+		<wsdl:part name="parameters" element="s:Create"/>
+	</wsdl:message>
+	<wsdl:message name="CreateSoapOut">
+		<wsdl:part name="parameters" element="s:CreateResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="Customer_Service_Change_State_and_Status_Update_NotificationPortType">
+		<wsdl:operation name="Create">
+			<wsdl:input message="s:CreateSoapIn"/>
+			<wsdl:output message="s:CreateSoapOut"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="Customer_Service_Change_State_and_Status_Update_NotificationSoapBinding" type="s:Customer_Service_Change_State_and_Status_Update_NotificationPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="Create">
+			<soap:operation soapAction="urn:Customer_Service_Change_State_and_Status_Update_Notification/Create" style="document"/>
+			<wsdl:input>
+				<soap:header message="s:ARAuthenticate" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="Customer_Service_Change_State_and_Status_Update_NotificationService">
+		<wsdl:port name="Customer_Service_Change_State_and_Status_Update_NotificationSoap" binding="s:Customer_Service_Change_State_and_Status_Update_NotificationSoapBinding">
+			<soap:address location="http://hdxs5d.unix.telecom.ptt.nl/arsys/services/ARService?server=hdxs5d&amp;webService=Customer_Service_Change_State_and_Status_Update_Notification"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

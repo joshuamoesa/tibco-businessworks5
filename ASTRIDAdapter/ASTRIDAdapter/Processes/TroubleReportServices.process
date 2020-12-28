@@ -1,0 +1,1536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:ns="http://tempuri.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://tempuri.org/GenericRequest" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/WSDL/ASTRID/GenericMessageRequest.wsdl" xmlns:pfx4="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" xmlns:pfx5="urn:NotifyNumberInportingComplete" xmlns:ns0="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/EDTAdapter/Response/UpsertTroubleReport.xsd" xmlns:pfx6="http://xmlns.kpn.com/fixed/portingservices/publish/NotifyNumberInportingComplete" xmlns:ns4="http://xmlns.kpn.com/fixed/EDTAdapter/common/CustomerIncidentReport.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/EDTAdapter/common/EDTResponse.xsd" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns7="http://www.tibco.com/pe/EngineTypes" xmlns:pfx7="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns8="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns9="http://schemas.tibco.com/bw/plugins/soap/5.0/SoapPluginExceptions">
+    <xsd:import namespace="http://tempuri.org/GenericRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericRequest.xsd"/>
+    <xsd:import namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Processes/TroubleReportServices.process</pd:name>
+    <pd:description>Generic process that handles all communications originating from ASTRID, directed towards the EAI bus.
+Note: It deals with client request-reply and server publish-subscribe.</pd:description>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <GUID>
+            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:GUID"/>
+        </GUID>
+    </pd:returnBindings>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>63</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <service>pfx:GenericMessageRequestPortType</service>
+            <operation>GenericMessage</operation>
+            <attachmentStyle>none</attachmentStyle>
+            <wsdlNamespaceRoot>urn:GenericMessageRequest/GenericMessageImpl</wsdlNamespaceRoot>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/HTTP Server Connection.sharedhttp</sharedChannel>
+            <sharedChannels>
+                <httpChannel>
+                    <useBasicAuthentication>false</useBasicAuthentication>
+                </httpChannel>
+            </sharedChannels>
+            <useBasicAuthentication>false</useBasicAuthentication>
+            <portAddressPrefix/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1175</pd:endX>
+    <pd:endY>342</pd:endY>
+    <pd:errorSchemas>
+        <InternalError ref="pfx:GenericMessage"/>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <ErrorStatus>
+            <xsd:element name="ResultStatus" type="ns6:ResultStatus"/>
+        </ErrorStatus>
+    </pd:processVariables>
+    <pd:activity name="Call-Publish">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>693</pd:x>
+        <pd:y>239</pd:y>
+        <config>
+            <processNameXPath>concat("/ASTRIDAdapter/Processes/Sub_",$Get-Destination/root/Record/INTERACTION_TYPE,".process")</processNameXPath>
+            <processName>/ASTRIDAdapter/Processes/Sub_CONFIRMATION.process</processName>
+        </config>
+        <pd:inputBindings>
+            <PublishGenericMessage>
+                <INTERACTION_TYPE>
+                    <xsl:value-of select="$Get-Destination/root/Record/INTERACTION_TYPE"/>
+                </INTERACTION_TYPE>
+                <INTERACTION_INITIATION>
+                    <xsl:value-of select="$Get-Destination/root/Record/INTERACTION_INITIATION"/>
+                </INTERACTION_INITIATION>
+                <INTERACTION_SUBTYPE>
+                    <xsl:value-of select="$Get-Destination/root/Record/INTERACTION_SUBTYPE"/>
+                </INTERACTION_SUBTYPE>
+                <MESSAGE_DESTINATION_IT_DOMAIN>
+                    <xsl:value-of select="$Get-Destination/root/Record/DESTINATION"/>
+                </MESSAGE_DESTINATION_IT_DOMAIN>
+                <xsl:copy-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage"/>
+            </PublishGenericMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call-PublishEvent">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>425</pd:x>
+        <pd:y>404</pd:y>
+        <config>
+            <processName>/ASTRIDAdapter/Processes/Sub_PublishShortTroubleReport.process</processName>
+            <processNameXPath>concat("/ASTRIDAdapter/Processes/",$Route-SOAP-Request/root/ProcessName,".process")</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <PublishGenericMessage>
+                <MessageType>
+                    <xsl:value-of select="$Route-SOAP-Request/root/ServiceName"/>
+                </MessageType>
+                <xsl:copy-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage"/>
+            </PublishGenericMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call-RequestEvent">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>314</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <processNameXPath>concat("/ASTRIDAdapter/Processes/",$Route-SOAP-Request/root/ProcessName,".process")</processNameXPath>
+            <processName>/ASTRIDAdapter/Processes/Sub_GetSNIConfigurationDetails_V2.process</processName>
+        </config>
+        <pd:inputBindings>
+            <RequestGenericMessage>
+                <MessageType>
+                    <xsl:value-of select="$Route-SOAP-Request/root/ServiceName"/>
+                </MessageType>
+                <xsl:copy-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage"/>
+            </RequestGenericMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FillCMH">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>176</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_FillCMH.process</processName>
+        </config>
+        <pd:inputBindings>
+            <CMH-IN>
+                <NewCMH>
+                    <ID>
+                        <xsl:value-of select="&quot;999&quot;"/>
+                    </ID>
+                    <NAME>
+                        <xsl:value-of select="&quot;SOAP&quot;"/>
+                    </NAME>
+                    <MID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </MID>
+                    <PARADIGM>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </PARADIGM>
+                    <OBJECT>
+                        <xsl:value-of select="&quot;Dummy&quot;"/>
+                    </OBJECT>
+                    <VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </VERSION>
+                    <COMPONENT-ID>
+                        <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                    </COMPONENT-ID>
+                    <COMPONENT-VERSION>
+                        <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                    </COMPONENT-VERSION>
+                    <DESTINATION>
+                        <xsl:value-of select="concat($_globalVariables/ns8:GlobalVariables/Env,&quot;.FIXED.&quot;,&#xA;    $_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentDomain, &quot;.&quot;,&#xA;    $_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentId, &quot;.SOAP.1&quot;)"/>
+                    </DESTINATION>
+                </NewCMH>
+            </CMH-IN>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Get Destination">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>593</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <processName>/ASTRIDAdapter/Processes/Sub_Data_Outbound.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <MOC>
+                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class"/>
+                </MOC>
+                <xsl:if test="not(($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension/@xsi:nil=(&quot;true&quot;)) or ($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension/@xsi:nil=(&quot;1&quot;)))">
+                    <MOCE>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension"/>
+                    </MOCE>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Ign_LogError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1018</pd:x>
+        <pd:y>457</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Ign_LogReq">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>436</pd:x>
+        <pd:y>35</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Ign_LogResp">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>993</pd:x>
+        <pd:y>35</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log Ack Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>992</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns2:AnyXMLMessage>
+                    <xsl:copy-of select="$Map-Soap-Ack/outputMessage"/>
+                </ns2:AnyXMLMessage>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-01101&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="concat(&quot;ASTRID outbound SOAP reply for service [&quot;, $Route-SOAP-Request/root/ServiceName, &quot;]&quot;)"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>315</pd:x>
+        <pd:y>584</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <LogError>
+                <xsl:if test="$_error/ns7:ErrorReport/StackTrace">
+                    <STACK_TRACE>
+                        <xsl:value-of select="$_error/ns7:ErrorReport/StackTrace"/>
+                    </STACK_TRACE>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_Call-PublishEvent/group/CHM)">
+                        <ExistingCMH>
+                            <COMPONENT-ID>
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                            </COMPONENT-ID>
+                            <COMPONENT-VERSION>
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                            </COMPONENT-VERSION>
+                            <COPY_ATTRIBUTES>
+                                <xsl:value-of select="&quot;true&quot;"/>
+                            </COPY_ATTRIBUTES>
+                            <EXTENT_TRACKING>
+                                <xsl:value-of select="&quot;true&quot;"/>
+                            </EXTENT_TRACKING>
+                            <xsl:for-each select="$_error_Call-PublishEvent/group/CHM">
+                                <CMH>
+                                    <ns1:ID>
+                                        <xsl:value-of select="ns1:ID"/>
+                                    </ns1:ID>
+                                    <ns1:NAME>
+                                        <xsl:value-of select="ns1:NAME"/>
+                                    </ns1:NAME>
+                                    <xsl:if test="ns1:FID">
+                                        <ns1:FID>
+                                            <xsl:value-of select="ns1:FID"/>
+                                        </ns1:FID>
+                                    </xsl:if>
+                                    <xsl:if test="ns1:MID">
+                                        <ns1:MID>
+                                            <xsl:value-of select="ns1:MID"/>
+                                        </ns1:MID>
+                                    </xsl:if>
+                                    <ns1:PARADIGM>
+                                        <xsl:value-of select="ns1:PARADIGM"/>
+                                    </ns1:PARADIGM>
+                                    <ns1:OBJECT>
+                                        <xsl:value-of select="ns1:OBJECT"/>
+                                    </ns1:OBJECT>
+                                    <ns1:VERSION>
+                                        <xsl:value-of select="ns1:VERSION"/>
+                                    </ns1:VERSION>
+                                    <xsl:for-each select="ns1:FROM">
+                                        <ns1:FROM>
+                                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                                <xsl:value-of select="@ns1:COMPONENT_ID"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="@ns1:COMPONENT_VERSION">
+                                                <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                                    <xsl:value-of select="@ns1:COMPONENT_VERSION"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:END_USER_INFO">
+                                                <xsl:attribute name="ns1:END_USER_INFO">
+                                                    <xsl:value-of select="@ns1:END_USER_INFO"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:SOURCE_ADDRESS">
+                                                <xsl:attribute name="ns1:SOURCE_ADDRESS">
+                                                    <xsl:value-of select="@ns1:SOURCE_ADDRESS"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                        </ns1:FROM>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:TO">
+                                        <ns1:TO>
+                                            <xsl:attribute name="ns1:DESTINATION">
+                                                <xsl:value-of select="@ns1:DESTINATION"/>
+                                            </xsl:attribute>
+                                        </ns1:TO>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:TRACKING">
+                                        <ns1:TRACKING>
+                                            <ns1:MESSAGE_ID>
+                                                <xsl:value-of select="ns1:MESSAGE_ID"/>
+                                            </ns1:MESSAGE_ID>
+                                            <xsl:if test="ns1:EXTERNAL_REF">
+                                                <ns1:EXTERNAL_REF>
+                                                    <xsl:value-of select="ns1:EXTERNAL_REF"/>
+                                                </ns1:EXTERNAL_REF>
+                                            </xsl:if>
+                                            <xsl:for-each select="ns1:ITEM">
+                                                <ns1:ITEM>
+                                                    <xsl:attribute name="ns1:APPINFO">
+                                                        <xsl:value-of select="@ns1:APPINFO"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:EVENT">
+                                                        <xsl:value-of select="@ns1:EVENT"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:TIMESTAMP">
+                                                        <xsl:value-of select="@ns1:TIMESTAMP"/>
+                                                    </xsl:attribute>
+                                                </ns1:ITEM>
+                                            </xsl:for-each>
+                                            <xsl:for-each select="ns1:SEQUENCE_NO">
+                                                <ns1:SEQUENCE_NO>
+                                                    <xsl:value-of select="."/>
+                                                </ns1:SEQUENCE_NO>
+                                            </xsl:for-each>
+                                        </ns1:TRACKING>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:ATTRIBUTE">
+                                        <ns1:ATTRIBUTE>
+                                            <xsl:attribute name="ns1:NAME">
+                                                <xsl:value-of select="@ns1:NAME"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:VALUE">
+                                                <xsl:value-of select="@ns1:VALUE"/>
+                                            </xsl:attribute>
+                                        </ns1:ATTRIBUTE>
+                                    </xsl:for-each>
+                                </CMH>
+                            </xsl:for-each>
+                        </ExistingCMH>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Call-Publish/group/CHM)">
+                        <ExistingCMH>
+                            <COMPONENT-ID>
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                            </COMPONENT-ID>
+                            <COMPONENT-VERSION>
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                            </COMPONENT-VERSION>
+                            <COPY_ATTRIBUTES>
+                                <xsl:value-of select="&quot;true&quot;"/>
+                            </COPY_ATTRIBUTES>
+                            <EXTENT_TRACKING>
+                                <xsl:value-of select="&quot;true&quot;"/>
+                            </EXTENT_TRACKING>
+                            <xsl:for-each select="$_error_Call-Publish/group/CHM">
+                                <CMH>
+                                    <ns1:ID>
+                                        <xsl:value-of select="ns1:ID"/>
+                                    </ns1:ID>
+                                    <ns1:NAME>
+                                        <xsl:value-of select="ns1:NAME"/>
+                                    </ns1:NAME>
+                                    <xsl:if test="ns1:FID">
+                                        <ns1:FID>
+                                            <xsl:value-of select="ns1:FID"/>
+                                        </ns1:FID>
+                                    </xsl:if>
+                                    <xsl:if test="ns1:MID">
+                                        <ns1:MID>
+                                            <xsl:value-of select="ns1:MID"/>
+                                        </ns1:MID>
+                                    </xsl:if>
+                                    <ns1:PARADIGM>
+                                        <xsl:value-of select="ns1:PARADIGM"/>
+                                    </ns1:PARADIGM>
+                                    <ns1:OBJECT>
+                                        <xsl:value-of select="ns1:OBJECT"/>
+                                    </ns1:OBJECT>
+                                    <ns1:VERSION>
+                                        <xsl:value-of select="ns1:VERSION"/>
+                                    </ns1:VERSION>
+                                    <xsl:for-each select="ns1:FROM">
+                                        <ns1:FROM>
+                                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                                <xsl:value-of select="@ns1:COMPONENT_ID"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="@ns1:COMPONENT_VERSION">
+                                                <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                                    <xsl:value-of select="@ns1:COMPONENT_VERSION"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:END_USER_INFO">
+                                                <xsl:attribute name="ns1:END_USER_INFO">
+                                                    <xsl:value-of select="@ns1:END_USER_INFO"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:SOURCE_ADDRESS">
+                                                <xsl:attribute name="ns1:SOURCE_ADDRESS">
+                                                    <xsl:value-of select="@ns1:SOURCE_ADDRESS"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                        </ns1:FROM>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:TO">
+                                        <ns1:TO>
+                                            <xsl:attribute name="ns1:DESTINATION">
+                                                <xsl:value-of select="@ns1:DESTINATION"/>
+                                            </xsl:attribute>
+                                        </ns1:TO>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:TRACKING">
+                                        <ns1:TRACKING>
+                                            <ns1:MESSAGE_ID>
+                                                <xsl:value-of select="ns1:MESSAGE_ID"/>
+                                            </ns1:MESSAGE_ID>
+                                            <xsl:if test="ns1:EXTERNAL_REF">
+                                                <ns1:EXTERNAL_REF>
+                                                    <xsl:value-of select="ns1:EXTERNAL_REF"/>
+                                                </ns1:EXTERNAL_REF>
+                                            </xsl:if>
+                                            <xsl:for-each select="ns1:ITEM">
+                                                <ns1:ITEM>
+                                                    <xsl:attribute name="ns1:APPINFO">
+                                                        <xsl:value-of select="@ns1:APPINFO"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:EVENT">
+                                                        <xsl:value-of select="@ns1:EVENT"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:TIMESTAMP">
+                                                        <xsl:value-of select="@ns1:TIMESTAMP"/>
+                                                    </xsl:attribute>
+                                                </ns1:ITEM>
+                                            </xsl:for-each>
+                                            <xsl:for-each select="ns1:SEQUENCE_NO">
+                                                <ns1:SEQUENCE_NO>
+                                                    <xsl:value-of select="."/>
+                                                </ns1:SEQUENCE_NO>
+                                            </xsl:for-each>
+                                        </ns1:TRACKING>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:ATTRIBUTE">
+                                        <ns1:ATTRIBUTE>
+                                            <xsl:attribute name="ns1:NAME">
+                                                <xsl:value-of select="@ns1:NAME"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:VALUE">
+                                                <xsl:value-of select="@ns1:VALUE"/>
+                                            </xsl:attribute>
+                                        </ns1:ATTRIBUTE>
+                                    </xsl:for-each>
+                                </CMH>
+                            </xsl:for-each>
+                        </ExistingCMH>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Call-RequestEvent/group/CMH)">
+                        <ExistingCMH>
+                            <COMPONENT-ID>
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                            </COMPONENT-ID>
+                            <COMPONENT-VERSION>
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                            </COMPONENT-VERSION>
+                            <COPY_ATTRIBUTES>
+                                <xsl:value-of select="&quot;true&quot;"/>
+                            </COPY_ATTRIBUTES>
+                            <EXTENT_TRACKING>
+                                <xsl:value-of select="&quot;true&quot;"/>
+                            </EXTENT_TRACKING>
+                            <xsl:for-each select="$_error_Call-RequestEvent/group/CMH">
+                                <CMH>
+                                    <ns1:ID>
+                                        <xsl:value-of select="ns1:ID"/>
+                                    </ns1:ID>
+                                    <ns1:NAME>
+                                        <xsl:value-of select="ns1:NAME"/>
+                                    </ns1:NAME>
+                                    <xsl:if test="ns1:FID">
+                                        <ns1:FID>
+                                            <xsl:value-of select="ns1:FID"/>
+                                        </ns1:FID>
+                                    </xsl:if>
+                                    <xsl:if test="ns1:MID">
+                                        <ns1:MID>
+                                            <xsl:value-of select="ns1:MID"/>
+                                        </ns1:MID>
+                                    </xsl:if>
+                                    <ns1:PARADIGM>
+                                        <xsl:value-of select="ns1:PARADIGM"/>
+                                    </ns1:PARADIGM>
+                                    <ns1:OBJECT>
+                                        <xsl:value-of select="ns1:OBJECT"/>
+                                    </ns1:OBJECT>
+                                    <ns1:VERSION>
+                                        <xsl:value-of select="ns1:VERSION"/>
+                                    </ns1:VERSION>
+                                    <xsl:for-each select="ns1:FROM">
+                                        <ns1:FROM>
+                                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                                <xsl:value-of select="@ns1:COMPONENT_ID"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="@ns1:COMPONENT_VERSION">
+                                                <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                                    <xsl:value-of select="@ns1:COMPONENT_VERSION"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:END_USER_INFO">
+                                                <xsl:attribute name="ns1:END_USER_INFO">
+                                                    <xsl:value-of select="@ns1:END_USER_INFO"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:SOURCE_ADDRESS">
+                                                <xsl:attribute name="ns1:SOURCE_ADDRESS">
+                                                    <xsl:value-of select="@ns1:SOURCE_ADDRESS"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                        </ns1:FROM>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:TO">
+                                        <ns1:TO>
+                                            <xsl:attribute name="ns1:DESTINATION">
+                                                <xsl:value-of select="@ns1:DESTINATION"/>
+                                            </xsl:attribute>
+                                        </ns1:TO>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:TRACKING">
+                                        <ns1:TRACKING>
+                                            <ns1:MESSAGE_ID>
+                                                <xsl:value-of select="ns1:MESSAGE_ID"/>
+                                            </ns1:MESSAGE_ID>
+                                            <xsl:if test="ns1:EXTERNAL_REF">
+                                                <ns1:EXTERNAL_REF>
+                                                    <xsl:value-of select="ns1:EXTERNAL_REF"/>
+                                                </ns1:EXTERNAL_REF>
+                                            </xsl:if>
+                                            <xsl:for-each select="ns1:ITEM">
+                                                <ns1:ITEM>
+                                                    <xsl:attribute name="ns1:APPINFO">
+                                                        <xsl:value-of select="@ns1:APPINFO"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:EVENT">
+                                                        <xsl:value-of select="@ns1:EVENT"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:TIMESTAMP">
+                                                        <xsl:value-of select="@ns1:TIMESTAMP"/>
+                                                    </xsl:attribute>
+                                                </ns1:ITEM>
+                                            </xsl:for-each>
+                                            <xsl:for-each select="ns1:SEQUENCE_NO">
+                                                <ns1:SEQUENCE_NO>
+                                                    <xsl:value-of select="."/>
+                                                </ns1:SEQUENCE_NO>
+                                            </xsl:for-each>
+                                        </ns1:TRACKING>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:ATTRIBUTE">
+                                        <ns1:ATTRIBUTE>
+                                            <xsl:attribute name="ns1:NAME">
+                                                <xsl:value-of select="@ns1:NAME"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:VALUE">
+                                                <xsl:value-of select="@ns1:VALUE"/>
+                                            </xsl:attribute>
+                                        </ns1:ATTRIBUTE>
+                                    </xsl:for-each>
+                                </CMH>
+                            </xsl:for-each>
+                        </ExistingCMH>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ExistingCMH>
+                            <COMPONENT-ID>
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentId"/>
+                            </COMPONENT-ID>
+                            <COMPONENT-VERSION>
+                                <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/ASTRIDAdapter/ComponentVersion"/>
+                            </COMPONENT-VERSION>
+                            <COPY_ATTRIBUTES>
+                                <xsl:value-of select="&quot;true&quot;"/>
+                            </COPY_ATTRIBUTES>
+                            <EXTENT_TRACKING>
+                                <xsl:value-of select="&quot;true&quot;"/>
+                            </EXTENT_TRACKING>
+                            <xsl:for-each select="$FillCMH/CMH">
+                                <CMH>
+                                    <ns1:ID>
+                                        <xsl:value-of select="ns1:ID"/>
+                                    </ns1:ID>
+                                    <ns1:NAME>
+                                        <xsl:value-of select="ns1:NAME"/>
+                                    </ns1:NAME>
+                                    <xsl:if test="ns1:FID">
+                                        <ns1:FID>
+                                            <xsl:value-of select="ns1:FID"/>
+                                        </ns1:FID>
+                                    </xsl:if>
+                                    <xsl:if test="ns1:MID">
+                                        <ns1:MID>
+                                            <xsl:value-of select="ns1:MID"/>
+                                        </ns1:MID>
+                                    </xsl:if>
+                                    <ns1:PARADIGM>
+                                        <xsl:value-of select="ns1:PARADIGM"/>
+                                    </ns1:PARADIGM>
+                                    <ns1:OBJECT>
+                                        <xsl:value-of select="ns1:OBJECT"/>
+                                    </ns1:OBJECT>
+                                    <ns1:VERSION>
+                                        <xsl:value-of select="ns1:VERSION"/>
+                                    </ns1:VERSION>
+                                    <xsl:for-each select="ns1:FROM">
+                                        <ns1:FROM>
+                                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                                <xsl:value-of select="@ns1:COMPONENT_ID"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="@ns1:COMPONENT_VERSION">
+                                                <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                                    <xsl:value-of select="@ns1:COMPONENT_VERSION"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:END_USER_INFO">
+                                                <xsl:attribute name="ns1:END_USER_INFO">
+                                                    <xsl:value-of select="@ns1:END_USER_INFO"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:if test="@ns1:SOURCE_ADDRESS">
+                                                <xsl:attribute name="ns1:SOURCE_ADDRESS">
+                                                    <xsl:value-of select="@ns1:SOURCE_ADDRESS"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                        </ns1:FROM>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:TO">
+                                        <ns1:TO>
+                                            <xsl:attribute name="ns1:DESTINATION">
+                                                <xsl:value-of select="concat('ErrorLog.',@ns1:DESTINATION)"/>
+                                            </xsl:attribute>
+                                        </ns1:TO>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:TRACKING">
+                                        <ns1:TRACKING>
+                                            <ns1:MESSAGE_ID>
+                                                <xsl:value-of select="ns1:MESSAGE_ID"/>
+                                            </ns1:MESSAGE_ID>
+                                            <xsl:if test="ns1:EXTERNAL_REF">
+                                                <ns1:EXTERNAL_REF>
+                                                    <xsl:value-of select="ns1:EXTERNAL_REF"/>
+                                                </ns1:EXTERNAL_REF>
+                                            </xsl:if>
+                                            <xsl:for-each select="ns1:ITEM">
+                                                <ns1:ITEM>
+                                                    <xsl:attribute name="ns1:APPINFO">
+                                                        <xsl:value-of select="concat(@ns1:APPINFO, '.ERROR')"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:EVENT">
+                                                        <xsl:value-of select="@ns1:EVENT"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:TIMESTAMP">
+                                                        <xsl:value-of select="@ns1:TIMESTAMP"/>
+                                                    </xsl:attribute>
+                                                </ns1:ITEM>
+                                            </xsl:for-each>
+                                            <xsl:for-each select="ns1:SEQUENCE_NO">
+                                                <ns1:SEQUENCE_NO>
+                                                    <xsl:value-of select="."/>
+                                                </ns1:SEQUENCE_NO>
+                                            </xsl:for-each>
+                                        </ns1:TRACKING>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="ns1:ATTRIBUTE">
+                                        <ns1:ATTRIBUTE>
+                                            <xsl:attribute name="ns1:NAME">
+                                                <xsl:value-of select="@ns1:NAME"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:VALUE">
+                                                <xsl:value-of select="@ns1:VALUE"/>
+                                            </xsl:attribute>
+                                        </ns1:ATTRIBUTE>
+                                    </xsl:for-each>
+                                </CMH>
+                            </xsl:for-each>
+                        </ExistingCMH>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_Call-PublishEvent/group/ResultStatus)">
+                        <xsl:copy-of select="$_error_Call-PublishEvent/group/ResultStatus"/>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Call-Publish/group/ResultStatus)">
+                        <xsl:copy-of select="$_error_Call-Publish/group/ResultStatus"/>
+                    </xsl:when>
+                    <xsl:when test="exists($SoapEventError/SoapEventError)">
+                        <ResultStatus>
+                            <xsl:copy-of select="$SoapEventError/SoapEventError/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$SoapEventError/SoapEventError/@*"/>
+                            <xsl:copy-of select="$SoapEventError/SoapEventError/node()"/>
+                        </ResultStatus>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Get-Destination)">
+                        <ResultStatus>
+                            <xsl:copy-of select="$_error_Get-Destination/pfx4:ErrorMessage/pfx4:RESULT_STATUS/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error_Get-Destination/pfx4:ErrorMessage/pfx4:RESULT_STATUS/@*"/>
+                            <xsl:copy-of select="$_error_Get-Destination/pfx4:ErrorMessage/pfx4:RESULT_STATUS/node()"/>
+                        </ResultStatus>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Call-RequestEvent)">
+                        <ResultStatus>
+                            <xsl:copy-of select="$_error_Call-RequestEvent/group/ResultStatus/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error_Call-RequestEvent/group/ResultStatus/@*"/>
+                            <xsl:copy-of select="$_error_Call-RequestEvent/group/ResultStatus/node()"/>
+                        </ResultStatus>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ResultStatus>
+                            <xsl:attribute name="ns6:STATUS">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                                <xsl:value-of select="'General Error'"/>
+                            </xsl:attribute>
+                        </ResultStatus>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </LogError>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Error Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>887</pd:x>
+        <pd:y>457</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns2:AnyXMLMessage>
+                    <xsl:copy-of select="$Map-Soap-Error/outputMessage"/>
+                </ns2:AnyXMLMessage>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-01101&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="concat(&quot;ASTRID outbound SOAP reply for service [&quot;, $SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class, &quot;]&quot;)"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:description>remarks:
+The incoming SOAP request can belong to one of the following 3 kinds:
+ 1) Application request to invoke publish service (offered by this adapter)
+ 2) Application request to invoke request-reply service (used by this adapter)
+ 3) Application response for request-reply service (offered by this adapter)!</pd:description>
+        <pd:x>288</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns2:AnyXMLMessage>
+                    <xsl:copy-of select="$SOAPEventSource/inputMessage"/>
+                </ns2:AnyXMLMessage>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-01100&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="concat(&quot;ASTRID outbound SOAP request for service [&quot;, $SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class, &quot;]&quot;)"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Routing">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>595</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns2:AnyXMLMessage>
+                    <xsl:copy-of select="$Get-Destination/root/Record"/>
+                </ns2:AnyXMLMessage>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-01108&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="concat('Routing for moc:',$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class,' , moce:',$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension)"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Soap Ack">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>842</pd:x>
+        <pd:y>131</pd:y>
+        <config>
+            <element>
+                <xsd:element name="outputMessage">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:GenericMessageResponse"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx:GenericMessageResponse>
+                    <pfx:GUID>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:GUID"/>
+                    </pfx:GUID>
+                    <xsl:choose>
+                        <xsl:when test="$Route-SOAP-Request/root/Paradigm=&quot;Not Supported&quot; and&#xA;string-length($Get-Destination/root/Record/INTERACTION_TYPE) = 0">
+                            <pfx:error>
+                                <xsl:value-of select="&quot;ASTRID-BW-03101&quot;"/>
+                            </pfx:error>
+                            <pfx:error_message>
+                                <xsl:value-of select="concat(&#xA;  'Unsupported Service: Managed Object Class = &quot;'&#xA;, $SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class&#xA;, '&quot;; Managed Object Class Extension = &quot;'&#xA;, $SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension&#xA;, '&quot;'&#xA;)"/>
+                            </pfx:error_message>
+                            <pfx:error_status>
+                                <xsl:value-of select="&quot;3&quot;"/>
+                            </pfx:error_status>
+                        </xsl:when>
+                        <xsl:when test="exists($Call-RequestEvent/pfx:GenericMessageResponse)">
+                            <pfx:error>
+                                <xsl:value-of select="$Call-RequestEvent/pfx:GenericMessageResponse/pfx:error"/>
+                            </pfx:error>
+                            <pfx:error_message>
+                                <xsl:value-of select="$Call-RequestEvent/pfx:GenericMessageResponse/pfx:error_message"/>
+                            </pfx:error_message>
+                            <pfx:error_status>
+                                <xsl:value-of select="$Call-RequestEvent/pfx:GenericMessageResponse/pfx:error_status"/>
+                            </pfx:error_status>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx:error>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </pfx:error>
+                            <pfx:error_message>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </pfx:error_message>
+                            <pfx:error_status>
+                                <xsl:value-of select="&quot;0&quot;"/>
+                            </pfx:error_status>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pfx:GenericMessageResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Soap Error">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>767</pd:x>
+        <pd:y>457</pd:y>
+        <config>
+            <element>
+                <xsd:element name="outputMessage">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:GenericMessageResponse"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <pfx:GenericMessageResponse>
+                    <pfx:GUID>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:GUID"/>
+                    </pfx:GUID>
+                    <pfx:error>
+                        <xsl:value-of select="$Log-Error/ErrorStatus/@ns6:ERROR_CODE"/>
+                    </pfx:error>
+                    <pfx:error_message>
+                        <xsl:value-of select="$Log-Error/ErrorStatus/@ns6:ERROR_DESCRIPTION"/>
+                    </pfx:error_message>
+                    <pfx:error_status>
+                        <xsl:value-of select="$Log-Error/ErrorStatus/@ns6:STATUS"/>
+                    </pfx:error_status>
+                </pfx:GenericMessageResponse>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>919</pd:x>
+        <pd:y>230</pd:y>
+        <config>
+            <variableName>ErrorStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <ResultStatus>
+                <xsl:attribute name="ns6:STATUS">
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </xsl:attribute>
+                <xsl:if test="$_error/ns7:ErrorReport/MsgCode">
+                    <xsl:attribute name="ns6:MSG_CODE">
+                        <xsl:value-of select="$_error/ns7:ErrorReport/MsgCode"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:attribute name="ns6:ERROR_CODE">
+                    <xsl:value-of select="&quot;ASTRID-BW-03102&quot;"/>
+                </xsl:attribute>
+                <xsl:if test="$_error/ns7:ErrorReport/Msg">
+                    <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                        <xsl:value-of select="$_error/ns7:ErrorReport/Msg"/>
+                    </xsl:attribute>
+                </xsl:if>
+            </ResultStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Route">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>691</pd:x>
+        <pd:y>130</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Route SOAP Request">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:description>Purpose:
+Based on the managed object class and extension, a choice for further processing is prepared.
+Note: Currently there are no requests for invocations of request-reply services, nor responses for provided request-reply services to be routed.</pd:description>
+        <pd:x>441</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Paradigm" type="xsd:string"/>
+                            <xsd:element name="ServiceName" type="xsd:string"/>
+                            <xsd:element name="ProcessName" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report&quot;) &#xA;and&#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;4&quot; or &#xA; $SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;6&quot; or &#xA; $SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;7&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;TroubleReport&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishTroubleReport&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class = &quot;Customer Service Incident Report Confirmation&quot;&#xA;and &#xA;$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension = &quot;9&quot;)&#xA;&#xA;or&#xA;(starts-with($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class, &quot;Customer Service Incident Report Confirmation&quot;)&#xA;and&#xA;(not(exists($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension))&#xA; or&#xA; $SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension = &quot;&quot;&#xA;)&#xA;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;CustomerIncidentReportConfirmation&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishCustomerIncidentReportConfirmation&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;3&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;ShortTroubleReport&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishShortTroubleReport&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Managed Object Report&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;0&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;ManagedObjectReport&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishManagedObjectReport&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Managed Object Report&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;1&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;ManagedObjectDetailsReport&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishManagedObjectDetailsReport&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report State and Status Update Notification EDT&quot;&#xA;and&#xA;(&#xA;not(exists($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension))&#xA;or&#xA;$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension = &quot;&quot;&#xA;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;TroubleStatusUpdateReport&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishTroubleStatusUpdateReportEDT&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Ticket Progress Entry&quot;)&#xA;and&#xA;(&#xA;not(exists($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension))&#xA;or&#xA;$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension = &quot;&quot;&#xA;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;TroubleProgressReport&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishTroubleProgressReport&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;9&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;CreateTroubleReportRequest&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_RequestCreateTroubleReport&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report State and Status Update Notification&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;9&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;GetTroubleReportStatusRequest&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_RequestGetTroubleReportStatus&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report State and Status Update Notification&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;10&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;AssessTroubleReportClosure&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishAssessTroubleReportClosure&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report State and Status Update Notification&quot;&#xA;and (not(exists($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension))&#xA;&#x9;or&#xA;&#x9;$SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension = &quot;&quot;)&#xA;) or&#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Customer Incident Report State and Status Update Notification&quot;&#xA;and $SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension = &quot;13&quot;&#xA;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;TroubleStatusUpdateReport&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishTroubleStatusUpdateReport&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;10&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;getDslamInfoTroubleReport&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_PublishGetDslamInfoTroubleReport&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;CreateTicket&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;1&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;CreateTicket&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_CreateTicket&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;SSUN&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;2&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;CreateTicket&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_CreateTicket&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:when test="($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class=&quot;Trouble Report&quot;) &#xA;and &#xA;($SOAPEventSource/inputMessage/pfx:GenericMessage/ns:Header/ns:managed_object_class_extension=&quot;16&quot;)">
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;REQUEST&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;GetSNIConfigurationDetails&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Sub_GetSNIConfigurationDetails_V2&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:when>
+                <xsl:otherwise>
+                    <root>
+                        <Paradigm>
+                            <xsl:value-of select="&quot;Not Supported&quot;"/>
+                        </Paradigm>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;Not Supported&quot;"/>
+                        </ServiceName>
+                        <ProcessName>
+                            <xsl:value-of select="&quot;Not Supported&quot;"/>
+                        </ProcessName>
+                    </root>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAP Send Ack">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>1173</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <xsl:copy-of select="$Map-Soap-Ack/outputMessage/pfx:GenericMessageResponse"/>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAP Send Error">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>1017</pd:x>
+        <pd:y>339</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <outputMessage>
+                <xsl:copy-of select="$Map-Soap-Error/outputMessage/pfx:GenericMessageResponse"/>
+            </outputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SoapError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1007</pd:x>
+        <pd:y>243</pd:y>
+        <config>
+            <variableName>ErrorStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <ResultStatus>
+                <xsl:attribute name="ns6:STATUS">
+                    <xsl:value-of select="&quot;2&quot;"/>
+                </xsl:attribute>
+                <xsl:if test="$_error/ns7:ErrorReport/MsgCode">
+                    <xsl:attribute name="ns6:MSG_CODE">
+                        <xsl:value-of select="$_error/ns7:ErrorReport/MsgCode"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                    <xsl:value-of select="concat($_error/ns7:ErrorReport/Msg, &quot;; &quot;, $_error_SOAP-Send-Ack/ns9:ServerException/msg)"/>
+                </xsl:attribute>
+                <xsl:attribute name="ns6:ERROR_CODE">
+                    <xsl:value-of select="&quot;ASTRID-BW-03103&quot;"/>
+                </xsl:attribute>
+            </ResultStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SoapEventError">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>66</pd:x>
+        <pd:y>267</pd:y>
+        <config>
+            <element>
+                <xsd:element name="SoapEventError" type="ns6:ResultStatus"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <SoapEventError>
+                <xsl:attribute name="ns6:STATUS">
+                    <xsl:value-of select="&quot;3&quot;"/>
+                </xsl:attribute>
+                <xsl:attribute name="ns6:ERROR_CODE">
+                    <xsl:value-of select="&quot;ASTRID-BW-03100&quot;"/>
+                </xsl:attribute>
+                <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                    <xsl:value-of select="$_error/ns7:ErrorReport/Msg"/>
+                </xsl:attribute>
+                <xsl:if test="$_error/ns7:ErrorReport/MsgCode">
+                    <xsl:attribute name="ns6:MSG_CODE">
+                        <xsl:value-of select="$_error/ns7:ErrorReport/MsgCode"/>
+                    </xsl:attribute>
+                </xsl:if>
+            </SoapEventError>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Map Soap Ack</pd:from>
+        <pd:to>Log Ack Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Ack Response</pd:from>
+        <pd:to>SOAP Send Ack</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>FillCMH</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Route SOAP Request</pd:from>
+        <pd:to>Call-PublishEvent</pd:to>
+        <pd:xpathDescription>Publish</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>upper-case($Route-SOAP-Request/root/Paradigm) = "PUBLISH"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAP Send Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>SoapEventError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Request</pd:from>
+        <pd:to>Route SOAP Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FillCMH</pd:from>
+        <pd:to>Log Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapEventError</pd:from>
+        <pd:to>FillCMH</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapError</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>Map Soap Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FillCMH</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:xpathDescription>SoapEventError</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($SoapEventError)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-PublishEvent</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-PublishEvent</pd:from>
+        <pd:to>Map Soap Ack</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAP Send Ack</pd:from>
+        <pd:to>SoapError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAP Send Ack</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Soap Error</pd:from>
+        <pd:to>Log Error Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error Response</pd:from>
+        <pd:to>SOAP Send Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Soap Ack</pd:from>
+        <pd:to>MapError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapError</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Request</pd:from>
+        <pd:to>Ign_LogReq</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Ign_LogReq</pd:from>
+        <pd:to>Route SOAP Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Ack Response</pd:from>
+        <pd:to>Ign_LogResp</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Ign_LogResp</pd:from>
+        <pd:to>SOAP Send Ack</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Route SOAP Request</pd:from>
+        <pd:to>Get Destination</pd:to>
+        <pd:xpathDescription>NotSupported</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Route-SOAP-Request/root/Paradigm="Not Supported"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error Response</pd:from>
+        <pd:to>Ign_LogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Ign_LogError</pd:from>
+        <pd:to>SOAP Send Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-Publish</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-Publish</pd:from>
+        <pd:to>Map Soap Ack</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Destination</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52480</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Destination</pd:from>
+        <pd:to>Log Routing</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Route</pd:from>
+        <pd:to>Map Soap Ack</pd:to>
+        <pd:xpathDescription>No Record</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Route</pd:from>
+        <pd:to>Call-Publish</pd:to>
+        <pd:xpathDescription>Record Found</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Get-Destination/root/Record) and
+string-length($Get-Destination/root/Record/INTERACTION_TYPE) &gt; 0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Routing</pd:from>
+        <pd:to>Route</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Route SOAP Request</pd:from>
+        <pd:to>Call-RequestEvent</pd:to>
+        <pd:xpathDescription>Request</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>upper-case($Route-SOAP-Request/root/Paradigm) = "REQUEST"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-RequestEvent</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call-RequestEvent</pd:from>
+        <pd:to>Map Soap Ack</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

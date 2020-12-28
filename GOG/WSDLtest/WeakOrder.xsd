@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by XMLSpy 2007 Professional Ed. Release 3, Installed for 15 users (with SMP from 2007-06-19 (KPN Telecom) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://kpn.com/eai/generic/order"
+	 targetNamespace="http://kpn.com/eai/generic/order"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:include schemaLocation="Order.xsd"/>
+	<xs:element name="root">
+		<xs:complexType/>
+	</xs:element>
+	<xs:element name="WeakOrder">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="Order">
+					<xs:sequence>
+						<xs:element ref="OrderParameters"/>
+						<xs:element ref="OrderItem"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OrderParameters" type="ParametersType"/>
+	<xs:complexType name="ParametersType">
+		<xs:sequence>
+			<xs:element name="Parameter" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Name" type="xs:string"/>
+						<xs:choice>
+							<xs:element name="Value" type="xs:string"/>
+							<xs:element name="Parameters" type="ParametersType"/>
+						</xs:choice>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="OrderItem">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="OrderItemParameters"/>
+				<xs:element ref="Product"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OrderItemParameters" type="ParametersType"/>
+	<xs:element name="Product">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Group" type="xs:string"/>
+				<xs:element name="Name" type="xs:string"/>
+				<xs:element name="Version" type="xs:string"/>
+				<xs:element ref="Action"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Action">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Name" type="xs:string"/>
+				<xs:element name="Parameters" type="ParametersType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WeakOrderFault">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="errorMessage" type="xs:string"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WeakOrderOut">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="output" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

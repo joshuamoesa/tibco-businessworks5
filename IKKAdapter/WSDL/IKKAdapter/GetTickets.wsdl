@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ikk="urn:IKKAdapter.GetTickets" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GetTickets" targetNamespace="urn:IKKAdapter.GetTickets">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IKKAdapter.GetTickets">
+            <xsd:include schemaLocation="../../XSDSchemas/IKKAdapter/Services/GetTickets.xsd"/>
+            <xsd:element name="GetTicketsRequest" type="ikk:GetTicketsRequest"/>
+            <xsd:element name="GetTicketsResponse" type="ikk:GetTicketsResponse"/>
+        </xsd:schema>
+    </types>
+    <message name=" GetTicketsRequest">
+        <part element="ikk:GetTicketsRequest" name="parameters"/>
+    </message>
+    <message name="GetTicketsResponse">
+        <part element="ikk:GetTicketsResponse" name="parameters"/>
+    </message>
+    <portType name="GetTicketsPortType">
+        <operation name="GetTickets">
+            <input message="ikk:GetTicketsRequest"/>
+            <output message="ikk:GetTicketsResponse"/>
+        </operation>
+    </portType>
+    <binding name="GetTicketsSoapBinding" type="ikk:GetTicketsPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetTickets">
+            <soap:operation style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetTicketsService">
+        <port binding="ikk:GetTicketsSoapBinding" name="GetTicketsSoap">
+            <soap:address location="http://localhost:8080/IKKAdapter/Processes/GetTickets"/>
+        </port>
+    </service>
+</definitions>

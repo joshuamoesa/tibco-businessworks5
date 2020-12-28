@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.tibco.com/CLEver/Notification" xmlns:ns="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.tibco.com/CLEver/Version">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Notification" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Notification.xsd"/>
+    <pd:name>Processes/DataServices/Security/DetermineRights/Notification.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:Notifications"/>
+    <pd:startX>68</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:for-each select="$Start/pfx:Notifications">
+            <pfx:Notifications>
+                <xsl:for-each select="pfx:Notification">
+                    <pfx:Notification>
+                        <pfx:ID>
+                            <xsl:value-of select="pfx:ID"/>
+                        </pfx:ID>
+                        <pfx:Name>
+                            <xsl:value-of select="pfx:Name"/>
+                        </pfx:Name>
+                        <pfx:Description>
+                            <xsl:value-of select="pfx:Description"/>
+                        </pfx:Description>
+                        <xsl:if test="pfx:ChannelID">
+                            <pfx:ChannelID>
+                                <xsl:value-of select="pfx:ChannelID"/>
+                            </pfx:ChannelID>
+                        </xsl:if>
+                        <xsl:if test="pfx:Message">
+                            <pfx:Message>
+                                <xsl:value-of select="pfx:Message"/>
+                            </pfx:Message>
+                        </xsl:if>
+                        <xsl:if test="pfx:Version">
+                            <pfx:Version>
+                                <xsl:value-of select="pfx:Version"/>
+                            </pfx:Version>
+                        </xsl:if>
+                        <xsl:copy-of select="ns:Parameters"/>
+                        <xsl:choose>
+                            <xsl:when test="$Retrieve/ns2:Versions/ns2:Version/ns2:Status=1">
+                                <ns:SecurityInfo>
+                                    <ns:isCreatable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isCreatable>
+                                    <ns:isReadable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isReadable>
+                                    <ns:isUpdatable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isUpdatable>
+                                    <ns:isDeletable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isDeletable>
+                                </ns:SecurityInfo>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <ns:SecurityInfo>
+                                    <ns:isCreatable>
+                                        <xsl:value-of select="false()"/>
+                                    </ns:isCreatable>
+                                    <ns:isReadable>
+                                        <xsl:value-of select="true()"/>
+                                    </ns:isReadable>
+                                    <ns:isUpdatable>
+                                        <xsl:value-of select="false()"/>
+                                    </ns:isUpdatable>
+                                    <ns:isDeletable>
+                                        <xsl:value-of select="false()"/>
+                                    </ns:isDeletable>
+                                </ns:SecurityInfo>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </pfx:Notification>
+                </xsl:for-each>
+            </pfx:Notifications>
+        </xsl:for-each>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:Notifications"/>
+    <pd:endX>672</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Retrieve">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>312</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Version/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Version/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ID>
+                    <xsl:value-of select="$Start/pfx:Notifications/pfx:Notification[1]/pfx:Version"/>
+                </ID>
+                <ns:Security>
+                    <ns:UserName>
+                        <xsl:value-of select="''"/>
+                    </ns:UserName>
+                    <ns:Password>
+                        <xsl:value-of select="''"/>
+                    </ns:Password>
+                </ns:Security>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Retrieve</pd:to>
+        <pd:xpathDescription>exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Start/pfx:Notifications/pfx:Notification)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Retrieve</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" xmlns:pfx4="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberInPortingComplete" xmlns:pfx5="urn:NotifyNumberInportingComplete" xmlns:ns12="http://tibco.com/namespaces/tnt/plugins/soap" xmlns:pfx6="urn:StartNumberInporting" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx7="http://xmlns.kpn.com/fixed/coinadapter/publish/ReceivePlannedNumberDeactivation.xsd" xmlns:pfx8="urn:ReceivePlannedNumberDeactivation" xmlns:pfx9="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyPlannedNumberDeactivation.xsd" xmlns:pfx10="EcPsXsd_V0.2" xmlns:pfx11="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx12="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberDeactivation.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/portingserviceswf/common/NumberSerie.xsd" xmlns:pfx13="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberInPortingComplete.xsd" xmlns:pfx14="http://xmlns.kpn.com/fixed/servicescanneradapter/request/PerformQualityOfServiceScan_SOAPRequest.xsd" xmlns:pfx15="http://webservices.kpn-lls.com/V0.2/MmspOrdering.wsdl" xmlns:pfx16="MmspXsd_V0.2" xmlns:pfx17="http://xmlns.kpn.com/fixed/annetadapter/request/PerformQualityOfServiceScan_SOAPRequest.xsd" xmlns:pfx18="http://xmlns.kpn.com/EAI/fixed/0292_CreateSubscriber/1.0/Request" xmlns:pfx19="http://xmlns.kpn.com/fixed/EClipsAdapter/Response/GetAvailabilityLogicalResourceResponse.xsd" xmlns:pfx20="urn:GetLogicalPortServiceInformation" xmlns:pfx21="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/CreateSubscriberRequest.xsd" xmlns:pfx22="http://engine.servicescanner.edgetech.nl" xmlns:pfx23="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/ReserveNumbersRequest.xsd" xmlns:pfx24="EcnsXsd_V0.2" xmlns:ns6="http://xmlns.kpn.com/EAI/fixed/0299_ReserveNumbers/1.0/Request" xmlns:pfx25="http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl" xmlns:pfx26="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/AssignNumbersRequest.xsd" xmlns:ns7="http://xmlns.kpn.com/EAI/fixed/0304_AssignNumbers/1.0/Request" xmlns:pfx27="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" xmlns:ns8="http://xmlns.kpn.com/imported/ordermessage.xsd" xmlns:ns9="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent1/Publish/TestPublicationService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberInPortingComplete" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/NotifyNumberInPortingComplete.xsd"/>
+    <xsd:import namespace="urn:NotifyNumberInportingComplete" schemaLocation="/WSDL/NotifyNumberInportingComplete.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/coinadapter/publish/ReceivePlannedNumberDeactivation.xsd" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/ReceivePlannedNumberDeactivation.xsd"/>
+    <xsd:import namespace="urn:ReceivePlannedNumberDeactivation" schemaLocation="/WSDL/ReceivePlannedNumberDeactivation.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyPlannedNumberDeactivation.xsd" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/NotifyPlannedNumberDeactivation.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/portingserviceswf/publish/NotifyNumberDeactivation.xsd" schemaLocation="/XSDSchemas/PortingServicesWF/Publish/NotifyNumberDeactivation.xsd"/>
+    <xsd:import namespace="EcPsXsd_V0.2" schemaLocation="/WSDL/EcnsPortingServices.xsd"/>
+    <xsd:import namespace="MmspXsd_V0.2" schemaLocation="/WSDL/MmspOrdering.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0292_CreateSubscriber/1.0/Request" schemaLocation="/XSDSchemas/EClipsAdapter/Imported/0292_CreateSubscriber_1.0_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/CreateSubscriberRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/CreateSubscriber.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/ReserveNumbersRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/ReserveNumbers.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/AssignNumbersRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/AssignNumbers.xsd"/>
+    <xsd:import namespace="EcnsXsd_V0.2" schemaLocation="/WSDL/EcnsOrdering.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/SubmitOrder.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/Inbound/Subscribe/UpdateOrderStatus.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Response/UpdateOrderStatus.xsd"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsPortingServices.wsdl" location="/WSDL/EcnsPortingServices.wsdl"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/MmspOrdering.wsdl" location="/WSDL/MmspOrdering.wsdl"/>
+    <wsdl:import namespace="http://webservices.kpn-lls.com/V0.2/EcnsOrdering.wsdl" location="/WSDL/EcnsOrdering.wsdl"/>
+    <pd:name>EClipsAdapter/Processes/Inbound/Sub/Sub_ProcessAssignNumbersRequest.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>39</pd:startX>
+    <pd:startY>199</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>974</pd:endX>
+    <pd:endY>205</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:ErrorReply"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse Publication">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>158</pd:x>
+        <pd:y>200</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx27:SubmitOrder"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>256</pd:x>
+        <pd:y>429</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_SOAPRequestReply)">
+                        <messageCode>
+                            <xsl:value-of select="&quot;EClips-03001&quot;"/>
+                        </messageCode>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Parse-Publication) or &#xA;$_error/ns3:ErrorReport/Msg = &quot;Output data invalid&quot;">
+                        <messageCode>
+                            <xsl:value-of select="&quot;EClips-03006&quot;"/>
+                        </messageCode>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <messageCode>
+                            <xsl:value-of select="&quot;EClips-03002&quot;"/>
+                        </messageCode>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <data>
+                    <pfx2:ErrorReply>
+                        <pfx2:Body>
+                            <ns9:UpdateOrderStatus>
+                                <ns1:CMH>
+                                    <xsl:choose>
+                                        <xsl:when test="exists($Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:ID)">
+                                            <ns1:ID>
+                                                <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:ID"/>
+                                            </ns1:ID>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <ns1:ID>
+                                                <xsl:value-of select="&quot;0304&quot;"/>
+                                            </ns1:ID>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    <ns1:NAME>
+                                        <xsl:value-of select="&quot;AssignNumbers&quot;"/>
+                                    </ns1:NAME>
+                                    <xsl:choose>
+                                        <xsl:when test="exists($Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:FID)">
+                                            <ns1:FID>
+                                                <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:FID"/>
+                                            </ns1:FID>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <ns1:FID>
+                                                <xsl:value-of select="&quot;UNKNOWN&quot;"/>
+                                            </ns1:FID>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    <ns1:MID>
+                                        <xsl:value-of select="&quot;709.31&quot;"/>
+                                    </ns1:MID>
+                                    <ns1:PARADIGM>
+                                        <xsl:value-of select="&quot;RESPONSE&quot;"/>
+                                    </ns1:PARADIGM>
+                                    <ns1:OBJECT>
+                                        <xsl:value-of select="&quot;PhoneNumbers&quot;"/>
+                                    </ns1:OBJECT>
+                                    <ns1:VERSION>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </ns1:VERSION>
+                                    <ns1:FROM>
+                                        <xsl:attribute name="ns1:COMPONENT_ID">
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentVersion"/>
+                                        </xsl:attribute>
+                                    </ns1:FROM>
+                                    <ns1:TO>
+                                        <xsl:attribute name="ns1:DESTINATION">
+                                            <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env , &quot;.FIXED.&quot;, $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentDomain,   &quot;.&quot; ,     $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId   , &quot;.Response.AssignNumberSequence.1&quot;)"/>
+                                        </xsl:attribute>
+                                    </ns1:TO>
+                                    <ns1:TRACKING>
+                                        <ns1:MESSAGE_ID>
+                                            <xsl:value-of select="eai:getMessageId($Start/ServiceIn/Body)"/>
+                                        </ns1:MESSAGE_ID>
+                                        <xsl:if test="exists($Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:TRACKING/ns1:ITEM)">
+                                            <xsl:for-each select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:TRACKING/ns1:ITEM">
+                                                <ns1:ITEM>
+                                                    <xsl:attribute name="ns1:APPINFO">
+                                                        <xsl:value-of select="@ns1:APPINFO"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:EVENT">
+                                                        <xsl:value-of select="@ns1:EVENT"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns1:TIMESTAMP">
+                                                        <xsl:value-of select="@ns1:TIMESTAMP"/>
+                                                    </xsl:attribute>
+                                                </ns1:ITEM>
+                                            </xsl:for-each>
+                                        </xsl:if>
+                                        <ns1:ITEM>
+                                            <xsl:attribute name="ns1:APPINFO">
+                                                <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentDomain, &quot;.&quot;, $_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId)"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:EVENT">
+                                                <xsl:value-of select="&quot;AssignNumber&quot;"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:TIMESTAMP">
+                                                <xsl:value-of select="tib:timestamp()"/>
+                                            </xsl:attribute>
+                                        </ns1:ITEM>
+                                    </ns1:TRACKING>
+                                    <xsl:if test="exists($Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:ATTRIBUTE)">
+                                        <xsl:for-each select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:ATTRIBUTE">
+                                            <ns1:ATTRIBUTE>
+                                                <xsl:attribute name="ns1:NAME">
+                                                    <xsl:value-of select="@ns1:NAME"/>
+                                                </xsl:attribute>
+                                                <xsl:attribute name="ns1:VALUE">
+                                                    <xsl:value-of select="@ns1:VALUE"/>
+                                                </xsl:attribute>
+                                            </ns1:ATTRIBUTE>
+                                        </xsl:for-each>
+                                    </xsl:if>
+                                </ns1:CMH>
+                                <ns8:BODY>
+                                    <ORDER>
+                                        <ORDER_HEADER>
+                                            <xsl:choose>
+                                                <xsl:when test="exists($Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/ORDER_TYPE)">
+                                                    <ORDER_TYPE>
+                                                        <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/ORDER_TYPE"/>
+                                                    </ORDER_TYPE>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <ORDER_TYPE>
+                                                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ReplyParameters/AssignNumbers/ORDER_TYPE"/>
+                                                    </ORDER_TYPE>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                            <xsl:choose>
+                                                <xsl:when test="exists($Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/CREATION_DATE)">
+                                                    <CREATION_DATE>
+                                                        <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/CREATION_DATE"/>
+                                                    </CREATION_DATE>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <CREATION_DATE>
+                                                        <xsl:value-of select="current-dateTime()"/>
+                                                    </CREATION_DATE>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </ORDER_HEADER>
+                                        <ORDER_ITEM>
+                                            <ORDER_ITEM_HEADER>
+                                                <xsl:choose>
+                                                    <xsl:when test="exists($Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM/ORDER_ITEM_HEADER/ORDER_ITEM_TYPE)">
+                                                        <ORDER_ITEM_TYPE>
+                                                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/ORDER_ITEM_HEADER/ORDER_ITEM_TYPE"/>
+                                                        </ORDER_ITEM_TYPE>
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <ORDER_ITEM_TYPE>
+                                                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/ORDER_ITEM_HEADER/ORDER_ITEM_TYPE"/>
+                                                        </ORDER_ITEM_TYPE>
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
+                                            </ORDER_ITEM_HEADER>
+                                            <xsl:choose>
+                                                <xsl:when test="exists($Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM/PRODUCT_CATEGORY)">
+                                                    <PRODUCT_CATEGORY>
+                                                        <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                                                    </PRODUCT_CATEGORY>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <PRODUCT_CATEGORY>
+                                                        <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/PRODUCT_CATEGORY"/>
+                                                    </PRODUCT_CATEGORY>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </ORDER_ITEM>
+                                    </ORDER>
+                                </ns8:BODY>
+                            </ns9:UpdateOrderStatus>
+                        </pfx2:Body>
+                        <pfx2:Errors>
+                            <xsl:choose>
+                                <xsl:when test="exists($_error_SOAPRequestReply)">
+                                    <pfx2:Error>
+                                        <pfx2:MsgCode>
+                                            <xsl:value-of select="&quot;EClips-03001&quot;"/>
+                                        </pfx2:MsgCode>
+                                        <pfx2:Params>
+                                            <xsl:value-of select="tib:render-xml($Parse-Publication/pfx27:SubmitOrder, false(), true())"/>
+                                        </pfx2:Params>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                                    </pfx2:Error>
+                                </xsl:when>
+                                <xsl:when test="exists($_error_Parse-Publication) or &#xA;$_error/ns3:ErrorReport/Msg = &quot;Output data invalid&quot;">
+                                    <pfx2:Error>
+                                        <pfx2:MsgCode>
+                                            <xsl:value-of select="&quot;EClips-03006&quot;"/>
+                                        </pfx2:MsgCode>
+                                        <pfx2:Params>
+                                            <xsl:value-of select="$Start/ServiceIn/Body"/>
+                                        </pfx2:Params>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                                    </pfx2:Error>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <pfx2:Error>
+                                        <pfx2:MsgCode>
+                                            <xsl:value-of select="&quot;EClips-03002&quot;"/>
+                                        </pfx2:MsgCode>
+                                        <pfx2:Params>
+                                            <xsl:value-of select="&quot;: Incorrect data supplied in message&quot;"/>
+                                        </pfx2:Params>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                                    </pfx2:Error>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </pfx2:Errors>
+                    </pfx2:ErrorReply>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>253</pd:x>
+        <pd:y>40</pd:y>
+        <pd:width>657</pd:width>
+        <pd:height>308</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SOAPData</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogSOAPResponse</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogSOAPRequest</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPData</pd:from>
+            <pd:to>LogSOAPRequest</pd:to>
+            <pd:xpathDescription>Trace</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("EClips-04001")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPData</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:xpathDescription>NoTrace</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>LogSOAPResponse</pd:to>
+            <pd:xpathDescription>Trace</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("EClips-04002")</pd:xpath>
+        </pd:transition>
+        <pd:activity name="LogSOAPRequest">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>424</pd:x>
+            <pd:y>95</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EClips-04001&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($SOAPData/pfx24:EcnsAssignNumberSeries, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPData">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>324</pd:x>
+            <pd:y>203</pd:y>
+            <config>
+                <element ref="pfx24:EcnsAssignNumberSeries"/>
+            </config>
+            <pd:inputBindings>
+                <pfx24:EcnsAssignNumberSeries>
+                    <pfx24:EcnsHeaderStruct>
+                        <pfx24:Sender>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:ATTRIBUTE[@ns1:NAME ='SENDER']/@ns1:VALUE"/>
+                        </pfx24:Sender>
+                        <pfx24:Receiver>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:ATTRIBUTE[@ns1:NAME ='RECEIVER']/@ns1:VALUE"/>
+                        </pfx24:Receiver>
+                    </pfx24:EcnsHeaderStruct>
+                    <pfx24:AssignNumberSeriesReqStruct>
+                        <xsl:if test="exists($Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_PACKAGER/INTERNAL)">
+                            <xsl:if test="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_PACKAGER/INTERNAL">
+                                <pfx24:RequesterPackagerCode>
+                                    <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_PACKAGER/INTERNAL"/>
+                                </pfx24:RequesterPackagerCode>
+                            </xsl:if>
+                        </xsl:if>
+                        <pfx24:PackagerCode>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/CUSTOMER_ID/ID_PACKAGER/EXTERNAL"/>
+                        </pfx24:PackagerCode>
+                        <pfx24:PackagerOrderId>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_HEADER/EXTERNAL_REFERENCE"/>
+                        </pfx24:PackagerOrderId>
+                        <pfx24:NrLow>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/MULTI_MEDIA_PRODUCT/RESOURCES/PHONE_NUMBER_SERIES[1]/NUMBER_LOW"/>
+                        </pfx24:NrLow>
+                        <pfx24:NrHigh>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/MULTI_MEDIA_PRODUCT/RESOURCES/PHONE_NUMBER_SERIES[1]/NUMBER_HIGH"/>
+                        </pfx24:NrHigh>
+                        <pfx24:TelcoCode>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/MULTI_MEDIA_PRODUCT/SERVICES/MULTI_MEDIA_SERVICE/TELCO_CODE"/>
+                        </pfx24:TelcoCode>
+                        <pfx24:VoIPPlatformCode>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns8:BODY/ORDER/ORDER_ITEM[1]/PRODUCT/MULTI_MEDIA_PRODUCT/SERVICES/MULTI_MEDIA_SERVICE/VOIP_PLATFORM_CODE"/>
+                        </pfx24:VoIPPlatformCode>
+                        <xsl:if test="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                            <pfx24:RequestKey>
+                                <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                            </pfx24:RequestKey>
+                        </xsl:if>
+                    </pfx24:AssignNumberSeriesReqStruct>
+                </pfx24:EcnsAssignNumberSeries>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogSOAPResponse">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>727</pd:x>
+            <pd:y>101</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EClips-04002&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Parse-Publication/pfx27:SubmitOrder/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($SOAPRequestReply/outputMessage, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPRequestReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>608</pd:x>
+            <pd:y>203</pd:y>
+            <config>
+                <timeout>%%EClipsAdapter/Inbound/SOAP/Timeout%%</timeout>
+                <service>pfx25:EcnsOrderingService</service>
+                <servicePort>InportTelnrsHttpPort</servicePort>
+                <operation>AssignNumberSeriesOperation</operation>
+                <endpointURL>%%EClipsAdapter/Inbound/SOAP/EndPointURL/EcnsOrderingService/ANSREndPoint%%</endpointURL>
+                <requireBasicAuth>false</requireBasicAuth>
+                <basicHttpAuthIdentity/>
+                <soapAction>/ProcessDefinitions/V0.2/AssignNumberSeriesServer</soapAction>
+                <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                    <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                    <ns0:cert isRef="true">/EClipsAdapter/Shared Resources/Trusted Certificates/.folder</ns0:cert>
+                </ns0:ssl>
+                <useProxy>false</useProxy>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <xsl:copy-of select="$SOAPData/pfx24:EcnsAssignNumberSeries"/>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Publication</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Publication</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Response/FindCustomerIdByPhoneNumber.xsd" xmlns:pfx2="http://engine.servicescanner.edgetech.nl" xmlns:pfx3="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/FindCustomerIdByPhoneNumber.xsd" xmlns:pfx4="http://www.siebel.com/xml/KZM%20CKRNumber%20Response" xmlns:pfx5="http://www.siebel.com/xml/KZM%20CKRNumber%20Request" xmlns:ns1="http://xmlns.kpn.com/EAI/fixed/0386_FindCustomerIdByPhoneNumber/1.0/Request" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx6="http://siebel.com/FindCustomerByPhoneNumberImpl/FindCustomerByPhoneNumberImpl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns3="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx7="http://xmlns.kpn.com/eai/common/errors" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx8="http://xmlns.example.com/unique/default/namespace/1168879614243" xmlns:pfx9="http://siebel.com/FindCustomerIdByPhoneNumberImpl/FindCustomerIdByPhoneNumberImpl" xmlns:ns0="http://xmlns.kpn.com/EAI/fixed/0386_FindCustomerIdByPhoneNumber/1.0/Response" xmlns:pfx10="http://siebel.com/FindCustomerIdByPhoneNumberImpl/FindCustomerIdByPhoneNumberImpl/FindCustomerIdByPhoneNumberImpl" xmlns:pfx11="http://xmlns.kpn.com/fixed/SiebelZM/FindDocument.1/FindDocument.1Impl" xmlns:pfx12="http://siebel.com/GetCKRNumber" xmlns:ns6="http://xmlns.tibco.com/encodings/mime" xmlns:ns7="http://www.siebel.com/xml/KZM%20CKRNumber%20and%20NAW%20Response" xmlns:pfx13="http://xmlns.kpn.com/fixed/annetadapter/request/PerformQualityOfServiceScan.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Request/FindCustomerIdByPhoneNumber.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Request/FindCustomerIdByPhoneNumber.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Response/FindCustomerIdByPhoneNumber.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Response/FindCustomerIdByPhoneNumber.xsd"/>
+    <xsd:import namespace="http://www.siebel.com/xml/KZM%20CKRNumber%20Request" schemaLocation="/WSDL/SiebelZMAdapter/FindCustomerIdByPhoneNumber_GetCKRNumber.wsdl"/>
+    <wsdl:import namespace="http://siebel.com/FindCustomerIdByPhoneNumberImpl/FindCustomerIdByPhoneNumberImpl/FindCustomerIdByPhoneNumberImpl" location="/WSDL/SiebelZMAdapter/FindCustomerIdByPhoneNumber.wsdl"/>
+    <wsdl:import namespace="http://siebel.com/GetCKRNumber" location="/WSDL/SiebelZMAdapter/FindCustomerIdByPhoneNumber_GetCKRNumber.wsdl"/>
+    <pd:name>SiebelZMAdapter/Processes/Inbound/Sub/FindCustomerIdByPhoneNumber.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ReplyDestination" type="xsd:string"/>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>173</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$MapRVResponse/pfx:FindCustomerIdByPhoneNumber"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:FindCustomerIdByPhoneNumber"/>
+    <pd:endX>827</pd:endX>
+    <pd:endY>169</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx7:ErrorReply"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse Request">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>129</pd:x>
+        <pd:y>173</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx3:FindCustomerIdByPhoneNumber"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>187</pd:x>
+        <pd:y>36</pd:y>
+        <pd:width>539</pd:width>
+        <pd:height>256</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>MapSOAPRequest</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapRVResponse</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSOAPRequest</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:xpathDescription>No Trace</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSOAPRequest</pd:from>
+            <pd:to>LogSOAPRequest</pd:to>
+            <pd:xpathDescription>TRACE</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("SiebelZM-04006")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogSOAPRequest</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>LogSOAPResponse</pd:to>
+            <pd:xpathDescription>TRACE</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>eai:isTraceOn("SiebelZM-04007")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogSOAPResponse</pd:from>
+            <pd:to>MapRVResponse</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>MapRVResponse</pd:to>
+            <pd:xpathDescription>No Trace</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="MapSOAPRequest">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>272</pd:x>
+            <pd:y>173</pd:y>
+            <config>
+                <element ref="pfx5:Account"/>
+            </config>
+            <pd:inputBindings>
+                <pfx5:Account>
+                    <pfx5:PhoneNumber>
+                        <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns1:BODY/PHONE_NUMBER/UNFORMATTED"/>
+                    </pfx5:PhoneNumber>
+                </pfx5:Account>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPRequestReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>421</pd:x>
+            <pd:y>174</pd:y>
+            <config>
+                <timeout>0</timeout>
+                <service>pfx12:KZM_spcGet_spcCKRNumber</service>
+                <servicePort>KZM_spcSearch_spcCKRNumber</servicePort>
+                <operation>KZM_spcSearch_spcCKRNumber</operation>
+                <soapAction>document/http://siebel.com/GetCKRNumber:KZM_spcSearch_spcCKRNumber</soapAction>
+                <endpointURL>%%SiebelZMAdapter/Inbound/FindCustomerIdByPhoneNumber/EndPointUrl%%</endpointURL>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx12:KZM_spcSearch_spcCKRNumber_Input>
+                        <pfx5:Account>
+                            <pfx5:PhoneNumber>
+                                <xsl:value-of select="$MapSOAPRequest/pfx5:Account/pfx5:PhoneNumber"/>
+                            </pfx5:PhoneNumber>
+                        </pfx5:Account>
+                    </pfx12:KZM_spcSearch_spcCKRNumber_Input>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="MapRVResponse">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>584</pd:x>
+            <pd:y>174</pd:y>
+            <config>
+                <element ref="pfx:FindCustomerIdByPhoneNumber"/>
+            </config>
+            <pd:inputBindings>
+                <pfx:FindCustomerIdByPhoneNumber>
+                    <ns2:CMH>
+                        <ns2:ID>
+                            <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:ID"/>
+                        </ns2:ID>
+                        <ns2:NAME>
+                            <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                        </ns2:NAME>
+                        <ns2:FID>
+                            <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:PhoneNumber"/>
+                        </ns2:FID>
+                        <ns2:MID>
+                            <xsl:value-of select="&quot;961.30&quot;"/>
+                        </ns2:MID>
+                        <ns2:PARADIGM>
+                            <xsl:value-of select="&quot;Response&quot;"/>
+                        </ns2:PARADIGM>
+                        <ns2:OBJECT>
+                            <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                        </ns2:OBJECT>
+                        <ns2:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns2:VERSION>
+                        <ns2:FROM>
+                            <xsl:attribute name="ns2:COMPONENT_ID">
+                                <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:FROM/@ns2:COMPONENT_ID"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:FROM/@ns2:COMPONENT_VERSION">
+                                <xsl:attribute name="ns2:COMPONENT_VERSION">
+                                    <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:FROM/@ns2:COMPONENT_VERSION"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </ns2:FROM>
+                        <ns2:TO>
+                            <xsl:attribute name="ns2:DESTINATION">
+                                <xsl:value-of select="concat($_globalVariables/ns4:GlobalVariables/Env,&quot;.FIXED.CRM.SiebelZMAdapter.Request.FindCustomerIdByPhoneNumber.1&quot;)"/>
+                            </xsl:attribute>
+                        </ns2:TO>
+                    </ns2:CMH>
+                    <pfx:RESULT_STATUS>
+                        <xsl:attribute name="ns3:ERROR_CODE">
+                            <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:ResultCode"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns3:ERROR_DESCRIPTION">
+                            <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:Description"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns3:STATUS">
+                            <xsl:value-of select="0"/>
+                        </xsl:attribute>
+                    </pfx:RESULT_STATUS>
+                    <ns0:BODY>
+                        <PHONE_NUMBER>
+                            <UNFORMATTED>
+                                <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:PhoneNumber"/>
+                            </UNFORMATTED>
+                        </PHONE_NUMBER>
+                        <xsl:if test="exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:HouseNumber) or exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:HouseNumberExtension) or exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:ZipCode) or exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:CKRNumber) or exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:KvKNumber)">
+                            <CUSTOMER>
+                                <xsl:if test="exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:CKRNumber) and $SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:CKRNumber!=&quot;&quot;">
+                                    <CUSTOMER_ID>
+                                        <ID_CKR>
+                                            <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:CKRNumber"/>
+                                        </ID_CKR>
+                                    </CUSTOMER_ID>
+                                </xsl:if>
+                                <xsl:if test="exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:HouseNumber) or exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:HouseNumberExtension) or exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:ZipCode)">
+                                    <PROPERTY_ADDRESS>
+                                        <xsl:if test="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:HouseNumber">
+                                            <HOUSE_NUMBER>
+                                                <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:HouseNumber"/>
+                                            </HOUSE_NUMBER>
+                                        </xsl:if>
+                                        <xsl:if test="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:HouseNumberExtension">
+                                            <HOUSE_NUMBER_EXTENSION>
+                                                <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:HouseNumberExtension"/>
+                                            </HOUSE_NUMBER_EXTENSION>
+                                        </xsl:if>
+                                        <xsl:if test="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:ZipCode">
+                                            <DUTCH_POSTCODE>
+                                                <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:ZipCode"/>
+                                            </DUTCH_POSTCODE>
+                                        </xsl:if>
+                                    </PROPERTY_ADDRESS>
+                                </xsl:if>
+                                <PARTY>
+                                    <ORGANISATION>
+                                        <xsl:if test="exists($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:KvKNumber)">
+                                            <KVK_REGISTRATION>
+                                                <KVK_NUMBER>
+                                                    <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account/ns7:KvKNumber"/>
+                                                </KVK_NUMBER>
+                                            </KVK_REGISTRATION>
+                                        </xsl:if>
+                                    </ORGANISATION>
+                                </PARTY>
+                            </CUSTOMER>
+                        </xsl:if>
+                    </ns0:BODY>
+                </pfx:FindCustomerIdByPhoneNumber>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogSOAPRequest">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>364</pd:x>
+            <pd:y>91</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;SiebelZM-04006&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($MapSOAPRequest/pfx5:Account, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogSOAPResponse">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>527</pd:x>
+            <pd:y>91</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="'SiebelZM-04007'"/>
+                    </MsgCode>
+                    <xsl:if test="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID">
+                        <MsgId>
+                            <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($SOAPRequestReply/outputMessage/pfx12:KZM_spcSearch_spcCKRNumber_Output/ns7:Account, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="ThrowException">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>167</pd:x>
+        <pd:y>397</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_Parse-Request)">
+                        <data>
+                            <pfx7:ErrorReply>
+                                <pfx7:Body>
+                                    <pfx:FindCustomerIdByPhoneNumber>
+                                        <ns2:CMH>
+                                            <ns2:ID>
+                                                <xsl:value-of select="&quot;961&quot;"/>
+                                            </ns2:ID>
+                                            <ns2:NAME>
+                                                <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                                            </ns2:NAME>
+                                            <xsl:if test="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns1:BODY/PHONE_NUMBER/UNFORMATTED">
+                                                <ns2:FID>
+                                                    <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns1:BODY/PHONE_NUMBER/UNFORMATTED"/>
+                                                </ns2:FID>
+                                            </xsl:if>
+                                            <ns2:MID>
+                                                <xsl:value-of select="&quot;961.30&quot;"/>
+                                            </ns2:MID>
+                                            <ns2:PARADIGM>
+                                                <xsl:value-of select="&quot;Response&quot;"/>
+                                            </ns2:PARADIGM>
+                                            <ns2:OBJECT>
+                                                <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                                            </ns2:OBJECT>
+                                            <ns2:VERSION>
+                                                <xsl:value-of select="&quot;1.0&quot;"/>
+                                            </ns2:VERSION>
+                                            <ns2:FROM>
+                                                <xsl:attribute name="ns2:COMPONENT_ID">
+                                                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/SiebelZMAdapter/ComponentId"/>
+                                                </xsl:attribute>
+                                                <xsl:attribute name="ns2:COMPONENT_VERSION">
+                                                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/SiebelZMAdapter/ComponentVersion"/>
+                                                </xsl:attribute>
+                                            </ns2:FROM>
+                                            <ns2:TO>
+                                                <xsl:attribute name="ns2:DESTINATION">
+                                                    <xsl:value-of select="concat($_globalVariables/ns4:GlobalVariables/Env,&quot;.FIXED.CRM.SiebelZMAdapter.Request.FindCustomerIdByPhoneNumber.1&quot;)"/>
+                                                </xsl:attribute>
+                                            </ns2:TO>
+                                        </ns2:CMH>
+                                        <pfx:RESULT_STATUS>
+                                            <xsl:attribute name="ns3:STATUS">
+                                                <xsl:value-of select="2"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns3:ERROR_CODE">
+                                                <xsl:value-of select="&quot;20030&quot;"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns3:ERROR_DESCRIPTION">
+                                                <xsl:value-of select="&quot;Incorrect data supplied in message&quot;"/>
+                                            </xsl:attribute>
+                                        </pfx:RESULT_STATUS>
+                                    </pfx:FindCustomerIdByPhoneNumber>
+                                </pfx7:Body>
+                                <pfx7:Errors>
+                                    <pfx7:Error>
+                                        <pfx7:MsgCode>
+                                            <xsl:value-of select="&quot;SiebelZM-03004&quot;"/>
+                                        </pfx7:MsgCode>
+                                        <pfx7:Params>
+                                            <xsl:value-of select="tib:render-xml($Start/ServiceIn/Body, false(), true())"/>
+                                        </pfx7:Params>
+                                        <xsl:if test="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID">
+                                            <pfx7:MsgId>
+                                                <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID"/>
+                                            </pfx7:MsgId>
+                                        </xsl:if>
+                                        <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                        <pfx7:ActivityError>
+                                            <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/@*"/>
+                                            <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/node()"/>
+                                        </pfx7:ActivityError>
+                                    </pfx7:Error>
+                                </pfx7:Errors>
+                            </pfx7:ErrorReply>
+                        </data>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_SOAPRequestReply)">
+                        <data>
+                            <pfx7:ErrorReply>
+                                <pfx7:Body>
+                                    <pfx:FindCustomerIdByPhoneNumber>
+                                        <ns2:CMH>
+                                            <ns2:ID>
+                                                <xsl:value-of select="&quot;961&quot;"/>
+                                            </ns2:ID>
+                                            <ns2:NAME>
+                                                <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                                            </ns2:NAME>
+                                            <ns2:FID>
+                                                <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns1:BODY/PHONE_NUMBER/UNFORMATTED"/>
+                                            </ns2:FID>
+                                            <ns2:MID>
+                                                <xsl:value-of select="&quot;961.30&quot;"/>
+                                            </ns2:MID>
+                                            <ns2:PARADIGM>
+                                                <xsl:value-of select="&quot;Response&quot;"/>
+                                            </ns2:PARADIGM>
+                                            <ns2:OBJECT>
+                                                <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                                            </ns2:OBJECT>
+                                            <ns2:VERSION>
+                                                <xsl:value-of select="&quot;1.0&quot;"/>
+                                            </ns2:VERSION>
+                                            <ns2:FROM>
+                                                <xsl:attribute name="ns2:COMPONENT_ID">
+                                                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/SiebelZMAdapter/ComponentId"/>
+                                                </xsl:attribute>
+                                                <xsl:attribute name="ns2:COMPONENT_VERSION">
+                                                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/SiebelZMAdapter/ComponentVersion"/>
+                                                </xsl:attribute>
+                                            </ns2:FROM>
+                                            <ns2:TO>
+                                                <xsl:attribute name="ns2:DESTINATION">
+                                                    <xsl:value-of select="concat($_globalVariables/ns4:GlobalVariables/Env,&quot;.FIXED.CRM.SiebelZMAdapter.Request.FindCustomerIdByPhoneNumber.1&quot;)"/>
+                                                </xsl:attribute>
+                                            </ns2:TO>
+                                        </ns2:CMH>
+                                        <pfx:RESULT_STATUS>
+                                            <xsl:attribute name="ns3:STATUS">
+                                                <xsl:value-of select="1"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns3:ERROR_CODE">
+                                                <xsl:value-of select="&quot;10002&quot;"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns3:ERROR_DESCRIPTION">
+                                                <xsl:value-of select="&quot;Application not available&quot;"/>
+                                            </xsl:attribute>
+                                        </pfx:RESULT_STATUS>
+                                    </pfx:FindCustomerIdByPhoneNumber>
+                                </pfx7:Body>
+                                <pfx7:Errors>
+                                    <pfx7:Error>
+                                        <pfx7:MsgCode>
+                                            <xsl:value-of select="&quot;SiebelZM-03002&quot;"/>
+                                        </pfx7:MsgCode>
+                                        <pfx7:Params>
+                                            <xsl:value-of select="tib:render-xml($Start/ServiceIn/Body, false(), true())"/>
+                                        </pfx7:Params>
+                                        <xsl:if test="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID">
+                                            <pfx7:MsgId>
+                                                <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID"/>
+                                            </pfx7:MsgId>
+                                        </xsl:if>
+                                        <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                        <pfx7:ActivityError>
+                                            <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/@*"/>
+                                            <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/node()"/>
+                                        </pfx7:ActivityError>
+                                    </pfx7:Error>
+                                </pfx7:Errors>
+                            </pfx7:ErrorReply>
+                        </data>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <data>
+                            <pfx7:ErrorReply>
+                                <pfx7:Body>
+                                    <pfx:FindCustomerIdByPhoneNumber>
+                                        <ns2:CMH>
+                                            <ns2:ID>
+                                                <xsl:value-of select="&quot;961.30&quot;"/>
+                                            </ns2:ID>
+                                            <ns2:NAME>
+                                                <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                                            </ns2:NAME>
+                                            <ns2:FID>
+                                                <xsl:value-of select="&quot;&quot;"/>
+                                            </ns2:FID>
+                                            <ns2:MID>
+                                                <xsl:value-of select="&quot;961.30&quot;"/>
+                                            </ns2:MID>
+                                            <ns2:PARADIGM>
+                                                <xsl:value-of select="&quot;Response&quot;"/>
+                                            </ns2:PARADIGM>
+                                            <ns2:OBJECT>
+                                                <xsl:value-of select="&quot;FindCustomerIdByPhoneNumber&quot;"/>
+                                            </ns2:OBJECT>
+                                            <ns2:VERSION>
+                                                <xsl:value-of select="&quot;1.0&quot;"/>
+                                            </ns2:VERSION>
+                                            <ns2:FROM>
+                                                <xsl:attribute name="ns2:COMPONENT_ID">
+                                                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/SiebelZMAdapter/ComponentId"/>
+                                                </xsl:attribute>
+                                                <xsl:attribute name="ns2:COMPONENT_VERSION">
+                                                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/SiebelZMAdapter/ComponentVersion"/>
+                                                </xsl:attribute>
+                                            </ns2:FROM>
+                                            <ns2:TO>
+                                                <xsl:attribute name="ns2:DESTINATION">
+                                                    <xsl:value-of select="concat($_globalVariables/ns4:GlobalVariables/Env,&quot;.FIXED.CRM.SiebelZmAdapter.Request.FindCustomerIdByPhoneNumber.1&quot;)"/>
+                                                </xsl:attribute>
+                                            </ns2:TO>
+                                        </ns2:CMH>
+                                        <pfx:RESULT_STATUS>
+                                            <xsl:attribute name="ns3:STATUS">
+                                                <xsl:value-of select="2"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns3:ERROR_CODE">
+                                                <xsl:value-of select="&quot;20010&quot;"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns3:ERROR_DESCRIPTION">
+                                                <xsl:value-of select="&quot;General un-attributable error&quot;"/>
+                                            </xsl:attribute>
+                                        </pfx:RESULT_STATUS>
+                                    </pfx:FindCustomerIdByPhoneNumber>
+                                </pfx7:Body>
+                                <pfx7:Errors>
+                                    <pfx7:Error>
+                                        <pfx7:MsgCode>
+                                            <xsl:value-of select="&quot;SiebelZM-03001&quot;"/>
+                                        </pfx7:MsgCode>
+                                        <pfx7:Params>
+                                            <xsl:value-of select="$_error/ns5:ErrorReport/Data/*"/>
+                                        </pfx7:Params>
+                                        <pfx7:MsgId>
+                                            <xsl:value-of select="$Parse-Request/pfx3:FindCustomerIdByPhoneNumber/ns2:CMH/ns2:TRACKING/ns2:MESSAGE_ID"/>
+                                        </pfx7:MsgId>
+                                        <xsl:copy-of select="$_error/ns5:ErrorReport"/>
+                                    </pfx7:Error>
+                                </pfx7:Errors>
+                            </pfx7:ErrorReply>
+                        </data>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Request</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ThrowException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Request</pd:from>
+        <pd:to>ThrowException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>ThrowException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

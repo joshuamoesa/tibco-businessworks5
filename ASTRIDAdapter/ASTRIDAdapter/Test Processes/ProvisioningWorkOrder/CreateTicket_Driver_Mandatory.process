@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:eai="java://com.kpn.eai.tools.Tools">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/ProvisioningWorkOrder/CreateTicket_Driver_Mandatory.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>290</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>%%ASTRIDAdapter/Test/Endpoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <headers>
+                    <Header.parameters/>
+                </headers>
+                <pfx:GenericMessage>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="eai:createGUID()"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="'CreateTicket'"/>
+                        </ns:managed_object_class>
+                        <ns:managed_object_class_extension>
+                            <xsl:value-of select="'1'"/>
+                        </ns:managed_object_class_extension>
+                        <ns:managed_object_class_version>
+                            <xsl:value-of select="'1.0'"/>
+                        </ns:managed_object_class_version>
+                        <ns:message_origination_it_domain>
+                            <xsl:value-of select="'Message origin domain'"/>
+                        </ns:message_origination_it_domain>
+                        <ns:message_instance>
+                            <xsl:value-of select="'Message instance'"/>
+                        </ns:message_instance>
+                        <ns:message_creation_time>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:message_creation_time>
+                        <ns:message_destination_it_domain>
+                            <xsl:value-of select="'Message destination domain'"/>
+                        </ns:message_destination_it_domain>
+                    </ns:Header>
+                    <ns:General/>
+                    <ns:Customer_info>
+                        <ns:co_contact_person_telephone_number>
+                            <xsl:value-of select="'0983337796'"/>
+                        </ns:co_contact_person_telephone_number>
+                    </ns:Customer_info>
+                    <ns:Managed_Object_Info>
+                        <ns:MOR0>
+                            <ns:MOR0>
+                                <ns:mo_supported_service_attribute_name_1>
+                                    <xsl:value-of select="'ATT1'"/>
+                                </ns:mo_supported_service_attribute_name_1>
+                                <ns:mo_supported_service_attribute_value_1>
+                                    <xsl:value-of select="'ATT1Val'"/>
+                                </ns:mo_supported_service_attribute_value_1>
+                                <ns:MOR1>
+                                    <ns:MOR1>
+                                        <ns:mo_supported_service_attribute_name_2>
+                                            <xsl:value-of select="'Att2'"/>
+                                        </ns:mo_supported_service_attribute_name_2>
+                                        <ns:mo_supported_service_attribute_value_2>
+                                            <xsl:value-of select="'Att2Val'"/>
+                                        </ns:mo_supported_service_attribute_value_2>
+                                    </ns:MOR1>
+                                </ns:MOR1>
+                            </ns:MOR0>
+                        </ns:MOR0>
+                    </ns:Managed_Object_Info>
+                </pfx:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

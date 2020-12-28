@@ -1,0 +1,1330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://www.tibco.com/CLEver/namespace/Custom" xmlns:pfx2="http://www.tibco.com/CLEver/Version" xmlns:pfx3="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns3="http://www.tibco.com/CLEver/Exception" xmlns:ns4="http://www.tibco.com/CLEver/InternalException" xmlns:pfx4="http://www.tibco.com/CLEver/BusinessDomain" xmlns:ns5="http://www.tibco.com/CLEver/Channel" xmlns:ns6="http://www.tibco.com/CLEver/ExceptionCategory" xmlns:ns7="http://www.tibco.com/CLEver/ExceptionSeverity" xmlns:ns8="http://www.tibco.com/CLEver/ExceptionType" xmlns:ns9="http://www.tibco.com/CLEver/Notification" xmlns:ns10="http://www.tibco.com/CLEver/Policy" xmlns:ns11="http://www.tibco.com/CLEver/Resolution" xmlns:ns12="http://www.tibco.com/CLEver/Rule" xmlns:ns13="http://www.tibco.com/CLEver/Schedule" xmlns:ns14="http://www.tibco.com/CLEver/TechnicalDomain" xmlns:ns15="http://www.tibco.com/CLEver/HistoryRetain" xmlns:ns16="http://www.tibco.com/CLEver/ExceptionCode">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Rule" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Rule.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Version" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Version.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <pd:name>Processes/DataServices/RuleGeneration/Exception/Sub/LoadRules.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ID" type="xsd:int"/>
+                    <xsd:element ref="pfx3:Security"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>93</pd:startX>
+    <pd:startY>314</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <xsl:copy-of select="$MapPolicyFull/ns12:RulesFull"/>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns12:RulesFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>896</pd:endX>
+    <pd:endY>313</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Handle Exception">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>190</pd:x>
+        <pd:y>1006</pd:y>
+        <config>
+            <processName>/Processes/InternalServices/Exception Handler/Local Exception Handler.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns4:Exception>
+                    <Service>
+                        <xsl:value-of select="$_error/ns:ErrorReport/ProcessStack"/>
+                    </Service>
+                    <ErrorMessage>
+                        <xsl:value-of select="'DataService error'"/>
+                    </ErrorMessage>
+                    <xsl:if test="$_error/ns:ErrorReport/MsgCode">
+                        <ErrorCode>
+                            <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                        </ErrorCode>
+                    </xsl:if>
+                    <ns4:Error>
+                        <ns4:ErrorReport>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns:ErrorReport/node()"/>
+                        </ns4:ErrorReport>
+                    </ns4:Error>
+                </ns4:Exception>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>44</pd:x>
+        <pd:y>1007</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Rethrow">
+        <pd:type>com.tibco.pe.core.RethrowActivity</pd:type>
+        <pd:resourceType>ae.activities.rethrow</pd:resourceType>
+        <pd:x>328</pd:x>
+        <pd:y>1006</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="BusinessDomain">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>418</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/BusinessDomain/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/BusinessDomain/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Channel">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>420</pd:x>
+        <pd:y>83</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Channel/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Channel/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ExceptionCategory">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>419</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/ExceptionCategory/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/ExceptionCategory/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ExceptionSeverity">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>420</pd:x>
+        <pd:y>178</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/ExceptionSeverity/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/ExceptionSeverity/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ExceptionType">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>426</pd:x>
+        <pd:y>321</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/ExceptionType/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/ExceptionType/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Notification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>429</pd:x>
+        <pd:y>367</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Notification/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Notification/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Policy">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>425</pd:x>
+        <pd:y>416</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Policy/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Policy/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Resolution">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>425</pd:x>
+        <pd:y>466</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Resolution/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Resolution/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Rule">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>423</pd:x>
+        <pd:y>509</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Rule/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Rule/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Schedule">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>423</pd:x>
+        <pd:y>557</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Schedule/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Schedule/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="TechnicalDomain">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>422</pd:x>
+        <pd:y>606</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/TechnicalDomain/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/TechnicalDomain/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>658</pd:x>
+        <pd:y>309</pd:y>
+        <config>
+            <element ref="ns12:RulesFull"/>
+        </config>
+        <pd:inputBindings>
+            <ns12:RulesFull>
+                <xsl:for-each select="$Rule/ns12:Rules/ns12:Rule">
+                    <ns12:RuleFull>
+                        <xsl:variable name="varRule" select="."/>
+                        <ns12:ID>
+                            <xsl:value-of select="ns12:ID"/>
+                        </ns12:ID>
+                        <ns12:Name>
+                            <xsl:value-of select="ns12:Name"/>
+                        </ns12:Name>
+                        <ns12:Description>
+                            <xsl:value-of select="ns12:Description"/>
+                        </ns12:Description>
+                        <xsl:copy-of select="$BusinessDomain/pfx4:BusinessDomains/pfx4:BusinessDomain[pfx4:ID=$varRule/ns12:BusinessDomainID]"/>
+                        <xsl:copy-of select="$TechnicalDomain/ns14:TechnicalDomains/ns14:TechnicalDomain[ns14:ID=$varRule/ns12:TechnicalDomainID]"/>
+                        <xsl:copy-of select="$ExceptionCategory/ns6:ExceptionCategories/ns6:ExceptionCategory[ns6:ID=$varRule/ns12:CategoryID]"/>
+                        <xsl:copy-of select="$ExceptionType/ns8:ExceptionTypes/ns8:ExceptionType[ns8:ID=$varRule/ns12:TypeID]"/>
+                        <xsl:copy-of select="$ExceptionCode/ns16:ExceptionCodes/ns16:ExceptionCode[ns16:ID=$varRule/ns12:CodeID]"/>
+                        <xsl:copy-of select="$ExceptionSeverity/ns7:ExceptionSeverities/ns7:ExceptionSeverity[ns7:ID=$varRule//ns12:SeverityID]"/>
+                        <ns12:Hostname>
+                            <xsl:value-of select="ns12:Hostname"/>
+                        </ns12:Hostname>
+                        <ns12:Component>
+                            <xsl:value-of select="ns12:Component"/>
+                        </ns12:Component>
+                        <ns12:Service>
+                            <xsl:value-of select="ns12:Service"/>
+                        </ns12:Service>
+                        <ns12:Process>
+                            <xsl:value-of select="ns12:Process"/>
+                        </ns12:Process>
+                        <ns10:PolicyFull>
+                            <xsl:variable name="PolID" select="$varRule/ns12:PolicyID"/>
+                            <xsl:variable name="varPolicy" select="$Policy/ns10:Policies/ns10:Policy[ns10:ID=$PolID]"/>
+                            <xsl:if test="$varPolicy/ns10:ID">
+                                <ns10:ID>
+                                    <xsl:value-of select="$varPolicy/ns10:ID"/>
+                                </ns10:ID>
+                            </xsl:if>
+                            <ns10:Name>
+                                <xsl:value-of select="$varPolicy/ns10:Name"/>
+                            </ns10:Name>
+                            <ns10:Description>
+                                <xsl:value-of select="$varPolicy/ns10:Description"/>
+                            </ns10:Description>
+                            <ns9:NotificationsFull>
+                                <xsl:for-each select="$varPolicy/ns10:PolicyNotifications/ns10:PolicyNotification">
+                                    <xsl:variable name="varNotification" select="$Notification/ns9:Notifications/ns9:Notification[ns9:ID=current()/ns10:ReferenceID]"/>
+                                    <ns9:NotificationFull>
+                                        <ns9:Name>
+                                            <xsl:value-of select="$varNotification/ns9:Name"/>
+                                        </ns9:Name>
+                                        <xsl:if test="$varNotification/ns9:Description">
+                                            <ns9:Description>
+                                                <xsl:value-of select="$varNotification/ns9:Description"/>
+                                            </ns9:Description>
+                                        </xsl:if>
+                                        <xsl:copy-of select="$Channel/ns5:Channels/ns5:Channel[ns5:ID=$varNotification/ns9:ChannelID]"/>
+                                        <xsl:if test="$varNotification/ns9:Message">
+                                            <ns9:Message>
+                                                <xsl:value-of select="$varNotification/ns9:Message"/>
+                                            </ns9:Message>
+                                        </xsl:if>
+                                        <xsl:copy-of select="$varNotification/pfx3:Parameters"/>
+                                    </ns9:NotificationFull>
+                                </xsl:for-each>
+                            </ns9:NotificationsFull>
+                            <ns11:ResolutionFull>
+                                <xsl:variable name="varResolution" select="$Resolution/ns11:Resolutions/ns11:Resolution[ns11:ID=$varPolicy/ns10:Resolution]"/>
+                                <xsl:if test="$varResolution/ns11:Name">
+                                    <ns11:Name>
+                                        <xsl:value-of select="$varResolution/ns11:Name"/>
+                                    </ns11:Name>
+                                </xsl:if>
+                                <xsl:if test="$varResolution/ns11:Description">
+                                    <ns11:Description>
+                                        <xsl:value-of select="$varResolution/ns11:Description"/>
+                                    </ns11:Description>
+                                </xsl:if>
+                                <xsl:copy-of select="$Channel/ns5:Channels/ns5:Channel[ns5:ID=$varResolution/ns11:ChannelID]"/>
+                                <xsl:copy-of select="$varResolution/ns11:Parameter"/>
+                            </ns11:ResolutionFull>
+                            <xsl:copy-of select="$Schedule/ns13:Schedules/ns13:Schedule[ns13:ID=$varPolicy/ns10:Schedule]"/>
+                        </ns10:PolicyFull>
+                        <ns12:ExecutionPriority>
+                            <xsl:value-of select="ns12:ExecutionPriority"/>
+                        </ns12:ExecutionPriority>
+                        <xsl:for-each select="pfx3:Parameters">
+                            <pfx3:Parameters>
+                                <xsl:for-each select="pfx3:Parameter">
+                                    <pfx3:Parameter>
+                                        <pfx3:Name>
+                                            <xsl:value-of select="pfx3:Name"/>
+                                        </pfx3:Name>
+                                        <pfx3:Value>
+                                            <xsl:value-of select="pfx3:Value"/>
+                                        </pfx3:Value>
+                                    </pfx3:Parameter>
+                                </xsl:for-each>
+                            </pfx3:Parameters>
+                        </xsl:for-each>
+                    </ns12:RuleFull>
+                </xsl:for-each>
+            </ns12:RulesFull>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="HistoryRetain">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>427</pd:x>
+        <pd:y>661</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/HistoryRetain/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/HistoryRetain/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ExceptionCode">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>419</pd:x>
+        <pd:y>259</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/ExceptionCode/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/ExceptionCode/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Version>
+                    <xsl:value-of select="$Start/Input/ID"/>
+                </Version>
+                <xsl:copy-of select="$Start/Input/pfx3:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapPolicyFull">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>761</pd:x>
+        <pd:y>310</pd:y>
+        <config>
+            <element ref="ns12:RulesFull"/>
+        </config>
+        <pd:inputBindings>
+            <ns12:RulesFull>
+                <xsl:for-each select="$Map-Data/ns12:RulesFull/ns12:RuleFull">
+                    <ns12:RuleFull>
+                        <ns12:ID>
+                            <xsl:value-of select="ns12:ID"/>
+                        </ns12:ID>
+                        <ns12:Name>
+                            <xsl:value-of select="ns12:Name"/>
+                        </ns12:Name>
+                        <ns12:Description>
+                            <xsl:value-of select="ns12:Description"/>
+                        </ns12:Description>
+                        <xsl:for-each select="pfx4:BusinessDomain">
+                            <pfx4:BusinessDomain>
+                                <pfx4:ID>
+                                    <xsl:value-of select="pfx4:ID"/>
+                                </pfx4:ID>
+                                <pfx4:Name>
+                                    <xsl:value-of select="pfx4:Name"/>
+                                </pfx4:Name>
+                                <pfx4:Description>
+                                    <xsl:value-of select="pfx4:Description"/>
+                                </pfx4:Description>
+                                <pfx3:Version>
+                                    <xsl:value-of select="pfx3:Version"/>
+                                </pfx3:Version>
+                                <xsl:for-each select="pfx3:Parameters">
+                                    <pfx3:Parameters>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </pfx3:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="pfx3:SecurityInfo">
+                                    <pfx3:SecurityInfo>
+                                        <pfx3:isCreatable>
+                                            <xsl:value-of select="pfx3:isCreatable"/>
+                                        </pfx3:isCreatable>
+                                        <pfx3:isReadable>
+                                            <xsl:value-of select="pfx3:isReadable"/>
+                                        </pfx3:isReadable>
+                                        <pfx3:isUpdatable>
+                                            <xsl:value-of select="pfx3:isUpdatable"/>
+                                        </pfx3:isUpdatable>
+                                        <pfx3:isDeletable>
+                                            <xsl:value-of select="pfx3:isDeletable"/>
+                                        </pfx3:isDeletable>
+                                    </pfx3:SecurityInfo>
+                                </xsl:for-each>
+                            </pfx4:BusinessDomain>
+                        </xsl:for-each>
+                        <xsl:for-each select="ns14:TechnicalDomain">
+                            <ns14:TechnicalDomain>
+                                <ns14:ID>
+                                    <xsl:value-of select="ns14:ID"/>
+                                </ns14:ID>
+                                <ns14:Name>
+                                    <xsl:value-of select="ns14:Name"/>
+                                </ns14:Name>
+                                <ns14:Description>
+                                    <xsl:value-of select="ns14:Description"/>
+                                </ns14:Description>
+                                <pfx3:Version>
+                                    <xsl:value-of select="pfx3:Version"/>
+                                </pfx3:Version>
+                                <xsl:for-each select="pfx3:Parameters">
+                                    <pfx3:Parameters>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </pfx3:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="pfx3:SecurityInfo">
+                                    <pfx3:SecurityInfo>
+                                        <pfx3:isCreatable>
+                                            <xsl:value-of select="pfx3:isCreatable"/>
+                                        </pfx3:isCreatable>
+                                        <pfx3:isReadable>
+                                            <xsl:value-of select="pfx3:isReadable"/>
+                                        </pfx3:isReadable>
+                                        <pfx3:isUpdatable>
+                                            <xsl:value-of select="pfx3:isUpdatable"/>
+                                        </pfx3:isUpdatable>
+                                        <pfx3:isDeletable>
+                                            <xsl:value-of select="pfx3:isDeletable"/>
+                                        </pfx3:isDeletable>
+                                    </pfx3:SecurityInfo>
+                                </xsl:for-each>
+                            </ns14:TechnicalDomain>
+                        </xsl:for-each>
+                        <xsl:for-each select="ns6:ExceptionCategory">
+                            <ns6:ExceptionCategory>
+                                <ns6:ID>
+                                    <xsl:value-of select="ns6:ID"/>
+                                </ns6:ID>
+                                <ns6:Name>
+                                    <xsl:value-of select="ns6:Name"/>
+                                </ns6:Name>
+                                <ns6:Description>
+                                    <xsl:value-of select="ns6:Description"/>
+                                </ns6:Description>
+                                <pfx3:Version>
+                                    <xsl:value-of select="pfx3:Version"/>
+                                </pfx3:Version>
+                                <xsl:for-each select="pfx3:Parameters">
+                                    <pfx3:Parameters>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </pfx3:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="pfx3:SecurityInfo">
+                                    <pfx3:SecurityInfo>
+                                        <pfx3:isCreatable>
+                                            <xsl:value-of select="pfx3:isCreatable"/>
+                                        </pfx3:isCreatable>
+                                        <pfx3:isReadable>
+                                            <xsl:value-of select="pfx3:isReadable"/>
+                                        </pfx3:isReadable>
+                                        <pfx3:isUpdatable>
+                                            <xsl:value-of select="pfx3:isUpdatable"/>
+                                        </pfx3:isUpdatable>
+                                        <pfx3:isDeletable>
+                                            <xsl:value-of select="pfx3:isDeletable"/>
+                                        </pfx3:isDeletable>
+                                    </pfx3:SecurityInfo>
+                                </xsl:for-each>
+                            </ns6:ExceptionCategory>
+                        </xsl:for-each>
+                        <xsl:for-each select="ns8:ExceptionType">
+                            <ns8:ExceptionType>
+                                <ns8:ID>
+                                    <xsl:value-of select="ns8:ID"/>
+                                </ns8:ID>
+                                <ns8:Name>
+                                    <xsl:value-of select="ns8:Name"/>
+                                </ns8:Name>
+                                <ns8:Description>
+                                    <xsl:value-of select="ns8:Description"/>
+                                </ns8:Description>
+                                <ns8:Version>
+                                    <xsl:value-of select="ns8:Version"/>
+                                </ns8:Version>
+                                <xsl:for-each select="pfx3:Parameters">
+                                    <pfx3:Parameters>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </pfx3:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="pfx3:SecurityInfo">
+                                    <pfx3:SecurityInfo>
+                                        <pfx3:isCreatable>
+                                            <xsl:value-of select="pfx3:isCreatable"/>
+                                        </pfx3:isCreatable>
+                                        <pfx3:isReadable>
+                                            <xsl:value-of select="pfx3:isReadable"/>
+                                        </pfx3:isReadable>
+                                        <pfx3:isUpdatable>
+                                            <xsl:value-of select="pfx3:isUpdatable"/>
+                                        </pfx3:isUpdatable>
+                                        <pfx3:isDeletable>
+                                            <xsl:value-of select="pfx3:isDeletable"/>
+                                        </pfx3:isDeletable>
+                                    </pfx3:SecurityInfo>
+                                </xsl:for-each>
+                            </ns8:ExceptionType>
+                        </xsl:for-each>
+                        <xsl:for-each select="ns16:ExceptionCode">
+                            <ns16:ExceptionCode>
+                                <ns16:ID>
+                                    <xsl:value-of select="ns16:ID"/>
+                                </ns16:ID>
+                                <ns16:Name>
+                                    <xsl:value-of select="ns16:Name"/>
+                                </ns16:Name>
+                                <ns16:Description>
+                                    <xsl:value-of select="ns16:Description"/>
+                                </ns16:Description>
+                                <ns16:Version>
+                                    <xsl:value-of select="ns16:Version"/>
+                                </ns16:Version>
+                                <xsl:for-each select="pfx3:Parameters">
+                                    <pfx3:Parameters>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </pfx3:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="pfx3:SecurityInfo">
+                                    <pfx3:SecurityInfo>
+                                        <pfx3:isCreatable>
+                                            <xsl:value-of select="pfx3:isCreatable"/>
+                                        </pfx3:isCreatable>
+                                        <pfx3:isReadable>
+                                            <xsl:value-of select="pfx3:isReadable"/>
+                                        </pfx3:isReadable>
+                                        <pfx3:isUpdatable>
+                                            <xsl:value-of select="pfx3:isUpdatable"/>
+                                        </pfx3:isUpdatable>
+                                        <pfx3:isDeletable>
+                                            <xsl:value-of select="pfx3:isDeletable"/>
+                                        </pfx3:isDeletable>
+                                    </pfx3:SecurityInfo>
+                                </xsl:for-each>
+                            </ns16:ExceptionCode>
+                        </xsl:for-each>
+                        <xsl:for-each select="ns7:ExceptionSeverity">
+                            <ns7:ExceptionSeverity>
+                                <ns7:ID>
+                                    <xsl:value-of select="ns7:ID"/>
+                                </ns7:ID>
+                                <ns7:Name>
+                                    <xsl:value-of select="ns7:Name"/>
+                                </ns7:Name>
+                                <ns7:Description>
+                                    <xsl:value-of select="ns7:Description"/>
+                                </ns7:Description>
+                                <ns7:Version>
+                                    <xsl:value-of select="ns7:Version"/>
+                                </ns7:Version>
+                                <xsl:for-each select="pfx3:Parameters">
+                                    <pfx3:Parameters>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </pfx3:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="pfx3:SecurityInfo">
+                                    <pfx3:SecurityInfo>
+                                        <pfx3:isCreatable>
+                                            <xsl:value-of select="pfx3:isCreatable"/>
+                                        </pfx3:isCreatable>
+                                        <pfx3:isReadable>
+                                            <xsl:value-of select="pfx3:isReadable"/>
+                                        </pfx3:isReadable>
+                                        <pfx3:isUpdatable>
+                                            <xsl:value-of select="pfx3:isUpdatable"/>
+                                        </pfx3:isUpdatable>
+                                        <pfx3:isDeletable>
+                                            <xsl:value-of select="pfx3:isDeletable"/>
+                                        </pfx3:isDeletable>
+                                    </pfx3:SecurityInfo>
+                                </xsl:for-each>
+                            </ns7:ExceptionSeverity>
+                        </xsl:for-each>
+                        <ns12:Hostname>
+                            <xsl:value-of select="ns12:Hostname"/>
+                        </ns12:Hostname>
+                        <ns12:Component>
+                            <xsl:value-of select="ns12:Component"/>
+                        </ns12:Component>
+                        <ns12:Service>
+                            <xsl:value-of select="ns12:Service"/>
+                        </ns12:Service>
+                        <ns12:Process>
+                            <xsl:value-of select="ns12:Process"/>
+                        </ns12:Process>
+                        <xsl:for-each select="ns10:PolicyFull">
+                            <ns10:PolicyFull>
+                                <ns10:ID>
+                                    <xsl:value-of select="ns10:ID"/>
+                                </ns10:ID>
+                                <ns10:Name>
+                                    <xsl:value-of select="ns10:Name"/>
+                                </ns10:Name>
+                                <ns10:Description>
+                                    <xsl:value-of select="ns10:Description"/>
+                                </ns10:Description>
+                                <xsl:for-each select="ns9:NotificationsFull">
+                                    <ns9:NotificationsFull>
+                                        <xsl:for-each select="ns9:NotificationFull">
+                                            <ns9:NotificationFull>
+                                                <ns9:Name>
+                                                    <xsl:value-of select="ns9:Name"/>
+                                                </ns9:Name>
+                                                <ns9:Description>
+                                                    <xsl:value-of select="ns9:Description"/>
+                                                </ns9:Description>
+                                                <xsl:for-each select="ns5:Channel">
+                                                    <ns5:Channel>
+                                                        <ns5:ID>
+                                                            <xsl:value-of select="ns5:ID"/>
+                                                        </ns5:ID>
+                                                        <ns5:Name>
+                                                            <xsl:value-of select="ns5:Name"/>
+                                                        </ns5:Name>
+                                                        <ns5:Description>
+                                                            <xsl:value-of select="ns5:Description"/>
+                                                        </ns5:Description>
+                                                        <ns5:TransportMechanism>
+                                                            <xsl:value-of select="ns5:TransportMechanism"/>
+                                                        </ns5:TransportMechanism>
+                                                        <xsl:for-each select="ns5:Parameter">
+                                                            <ns5:Parameter>
+                                                                <ns5:Name>
+                                                                    <xsl:value-of select="ns5:Name"/>
+                                                                </ns5:Name>
+                                                                <ns5:Value>
+                                                                    <xsl:value-of select="ns5:Value"/>
+                                                                </ns5:Value>
+                                                            </ns5:Parameter>
+                                                        </xsl:for-each>
+                                                        <pfx3:Version>
+                                                            <xsl:value-of select="pfx3:Version"/>
+                                                        </pfx3:Version>
+                                                        <xsl:for-each select="pfx3:SecurityInfo">
+                                                            <pfx3:SecurityInfo>
+                                                                <pfx3:isCreatable>
+                                                                    <xsl:value-of select="pfx3:isCreatable"/>
+                                                                </pfx3:isCreatable>
+                                                                <pfx3:isReadable>
+                                                                    <xsl:value-of select="pfx3:isReadable"/>
+                                                                </pfx3:isReadable>
+                                                                <pfx3:isUpdatable>
+                                                                    <xsl:value-of select="pfx3:isUpdatable"/>
+                                                                </pfx3:isUpdatable>
+                                                                <pfx3:isDeletable>
+                                                                    <xsl:value-of select="pfx3:isDeletable"/>
+                                                                </pfx3:isDeletable>
+                                                            </pfx3:SecurityInfo>
+                                                        </xsl:for-each>
+                                                    </ns5:Channel>
+                                                </xsl:for-each>
+                                                <ns9:Message>
+                                                    <xsl:value-of select="ns9:Message"/>
+                                                </ns9:Message>
+                                                <xsl:for-each select="pfx3:Parameters">
+                                                    <pfx3:Parameters>
+                                                        <xsl:for-each select="pfx3:Parameter">
+                                                            <pfx3:Parameter>
+                                                                <pfx3:Name>
+                                                                    <xsl:value-of select="pfx3:Name"/>
+                                                                </pfx3:Name>
+                                                                <pfx3:Value>
+                                                                    <xsl:value-of select="pfx3:Value"/>
+                                                                </pfx3:Value>
+                                                            </pfx3:Parameter>
+                                                        </xsl:for-each>
+                                                    </pfx3:Parameters>
+                                                </xsl:for-each>
+                                            </ns9:NotificationFull>
+                                        </xsl:for-each>
+                                    </ns9:NotificationsFull>
+                                </xsl:for-each>
+                                <xsl:for-each select="ns11:ResolutionFull">
+                                    <ns11:ResolutionFull>
+                                        <ns11:Name>
+                                            <xsl:value-of select="ns11:Name"/>
+                                        </ns11:Name>
+                                        <ns11:Description>
+                                            <xsl:value-of select="ns11:Description"/>
+                                        </ns11:Description>
+                                        <xsl:for-each select="ns5:Channel">
+                                            <ns5:Channel>
+                                                <ns5:ID>
+                                                    <xsl:value-of select="ns5:ID"/>
+                                                </ns5:ID>
+                                                <ns5:Name>
+                                                    <xsl:value-of select="ns5:Name"/>
+                                                </ns5:Name>
+                                                <ns5:Description>
+                                                    <xsl:value-of select="ns5:Description"/>
+                                                </ns5:Description>
+                                                <ns5:TransportMechanism>
+                                                    <xsl:value-of select="ns5:TransportMechanism"/>
+                                                </ns5:TransportMechanism>
+                                                <xsl:for-each select="ns5:Parameter">
+                                                    <ns5:Parameter>
+                                                        <ns5:Name>
+                                                            <xsl:value-of select="ns5:Name"/>
+                                                        </ns5:Name>
+                                                        <ns5:Value>
+                                                            <xsl:value-of select="ns5:Value"/>
+                                                        </ns5:Value>
+                                                    </ns5:Parameter>
+                                                </xsl:for-each>
+                                                <pfx3:Version>
+                                                    <xsl:value-of select="pfx3:Version"/>
+                                                </pfx3:Version>
+                                                <xsl:for-each select="pfx3:SecurityInfo">
+                                                    <pfx3:SecurityInfo>
+                                                        <pfx3:isCreatable>
+                                                            <xsl:value-of select="pfx3:isCreatable"/>
+                                                        </pfx3:isCreatable>
+                                                        <pfx3:isReadable>
+                                                            <xsl:value-of select="pfx3:isReadable"/>
+                                                        </pfx3:isReadable>
+                                                        <pfx3:isUpdatable>
+                                                            <xsl:value-of select="pfx3:isUpdatable"/>
+                                                        </pfx3:isUpdatable>
+                                                        <pfx3:isDeletable>
+                                                            <xsl:value-of select="pfx3:isDeletable"/>
+                                                        </pfx3:isDeletable>
+                                                    </pfx3:SecurityInfo>
+                                                </xsl:for-each>
+                                            </ns5:Channel>
+                                        </xsl:for-each>
+                                        <xsl:for-each select="ns11:Parameter">
+                                            <ns11:Parameter>
+                                                <ns11:Name>
+                                                    <xsl:value-of select="ns11:Name"/>
+                                                </ns11:Name>
+                                                <ns11:Value>
+                                                    <xsl:value-of select="ns11:Value"/>
+                                                </ns11:Value>
+                                            </ns11:Parameter>
+                                        </xsl:for-each>
+                                        <pfx3:Version>
+                                            <xsl:value-of select="pfx3:Version"/>
+                                        </pfx3:Version>
+                                    </ns11:ResolutionFull>
+                                </xsl:for-each>
+                                <xsl:for-each select="ns13:Schedule">
+                                    <ns13:Schedule>
+                                        <ns13:ID>
+                                            <xsl:value-of select="ns13:ID"/>
+                                        </ns13:ID>
+                                        <ns13:Name>
+                                            <xsl:value-of select="ns13:Name"/>
+                                        </ns13:Name>
+                                        <ns13:Description>
+                                            <xsl:value-of select="ns13:Description"/>
+                                        </ns13:Description>
+                                        <xsl:for-each select="ns13:TimeSeries">
+                                            <ns13:TimeSeries>
+                                                <xsl:for-each select="ns13:TimeSerie">
+                                                    <ns13:TimeSerie>
+                                                        <ns13:StartDate>
+                                                            <xsl:value-of select="ns13:StartDate"/>
+                                                        </ns13:StartDate>
+                                                        <ns13:EndDate>
+                                                            <xsl:value-of select="ns13:EndDate"/>
+                                                        </ns13:EndDate>
+                                                        <ns13:Monday>
+                                                            <xsl:value-of select="ns13:Monday"/>
+                                                        </ns13:Monday>
+                                                        <ns13:Tuesday>
+                                                            <xsl:value-of select="ns13:Tuesday"/>
+                                                        </ns13:Tuesday>
+                                                        <ns13:Wednesday>
+                                                            <xsl:value-of select="ns13:Wednesday"/>
+                                                        </ns13:Wednesday>
+                                                        <ns13:Thursday>
+                                                            <xsl:value-of select="ns13:Thursday"/>
+                                                        </ns13:Thursday>
+                                                        <ns13:Friday>
+                                                            <xsl:value-of select="ns13:Friday"/>
+                                                        </ns13:Friday>
+                                                        <ns13:Saturday>
+                                                            <xsl:value-of select="ns13:Saturday"/>
+                                                        </ns13:Saturday>
+                                                        <ns13:Sunday>
+                                                            <xsl:value-of select="ns13:Sunday"/>
+                                                        </ns13:Sunday>
+                                                        <ns13:StartTime>
+                                                            <xsl:value-of select="ns13:StartTime"/>
+                                                        </ns13:StartTime>
+                                                        <ns13:EndTime>
+                                                            <xsl:value-of select="ns13:EndTime"/>
+                                                        </ns13:EndTime>
+                                                    </ns13:TimeSerie>
+                                                </xsl:for-each>
+                                            </ns13:TimeSeries>
+                                        </xsl:for-each>
+                                        <pfx3:Version>
+                                            <xsl:value-of select="pfx3:Version"/>
+                                        </pfx3:Version>
+                                        <xsl:for-each select="pfx3:SecurityInfo">
+                                            <pfx3:SecurityInfo>
+                                                <pfx3:isCreatable>
+                                                    <xsl:value-of select="pfx3:isCreatable"/>
+                                                </pfx3:isCreatable>
+                                                <pfx3:isReadable>
+                                                    <xsl:value-of select="pfx3:isReadable"/>
+                                                </pfx3:isReadable>
+                                                <pfx3:isUpdatable>
+                                                    <xsl:value-of select="pfx3:isUpdatable"/>
+                                                </pfx3:isUpdatable>
+                                                <pfx3:isDeletable>
+                                                    <xsl:value-of select="pfx3:isDeletable"/>
+                                                </pfx3:isDeletable>
+                                            </pfx3:SecurityInfo>
+                                        </xsl:for-each>
+                                    </ns13:Schedule>
+                                </xsl:for-each>
+                                <xsl:for-each select="../pfx4:BusinessDomain/pfx3:Parameters">
+                                    <ns10:Parameters>
+                                        <ns10:Type>
+                                            <xsl:value-of select="'BusinessDomain'"/>
+                                        </ns10:Type>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </ns10:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="../ns14:TechnicalDomain/pfx3:Parameters">
+                                    <ns10:Parameters>
+                                        <ns10:Type>
+                                            <xsl:value-of select="'TechnicalDomain'"/>
+                                        </ns10:Type>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </ns10:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="../ns6:ExceptionCategory/pfx3:Parameters">
+                                    <ns10:Parameters>
+                                        <ns10:Type>
+                                            <xsl:value-of select="'ExceptionCategory'"/>
+                                        </ns10:Type>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </ns10:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="../ns8:ExceptionType/pfx3:Parameters">
+                                    <ns10:Parameters>
+                                        <ns10:Type>
+                                            <xsl:value-of select="'ExceptionType'"/>
+                                        </ns10:Type>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </ns10:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="../ns16:ExceptionCode/pfx3:Parameters">
+                                    <ns10:Parameters>
+                                        <ns10:Type>
+                                            <xsl:value-of select="'ExceptionCode'"/>
+                                        </ns10:Type>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </ns10:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="../ns7:ExceptionSeverity/pfx3:Parameters">
+                                    <ns10:Parameters>
+                                        <ns10:Type>
+                                            <xsl:value-of select="'ExceptionSeverity'"/>
+                                        </ns10:Type>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </ns10:Parameters>
+                                </xsl:for-each>
+                                <xsl:for-each select="../pfx3:Parameters">
+                                    <ns10:Parameters>
+                                        <ns10:Type>
+                                            <xsl:value-of select="'Rule'"/>
+                                        </ns10:Type>
+                                        <xsl:for-each select="pfx3:Parameter">
+                                            <pfx3:Parameter>
+                                                <pfx3:Name>
+                                                    <xsl:value-of select="pfx3:Name"/>
+                                                </pfx3:Name>
+                                                <pfx3:Value>
+                                                    <xsl:value-of select="pfx3:Value"/>
+                                                </pfx3:Value>
+                                            </pfx3:Parameter>
+                                        </xsl:for-each>
+                                    </ns10:Parameters>
+                                </xsl:for-each>
+                            </ns10:PolicyFull>
+                        </xsl:for-each>
+                        <ns12:ExecutionPriority>
+                            <xsl:value-of select="ns12:ExecutionPriority"/>
+                        </ns12:ExecutionPriority>
+                        <xsl:for-each select="pfx3:Parameters">
+                            <pfx3:Parameters>
+                                <xsl:for-each select="pfx3:Parameter">
+                                    <pfx3:Parameter>
+                                        <pfx3:Name>
+                                            <xsl:value-of select="pfx3:Name"/>
+                                        </pfx3:Name>
+                                        <pfx3:Value>
+                                            <xsl:value-of select="pfx3:Value"/>
+                                        </pfx3:Value>
+                                    </pfx3:Parameter>
+                                </xsl:for-each>
+                            </pfx3:Parameters>
+                        </xsl:for-each>
+                    </ns12:RuleFull>
+                </xsl:for-each>
+            </ns12:RulesFull>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>BusinessDomain</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Handle Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Handle Exception</pd:from>
+        <pd:to>Rethrow</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BusinessDomain</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Channel</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExceptionCategory</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExceptionSeverity</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExceptionType</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Notification</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Policy</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Resolution</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rule</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Schedule</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TechnicalDomain</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>MapPolicyFull</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>HistoryRetain</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Channel</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ExceptionCategory</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ExceptionSeverity</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ExceptionType</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Notification</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Policy</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Resolution</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Rule</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Schedule</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>TechnicalDomain</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>HistoryRetain</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ExceptionCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExceptionCode</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapPolicyFull</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

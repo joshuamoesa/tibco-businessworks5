@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<simpleType name="businessInteractionType_type">
+
+		<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Joost Verbeek (Atos Origin Nederland B.V.) -->
+		<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Trupti (Atos Origin Nederland B.V.) -->
+		<annotation>
+			<documentation>The Business Interaction Type specifies how to interpret this interaction. 
+The current possible values are:
+- INCIDENT_REPORT_REQUEST
+- CHANGE_REQUEST
+- REQUEST_FOR_INFORMATION
+- REQUEST_FOR_QUOTATION
+- CONFIRMATION
+- STATUS_UPDATE
+- STATUS_CONFIRMATION
+- INTERACTION_UPDATE
+- FILE_READY
+			
+			
+			</documentation>
+			<documentation>Default value is:''</documentation>
+			<documentation>Size limitation taken from API side, since EAI definition did not have one.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<enumeration value="INCIDENT_REPORT_REQUEST"/>
+			<enumeration value="CHANGE_REQUEST"/>
+			<enumeration value="REQUEST_FOR_INFORMATION"/>
+			<enumeration value="REQUEST_FOR_QUOTATION"/>
+			<enumeration value="CONFIRMATION"/>
+			<enumeration value="STATUS_UPDATE"/>
+			<enumeration value="STATUS_CONFIRMATION"/>
+			<enumeration value="INTERACTION_UPDATE"/>
+			<enumeration value="REQUEST"/>
+			<enumeration value="RESPONSE"/>
+			<enumeration value="NOTIFICATION"/>
+			<enumeration value="FILE_READY"/>
+			<maxLength value="100"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="description_type">
+		<annotation>
+			<documentation>The description field contains a summary to indicate the intent of the interaction</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="streetName_type">
+		<annotation>
+			<documentation>Specifies the customer address street name.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="24"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="houseNumber_type">
+		<annotation>
+			<documentation>Specifies the customer address house number.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="5"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="houseNumberExtension_type">
+		<annotation>
+			<documentation>Specifies the customer address house number extension.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+			<minLength value="0"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="dutchPostcodeNumbers_type">
+		<annotation>
+			<documentation>Specifies the customer address dutch postcode number part.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<pattern value="\d{4}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="dutchPostcodeLetters_type">
+		<annotation>
+			<documentation>Specifies the customer address dutch postcode letters part.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<pattern value="[a-zA-Z]{2}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="cityName_type">
+		<annotation>
+			<documentation>Specifies the customer address city name.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="countryName_type">
+		<annotation>
+			<documentation>Specifies the customer address country name.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="givenNames_type">
+		<annotation>
+			<documentation>First name of the contact person.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="initials_type">
+		<annotation>
+			<documentation>Initials of the contact person</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="familyName_type">
+		<annotation>
+			<documentation>Official surname of the contact person</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="70"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="familyNamePrefix_type">
+		<annotation>
+			<documentation>A prefix for the surname. This can be something like, 'van', 'van der', etcetera.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="10"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="emailAddress_type">
+		<annotation>
+			<documentation>The e-mail address of the contact person is supplied in this field</documentation>
+		</annotation>
+		<!--pattern value="^[-!#$%&amp;'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&amp;'*+/0-9=?A-Z^_a-z{|}~])*@[a-zA-Z](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$"/-->
+		<restriction base="xs:string">
+			<maxLength value="320"/>
+		</restriction>
+	</simpleType>
+	<element name="BODY">
+		<annotation>
+			<documentation>This is the BODY object for KPN EAI service number 0355 - CustomerInteractionNotification version 1.0 Publish message.</documentation>
+			<documentation>Automatically generated schema for service:'CustomerInteractionNotification', version:'1.0'</documentation>
+			<documentation>Generated on 2007-10-11 14:34:07Z</documentation>
+			<documentation>Service paradigm is intended to be Publish/Subscribe</documentation>
+			<documentation>Service ID is:'0355'</documentation>
+			<documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</documentation>
+			<documentation>KPN EAI message body class.</documentation>
+			<documentation>Artificial sequence to separate.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="CUSTOMER_INTERACTION_NOTIFICATION">
+					<annotation>
+						<documentation>Artificial sequence to separate.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="ATTACHMENT" minOccurs="0" maxOccurs="unbounded">
+								<annotation>
+									<documentation>Attachments can be used to supply more in to depth information for this interaction</documentation>
+									<documentation>Artificial sequence to separate.</documentation>
+								</annotation>
+								<complexType>
+									<sequence>
+										<element name="ATTACHMENT_ID" type="xs:string">
+											<annotation>
+												<documentation>A unique identifier is supplied in this field to identify this attachment.</documentation>
+											</annotation>
+										</element>
+										<element name="ATTACHMENT_URL" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>A reference to the location of the attachment is supplied in this field, enabling separate download through another connection protocol.</documentation>
+											</annotation>
+										</element>
+										<element name="ATTACHMENT_TYPE" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>The type of the attachment is specified in this field</documentation>
+											</annotation>
+										</element>
+										<element name="ATTACHMENT_DESCRIPTION" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>This field contains a comprehensive description of the attachment or a summary of the contents in the attachment.</documentation>
+											</annotation>
+										</element>
+										<element name="ATTACHMENT_DATA" type="xs:base64Binary" minOccurs="0">
+											<annotation>
+												<documentation>This field can be used to store the attachment itself. It is only to be used for small attachments. Attachments larger than 300 Kilobyte should be put on a shared storage and a reference to the attachment should be provided in the ATTACHMENT_URL field.</documentation>
+											</annotation>
+										</element>
+										<element name="ATTACHMENT_ORIGINAL_SIZE" type="xs:integer" minOccurs="0">
+											<annotation>
+												<documentation>This field can be used to  specify the original size, prior to XML-encoding, for the attachment.</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="CONTRACT" minOccurs="0">
+								<annotation>
+									<documentation>An Interaction Contract is an official agreement between parties that describes the products, services or resources to which both parties have agreed to use or deliver.
+In this service the contract can be related to the official contract that was signed by both parties under which a collection of products, service and resources fall, or just part of the contract, being a product, a service of a product offering or a resource being used for a service.
+									
+									
+									
+									</documentation>
+									<documentation>Artificial sequence to separate.</documentation>
+								</annotation>
+								<complexType>
+									<sequence>
+										<element name="INTERACTION_ACTIVITY" minOccurs="0">
+											<complexType>
+												<sequence>
+													<element name="PARAMETER" minOccurs="0" maxOccurs="unbounded">
+														<annotation>
+															<documentation>In the parameters the customer can specify any additional parameters that might be needed to execute the activity.</documentation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="ORDER" type="xs:string" minOccurs="0"/>
+																<element name="NAME" type="xs:string">
+																	<annotation>
+																		<documentation>Name of the parameter</documentation>
+																	</annotation>
+																</element>
+																<element name="VALUE" type="xs:string">
+																	<annotation>
+																		<documentation>Value of the parameter</documentation>
+																	</annotation>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="ACTIVITY" type="xs:string">
+														<annotation>
+															<documentation>The customer can specify the activity he would like to be undertaken as part of this interaction, e.g. upgrade/downgrade, etc.</documentation>
+														</annotation>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="INTERACTION_ITEM" minOccurs="0" maxOccurs="unbounded">
+											<annotation>
+												<documentation>The interaction item is a product, service or resource that relates to the customer interaction. </documentation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="ATTRIBUTE" minOccurs="0" maxOccurs="unbounded">
+														<annotation>
+															<documentation>The attributes of the interaction item that are affected by this interaction are specified in this structure.</documentation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="ORDER" type="xs:string" minOccurs="0"/>
+																<element name="NAME" type="xs:string">
+																	<annotation>
+																		<documentation>Name of the attribute</documentation>
+																	</annotation>
+																</element>
+																<element name="OLD_VALUE" type="xs:string" minOccurs="0">
+																	<annotation>
+																		<documentation>Old value of the attribute.</documentation>
+																	</annotation>
+																</element>
+																<element name="NEW_VALUE" type="xs:string" minOccurs="0">
+																	<annotation>
+																		<documentation>The new value of the attribute. </documentation>
+																	</annotation>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="ORDER" type="xs:string" minOccurs="0"/>
+													<element name="INTERACTION_ITEM_ID" type="xs:string">
+														<annotation>
+															<documentation>The unique name of the of the item that is specified in a mutually agreed item repository.</documentation>
+														</annotation>
+													</element>
+													<element name="ACTION" type="xs:string" minOccurs="0">
+														<annotation>
+															<documentation>NEW, CHANGED or DELETED</documentation>
+														</annotation>
+													</element>
+													<element name="CLASS" type="xs:string">
+														<annotation>
+															<documentation>Type of interaction item that is to be created, changed or deleted.</documentation>
+														</annotation>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="SERVICE_NAME" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>Contract identifier to which this customer interaction relates.
+This can be a service or product name from a mutually agreed to service portfolio.
+												
+												
+												
+												</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="CUSTOMER" minOccurs="0">
+								<annotation>
+									<documentation>The customer represents the external party which whom KPN interacts.</documentation>
+									<documentation>Artificial sequence to separate.</documentation>
+								</annotation>
+								<complexType>
+									<sequence>
+										<element name="ADDRESS" minOccurs="0">
+											<annotation>
+												<documentation>The address of the customer can be specified in these fields</documentation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="STREET_NAME" type="tns:streetName_type">
+														<annotation>
+															<documentation>Specifies the customer address street name.</documentation>
+														</annotation>
+													</element>
+													<element name="HOUSE_NUMBER" type="tns:houseNumber_type">
+														<annotation>
+															<documentation>Specifies the customer address house number.</documentation>
+														</annotation>
+													</element>
+													<element name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" minOccurs="0">
+														<annotation>
+															<documentation>Specifies the customer address house number extension.</documentation>
+														</annotation>
+													</element>
+													<element name="POSTCODE_NUMBERS" type="tns:dutchPostcodeNumbers_type">
+														<annotation>
+															<documentation>Specifies the customer address dutch postcode number part.</documentation>
+														</annotation>
+													</element>
+													<element name="POSTCODE_LETTERS" type="tns:dutchPostcodeLetters_type">
+														<annotation>
+															<documentation>Specifies the customer address dutch postcode letters part.</documentation>
+														</annotation>
+													</element>
+													<element name="CITY" type="tns:cityName_type">
+														<annotation>
+															<documentation>Specifies the customer address city name.</documentation>
+														</annotation>
+													</element>
+													<element name="COUNTRY" type="tns:countryName_type" minOccurs="0">
+														<annotation>
+															<documentation>Specifies the customer address country name.</documentation>
+														</annotation>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="CONTACT_PERSON" minOccurs="0" maxOccurs="unbounded">
+											<annotation>
+												<documentation>The contact persons for this interaction are specified in these fields. Possible contact persons are the reporting person and the handling contact person. This is indicated in the CONTACT_ROLE.</documentation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="PHONE_NUMBER" minOccurs="0">
+														<annotation>
+															<documentation>The telephone number of the contact person that can be used to make contact.</documentation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="COUNTRY_CODE" type="xs:string" minOccurs="0">
+																	<annotation>
+																		<documentation>The country code that is to be used.</documentation>
+																	</annotation>
+																</element>
+																<element name="AREA_CODE" type="xs:string">
+																	<annotation>
+																		<documentation>The area code of the subscriber</documentation>
+																	</annotation>
+																</element>
+																<element name="SUBSCRIBER_NUMBER" type="xs:string">
+																	<annotation>
+																		<documentation>The telephone number of the subscription that can be used in the specified area code.</documentation>
+																	</annotation>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="FAX_NUMBER" minOccurs="0">
+														<annotation>
+															<documentation>A fax number of the contact person can be specified in this field.</documentation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="COUNTRY_CODE" type="xs:string" minOccurs="0">
+																	<annotation>
+																		<documentation>The country code that is to be used.</documentation>
+																	</annotation>
+																</element>
+																<element name="AREA_CODE" type="xs:string">
+																	<annotation>
+																		<documentation>The area code of the subscriber</documentation>
+																	</annotation>
+																</element>
+																<element name="SUBSCRIBER_NUMBER" type="xs:string">
+																	<annotation>
+																		<documentation>The telephone number of the subscription that can be used in the specified area code.</documentation>
+																	</annotation>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="GIVEN_NAME" type="tns:givenNames_type" minOccurs="0">
+														<annotation>
+															<documentation>First name of the contact person.</documentation>
+														</annotation>
+													</element>
+													<element name="INITIALS" type="tns:initials_type" minOccurs="0">
+														<annotation>
+															<documentation>Initials of the contact person</documentation>
+														</annotation>
+													</element>
+													<element name="FAMILY_NAME" type="tns:familyName_type" minOccurs="0">
+														<annotation>
+															<documentation>Official surname of the contact person</documentation>
+														</annotation>
+													</element>
+													<element name="FAMILY_NAME_PREFIX" type="tns:familyNamePrefix_type" minOccurs="0">
+														<annotation>
+															<documentation>A prefix for the surname. This can be something like, 'van', 'van der', etcetera.</documentation>
+														</annotation>
+													</element>
+													<element name="FULL_NAME" type="xs:string" minOccurs="0">
+														<annotation>
+															<documentation>Full person name as single string.</documentation>
+														</annotation>
+													</element>
+													<element name="PREFERRED_CONTACT_METHOD" type="xs:string" minOccurs="0">
+														<annotation>
+															<documentation>It can be specified in this field if a contact person has a preferred way to be contacted.
+Possible values are:
+* E-Mail
+* Fax
+* Telephone
+															
+															
+															
+															</documentation>
+														</annotation>
+													</element>
+													<element name="EMAIL_ADDRESS" type="tns:emailAddress_type" minOccurs="0">
+														<annotation>
+															<documentation>The e-mail address of the contact person is supplied in this field</documentation>
+														</annotation>
+													</element>
+													<element name="CONTACT_ROLE" type="xs:string">
+														<annotation>
+															<documentation>The role this contact person has in the interaction.
+Possible values are:
+-Contact
+-Reporter
+															
+															
+															
+															</documentation>
+														</annotation>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="NAME" type="xs:string">
+											<annotation>
+												<documentation>Specifies the business name of the customer as used by KPN.</documentation>
+											</annotation>
+										</element>
+										<element name="BUSINESS_UNIT" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>This field can be used to specify the customer business unit that is involved in this interaction.</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="INQUIRY" minOccurs="0">
+								<annotation>
+									<documentation>Artificial sequence to separate.</documentation>
+								</annotation>
+								<complexType>
+									<sequence>
+										<element name="INQUIRY_TYPE" type="xs:string">
+											<annotation>
+												<documentation>Specifies the type of inquiry contained in this request. such as RfI, RfQ, etc..</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="PROGRESS_EVENT" minOccurs="0">
+								<annotation>
+									<documentation>Provides information concerning the reported progress (status change).</documentation>
+									<documentation>Artificial sequence to separate.</documentation>
+								</annotation>
+								<complexType>
+									<sequence>
+										<element name="CUSTOMER_CONTACT_PERSON" minOccurs="0">
+											<annotation>
+												<documentation>Specifiy the service using organisation contact person detaills.</documentation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="FAX_NUMBER" minOccurs="0">
+														<annotation>
+															<documentation>A fax number of the contact person can be specified in this field.</documentation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="COUNTRY_CODE" type="xs:string" minOccurs="0">
+																	<annotation>
+																		<documentation>The country code that is to be used.</documentation>
+																	</annotation>
+																</element>
+																<element name="AREA_CODE" type="xs:string">
+																	<annotation>
+																		<documentation>The area code of the subscriber</documentation>
+																	</annotation>
+																</element>
+																<element name="SUBSCRIBER_NUMBER" type="xs:string">
+																	<annotation>
+																		<documentation>The telephone number of the subscription that can be used in the specified area code.</documentation>
+																	</annotation>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="PHONE_NUMBER" minOccurs="0">
+														<annotation>
+															<documentation>The telephone number of the contact person that can be used to make contact.</documentation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="COUNTRY_CODE" type="xs:string" minOccurs="0">
+																	<annotation>
+																		<documentation>The country code that is to be used.</documentation>
+																	</annotation>
+																</element>
+																<element name="AREA_CODE" type="xs:string">
+																	<annotation>
+																		<documentation>The area code of the subscriber</documentation>
+																	</annotation>
+																</element>
+																<element name="SUBSCRIBER_NUMBER" type="xs:string">
+																	<annotation>
+																		<documentation>The telephone number of the subscription that can be used in the specified area code.</documentation>
+																	</annotation>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="GIVEN_NAME" type="tns:givenNames_type" minOccurs="0">
+														<annotation>
+															<documentation>First name of the contact person</documentation>
+														</annotation>
+													</element>
+													<element name="INITIALS" type="tns:initials_type" minOccurs="0">
+														<annotation>
+															<documentation>Initials of the contact person</documentation>
+														</annotation>
+													</element>
+													<element name="FAMILY_NAME" type="tns:familyName_type">
+														<annotation>
+															<documentation>Official surname of the contact person</documentation>
+														</annotation>
+													</element>
+													<element name="FAMILY_NAME_PREFIX" type="tns:familyNamePrefix_type" minOccurs="0">
+														<annotation>
+															<documentation>A prefix for the surname. This can be something like, 'van', 'van der', etcetera.</documentation>
+														</annotation>
+													</element>
+													<element name="FULL_NAME" type="xs:string" minOccurs="0">
+														<annotation>
+															<documentation>Full person name as single string.</documentation>
+														</annotation>
+													</element>
+													<element name="PREFERRED_CONTACT_METHOD" type="xs:string" minOccurs="0">
+														<annotation>
+															<documentation>It can be specified in this field if a contact person has a preferred way to be contacted. 
+Possible values are:
+E-Mail
+Fax
+Telephone
+															
+															
+															
+															</documentation>
+														</annotation>
+													</element>
+													<element name="EMAIL_ADDRESS" type="tns:emailAddress_type" minOccurs="0">
+														<annotation>
+															<documentation>The e-mail address of the contact person is supplied in this field</documentation>
+														</annotation>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="SUPPLIER_CONTACT_PERSON" minOccurs="0">
+											<annotation>
+												<documentation>Specifiy the service providing (e.g. KPN) organisation contact person detaills.</documentation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="FAX_NUMBER" minOccurs="0">
+														<annotation>
+															<documentation>A fax number of the contact person can be specified in this field.</documentation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="COUNTRY_CODE" type="xs:string" minOccurs="0">
+																	<annotation>
+																		<documentation>The country code that is to be used.</documentation>
+																	</annotation>
+																</element>
+																<element name="AREA_CODE" type="xs:string">
+																	<annotation>
+																		<documentation>The area code of the subscriber</documentation>
+																	</annotation>
+																</element>
+																<element name="SUBSCRIBER_NUMBER" type="xs:string">
+																	<annotation>
+																		<documentation>The telephone number of the subscription that can be used in the specified area code.</documentation>
+																	</annotation>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="PHONE_NUMBER" minOccurs="0">
+														<annotation>
+															<documentation>The telephone number of the contact person that can be used to make contact.</documentation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="COUNTRY_CODE" type="xs:string" minOccurs="0">
+																	<annotation>
+																		<documentation>The country code that is to be used.</documentation>
+																	</annotation>
+																</element>
+																<element name="AREA_CODE" type="xs:string">
+																	<annotation>
+																		<documentation>The area code of the subscriber</documentation>
+																	</annotation>
+																</element>
+																<element name="SUBSCRIBER_NUMBER" type="xs:string">
+																	<annotation>
+																		<documentation>The telephone number of the subscription that can be used in the specified area code.</documentation>
+																	</annotation>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="GIVEN_NAME" type="tns:givenNames_type" minOccurs="0">
+														<annotation>
+															<documentation>First name of the contact person</documentation>
+														</annotation>
+													</element>
+													<element name="INITIALS" type="tns:initials_type" minOccurs="0">
+														<annotation>
+															<documentation>Initials of the contact person</documentation>
+														</annotation>
+													</element>
+													<element name="FAMILY_NAME" type="tns:familyName_type">
+														<annotation>
+															<documentation>Official surname of the contact person</documentation>
+														</annotation>
+													</element>
+													<element name="FAMILY_NAME_PREFIX" type="tns:familyNamePrefix_type" minOccurs="0">
+														<annotation>
+															<documentation>A prefix for the surname. This can be something like, 'van', 'van der', etcetera.</documentation>
+														</annotation>
+													</element>
+													<element name="FULL_NAME" type="xs:string" minOccurs="0">
+														<annotation>
+															<documentation>Full person name as single string.</documentation>
+														</annotation>
+													</element>
+													<element name="PREFERRED_CONTACT_METHOD" type="xs:string" minOccurs="0">
+														<annotation>
+															<documentation>It can be specified in this field if a contact person has a preferred way to be contacted. 
+Possible values are:
+E-Mail
+Fax
+Telephone
+															
+															
+															
+															</documentation>
+														</annotation>
+													</element>
+													<element name="EMAIL_ADDRESS" type="tns:emailAddress_type" minOccurs="0">
+														<annotation>
+															<documentation>The e-mail address of the contact person is supplied in this field</documentation>
+														</annotation>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="PROGRESS_TYPE" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>Specifies the type/kind of progress reported in the message.</documentation>
+											</annotation>
+										</element>
+										<element name="INITIATOR" type="xs:string">
+											<annotation>
+												<documentation>Indicates which party initiated contact.</documentation>
+											</annotation>
+										</element>
+										<element name="CONTACT_METHOD" type="xs:string">
+											<annotation>
+												<documentation>Indicates the mode of contact, e.i. mail, phone, </documentation>
+											</annotation>
+										</element>
+										<element name="DESCRIPTION" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>A short, to the point, description of the contact content, topics and arrangements</documentation>
+											</annotation>
+										</element>
+										<element name="NEXT_EVENT_DATE" type="xs:date" minOccurs="0">
+											<annotation>
+												<documentation>Date for the next contact event. Any follow-up actions described should then be completed.</documentation>
+											</annotation>
+										</element>
+										<element name="FOLLOWUP_ACTION_DESCRIPTION" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>Describe actions, if any, to be undertaken before the next contact event.</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="SERVICE_LEVEL_AGREEMENT" minOccurs="0">
+								<annotation>
+									<documentation>Information regarding the Service Level Agreement covering this interaction.</documentation>
+									<documentation>Artificial sequence to separate.</documentation>
+								</annotation>
+								<complexType>
+									<sequence>
+										<element name="CATEGORY" type="xs:string">
+											<annotation>
+												<documentation>Specifies the Service Level Agreement category that covers this interaction.</documentation>
+											</annotation>
+										</element>
+										<element name="SLA_DATE_COMPLETE" type="xs:dateTime" minOccurs="0">
+											<annotation>
+												<documentation>Specifies Service Level Agreement (SLA) based incident closure date and time; the time at which, according to SLA, the incident should be resolved.</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="INTERACTION_STATUS" minOccurs="0">
+								<annotation>
+									<documentation>Interaction subject status information.</documentation>
+									<documentation>Artificial sequence to separate.</documentation>
+								</annotation>
+								<complexType>
+									<sequence>
+										<element name="CUSTOMER_REQUEST_STATUS" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>The Interaction customer request status specifies an optional status that can be assigned to the interaction.</documentation>
+											</annotation>
+										</element>
+										<element name="INTERACTION_STATUS_DATE" type="xs:dateTime" minOccurs="0"/>
+										<element name="CONFIRMATION_DUE_TIME" type="xs:integer" minOccurs="0"/>
+										<element name="CUSTOMER_REQUEST_STATUS_ACCEPTED" type="xs:boolean" minOccurs="0"/>
+										<element name="ERROR_CODE" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>Error code detailing the status information.</documentation>
+											</annotation>
+										</element>
+										<element name="ERROR_DESCRIPTION" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>Status/error description, additional information.</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="BUSINESS_INTERACTION_TYPE" type="tns:businessInteractionType_type">
+								<annotation>
+									<documentation>The Business Interaction Type specifies how to interpret this interaction. 
+The current possible values are:
+- INCIDENT_REPORT_REQUEST
+- CHANGE_REQUEST
+- REQUEST_FOR_INFORMATION
+- REQUEST_FOR_QUOTATION
+- CONFIRMATION
+- STATUS_UPDATE
+- STATUS_CONFIRMATION
+- INTERACTION_UPDATE
+									
+									
+									
+									</documentation>
+								</annotation>
+							</element>
+							<element name="BUSINESS_INTERACTION_SUB_TYPE" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>This can be a sub type for the interaction. For Confirmations this can be Accept or Reject. For updates this field specifies the type of update etcetera.</documentation>
+								</annotation>
+							</element>
+							<element name="INTERACTION_ID" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>This field is used to specify the identification of the interaction as known by the service provider (e.g. KPN). This can be the Ticket ID, Change ID, etcetera. </documentation>
+								</annotation>
+							</element>
+							<element name="EXTERNAL_ID" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>This field contains the identifier that the customer has assigned to this interaction.</documentation>
+								</annotation>
+							</element>
+							<element name="EXTERNAL_SUB_ID" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>The customer can use this field to specify an additional ID for this interaction.</documentation>
+								</annotation>
+							</element>
+							<element name="EXTERNAL_REFERENCE" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>The external reference can be used to reference other tickets, incidents or other elements</documentation>
+								</annotation>
+							</element>
+							<element name="INTERACTION_DATE" type="xs:dateTime" minOccurs="0">
+								<annotation>
+									<documentation>Date and time this interaction is to take place. This could be a wish date, planned date etc.</documentation>
+								</annotation>
+							</element>
+							<element name="INTERACTION_DATE_COMPLETE" type="xs:dateTime" minOccurs="0">
+								<annotation>
+									<documentation>Date and time issues subject to this interaction are considered closed, not further actions or modifications will be allowed.</documentation>
+								</annotation>
+							</element>
+							<element name="INTERACTION_REASON_CODE" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>This field is used to inform about the reason of the interaction. For example, when a ticket is put on hold, this field can be used to give the reason for the hold action.</documentation>
+								</annotation>
+							</element>
+							<element name="DESCRIPTION" type="tns:description_type" minOccurs="0">
+								<annotation>
+									<documentation>The description field contains a summary to indicate the intent of the interaction</documentation>
+								</annotation>
+							</element>
+							<element name="IMPACT" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>The impact field can be used by the customer to give their opinion on the impact on their business of the communicated change or incident.</documentation>
+								</annotation>
+							</element>
+							<element name="URGENCY" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>The customer can use the urgency field to indicate the urgency of this interaction.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://xmlns.kpn.com/eai/common/errors" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns5="http://xmlns.kpn.com/fixed/momsadapter/publish/Order.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="urn:CustomerService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx3="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" xmlns:ns6="http://schemas.tibco.com/bw/plugins/soap/5.0/SoapPluginExceptions" xmlns:pfx4="urn:Confirmation" xmlns:ns7="http://xmlns.tibco.com/encodings/mime" xmlns:ns0="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish" xmlns:pfx5="urn:B2B_CustomerServiceRequest_Confirmation" xmlns:eai1="java://com.kpn.eai.tools.Tools" xmlns:pfx6="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx7="urn:B2B_CustomerServiceRequest_SSU">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerInteractionNotification.xsd"/>
+    <xsd:import namespace="urn:CustomerService" schemaLocation="/WSDL/B2BCSAdapter/840 - CustomerServiceRequest.wsdl"/>
+    <xsd:import namespace="urn:Confirmation" schemaLocation="/WSDL/B2BCSAdapter/869 - Confirmation.wsdl"/>
+    <xsd:import namespace="urn:B2B_CustomerServiceRequest_Confirmation" schemaLocation="/WSDL/Outbound/B2B_CustomerServiceRequest_Confirmation.wsdl"/>
+    <wsdl:import namespace="urn:CustomerService" location="/WSDL/B2BCSAdapter/840 - CustomerServiceRequest.wsdl"/>
+    <wsdl:import namespace="urn:Confirmation" location="/WSDL/B2BCSAdapter/869 - Confirmation.wsdl"/>
+    <wsdl:import namespace="urn:B2B_CustomerServiceRequest_Confirmation" location="/WSDL/Outbound/B2B_CustomerServiceRequest_Confirmation.wsdl"/>
+    <wsdl:import namespace="urn:B2B_CustomerServiceRequest_SSU" location="/WSDL/Outbound/B2B_CustomerServiceRequest_SSUv2.wsdl"/>
+    <pd:name>EDTAdapter/Processes/Outbound/CustomerServiceRequestStateAndStatusUpdateNotification.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>58</pd:x>
+        <pd:y>206</pd:y>
+        <config>
+            <service>pfx7:B2B_CustomerServiceRequest_SSUPortType</service>
+            <wsdlNamespaceRoot>urn:B2B_CustomerServiceRequest_SSU/CreateImpl</wsdlNamespaceRoot>
+            <operation>Create</operation>
+            <portAddressPrefix/>
+            <operationStyle>document</operationStyle>
+            <soapUse>literal</soapUse>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>"urn:B2B_CustomerServiceRequest_SSU/Create"</soapAction>
+            <sharedChannel>/EDTAdapter/Shared Resources/HTTP Server Connection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <sharedChannels>
+                <httpChannel>
+                    <useBasicAuthentication>false</useBasicAuthentication>
+                </httpChannel>
+            </sharedChannels>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1155</pd:endX>
+    <pd:endY>607</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>231</pd:x>
+        <pd:y>34</pd:y>
+        <pd:width>795</pd:width>
+        <pd:height>329</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CreateMsgID</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPSendReply</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map SOAP Request to EDT JMS Publication</pd:from>
+            <pd:to>Call JMS Publication to EDT</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Call JMS Publication to EDT</pd:from>
+            <pd:to>SOAP Reply Data</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SOAP Request</pd:from>
+            <pd:to>Map SOAP Request to EDT JMS Publication</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAP Reply Data</pd:from>
+            <pd:to>Log SOAP Response</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SOAP Response</pd:from>
+            <pd:to>SOAPSendReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CreateMsgID</pd:from>
+            <pd:to>Log SOAP Request</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CreateMsgID">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>418</pd:x>
+            <pd:y>206</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="Guid_field" type="xsd:string"/>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <Guid_field>
+                    <xsl:value-of select="eai1:createGUID()"/>
+                </Guid_field>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Call JMS Publication to EDT">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>667</pd:x>
+            <pd:y>217</pd:y>
+            <config>
+                <processName>/EDTAdapter/Processes/Outbound/Sub/CustomerInteractionNotification.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ServiceIn>
+                    <ServiceName>
+                        <xsl:value-of select="&quot;CustomerServiceRequestConfirmation&quot;"/>
+                    </ServiceName>
+                    <msgid>
+                        <xsl:value-of select="$CreateMsgID/Guid_field"/>
+                    </msgid>
+                    <xsl:copy-of select="$Map-SOAP-Request-to-EDT-JMS-Publication/pfx3:CustomerInteractionNotification"/>
+                </ServiceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map SOAP Request to EDT JMS Publication">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>535</pd:x>
+            <pd:y>220</pd:y>
+            <config>
+                <element ref="pfx3:CustomerInteractionNotification"/>
+            </config>
+            <pd:inputBindings>
+                <pfx3:CustomerInteractionNotification>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="&quot;842&quot;"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="&quot;CustomerServiceRequestStateAndStatusUpdateNotification&quot;"/>
+                        </ns1:NAME>
+                        <ns1:MID>
+                            <xsl:value-of select="&quot;842.10&quot;"/>
+                        </ns1:MID>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;PUBLISH&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="&quot;CustomerServiceRequestStateAndStatusUpdateNotification&quot;"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EDTAdapter/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EDTAdapter/ComponentVersion"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/Env, &quot;.FIXED.Operations.EDTAdapter.Publish.CustomerInteractionNotification.1&quot;)"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                        <ns1:TRACKING>
+                            <ns1:MESSAGE_ID>
+                                <xsl:value-of select="$CreateMsgID/Guid_field"/>
+                            </ns1:MESSAGE_ID>
+                        </ns1:TRACKING>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:managed_object_class">
+                            <ns1:ATTRIBUTE>
+                                <xsl:attribute name="ns1:NAME">
+                                    <xsl:value-of select="&quot;MANAGED_OBJECT_CLASS&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns1:VALUE">
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:managed_object_class"/>
+                                </xsl:attribute>
+                            </ns1:ATTRIBUTE>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:message_origination_it_domain">
+                            <ns1:ATTRIBUTE>
+                                <xsl:attribute name="ns1:NAME">
+                                    <xsl:value-of select="&quot;MESSAGE_ORIGINATION_IT_DOMAIN&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns1:VALUE">
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:message_origination_it_domain"/>
+                                </xsl:attribute>
+                            </ns1:ATTRIBUTE>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:message_destination_it_domain">
+                            <ns1:ATTRIBUTE>
+                                <xsl:attribute name="ns1:NAME">
+                                    <xsl:value-of select="&quot;MESSAGE_DESTINATION_IT_DOMAIN&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns1:VALUE">
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:message_destination_it_domain"/>
+                                </xsl:attribute>
+                            </ns1:ATTRIBUTE>
+                        </xsl:if>
+                        <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:message_creation_time">
+                            <ns1:ATTRIBUTE>
+                                <xsl:attribute name="ns1:NAME">
+                                    <xsl:value-of select="&quot;MESSAGE_CREATION_TIME&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns1:VALUE">
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:message_creation_time"/>
+                                </xsl:attribute>
+                            </ns1:ATTRIBUTE>
+                        </xsl:if>
+                    </ns1:CMH>
+                    <ns0:BODY>
+                        <CUSTOMER_INTERACTION_NOTIFICATION>
+                            <ATTACHMENT>
+                                <ATTACHMENT_ID>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_1_attachmentName"/>
+                                </ATTACHMENT_ID>
+                                <ATTACHMENT_URL>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachement_url"/>
+                                </ATTACHMENT_URL>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_1_attachmentData!=&quot;&quot;">
+                                    <ATTACHMENT_DATA>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_1_attachmentData"/>
+                                    </ATTACHMENT_DATA>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_1_attachmentOrigSize!=&quot;&quot;">
+                                    <ATTACHMENT_ORIGINAL_SIZE>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_1_attachmentOrigSize"/>
+                                    </ATTACHMENT_ORIGINAL_SIZE>
+                                </xsl:if>
+                            </ATTACHMENT>
+                            <ATTACHMENT>
+                                <ATTACHMENT_ID>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_2_attachmentName"/>
+                                </ATTACHMENT_ID>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_2_attachmentData!=&quot;&quot;">
+                                    <ATTACHMENT_DATA>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_2_attachmentData"/>
+                                    </ATTACHMENT_DATA>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_2_attachmentOrigSize!=&quot;&quot;">
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_2_attachmentOrigSize">
+                                        <ATTACHMENT_ORIGINAL_SIZE>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_2_attachmentOrigSize"/>
+                                        </ATTACHMENT_ORIGINAL_SIZE>
+                                    </xsl:if>
+                                </xsl:if>
+                            </ATTACHMENT>
+                            <ATTACHMENT>
+                                <ATTACHMENT_ID>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_3_attachmentName"/>
+                                </ATTACHMENT_ID>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_3_attachmentData!=&quot;&quot;">
+                                    <ATTACHMENT_DATA>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_3_attachmentData"/>
+                                    </ATTACHMENT_DATA>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_3_attachmentOrigSize!=&quot;&quot;">
+                                    <ATTACHMENT_ORIGINAL_SIZE>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachment_3_attachmentOrigSize"/>
+                                    </ATTACHMENT_ORIGINAL_SIZE>
+                                </xsl:if>
+                            </ATTACHMENT>
+                            <CONTRACT>
+                                <xsl:for-each select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:MOR0/pfx6:MOR0">
+                                    <INTERACTION_ITEM>
+                                        <xsl:for-each select="pfx6:MOR1/pfx6:MOR1">
+                                            <ATTRIBUTE>
+                                                <xsl:if test="pfx6:order!=&quot;&quot;">
+                                                    <xsl:if test="not(pfx6:order/@xsi:nil!=(&quot;true&quot;,&quot;1&quot;))">
+                                                        <ORDER>
+                                                            <xsl:value-of select="pfx6:order"/>
+                                                        </ORDER>
+                                                    </xsl:if>
+                                                </xsl:if>
+                                                <NAME>
+                                                    <xsl:value-of select="pfx6:label"/>
+                                                </NAME>
+                                                <xsl:if test="pfx6:value_old!=&quot;&quot;">
+                                                    <OLD_VALUE>
+                                                        <xsl:value-of select="pfx6:value_old"/>
+                                                    </OLD_VALUE>
+                                                </xsl:if>
+                                                <xsl:if test="pfx6:value!=&quot;&quot;">
+                                                    <NEW_VALUE>
+                                                        <xsl:value-of select="pfx6:value"/>
+                                                    </NEW_VALUE>
+                                                </xsl:if>
+                                            </ATTRIBUTE>
+                                        </xsl:for-each>
+                                        <xsl:if test="pfx6:order!=&quot;&quot;">
+                                            <xsl:if test="pfx6:order">
+                                                <ORDER>
+                                                    <xsl:value-of select="pfx6:order"/>
+                                                </ORDER>
+                                            </xsl:if>
+                                        </xsl:if>
+                                        <INTERACTION_ITEM_ID>
+                                            <xsl:value-of select="pfx6:mo_instance"/>
+                                        </INTERACTION_ITEM_ID>
+                                        <xsl:if test="pfx6:activity!=&quot;&quot;">
+                                            <ACTION>
+                                                <xsl:value-of select="pfx6:activity"/>
+                                            </ACTION>
+                                        </xsl:if>
+                                        <CLASS>
+                                            <xsl:value-of select="pfx6:mo_class"/>
+                                        </CLASS>
+                                    </INTERACTION_ITEM>
+                                </xsl:for-each>
+                            </CONTRACT>
+                            <CUSTOMER>
+                                <CONTACT_PERSON>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number !=&quot;&quot;">
+                                        <xsl:choose>
+                                            <xsl:when test="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 1, 2) = &quot;00&quot;">
+                                                <PHONE_NUMBER>
+                                                    <COUNTRY_CODE>
+                                                        <xsl:value-of select="&quot;31&quot;"/>
+                                                    </COUNTRY_CODE>
+                                                    <AREA_CODE>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 2, 3)"/>
+                                                    </AREA_CODE>
+                                                    <SUBSCRIBER_NUMBER>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 5, 7)"/>
+                                                    </SUBSCRIBER_NUMBER>
+                                                </PHONE_NUMBER>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <PHONE_NUMBER>
+                                                    <COUNTRY_CODE>
+                                                        <xsl:value-of select="&quot;31&quot;"/>
+                                                    </COUNTRY_CODE>
+                                                    <AREA_CODE>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 1,4)"/>
+                                                    </AREA_CODE>
+                                                    <SUBSCRIBER_NUMBER>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 6,6)"/>
+                                                    </SUBSCRIBER_NUMBER>
+                                                </PHONE_NUMBER>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:if>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number !=&quot;&quot;">
+                                        <xsl:choose>
+                                            <xsl:when test="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 1, 2) = &quot;00&quot;">
+                                                <FAX_NUMBER>
+                                                    <COUNTRY_CODE>
+                                                        <xsl:value-of select="&quot;31&quot;"/>
+                                                    </COUNTRY_CODE>
+                                                    <AREA_CODE>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 2, 3)"/>
+                                                    </AREA_CODE>
+                                                    <SUBSCRIBER_NUMBER>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 5, 7)"/>
+                                                    </SUBSCRIBER_NUMBER>
+                                                </FAX_NUMBER>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <FAX_NUMBER>
+                                                    <COUNTRY_CODE>
+                                                        <xsl:value-of select="&quot;31&quot;"/>
+                                                    </COUNTRY_CODE>
+                                                    <AREA_CODE>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 1,4)"/>
+                                                    </AREA_CODE>
+                                                    <SUBSCRIBER_NUMBER>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 6,6)"/>
+                                                    </SUBSCRIBER_NUMBER>
+                                                </FAX_NUMBER>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:if>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person!=&quot;&quot;">
+                                        <FULL_NAME>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person"/>
+                                        </FULL_NAME>
+                                    </xsl:if>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_contact_methode!=&quot;&quot;">
+                                        <PREFERRED_CONTACT_METHOD>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_contact_methode"/>
+                                        </PREFERRED_CONTACT_METHOD>
+                                    </xsl:if>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_electronic_mail_address!=&quot;&quot;">
+                                        <EMAIL_ADDRESS>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_electronic_mail_address"/>
+                                        </EMAIL_ADDRESS>
+                                    </xsl:if>
+                                    <CONTACT_ROLE>
+                                        <xsl:value-of select="&quot;Contact&quot;"/>
+                                    </CONTACT_ROLE>
+                                </CONTACT_PERSON>
+                                <NAME>
+                                    <xsl:value-of select="&quot;&quot;"/>
+                                </NAME>
+                            </CUSTOMER>
+                            <PROGRESS_EVENT>
+                                <SUPPLIER_CONTACT_PERSON>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number!=&quot;&quot;">
+                                        <xsl:choose>
+                                            <xsl:when test="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 1, 2) = &quot;00&quot;">
+                                                <FAX_NUMBER>
+                                                    <COUNTRY_CODE>
+                                                        <xsl:value-of select="&quot;31&quot;"/>
+                                                    </COUNTRY_CODE>
+                                                    <AREA_CODE>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 2, 3)"/>
+                                                    </AREA_CODE>
+                                                    <SUBSCRIBER_NUMBER>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 5, 7)"/>
+                                                    </SUBSCRIBER_NUMBER>
+                                                </FAX_NUMBER>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <FAX_NUMBER>
+                                                    <COUNTRY_CODE>
+                                                        <xsl:value-of select="&quot;31&quot;"/>
+                                                    </COUNTRY_CODE>
+                                                    <AREA_CODE>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 1,4)"/>
+                                                    </AREA_CODE>
+                                                    <SUBSCRIBER_NUMBER>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_fax_number, 6,6)"/>
+                                                    </SUBSCRIBER_NUMBER>
+                                                </FAX_NUMBER>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:if>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number!=&quot;&quot;">
+                                        <xsl:choose>
+                                            <xsl:when test="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 1, 2) = &quot;00&quot;">
+                                                <PHONE_NUMBER>
+                                                    <COUNTRY_CODE>
+                                                        <xsl:value-of select="&quot;31&quot;"/>
+                                                    </COUNTRY_CODE>
+                                                    <AREA_CODE>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 2, 3)"/>
+                                                    </AREA_CODE>
+                                                    <SUBSCRIBER_NUMBER>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 5, 7)"/>
+                                                    </SUBSCRIBER_NUMBER>
+                                                </PHONE_NUMBER>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <PHONE_NUMBER>
+                                                    <COUNTRY_CODE>
+                                                        <xsl:value-of select="&quot;31&quot;"/>
+                                                    </COUNTRY_CODE>
+                                                    <AREA_CODE>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 1,4)"/>
+                                                    </AREA_CODE>
+                                                    <SUBSCRIBER_NUMBER>
+                                                        <xsl:value-of select="substring($SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_telephone_number, 6,6)"/>
+                                                    </SUBSCRIBER_NUMBER>
+                                                </PHONE_NUMBER>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:if>
+                                    <FAMILY_NAME>
+                                        <xsl:value-of select="&quot;&quot;"/>
+                                    </FAMILY_NAME>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person!=&quot;&quot;">
+                                        <FULL_NAME>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person"/>
+                                        </FULL_NAME>
+                                    </xsl:if>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_contact_methode!=&quot;&quot;">
+                                        <PREFERRED_CONTACT_METHOD>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_contact_methode"/>
+                                        </PREFERRED_CONTACT_METHOD>
+                                    </xsl:if>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_electronic_mail_address!=&quot;&quot;">
+                                        <EMAIL_ADDRESS>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:manager_contact_person_electronic_mail_address"/>
+                                        </EMAIL_ADDRESS>
+                                    </xsl:if>
+                                </SUPPLIER_CONTACT_PERSON>
+                                <INITIATOR>
+                                    <xsl:value-of select="&quot;&quot;"/>
+                                </INITIATOR>
+                                <CONTACT_METHOD>
+                                    <xsl:value-of select="&quot;&quot;"/>
+                                </CONTACT_METHOD>
+                            </PROGRESS_EVENT>
+                            <SERVICE_LEVEL_AGREEMENT>
+                                <CATEGORY>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_description_code"/>
+                                </CATEGORY>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:sla_end_time!=&quot;&quot;">
+                                    <SLA_DATE_COMPLETE>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:sla_end_time"/>
+                                    </SLA_DATE_COMPLETE>
+                                </xsl:if>
+                            </SERVICE_LEVEL_AGREEMENT>
+                            <INTERACTION_STATUS>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_report_customer_state!=&quot;&quot;">
+                                    <CUSTOMER_REQUEST_STATUS>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_report_customer_state"/>
+                                    </CUSTOMER_REQUEST_STATUS>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:event_time!=&quot;&quot;">
+                                    <INTERACTION_STATUS_DATE>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:event_time"/>
+                                    </INTERACTION_STATUS_DATE>
+                                </xsl:if>
+                                <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:acknowledgement_due_time!=&quot;&quot;">
+                                    <CONFIRMATION_DUE_TIME>
+                                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:acknowledgement_due_time"/>
+                                    </CONFIRMATION_DUE_TIME>
+                                </xsl:if>
+                            </INTERACTION_STATUS>
+                            <xsl:choose>
+                                <xsl:when test="($SOAPEventSource/inputMessage/pfx7:Create/pfx6:attachement_url!=&quot;&quot;) and (($SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_report_customer_state =&quot;&quot; ) or not(exists($SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_report_customer_state)))">
+                                    <BUSINESS_INTERACTION_TYPE>
+                                        <xsl:value-of select="&quot;FILE_READY&quot;"/>
+                                    </BUSINESS_INTERACTION_TYPE>
+                                </xsl:when>
+                                <xsl:when test="($SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_report_customer_state !=&quot;&quot; ) and  (($SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_notification_type = &quot;&quot;) or not(exists($SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_notification_type)))">
+                                    <BUSINESS_INTERACTION_TYPE>
+                                        <xsl:value-of select="&quot;INTERACTION_UPDATE&quot;"/>
+                                    </BUSINESS_INTERACTION_TYPE>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <BUSINESS_INTERACTION_TYPE>
+                                        <xsl:value-of select="&quot;STATUS_UPDATE&quot;"/>
+                                    </BUSINESS_INTERACTION_TYPE>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:customer_service_request_reference_number!=&quot;&quot;">
+                                <EXTERNAL_ID>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:customer_service_request_reference_number"/>
+                                </EXTERNAL_ID>
+                            </xsl:if>
+                            <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:customer_service_request_identifier!=&quot;&quot;">
+                                <EXTERNAL_SUB_ID>
+                                    <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:customer_service_request_identifier"/>
+                                </EXTERNAL_SUB_ID>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:actual_end_time!=&quot;&quot;">
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:actual_end_time!=&quot;&quot;">
+                                        <INTERACTION_DATE_COMPLETE>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:actual_end_time"/>
+                                        </INTERACTION_DATE_COMPLETE>
+                                    </xsl:if>
+                                </xsl:when>
+                                <xsl:when test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:planned_end!=&quot;&quot;">
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:planned_end!=&quot;&quot;">
+                                        <INTERACTION_DATE_COMPLETE>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:planned_end"/>
+                                        </INTERACTION_DATE_COMPLETE>
+                                    </xsl:if>
+                                </xsl:when>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:pause_code!=&quot;&quot;">
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:pause_code!=&quot;&quot;">
+                                        <INTERACTION_REASON_CODE>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:pause_code"/>
+                                        </INTERACTION_REASON_CODE>
+                                    </xsl:if>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_closure_code!=&quot;&quot;">
+                                        <INTERACTION_REASON_CODE>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_closure_code"/>
+                                        </INTERACTION_REASON_CODE>
+                                    </xsl:if>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:pause_reason!=&quot;&quot;">
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:pause_reason!=&quot;&quot;">
+                                        <DESCRIPTION>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:pause_reason"/>
+                                        </DESCRIPTION>
+                                    </xsl:if>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:if test="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_closure_description!=&quot;&quot;">
+                                        <DESCRIPTION>
+                                            <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:request_closure_description"/>
+                                        </DESCRIPTION>
+                                    </xsl:if>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </CUSTOMER_INTERACTION_NOTIFICATION>
+                    </ns0:BODY>
+                </pfx3:CustomerInteractionNotification>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAP Reply Data">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>821</pd:x>
+            <pd:y>207</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root" type="pfx5:CreateOutputMap"/>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <pfx5:GUID>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:GUID"/>
+                    </pfx5:GUID>
+                    <pfx5:STATUS>
+                        <xsl:value-of select="&quot;0&quot;"/>
+                    </pfx5:STATUS>
+                    <pfx5:MSG_CODE>
+                        <xsl:value-of select="&quot;No Error&quot;"/>
+                    </pfx5:MSG_CODE>
+                    <pfx5:ERROR_CODE>
+                        <xsl:value-of select="0"/>
+                    </pfx5:ERROR_CODE>
+                    <pfx5:ERROR_DESCRIPTION>
+                        <xsl:value-of select="&quot;No Error&quot;"/>
+                    </pfx5:ERROR_DESCRIPTION>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPSendReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+            <pd:x>949</pd:x>
+            <pd:y>208</pd:y>
+            <config>
+                <eventSource>SOAPEventSource</eventSource>
+            </config>
+            <pd:inputBindings>
+                <outputMessage>
+                    <pfx7:CreateResponse>
+                        <pfx7:GUID>
+                            <xsl:value-of select="$SOAP-Reply-Data/root/pfx5:GUID"/>
+                        </pfx7:GUID>
+                        <pfx7:STATUS>
+                            <xsl:value-of select="$SOAP-Reply-Data/root/pfx5:STATUS"/>
+                        </pfx7:STATUS>
+                        <pfx7:MSG_CODE>
+                            <xsl:value-of select="$SOAP-Reply-Data/root/pfx5:MSG_CODE"/>
+                        </pfx7:MSG_CODE>
+                        <pfx7:ERROR_CODE>
+                            <xsl:value-of select="$SOAP-Reply-Data/root/pfx5:ERROR_CODE"/>
+                        </pfx7:ERROR_CODE>
+                        <pfx7:ERROR_DESCRIPTION>
+                            <xsl:value-of select="$SOAP-Reply-Data/root/pfx5:ERROR_DESCRIPTION"/>
+                        </pfx7:ERROR_DESCRIPTION>
+                    </pfx7:CreateResponse>
+                </outputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log SOAP Request">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>537</pd:x>
+            <pd:y>94</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EDT-04003&quot;"/>
+                    </MsgCode>
+                    <MsgId>
+                        <xsl:value-of select="$CreateMsgID/Guid_field"/>
+                    </MsgId>
+                    <Parameter>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EDTAdapter/Outbound/SOAP/ServerPort"/>
+                    </Parameter>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($SOAPEventSource/inputMessage/pfx7:Create, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log SOAP Response">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>945</pd:x>
+            <pd:y>108</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EDT-04002&quot;"/>
+                    </MsgCode>
+                    <MsgId>
+                        <xsl:value-of select="$CreateMsgID/Guid_field"/>
+                    </MsgId>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($SOAP-Reply-Data/root, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="Error try catch process">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>390</pd:x>
+        <pd:y>460</pd:y>
+        <pd:width>480</pd:width>
+        <pd:height>272</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Log Error</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Soap Err Reply</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log Error</pd:from>
+            <pd:to>Map Soap Err Reply</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log Soap Err Reply</pd:from>
+            <pd:to>Soap Err Reply</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Soap Err Reply</pd:from>
+            <pd:to>Log Soap Err Reply</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Log Error">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>442</pd:x>
+            <pd:y>600</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EAI-03010&quot;"/>
+                    </MsgCode>
+                    <xsl:choose>
+                        <xsl:when test="$CreateMsgID">
+                            <xsl:if test="$CreateMsgID/Guid_field">
+                                <MsgId>
+                                    <xsl:value-of select="$CreateMsgID/Guid_field"/>
+                                </MsgId>
+                            </xsl:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <MsgId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </MsgId>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="$_error_SOAPEventSource">
+                            <Parameter>
+                                <xsl:value-of select="concat(tib:render-xml($_error_SOAPEventSource), tib:render-xml($_error))"/>
+                            </Parameter>
+                        </xsl:when>
+                        <xsl:when test="$Map-SOAP-Request-to-EDT-JMS-Publication">
+                            <Parameter>
+                                <xsl:value-of select="concat(tib:render-xml($Map-SOAP-Request-to-EDT-JMS-Publication), tib:render-xml($_error))"/>
+                            </Parameter>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <Parameter>
+                                <xsl:value-of select="tib:render-xml($_error)"/>
+                            </Parameter>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map Soap Err Reply">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>578</pd:x>
+            <pd:y>597</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root" type="pfx5:CreateOutputMap"/>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <xsl:choose>
+                    <xsl:when test="exists($_error_SOAPEventSource)">
+                        <root>
+                            <pfx5:GUID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </pfx5:GUID>
+                            <pfx5:STATUS>
+                                <xsl:value-of select="3"/>
+                            </pfx5:STATUS>
+                            <xsl:choose>
+                                <xsl:when test="$_error/ns3:ErrorReport/MsgCode">
+                                    <pfx5:MSG_CODE>
+                                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                                    </pfx5:MSG_CODE>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <pfx5:MSG_CODE>
+                                        <xsl:value-of select="&quot;Invalid SOAP Request&quot;"/>
+                                    </pfx5:MSG_CODE>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <pfx5:ERROR_CODE>
+                                <xsl:value-of select="3"/>
+                            </pfx5:ERROR_CODE>
+                            <pfx5:ERROR_DESCRIPTION>
+                                <xsl:value-of select="&quot;Invalid SOAP Request&quot;"/>
+                            </pfx5:ERROR_DESCRIPTION>
+                        </root>
+                    </xsl:when>
+                    <xsl:when test="exists($_error_Call-JMS-Publication-to-EDT)">
+                        <root>
+                            <pfx5:GUID>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:GUID"/>
+                            </pfx5:GUID>
+                            <pfx5:STATUS>
+                                <xsl:value-of select="2"/>
+                            </pfx5:STATUS>
+                            <xsl:choose>
+                                <xsl:when test="$_error/ns3:ErrorReport/MsgCode">
+                                    <pfx5:MSG_CODE>
+                                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                                    </pfx5:MSG_CODE>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <pfx5:MSG_CODE>
+                                        <xsl:value-of select="&quot;Failed To Publish Message&quot;"/>
+                                    </pfx5:MSG_CODE>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <pfx5:ERROR_CODE>
+                                <xsl:value-of select="2"/>
+                            </pfx5:ERROR_CODE>
+                            <pfx5:ERROR_DESCRIPTION>
+                                <xsl:value-of select="&quot;Failed To Publish Message&quot;"/>
+                            </pfx5:ERROR_DESCRIPTION>
+                        </root>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <root>
+                            <pfx5:GUID>
+                                <xsl:value-of select="$SOAPEventSource/inputMessage/pfx7:Create/pfx6:GUID"/>
+                            </pfx5:GUID>
+                            <pfx5:STATUS>
+                                <xsl:value-of select="1"/>
+                            </pfx5:STATUS>
+                            <xsl:choose>
+                                <xsl:when test="$_error/ns3:ErrorReport/MsgCode">
+                                    <pfx5:MSG_CODE>
+                                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                                    </pfx5:MSG_CODE>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <pfx5:MSG_CODE>
+                                        <xsl:value-of select="&quot;General Unattributable Error&quot;"/>
+                                    </pfx5:MSG_CODE>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <pfx5:ERROR_CODE>
+                                <xsl:value-of select="1"/>
+                            </pfx5:ERROR_CODE>
+                            <pfx5:ERROR_DESCRIPTION>
+                                <xsl:value-of select="&quot;General Unattributable Error&quot;"/>
+                            </pfx5:ERROR_DESCRIPTION>
+                        </root>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Soap Err Reply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+            <pd:x>768</pd:x>
+            <pd:y>524</pd:y>
+            <config>
+                <eventSource>SOAPEventSource</eventSource>
+            </config>
+            <pd:inputBindings>
+                <outputMessage>
+                    <pfx7:CreateResponse>
+                        <pfx7:GUID>
+                            <xsl:value-of select="$Map-Soap-Err-Reply/root/pfx5:GUID"/>
+                        </pfx7:GUID>
+                        <pfx7:STATUS>
+                            <xsl:value-of select="$Map-Soap-Err-Reply/root/pfx5:STATUS"/>
+                        </pfx7:STATUS>
+                        <pfx7:MSG_CODE>
+                            <xsl:value-of select="$Map-Soap-Err-Reply/root/pfx5:MSG_CODE"/>
+                        </pfx7:MSG_CODE>
+                        <pfx7:ERROR_CODE>
+                            <xsl:value-of select="$Map-Soap-Err-Reply/root/pfx5:ERROR_CODE"/>
+                        </pfx7:ERROR_CODE>
+                        <pfx7:ERROR_DESCRIPTION>
+                            <xsl:value-of select="$Map-Soap-Err-Reply/root/pfx5:ERROR_DESCRIPTION"/>
+                        </pfx7:ERROR_DESCRIPTION>
+                    </pfx7:CreateResponse>
+                </outputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log Soap Err Reply">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>769</pd:x>
+            <pd:y>656</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EDT-04004&quot;"/>
+                    </MsgCode>
+                    <xsl:if test="$CreateMsgID/Guid_field">
+                        <MsgId>
+                            <xsl:value-of select="$CreateMsgID/Guid_field"/>
+                        </MsgId>
+                    </xsl:if>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($Map-Soap-Err-Reply/root, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Ignore errors">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>636</pd:x>
+        <pd:y>831</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Error try catch process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error try catch process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error try catch process</pd:from>
+        <pd:to>Ignore errors</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Ignore errors</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>Error try catch process</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

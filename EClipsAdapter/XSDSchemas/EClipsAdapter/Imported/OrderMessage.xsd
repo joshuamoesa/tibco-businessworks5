@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Trupti (Atos Origin Nederland B.V.) -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://xmlns.kpn.com/imported/ordermessage.xsd"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.kpn.com/imported/ordermessage.xsd"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<simpleType name="orderType_type">
+
+		<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by bhogeshwar k (Atos Origin Nederland B.V.) -->
+		<annotation>
+			<documentation>The deifferent types of orders i.e.:
+- customerOrder
+- networkResourceOrder
+- wholesaleAccessOrder
+- workOrder
+			
+			
+			
+			
+			
+			
+			</documentation>
+			<documentation>Default value is:''</documentation>
+			<documentation>1000 length string limitation added by KPN EAI defaults.Increase size in Rose if required.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="orderId_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="externalReference_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="creationDate_type">
+		<restriction base="xs:dateTime"/>
+	</simpleType>
+	<simpleType name="dueDate_type">
+		<restriction base="xs:dateTime"/>
+	</simpleType>
+	<simpleType name="orderPriority_type">
+		<restriction base="xs:unsignedByte"/>
+	</simpleType>
+	<simpleType name="streetName_type">
+		<restriction base="xs:string">
+			<maxLength value="24"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="houseNumber_type">
+		<restriction base="xs:string">
+			<maxLength value="5"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="houseNumberExtension_type">
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+			<minLength value="0"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="dutchPostcodeNumbers_type">
+		<restriction base="xs:string">
+			<pattern value="\d{4}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="dutchPostcodeLetters_type">
+		<restriction base="xs:string">
+			<pattern value="[a-zA-Z]{2}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="cityName_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="countryCodeA2_type">
+		<restriction base="xs:string">
+			<length value="2"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="centralCustomerId_type">
+		<restriction base="xs:string">
+			<pattern value="[A-Z,0-9]{8}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="productCategoryType_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="orderItemType_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="subscriberNumber_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="phoneNumberAreaCode_type">
+		<restriction base="xs:string">
+			<maxLength value="5"/>
+			<minLength value="0"/>
+			<whiteSpace value="collapse"/>
+			<pattern value="\d*"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="phoneNumberCountryCode_type">
+		<restriction base="xs:string">
+			<maxLength value="3"/>
+			<minLength value="1"/>
+			<whiteSpace value="collapse"/>
+			<pattern value="\d+"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="ipAddressValue_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="phoneNumberSubscriberNumber_type">
+		<restriction base="xs:string">
+			<maxLength value="15"/>
+			<minLength value="1"/>
+			<whiteSpace value="collapse"/>
+			<pattern value="\d+"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="emailAddress_type">
+		<restriction base="xs:string">
+			<maxLength value="320"/>
+			<pattern value="([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(([a-zA-Z0-9_-])*\.([a-zA-Z0-9_-])+)+"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="dutchPostcode_type">
+		<restriction base="xs:string">
+			<length value="6"/>
+			<pattern value="\d{4}[a-zA-Z]{2}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="unformattedPostcode_type">
+		<restriction base="xs:string">
+			<length value="6"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="cityCode_type">
+		<annotation>
+			<documentation>*** For future use ***</documentation>
+			<documentation>Field size limitation copied from API definition as EAI side had no limitation.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="contractId_type">
+		<restriction base="xs:string">
+			<maxLength value="9"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="appInfo_type">
+		<restriction base="xs:string">
+			<maxLength value="100"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="event_type">
+		<restriction base="xs:string">
+			<maxLength value="100"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="timestamp_type">
+		<restriction base="xs:long"/>
+	</simpleType>
+	<simpleType name="messageId_type">
+		<restriction base="xs:string"/>
+	</simpleType>
+	<simpleType name="externalRef_type">
+		<restriction base="xs:string">
+			<maxLength value="9"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="componentId_type">
+		<restriction base="xs:string">
+			<maxLength value="9"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="componentVersion_type">
+		<restriction base="xs:string">
+			<maxLength value="9"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="endUserInfo_type">
+		<restriction base="xs:string"/>
+	</simpleType>
+	<simpleType name="sourceAddress_type">
+		<restriction base="xs:string"/>
+	</simpleType>
+	<simpleType name="sequenceNo_type">
+		<restriction base="xs:string">
+			<maxLength value="9"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="interfaceId_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="messageVersion_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="messageObject_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="messageParadigm_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="functionalId_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="moduleId_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="messageName_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="messageDestination_type">
+		<annotation>
+			<documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="1000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="serviceProviderID_type">
+		<annotation>
+			<documentation>String limitation 30 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+			<minLength value="3"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="recipientServiceProviderId_type">
+		<annotation>
+			<documentation>String limitation 30 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+			<minLength value="3"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="telecoCode_type">
+		<annotation>
+			<documentation>String limitation 30 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+			<minLength value="3"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="donorserviceProviderId_type">
+		<annotation>
+			<documentation>String limitation 30 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+			<minLength value="3"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="recipientServiceProviderID_type">
+		<annotation>
+			<documentation>String limitation 30 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+			<minLength value="3"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="portingWishDateTime_type">
+		<restriction base="xs:dateTime"/>
+	</simpleType>
+	<simpleType name="supportsAutomaticSynchronisation_type">
+		<restriction base="xs:boolean"/>
+	</simpleType>
+	<simpleType name="numberOfPhoneNumber_type">
+		<restriction base="xs:integer"/>
+		<!--<maxLength value = "1"/>
+			<minLength value = "0"/> -->
+	</simpleType>
+	<simpleType name="isInblock_type">
+		<restriction base="xs:boolean"/>
+	</simpleType>
+	<simpleType name="unformatted_type">
+		<restriction base="xs:string">
+			<maxLength value="26"/>
+			<pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="numberHigh_type">
+		<restriction base="xs:string">
+			<maxLength value="26"/>
+			<pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="numberLow_type">
+		<restriction base="xs:string">
+			<maxLength value="26"/>
+			<pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="portingId_type">
+		<restriction base="xs:string">
+			<maxLength value="26"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="portingProposedDateTime_type">
+		<restriction base="xs:dateTime"/>
+	</simpleType>
+	<simpleType name="typeOfNumber_type">
+		<restriction base="xs:string">
+			<enumeration value="0"/>
+			<enumeration value="1"/>
+			<enumeration value="2"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="ServiceProviderID_type">
+		<annotation>
+			<documentation>String limitation 30 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+			<minLength value="3"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="isReminder_type">
+		<restriction base="xs:boolean"/>
+	</simpleType>
+	<simpleType name="phoneNumber_type">
+		<restriction base="xs:string">
+			<maxLength value="26"/>
+			<pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="chargeType_type">
+		<restriction base="xs:string">
+			<enumeration value="0"/>
+			<enumeration value="1"/>
+			<enumeration value="2"/>
+			<enumeration value="3"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="taxExemptionCode_type">
+		<restriction base="xs:string">
+			<enumeration value="0"/>
+			<enumeration value="1"/>
+			<enumeration value="2"/>
+			<enumeration value="3"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="initial_type">
+		<restriction base="xs:string">
+			<maxLength value="6"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="familyNamePrefix_type">
+		<restriction base="xs:string">
+			<maxLength value="10"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="familyName_type">
+		<restriction base="xs:string">
+			<maxLength value="70"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="isBlocking_type">
+		<restriction base="xs:string">
+			<maxLength value="1"/>
+		</restriction>
+	</simpleType>
+	<element name="BODY">
+		<annotation>
+			<documentation>This is the BODY object for KPN EAI service number 0248 - ProcessProvisioningWorkOrder version 2.0 Request message.</documentation>
+			<documentation>Automatically generated schema for service:'ProcessProvisioningWorkOrder', version:'2.0'</documentation>
+			<documentation>Generated on 2007-08-03 11:36:50Z</documentation>
+			<documentation>Service paradigm is intended to be Request/Response</documentation>
+			<documentation>Service ID is:'0248'</documentation>
+			<documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</documentation>
+			<documentation>KPN EAI message body class.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="ORDER">
+					<complexType>
+						<sequence>
+							<element name="ORDER_HEADER">
+								<annotation>
+									<documentation>Artificial sequence to separate.</documentation>
+								</annotation>
+								<complexType>
+									<sequence>
+										<element name="ORDER_TYPE" type="tns:orderType_type"/>
+										<element name="ORDER_ID" type="tns:orderId_type" minOccurs="0"/>
+										<element name="CUSTOMER_ID" minOccurs="0">
+											<annotation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="ID_CKR" type="tns:centralCustomerId_type" minOccurs="0"/>
+													<element name="ID_MCCS" type="tns:centralCustomerId_type" minOccurs="0"/>
+													<element name="ID_PACKAGER" minOccurs="0">
+														<complexType>
+															<sequence>
+																<element name="INTERNAL" type="xs:string" minOccurs="0"/>
+																<element name="EXTERNAL" type="xs:string" minOccurs="0"/>
+															</sequence>
+														</complexType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="EXTERNAL_REFERENCE" type="tns:externalReference_type" minOccurs="0"/>
+										<element name="ORDER_STATUS" minOccurs="0" maxOccurs="unbounded">
+											<annotation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="ORDER_STATUS" type="xs:string" minOccurs="0"/>
+													<element name="ERROR_CODE" type="xs:string" minOccurs="0"/>
+													<element name="ERROR_DESCRIPTION" type="xs:string" minOccurs="0"/>
+													<element name="DELIVERY_STATUS_CODE" type="xs:string" minOccurs="0"/>
+													<element name="DELIVERY_STATUS_DESCRIPTION" type="xs:string" minOccurs="0"/>
+													<element name="DELIVERY_STATUS_ADDITIONAL_INFORMATION" type="xs:string" minOccurs="0"/>
+													<element name="STATUS_CODE" type="xs:string" minOccurs="0"/>
+													<element name="STATUS_DESCRIPTION" type="xs:string" minOccurs="0"/>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="CREATION_DATE" type="tns:creationDate_type"/>
+										<element name="DUE_DATE" type="tns:dueDate_type" minOccurs="0"/>
+										<element name="DELIVERY_ADDRESS" minOccurs="0">
+											<annotation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<choice>
+													<element name="UNFORMATTED_ADDRESS" minOccurs="0">
+														<annotation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="ADDRESS_LINE" maxOccurs="unbounded">
+																	<annotation>
+																		<documentation>Artificial sequence to separate.</documentation>
+																	</annotation>
+																	<complexType>
+																		<sequence>
+																			<element name="ADDRESS_LINE" type="xs:string"/>
+																		</sequence>
+																	</complexType>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="LOGICAL_ADDRESS">
+														<annotation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="POBOX_NUMBER" type="xs:string" minOccurs="0"/>
+																<element name="POBOX_NAME" type="xs:string" minOccurs="0"/>
+																<element name="CITY_NAME" type="tns:cityName_type" minOccurs="0"/>
+																<element name="CITY_CODE" type="tns:cityCode_type" minOccurs="0"/>
+																<element name="COUNTRY" type="tns:cityName_type" minOccurs="0"/>
+																<element name="COUNTRY_CODE" type="tns:countryCodeA2_type" minOccurs="0"/>
+																<element name="POSTCODE">
+																	<complexType>
+																		<choice>
+																			<element name="DUTCH_POSTCODE" type="tns:dutchPostcode_type" minOccurs="0"/>
+																			<element name="UNFORMATTED_POSTCODE" type="tns:unformattedPostcode_type" minOccurs="0"/>
+																		</choice>
+																	</complexType>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="PROPERTY_ADDRESS">
+														<annotation>
+															<documentation>Artificial sequence to separate.</documentation>
+														</annotation>
+														<complexType>
+															<sequence>
+																<element name="STREET_NAME" type="tns:streetName_type"/>
+																<element name="HOUSE_NUMBER" type="tns:houseNumber_type"/>
+																<element name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" minOccurs="0">
+																	<annotation>
+																		<documentation>Default (autogenerated) min and max occurs values.</documentation>
+																	</annotation>
+																</element>
+																<element name="CITY_NAME" type="tns:cityName_type"/>
+																<element name="COUNTRY_CODE" type="tns:countryCodeA2_type" minOccurs="0"/>
+																<element name="POSTCODE">
+																	<complexType>
+																		<choice>
+																			<element name="DUTCH_POSTCODE" type="tns:dutchPostcode_type" minOccurs="0"/>
+																			<element name="UNFORMATTED_POSTCODE" type="tns:unformattedPostcode_type" minOccurs="0"/>
+																		</choice>
+																	</complexType>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+												</choice>
+											</complexType>
+										</element>
+										<element name="ORDER_PRIORITY" type="tns:orderPriority_type" minOccurs="0"/>
+										<element name="OTHER_REFERENCE" minOccurs="0" maxOccurs="unbounded">
+											<annotation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="ORIGIN" type="xs:string"/>
+													<element name="REFERENCE" type="xs:string"/>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="PARENT_ORDER" minOccurs="0" maxOccurs="unbounded">
+											<annotation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="PARENT_ORDER_ID" type="tns:orderId_type"/>
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="ORDER_ITEM" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="ORDER_ITEM_HEADER">
+											<annotation>
+												<documentation>Artificial sequence to separate.</documentation>
+											</annotation>
+											<complexType>
+												<sequence>
+													<element name="ORDER_ITEM_TYPE" type="tns:orderItemType_type"/>
+													<element name="ORDER_ITEM_ID" type="tns:orderItemType_type" minOccurs="0"/>
+													<element name="EXTERNAL_REFERENCE" type="tns:externalReference_type" minOccurs="0"/>
+													<element name="ORDER_ITEM_STATUS" type="xs:string" minOccurs="0"/>
+													<element name="DUE_DATE" type="tns:dueDate_type" minOccurs="0"/>
+													<element name="REMARK" minOccurs="0" maxOccurs="unbounded">
+														<complexType>
+															<sequence>
+																<element name="TYPE" type="xs:string" minOccurs="0"/>
+																<element name="REMARK" type="xs:string" minOccurs="0"/>
+															</sequence>
+														</complexType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="PRODUCT_CATEGORY" type="tns:productCategoryType_type"/>
+										<element name="PRODUCT" minOccurs="0">
+											<complexType>
+												<choice>
+													<element name="MULTI_MEDIA_PRODUCT">
+														<complexType>
+															<sequence>
+																<element name="SERVICES">
+																	<complexType>
+																		<sequence>
+																			<element name="MULTI_MEDIA_SERVICE" minOccurs="0">
+																				<complexType>
+																					<sequence>
+																						<element name="VOIP_PLATFORM_CODE" type="xs:string" minOccurs="0"/>
+																						<element name="SERVICE_PROVIDER_ID" type="tns:serviceProviderID_type" minOccurs="0"/>
+																						<element name="STATUS_CODE" type="xs:string" minOccurs="0"/>
+																						<element name="IS_CURRENT_SERVICE_PROVIDER" type="xs:boolean" minOccurs="0"/>
+																						<element name="RECIPIENT_SERVICE_PROVIDER_ID" type="tns:recipientServiceProviderId_type" minOccurs="0"/>
+																						<element name="TELCO_CODE" type="tns:telecoCode_type" minOccurs="0"/>
+																						<element name="ACCESS_LOCATION" minOccurs="0">
+																							<complexType>
+																								<sequence>
+																									<element name="DUTCH_POST_CODE" type="tns:dutchPostcode_type"/>
+																								</sequence>
+																							</complexType>
+																						</element>
+																					</sequence>
+																				</complexType>
+																			</element>
+																			<element name="PORTING_SERVICE" minOccurs="0">
+																				<complexType>
+																					<sequence>
+																						<element name="DONOR_SERVICE_PROVIDER_ID" type="tns:donorserviceProviderId_type" minOccurs="0"/>
+																						<element name="RECIPIENT_SERVICE_PROVIDER_ID" type="tns:recipientServiceProviderID_type"/>
+																						<element name="PORTING_WISH_DATE_TIME" type="tns:portingWishDateTime_type" minOccurs="0"/>
+																						<element name="SUPPORTS_AUTOMATIC_SYNCHRONISATION" type="tns:supportsAutomaticSynchronisation_type"/>
+																						<element name="ACCESS_LOCATION">
+																							<complexType>
+																								<sequence>
+																									<element name="STREET_NAME" type="tns:streetName_type"/>
+																									<element name="HOUSE_NUMBER" type="tns:houseNumber_type"/>
+																									<element name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" minOccurs="0"/>
+																									<element name="DUTCH_POSTCODE" type="tns:dutchPostcode_type" minOccurs="0"/>
+																									<element name="CITY_NAME" type="tns:cityName_type"/>
+																								</sequence>
+																							</complexType>
+																						</element>
+																						<element name="CONTACT_DETAILS" minOccurs="0">
+																							<complexType>
+																								<sequence>
+																									<element name="INITIALS" type="xs:string" minOccurs="0"/>
+																									<element name="PREFIX" type="xs:string" minOccurs="0"/>
+																									<element name="LAST_NAME" type="xs:string" minOccurs="0"/>
+																									<element name="COMPANY_NAME" type="xs:string" minOccurs="0"/>
+																								</sequence>
+																							</complexType>
+																						</element>
+																					</sequence>
+																				</complexType>
+																			</element>
+																		</sequence>
+																	</complexType>
+																</element>
+																<element name="RESOURCES" minOccurs="0">
+																	<complexType>
+																		<choice>
+																			<element name="PHONE_NUMBER" minOccurs="0">
+																				<complexType>
+																					<sequence>
+																						<element name="HAS_ACTIVE_ORDER" type="xs:boolean" minOccurs="0"/>
+																						<choice>
+																							<sequence>
+																								<element name="NUMBER_OF_PHONE_NUMBERS" type="tns:numberOfPhoneNumber_type" minOccurs="0"/>
+																								<element name="IS_IN_BLOCK" type="tns:isInblock_type" minOccurs="0"/>
+																								<element name="TCA_CODE" type="xs:string" minOccurs="0"/>
+																							</sequence>
+																							<element name="UNFORMATTED" type="tns:unformatted_type" minOccurs="0"/>
+																						</choice>
+																					</sequence>
+																				</complexType>
+																			</element>
+																			<element name="PHONE_NUMBER_SERIES" minOccurs="0" maxOccurs="250">
+																				<complexType>
+																					<sequence>
+																						<element name="NUMBER_HIGH" type="tns:numberHigh_type"/>
+																						<element name="NUMBER_LOW" type="tns:numberLow_type"/>
+																						<element name="IS_IN_BLOCK" type="tns:isInblock_type" minOccurs="0"/>
+																					</sequence>
+																				</complexType>
+																			</element>
+																		</choice>
+																	</complexType>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+													<element name="PORTING_PRODUCT">
+														<complexType>
+															<sequence>
+																<element name="PORTING_ID" type="tns:portingId_type" minOccurs="0"/>
+																<element name="RECIPIENT_SERVICE_PROVIDER_ID" type="tns:recipientServiceProviderID_type" minOccurs="0"/>
+																<element name="DONOR_SERVICE_PROVIDER_ID" type="tns:donorserviceProviderId_type" minOccurs="0"/>
+																<element name="PORTING_WISH_DATE_TIME" type="tns:portingWishDateTime_type" minOccurs="0"/>
+																<element name="PORTING_PROPOSED_DATE_TIME" type="tns:portingProposedDateTime_type" minOccurs="0"/>
+																<element name="ORDER_ID" type="tns:orderId_type" minOccurs="0"/>
+																<element name="NOTES" type="xs:string" minOccurs="0"/>
+																<element name="TYPE_OF_NUMBER" type="tns:typeOfNumber_type" minOccurs="0"/>
+																<element name="POINT_OF_PRESENCE" type="xs:string" minOccurs="0"/>
+																<element name="EXTRERNAL_REFERENCE" type="tns:externalReference_type" minOccurs="0"/>
+																<element name="SERVICE_PROVIDER_ID" type="tns:ServiceProviderID_type" minOccurs="0"/>
+																<element name="BLOCKING_CODE" type="xs:string" minOccurs="0"/>
+																<element name="IS_BLOCKING" type="tns:isBlocking_type" minOccurs="0"/>
+																<element name="IS_REMINDER" type="tns:isReminder_type" minOccurs="0"/>
+																<element name="RESOURCES" minOccurs="0">
+																	<complexType>
+																		<sequence>
+																			<element name="PHONE_NUMBER_SERIES" minOccurs="0" maxOccurs="250">
+																				<complexType>
+																					<sequence>
+																						<element name="NUMBER_LOW" type="tns:phoneNumber_type"/>
+																						<element name="NUMBER_HIGH" type="tns:phoneNumber_type"/>
+																					</sequence>
+																				</complexType>
+																			</element>
+																		</sequence>
+																	</complexType>
+																</element>
+																<element name="SERVICES" minOccurs="0">
+																	<complexType>
+																		<choice>
+																			<element name="MULTI_MEDIA_SERVICE" minOccurs="0">
+																				<complexType>
+																					<sequence>
+																						<element name="SUBSCRIBER" minOccurs="0">
+																							<complexType>
+																								<sequence>
+																									<element name="NUMBER" type="xs:string" maxOccurs="10000"/>
+																								</sequence>
+																							</complexType>
+																						</element>
+																					</sequence>
+																				</complexType>
+																			</element>
+																		</choice>
+																	</complexType>
+																</element>
+																<element name="TARIFF_INFO" minOccurs="0">
+																	<complexType>
+																		<sequence>
+																			<element name="TARIFF_PEAK" type="xs:string" minOccurs="0"/>
+																			<element name="TARIFF_OFFPEAK" type="xs:string" minOccurs="0"/>
+																			<element name="CURRENCY_CODE" type="xs:string" minOccurs="0"/>
+																			<element name="CHARGE_TYPE" type="tns:chargeType_type" minOccurs="0"/>
+																			<element name="TAX_EXEMPTION_CODE" type="tns:taxExemptionCode_type" minOccurs="0"/>
+																		</sequence>
+																	</complexType>
+																</element>
+																<element name="CUSTOMER" minOccurs="0">
+																	<complexType>
+																		<sequence>
+																			<element name="PARTY" minOccurs="0">
+																				<complexType>
+																					<sequence>
+																						<element name="INDIVIDUAL_NAME" minOccurs="0">
+																							<complexType>
+																								<sequence>
+																									<element name="INITIALS" type="tns:initial_type" minOccurs="0"/>
+																									<element name="FAMILY_NAME_PREFIX" type="tns:familyNamePrefix_type" minOccurs="0"/>
+																									<element name="FAMILY_NAME" type="tns:familyName_type" minOccurs="0"/>
+																								</sequence>
+																							</complexType>
+																						</element>
+																						<element name="ORGANIZATION_NAME" minOccurs="0">
+																							<complexType>
+																								<sequence>
+																									<element name="TRADING_NAME" type="xs:string"/>
+																								</sequence>
+																							</complexType>
+																						</element>
+																					</sequence>
+																				</complexType>
+																			</element>
+																			<element name="PROPERTY_ADDRESS" minOccurs="0">
+																				<complexType>
+																					<sequence>
+																						<element name="STREET_NAME" type="tns:streetName_type"/>
+																						<element name="HOUSE_NUMBER" type="tns:houseNumber_type"/>
+																						<element name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" minOccurs="0"/>
+																						<element name="POSTCODE_NUMBERS" type="tns:dutchPostcodeNumbers_type" minOccurs="0"/>
+																						<element name="POSTCODE_LETTERS" type="tns:dutchPostcodeLetters_type" minOccurs="0"/>
+																						<element name="CITY_NAME" type="tns:cityName_type" minOccurs="0"/>
+																						<element name="COUNTRY_CODE" type="tns:countryCodeA2_type" minOccurs="0"/>
+																					</sequence>
+																				</complexType>
+																			</element>
+																		</sequence>
+																	</complexType>
+																</element>
+															</sequence>
+														</complexType>
+													</element>
+												</choice>
+											</complexType>
+										</element>
+										<element name="CONTRACT" minOccurs="0">
+											<complexType>
+												<sequence>
+													<element name="CONTRACT_NUMBER" type="tns:contractId_type" minOccurs="0"/>
+													<element name="CONTRACT_VERSION" type="xs:string" minOccurs="0"/>
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

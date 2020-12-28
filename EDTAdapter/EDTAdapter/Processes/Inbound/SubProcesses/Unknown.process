@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerInteractionNotification.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>EDTAdapter/Processes/Outbound/SubProcesses/Unknown.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:CustomerInteractionNotification"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas>
+        <ErrorSchema ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Invalid Input Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>295</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EDT-03004&quot;"/>
+                </MsgCode>
+                <xsl:if test="$Start/pfx:CustomerInteractionNotification/ns:CMH/ns:TRACKING/ns:MESSAGE_ID">
+                    <MsgId>
+                        <xsl:value-of select="$Start/pfx:CustomerInteractionNotification/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                    </MsgId>
+                </xsl:if>
+                <Parameter>
+                    <xsl:value-of select="&quot;Not a valide request received for the field BUSINESS_INTERACTION_TYPE&quot;"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="concat(&quot;Input received for the field is  BUSINESS_INTERACTION_TYPE= &quot;, $Start/pfx:CustomerInteractionNotification/ns1:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE)"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Invalid Input Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Invalid Input Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:XSLTCache="java://XSLTTransform" xmlns:ns="http://www.tibco.com/CLEver/ExtraTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/CLEver/Log" xmlns:pfx="http://www.tibco.com/CLEver/Exception" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/CLEver/Log" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Log.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="/Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+    <pd:name>Processes/DataServices_Oracle/Transactional/Logging/Create.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:Log"/>
+    <pd:startX>53</pd:startX>
+    <pd:startY>70</pd:startY>
+    <pd:returnBindings>
+        <Return>
+            <xsl:if test="string-length($InsertLogging/resultSet/outputSet/LOGGINGID)>0">
+                <LoggingID>
+                    <xsl:value-of select="round($InsertLogging/resultSet/outputSet/LOGGINGID)"/>
+                </LoggingID>
+            </xsl:if>
+        </Return>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Return">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="LoggingID" type="xsd:int" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>503</pd:endX>
+    <pd:endY>409</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1326171271540</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>303</pd:x>
+        <pd:y>169</pd:y>
+        <pd:width>172</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/pfx2:Log/ns:ProcessContext/ns:BusinessRefs/ns:Parameter</pd:over>
+            <pd:iterationElementSlot>Reference</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>InsertReferences</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InsertReferences</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="InsertReferences">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>380</pd:x>
+            <pd:y>237</pd:y>
+            <config>
+                <timeout>%%Connections/DB/Oracle/MainStorage/ExecutionTimeOut%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/Shared Resources/Connections/DB/Oracle/MainStorage.sharedjdbc</jdbcSharedConfig>
+                <statement>INSERT INTO TDA_REFERENCE(ID,TYPE,NAME,VALUE)
+ VALUES(?,'L',?,?)</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>LoggingID</parameterName>
+                        <dataType>INTEGER</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>Name</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>Value</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <LoggingID>
+                        <xsl:value-of select="round($InsertLogging/resultSet/outputSet/LOGGINGID)"/>
+                    </LoggingID>
+                    <Name>
+                        <xsl:value-of select="if (string-length($Reference/ns:Parameter/ns:Name)>125) then&#xA;tib:left($Reference/ns:Parameter/ns:Name, 125)&#xA;else&#xA;$Reference/ns:Parameter/ns:Name"/>
+                    </Name>
+                    <Value>
+                        <xsl:choose>
+                            <xsl:when test="exists(if (string-length($Reference/ns:Parameter/ns:Value)>125) then&#xA;tib:left($Reference/ns:Parameter/ns:Value, 125)&#xA;else&#xA;$Reference/ns:Parameter/ns:Value)">
+                                <xsl:value-of select="if (string-length($Reference/ns:Parameter/ns:Value)>125) then&#xA;tib:left($Reference/ns:Parameter/ns:Value, 125)&#xA;else&#xA;$Reference/ns:Parameter/ns:Value"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </Value>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="Group (1)">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>542</pd:x>
+        <pd:y>172</pd:y>
+        <pd:width>186</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/pfx2:Log/pfx2:LogDetail/pfx2:Attachments/pfx2:Attachment</pd:over>
+            <pd:iterationElementSlot>Attachment</pd:iterationElementSlot>
+            <pd:indexSlot>j</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>InsertAttachments</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InsertAttachments</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="InsertAttachments">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>633</pd:x>
+            <pd:y>237</pd:y>
+            <config>
+                <timeout>%%Connections/DB/Oracle/MainStorage/ExecutionTimeOut%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/Shared Resources/Connections/DB/Oracle/MainStorage.sharedjdbc</jdbcSharedConfig>
+                <statement>INSERT INTO TDA_LOGGINGLARGETEXT(ID,TYPE,NAME, TEXT)
+ VALUES(?,?,?,?)</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>LoggingID</parameterName>
+                        <dataType>INTEGER</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>Type</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>Name</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>Content</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <LoggingID>
+                        <xsl:value-of select="round($InsertLogging/resultSet/outputSet/LOGGINGID)"/>
+                    </LoggingID>
+                    <Type>
+                        <xsl:value-of select="$Attachment/pfx2:Attachment/pfx2:Type"/>
+                    </Type>
+                    <Name>
+                        <xsl:value-of select="$Attachment/pfx2:Attachment/pfx2:Name"/>
+                    </Name>
+                    <Content>
+                        <xsl:value-of select="$Attachment/pfx2:Attachment/pfx2:Content"/>
+                    </Content>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Determine Storage Requirements">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>179</pd:x>
+        <pd:y>81</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Store" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Store>
+                    <xsl:value-of select="if (XSLTCache:executeXslt(&quot;StoreLog&quot;, tib:render-xml($Start/pfx2:Log), true())!=-1) then&#xA;if (XSLTCache:executeXslt(&quot;StoreLogAttachement&quot;,  tib:render-xml($Start/pfx2:Log),true())>0) then&#xA;'logattachements'&#xA;else&#xA;'log'&#xA;else&#xA;'ignore'"/>
+                </Store>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="IgnoreMessage">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>184</pd:x>
+        <pd:y>407</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="Group (2)">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>448</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>151</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>errorLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>m</pd:indexSlot>
+            <pd:errorCondition>$m&gt;3</pd:errorCondition>
+            <pd:suspendAfterErrorRetry>false</pd:suspendAfterErrorRetry>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>InsertLogging</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InsertLogging</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="InsertLogging">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>512</pd:x>
+            <pd:y>56</pd:y>
+            <config>
+                <timeout>%%Connections/DB/Oracle/MainStorage/ExecutionTimeOut%%</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>true</emptyStrAsNil>
+                <jdbcSharedConfig>/Shared Resources/Connections/DB/Oracle/MainStorage.sharedjdbc</jdbcSharedConfig>
+                <ProcedureName>TDA_INSERTLOGGING</ProcedureName>
+                <schema/>
+                <parameterTypes>
+                    <parameter>
+                        <colName>TRANSACTIONID</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>SERVICE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>COMPONENT</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PROCESSNAME</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>ROLE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>STATUS</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>HOSTNAME</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>BUSINESSDOMAIN</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>BUSINESSCONCEPT</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>BUSINESSOPERATION</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>TECHNICALDOMAIN</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>DATE_NUMBER</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>DATETIME</colName>
+                        <colType>1</colType>
+                        <dataType>93</dataType>
+                        <typeName>TIMESTAMP</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>MESSAGE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>LOGGINGID</colName>
+                        <colType>4</colType>
+                        <dataType>2</dataType>
+                        <typeName>NUMBER</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <TRANSACTIONID>
+                            <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:TransactionID, 125)"/>
+                        </TRANSACTIONID>
+                        <SERVICE>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:left($Start/pfx2:Log/ns:ProcessContext/ns:ServiceName, 125))">
+                                    <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:ServiceName, 125)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </SERVICE>
+                        <COMPONENT>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:left($Start/pfx2:Log/ns:ProcessContext/ns:ComponentName, 125))">
+                                    <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:ComponentName, 125)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </COMPONENT>
+                        <PROCESSNAME>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:left($Start/pfx2:Log/ns:ProcessContext/ns:ProcessName, 125))">
+                                    <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:ProcessName, 125)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PROCESSNAME>
+                        <ROLE>
+                            <xsl:value-of select="tib:left($Start/pfx2:Log/pfx2:LogDetail/pfx2:Role, 50)"/>
+                        </ROLE>
+                        <STATUS>
+                            <xsl:value-of select="tib:left($Start/pfx2:Log/pfx2:LogDetail/pfx2:Status,50)"/>
+                        </STATUS>
+                        <HOSTNAME>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:left($Start/pfx2:Log/ns:ProcessContext/ns:HostName, 125))">
+                                    <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:HostName, 125)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </HOSTNAME>
+                        <BUSINESSDOMAIN>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:left($Start/pfx2:Log/ns:ProcessContext/ns:BusinessDomain, 125))">
+                                    <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:BusinessDomain, 125)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </BUSINESSDOMAIN>
+                        <BUSINESSCONCEPT>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:left($Start/pfx2:Log/ns:ProcessContext/ns:BusinessConcept, 50))">
+                                    <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:BusinessConcept, 50)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </BUSINESSCONCEPT>
+                        <BUSINESSOPERATION>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:left($Start/pfx2:Log/ns:ProcessContext/ns:BusinessOperation, 50))">
+                                    <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:BusinessOperation, 50)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </BUSINESSOPERATION>
+                        <TECHNICALDOMAIN>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:left($Start/pfx2:Log/ns:ProcessContext/ns:TechnicalDomain, 125))">
+                                    <xsl:value-of select="tib:left($Start/pfx2:Log/ns:ProcessContext/ns:TechnicalDomain, 125)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </TECHNICALDOMAIN>
+                        <DATE_NUMBER>
+                            <xsl:choose>
+                                <xsl:when test="exists((tib:get-year-from-dateTime($Start/pfx2:Log/ns:ProcessContext/ns:DateTime)*10000)+(tib:get-month-from-dateTime($Start/pfx2:Log/ns:ProcessContext/ns:DateTime)*100)+ tib:get-day-from-dateTime($Start/pfx2:Log/ns:ProcessContext/ns:DateTime))">
+                                    <xsl:value-of select="(tib:get-year-from-dateTime($Start/pfx2:Log/ns:ProcessContext/ns:DateTime)*10000)+(tib:get-month-from-dateTime($Start/pfx2:Log/ns:ProcessContext/ns:DateTime)*100)+ tib:get-day-from-dateTime($Start/pfx2:Log/ns:ProcessContext/ns:DateTime)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </DATE_NUMBER>
+                        <DATETIME>
+                            <xsl:value-of select="$Start/pfx2:Log/ns:ProcessContext/ns:DateTime"/>
+                        </DATETIME>
+                        <MESSAGE>
+                            <xsl:value-of select="tib:left($Start/pfx2:Log/pfx2:LogDetail/pfx2:LogMessage, 500)"/>
+                        </MESSAGE>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Determine Storage Requirements</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (1)</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Determine Storage Requirements</pd:from>
+        <pd:to>IgnoreMessage</pd:to>
+        <pd:xpathDescription>Ignore</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Determine-Storage-Requirements/root/Store='ignore'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IgnoreMessage</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (2)</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (2)</pd:from>
+        <pd:to>Group (1)</pd:to>
+        <pd:xpathDescription>Log Attachements?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Determine-Storage-Requirements/root/Store='logattachements'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Determine Storage Requirements</pd:from>
+        <pd:to>Group (2)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

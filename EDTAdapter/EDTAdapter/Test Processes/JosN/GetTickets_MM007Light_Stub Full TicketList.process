@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798344886" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802707930" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1087368660275" xmlns:pfx3="http://xmlns.example.com/unique/default/namespace/1087727306677" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1087727473027" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx6="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Response/GetTickets.xsd" xmlns:ns3="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/ASTRIDResponse.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/HDR-SW-0101.xsd" xmlns:pfx7="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/STATUS_S-0100.xsd" xmlns:ns5="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/ANSLIM_S-0101.xsd" xmlns:pfx8="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/MELD_S-0100.xsd" xmlns:pfx9="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/WERK_S-0100.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/VERPL_S-0100.xsd" xmlns:pfx11="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/OBSERV_S-0100.xsd" xmlns:pfx12="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/PORTER_S-0100.xsd" xmlns:pfx13="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/VORANA_S-0100.xsd" xmlns:pfx14="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/VOROND_S-0100.xsd" xmlns:pfx15="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/KLANT_S-0100.xsd" xmlns:pfx16="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/KLACHT_S-0102.xsd" xmlns:ns6="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/CONTR_S-0100.xsd" xmlns:pfx17="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/INFRA_S-0100.xsd" xmlns:pfx18="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/MEET_S-0100.xsd" xmlns:pfx19="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/OVERIG_S-0101.xsd" xmlns:ns7="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/TECH_S-0100.xsd" xmlns:pfx20="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/SERBOX_S-0100.xsd" xmlns:pfx21="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/STRBOX_S-0100.xsd" xmlns:pfx22="http://xmlns.kpn.com/fixed/ASTRIDAdapter/common/VV_S-0100.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086798344886" schemaLocation="/XSDSchemas/EnginAdapter/Request/GetTickets.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802707930" schemaLocation="/XSDSchemas/EnginAdapter/Response/GetTickets.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Response/GetTickets.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Response/GetTickets.xsd"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/GetTickets_MM007Light_Stub Full TicketList.process</pd:name>
+    <pd:startName>GetTickets Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetTickets Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>97</pd:x>
+        <pd:y>188</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Operations.ASTRIDAdapter.Request.GetTickets.1</subject>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/EDTAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx:GetTickets"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>566</pd:endX>
+    <pd:endY>180</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to Rendezvous Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>310</pd:x>
+        <pd:y>186</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetTickets Subscriber</eventSource>
+            <xsdString ref="pfx6:GetTickets"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <xsl:copy-of select="$GetTickets-Subscriber/ActivityOutput/body/ns:CMH"/>
+                    <ns3:RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="0"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;Teststub Full TicketList&quot;"/>
+                        </xsl:attribute>
+                    </ns3:RESULT_STATUS>
+                    <pfx6:ENGIN>
+                        <pfx6:HDR-SW-0101>
+                            <ns4:AFZENDER_APPLICATIE>
+                                <xsl:value-of select="&quot;Naam van het systeem die transactie initëerde&quot;"/>
+                            </ns4:AFZENDER_APPLICATIE>
+                            <ns4:AFZENDER_GEBRUIKER>
+                                <xsl:value-of select="&quot;Naam van de gebruiker waarvoor de transactie wordt uitgevoerd&quot;"/>
+                            </ns4:AFZENDER_GEBRUIKER>
+                            <ns4:ONTVANGER_APPLICATIE>
+                                <xsl:value-of select="&quot;Naam van het systeem die de transactie moet uitvoeren&quot;"/>
+                            </ns4:ONTVANGER_APPLICATIE>
+                            <ns4:BERICHT_TYPE>
+                                <xsl:value-of select="&quot;Naam van het bericht type die de transactie aanduid&quot;"/>
+                            </ns4:BERICHT_TYPE>
+                            <ns4:FUNCTION_TYPE>
+                                <xsl:value-of select="&quot;Identificatie van de transactie die moeten worden uitgevoerd&quot;"/>
+                            </ns4:FUNCTION_TYPE>
+                            <ns4:BERICHT_VERSIE>
+                                <xsl:value-of select="1"/>
+                            </ns4:BERICHT_VERSIE>
+                            <ns4:TRANSACTIE_ID>
+                                <xsl:value-of select="&quot;unieknummer bepaald door afzender&quot;"/>
+                            </ns4:TRANSACTIE_ID>
+                            <ns4:DATUM_TIJD>
+                                <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                            </ns4:DATUM_TIJD>
+                        </pfx6:HDR-SW-0101>
+                        <pfx6:STATUS_S-0100>
+                            <pfx7:RESULTAAT_CODE>
+                                <xsl:value-of select="20"/>
+                            </pfx7:RESULTAAT_CODE>
+                            <pfx7:RESULTAAT_TEKST>
+                                <xsl:value-of select="&quot;Resultaat tekst voor 20&quot;"/>
+                            </pfx7:RESULTAAT_TEKST>
+                        </pfx6:STATUS_S-0100>
+                        <pfx6:ANSLIM_S-0101>
+                            <ns5:AANTAL_ITEMS>
+                                <xsl:value-of select="5"/>
+                            </ns5:AANTAL_ITEMS>
+                            <ns5:SLEUTEL_VOLGENDE_ITEM>
+                                <xsl:value-of select="&quot;Sleutel om volgende items op te halen.&quot;"/>
+                            </ns5:SLEUTEL_VOLGENDE_ITEM>
+                        </pfx6:ANSLIM_S-0101>
+                        <pfx6:Loop>
+                            <pfx6:MELD_S-0100>
+                                <pfx8:KLANTORDER_NUMMER>
+                                    <xsl:value-of select="123456789"/>
+                                </pfx8:KLANTORDER_NUMMER>
+                                <pfx8:STATUS>
+                                    <xsl:value-of select="10"/>
+                                </pfx8:STATUS>
+                                <pfx8:STATUS_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Omschrijving van de status. Wordt door MM007 bepaald.&quot;"/>
+                                </pfx8:STATUS_OMSCHRIJVING>
+                                <pfx8:DATUM_WAAROP_STATUS_VERKREGEN_IS>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx8:DATUM_WAAROP_STATUS_VERKREGEN_IS>
+                                <pfx8:AANNAME_DATUM>
+                                    <xsl:value-of select="&quot;2004-07-03T13:20:00-05:00&quot;"/>
+                                </pfx8:AANNAME_DATUM>
+                                <pfx8:IDENTIFICATIE_VAN_DE_MELDING>
+                                    <xsl:value-of select="&quot;Identificatie van de melding&quot;"/>
+                                </pfx8:IDENTIFICATIE_VAN_DE_MELDING>
+                                <pfx8:LEIDENDE_SERVICE_ID>
+                                    <xsl:value-of select="&quot;TCNR&quot;"/>
+                                </pfx8:LEIDENDE_SERVICE_ID>
+                                <pfx8:TELEFOONNUMMER>
+                                    <xsl:value-of select="&quot;070-918748&quot;"/>
+                                </pfx8:TELEFOONNUMMER>
+                                <pfx8:TYPE_PRODUCT_ID>
+                                    <xsl:value-of select="&quot;12345&quot;"/>
+                                </pfx8:TYPE_PRODUCT_ID>
+                                <pfx8:TYPE_PRODUCT_ID_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Type product id omschrijving&quot;"/>
+                                </pfx8:TYPE_PRODUCT_ID_OMSCHRIJVING>
+                                <pfx8:PRODUCT_ID>
+                                    <xsl:value-of select="&quot;product id&quot;"/>
+                                </pfx8:PRODUCT_ID>
+                                <pfx8:ONDERNUMMER>
+                                    <xsl:value-of select="&quot;070-918740&quot;"/>
+                                </pfx8:ONDERNUMMER>
+                                <pfx8:EXTERN_KLANTORDER_NUMMER>
+                                    <xsl:value-of select="&quot;Extern klantorder nummer&quot;"/>
+                                </pfx8:EXTERN_KLANTORDER_NUMMER>
+                                <pfx8:ORDER_TYPE_AFKORTING>
+                                    <xsl:value-of select="&quot;A&quot;"/>
+                                </pfx8:ORDER_TYPE_AFKORTING>
+                                <pfx8:NAAM_VAN_GEBRUIKER_DIE_KLACHT_AANNEEMT>
+                                    <xsl:value-of select="&quot;Naam van gebruiker die klacht aanbracht&quot;"/>
+                                </pfx8:NAAM_VAN_GEBRUIKER_DIE_KLACHT_AANNEEMT>
+                                <pfx8:VORIGE_STATUS>
+                                    <xsl:value-of select="9"/>
+                                </pfx8:VORIGE_STATUS>
+                                <pfx8:VORIGE_STATUS_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Omschrijving van de vorige status&quot;"/>
+                                </pfx8:VORIGE_STATUS_OMSCHRIJVING>
+                                <pfx8:INDICATIE_OF_HET_EEN_BSD_MELDING_BETREFT>
+                                    <xsl:value-of select="&quot;J&quot;"/>
+                                </pfx8:INDICATIE_OF_HET_EEN_BSD_MELDING_BETREFT>
+                            </pfx6:MELD_S-0100>
+                            <pfx6:KLANT_S-0100>
+                                <pfx15:KLANTNAAM>
+                                    <xsl:value-of select="&quot;Klantnaam&quot;"/>
+                                </pfx15:KLANTNAAM>
+                                <pfx15:STRAATNAAM>
+                                    <xsl:value-of select="&quot;Straatnaam&quot;"/>
+                                </pfx15:STRAATNAAM>
+                                <pfx15:HUISNUMMER_NUMERIEK>
+                                    <xsl:value-of select="1"/>
+                                </pfx15:HUISNUMMER_NUMERIEK>
+                                <pfx15:HUISNUMMER_ALFANUMERIEK>
+                                    <xsl:value-of select="&quot;A&quot;"/>
+                                </pfx15:HUISNUMMER_ALFANUMERIEK>
+                                <pfx15:POSTCODE_NUMERIEK>
+                                    <xsl:value-of select="2256"/>
+                                </pfx15:POSTCODE_NUMERIEK>
+                                <pfx15:POSTCODE_ALFANUMERIEK>
+                                    <xsl:value-of select="&quot;GA&quot;"/>
+                                </pfx15:POSTCODE_ALFANUMERIEK>
+                                <pfx15:PLAATSNAAM>
+                                    <xsl:value-of select="&quot;Plaatsnaam&quot;"/>
+                                </pfx15:PLAATSNAAM>
+                                <pfx15:PLAATSNAAM_CODE>
+                                    <xsl:value-of select="&quot;abcde&quot;"/>
+                                </pfx15:PLAATSNAAM_CODE>
+                                <pfx15:CORRESPONDENTIE_NAAM>
+                                    <xsl:value-of select="&quot;Corresponditie naam&quot;"/>
+                                </pfx15:CORRESPONDENTIE_NAAM>
+                                <pfx15:CORRESPONDENTIE_TELEFOONNR>
+                                    <xsl:value-of select="&quot;070-417856&quot;"/>
+                                </pfx15:CORRESPONDENTIE_TELEFOONNR>
+                                <pfx15:CENTRALE_KLANT_REGISTRATIE_NR>
+                                    <xsl:value-of select="&quot;123abc23&quot;"/>
+                                </pfx15:CENTRALE_KLANT_REGISTRATIE_NR>
+                                <pfx15:RECHTSVORM_CODE>
+                                    <xsl:value-of select="&quot;RC&quot;"/>
+                                </pfx15:RECHTSVORM_CODE>
+                                <pfx15:TELECOM_REGIO_CODE>
+                                    <xsl:value-of select="&quot;TRC010&quot;"/>
+                                </pfx15:TELECOM_REGIO_CODE>
+                                <pfx15:TELECOM_DISTRICT_CODE>
+                                    <xsl:value-of select="&quot;TDC010&quot;"/>
+                                </pfx15:TELECOM_DISTRICT_CODE>
+                            </pfx6:KLANT_S-0100>
+                            <pfx6:KLACHT_S-0102>
+                                <pfx16:PRODUCTSOORT_CODE>
+                                    <xsl:value-of select="1"/>
+                                </pfx16:PRODUCTSOORT_CODE>
+                                <pfx16:PRODUCTSOORT_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Product omshrijving&quot;"/>
+                                </pfx16:PRODUCTSOORT_OMSCHRIJVING>
+                                <pfx16:RAPPORTAGE_CODE>
+                                    <xsl:value-of select="3"/>
+                                </pfx16:RAPPORTAGE_CODE>
+                                <pfx16:RAPPORTAGE_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Rapportage  omschrijving&quot;"/>
+                                </pfx16:RAPPORTAGE_OMSCHRIJVING>
+                                <pfx16:KLACHT_GROEP>
+                                    <xsl:value-of select="1"/>
+                                </pfx16:KLACHT_GROEP>
+                                <pfx16:KLACHT_NUMMER>
+                                    <xsl:value-of select="2"/>
+                                </pfx16:KLACHT_NUMMER>
+                                <pfx16:KLACHT_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Klacht omschrijving&quot;"/>
+                                </pfx16:KLACHT_OMSCHRIJVING>
+                                <pfx16:KLACHT_TEKST>
+                                    <xsl:value-of select="&quot;Klacht tekst&quot;"/>
+                                </pfx16:KLACHT_TEKST>
+                                <pfx16:URGENTIE_DOOR_KLANT_AANGEGEVEN_CODE>
+                                    <xsl:value-of select="&quot;UC&quot;"/>
+                                </pfx16:URGENTIE_DOOR_KLANT_AANGEGEVEN_CODE>
+                                <pfx16:URGENTIE_DOOR_KLANT_AANGEGEVEN_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Urgentie door klant aangegeven omschrijving&quot;"/>
+                                </pfx16:URGENTIE_DOOR_KLANT_AANGEGEVEN_OMSCHRIJVING>
+                                <pfx16:BIJZONDERHEDEN>
+                                    <xsl:value-of select="&quot;Bijzonderheden&quot;"/>
+                                </pfx16:BIJZONDERHEDEN>
+                                <pfx16:KLACHT_1E_PRODUCTSOORT_CODE>
+                                    <xsl:value-of select="3"/>
+                                </pfx16:KLACHT_1E_PRODUCTSOORT_CODE>
+                                <pfx16:KLACHT_1E_PRODUCTSOORT_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Klacht 1e productsoort omschrijving&quot;"/>
+                                </pfx16:KLACHT_1E_PRODUCTSOORT_OMSCHRIJVING>
+                                <pfx16:PRODUCT_CATEGORIE_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Product catagorie omschrijving&quot;"/>
+                                </pfx16:PRODUCT_CATEGORIE_OMSCHRIJVING>
+                                <pfx16:HERHAALSTORING>
+                                    <xsl:value-of select="&quot;N&quot;"/>
+                                </pfx16:HERHAALSTORING>
+                                <pfx16:BUITEN_NORM_PLAN_KAL>
+                                    <xsl:value-of select="&quot;P&quot;"/>
+                                </pfx16:BUITEN_NORM_PLAN_KAL>
+                                <pfx16:BUITEN_NORM_VERZOEK_KLANT>
+                                    <xsl:value-of select="&quot;H&quot;"/>
+                                </pfx16:BUITEN_NORM_VERZOEK_KLANT>
+                                <pfx16:FORMULE>
+                                    <xsl:value-of select="&quot;Formule&quot;"/>
+                                </pfx16:FORMULE>
+                                <pfx16:KOSTEN_AKKOORD_>
+                                    <xsl:value-of select="&quot;J&quot;"/>
+                                </pfx16:KOSTEN_AKKOORD_>
+                            </pfx6:KLACHT_S-0102>
+                            <pfx6:WERK_S-0100>
+                                <pfx9:ROUTEREN_NAAR>
+                                    <xsl:value-of select="&quot;ANA&quot;"/>
+                                </pfx9:ROUTEREN_NAAR>
+                                <pfx9:BEPAAL_DEFAULT_ANALIST>
+                                    <xsl:value-of select="&quot;N&quot;"/>
+                                </pfx9:BEPAAL_DEFAULT_ANALIST>
+                                <pfx9:ANALIST_CODE>
+                                    <xsl:value-of select="&quot;Analist code&quot;"/>
+                                </pfx9:ANALIST_CODE>
+                                <pfx9:ANALIST_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Analist omschrijving&quot;"/>
+                                </pfx9:ANALIST_OMSCHRIJVING>
+                                <pfx9:ONDERZOEKER_WERKGEBIED>
+                                    <xsl:value-of select="&quot;Onderzoek werkgebied&quot;"/>
+                                </pfx9:ONDERZOEKER_WERKGEBIED>
+                                <pfx9:ONDERZOEKER_AFDELING>
+                                    <xsl:value-of select="&quot;Onderzoek afdeling&quot;"/>
+                                </pfx9:ONDERZOEKER_AFDELING>
+                                <pfx9:ONDERZOEKER_NUMMER>
+                                    <xsl:value-of select="&quot;123&quot;"/>
+                                </pfx9:ONDERZOEKER_NUMMER>
+                                <pfx9:UITGIFTE_DATUM>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx9:UITGIFTE_DATUM>
+                                <pfx9:ANALYSE_EINDDATUM>
+                                    <xsl:value-of select="&quot;2004-08-02T13:20:00-05:00&quot;"/>
+                                </pfx9:ANALYSE_EINDDATUM>
+                                <pfx9:DATUM_AANVANG_WERKZAAMHEDEN>
+                                    <xsl:value-of select="&quot;2004-09-02T13:20:00-05:00&quot;"/>
+                                </pfx9:DATUM_AANVANG_WERKZAAMHEDEN>
+                                <pfx9:DATUM_EINDE_WERKZAAMHEDEN>
+                                    <xsl:value-of select="&quot;2004-10-02T13:20:00-05:00&quot;"/>
+                                </pfx9:DATUM_EINDE_WERKZAAMHEDEN>
+                                <pfx9:DATUM_TERUGMELDEN_KLACHT>
+                                    <xsl:value-of select="&quot;2004-11-02T13:20:00-05:00&quot;"/>
+                                </pfx9:DATUM_TERUGMELDEN_KLACHT>
+                                <pfx9:DATUM_GEREEDMELDEN_KLACHT>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx9:DATUM_GEREEDMELDEN_KLACHT>
+                                <pfx9:AARD_VAN_STORING_CODE>
+                                    <xsl:value-of select="4"/>
+                                </pfx9:AARD_VAN_STORING_CODE>
+                                <pfx9:AARD_VAN_STORING_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Aard van storing omschrijving&quot;"/>
+                                </pfx9:AARD_VAN_STORING_OMSCHRIJVING>
+                                <pfx9:GEREEDMELDING_WIJZE>
+                                    <xsl:value-of select="&quot;T&quot;"/>
+                                </pfx9:GEREEDMELDING_WIJZE>
+                            </pfx6:WERK_S-0100>
+                            <pfx6:VERPL_S-0100>
+                                <pfx10:HERSTEL_TIJDSTIP>
+                                    <xsl:value-of select="&quot;2005-07-02T13:20:00-05:00&quot;"/>
+                                </pfx10:HERSTEL_TIJDSTIP>
+                                <pfx10:BEREKEND_TIJDSTIP>
+                                    <xsl:value-of select="&quot;2006-07-02T13:20:00-05:00&quot;"/>
+                                </pfx10:BEREKEND_TIJDSTIP>
+                                <pfx10:CONTRACT_SOORT>
+                                    <xsl:value-of select="3"/>
+                                </pfx10:CONTRACT_SOORT>
+                                <pfx10:AFSPRAAK_ORGANISATIE>
+                                    <xsl:value-of select="&quot;Afspraak organisatie&quot;"/>
+                                </pfx10:AFSPRAAK_ORGANISATIE>
+                                <pfx10:AFSPRAAK_ORGANISATIE_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Afspraak organisatie omschrijving&quot;"/>
+                                </pfx10:AFSPRAAK_ORGANISATIE_OMSCHRIJVING>
+                                <pfx10:AFSPRAAK_ONDERZOEKER_WERKGEBIED>
+                                    <xsl:value-of select="&quot;Afspraak onderzoek werkgebied&quot;"/>
+                                </pfx10:AFSPRAAK_ONDERZOEKER_WERKGEBIED>
+                                <pfx10:AFSPRAAK_ONDERZOEKER_AFDELING>
+                                    <xsl:value-of select="&quot;123&quot;"/>
+                                </pfx10:AFSPRAAK_ONDERZOEKER_AFDELING>
+                                <pfx10:AFSPRAAK_ONDERZOEKER_NUMMER>
+                                    <xsl:value-of select="&quot;321&quot;"/>
+                                </pfx10:AFSPRAAK_ONDERZOEKER_NUMMER>
+                                <pfx10:AFSPRAAK_DATUM>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx10:AFSPRAAK_DATUM>
+                                <pfx10:AFSPRAAK_DAGDEEL_CODE>
+                                    <xsl:value-of select="2"/>
+                                </pfx10:AFSPRAAK_DAGDEEL_CODE>
+                                <pfx10:AFSPRAAK_DAGDEEL_VAN>
+                                    <xsl:value-of select="&quot;13:20:00-05:00&quot;"/>
+                                </pfx10:AFSPRAAK_DAGDEEL_VAN>
+                                <pfx10:AFSPRAAK_DAGDEEL_TOT>
+                                    <xsl:value-of select="&quot;13:20:00-05:00&quot;"/>
+                                </pfx10:AFSPRAAK_DAGDEEL_TOT>
+                                <pfx10:INDICATIE_WEL_GEEN_BEZOEK_BIJ_AFSPRAAK>
+                                    <xsl:value-of select="&quot;J&quot;"/>
+                                </pfx10:INDICATIE_WEL_GEEN_BEZOEK_BIJ_AFSPRAAK>
+                                <pfx10:CONTRACT_WERKTIJD_CODE>
+                                    <xsl:value-of select="&quot;56&quot;"/>
+                                </pfx10:CONTRACT_WERKTIJD_CODE>
+                                <pfx10:CONTRACT_RESPONSE_UREN>
+                                    <xsl:value-of select="2"/>
+                                </pfx10:CONTRACT_RESPONSE_UREN>
+                                <pfx10:CONTRACT_IDENTIFICATIE_NUMMER_PAKKET>
+                                    <xsl:value-of select="&quot;87654321&quot;"/>
+                                </pfx10:CONTRACT_IDENTIFICATIE_NUMMER_PAKKET>
+                                <pfx10:CONTRACT_DATUM_IN_DIENST>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx10:CONTRACT_DATUM_IN_DIENST>
+                                <pfx10:URGENTIE_CODE>
+                                    <xsl:value-of select="&quot;abcd&quot;"/>
+                                </pfx10:URGENTIE_CODE>
+                                <pfx10:URGENTIE_MAJOR_MINOR_INDICATIE>
+                                    <xsl:value-of select="&quot;A&quot;"/>
+                                </pfx10:URGENTIE_MAJOR_MINOR_INDICATIE>
+                                <pfx10:KLACHT_INDICATIE_1E_BEZOEK_BIJ_AFSPRAAK>
+                                    <xsl:value-of select="&quot;J&quot;"/>
+                                </pfx10:KLACHT_INDICATIE_1E_BEZOEK_BIJ_AFSPRAAK>
+                                <pfx10:KLACHT_1E_ORGANISATIE_CODE_TBV_DDE>
+                                    <xsl:value-of select="&quot;zyx&quot;"/>
+                                </pfx10:KLACHT_1E_ORGANISATIE_CODE_TBV_DDE>
+                                <pfx10:KLACHT_1E_DAGDEEL_CODE>
+                                    <xsl:value-of select="1"/>
+                                </pfx10:KLACHT_1E_DAGDEEL_CODE>
+                                <pfx10:KLACHT_1E_DAGDEEL_VAN>
+                                    <xsl:value-of select="&quot;13:20:00-05:00&quot;"/>
+                                </pfx10:KLACHT_1E_DAGDEEL_VAN>
+                                <pfx10:KLACHT_1E_DAGDEEL_TOT>
+                                    <xsl:value-of select="&quot;13:20:00-05:00&quot;"/>
+                                </pfx10:KLACHT_1E_DAGDEEL_TOT>
+                                <pfx10:KLACHT_1E_AFSPRAAK_DATUM>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx10:KLACHT_1E_AFSPRAAK_DATUM>
+                                <pfx10:INDICATIE_AFSPRAAK_BUITEN_NORM>
+                                    <xsl:value-of select="&quot;J&quot;"/>
+                                </pfx10:INDICATIE_AFSPRAAK_BUITEN_NORM>
+                                <pfx10:AANTAL_CONTRACTEN>
+                                    <xsl:value-of select="23"/>
+                                </pfx10:AANTAL_CONTRACTEN>
+                                <pfx10:HERSTELTIJDSTIP_1E>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx10:HERSTELTIJDSTIP_1E>
+                            </pfx6:VERPL_S-0100>
+                            <pfx6:CONTR_S-0100>
+                                <ns6:CONTRACTANT_NAAM>
+                                    <xsl:value-of select="&quot;contractant naam&quot;"/>
+                                </ns6:CONTRACTANT_NAAM>
+                                <ns6:CONTRACTANT_STRAATNAAM>
+                                    <xsl:value-of select="&quot;contractant straatnaam&quot;"/>
+                                </ns6:CONTRACTANT_STRAATNAAM>
+                                <ns6:CONTRACTANT_HUISNR_NUMERIEK>
+                                    <xsl:value-of select="34"/>
+                                </ns6:CONTRACTANT_HUISNR_NUMERIEK>
+                                <ns6:CONTRACTANT_HUISNR_ALFANUMERIEK>
+                                    <xsl:value-of select="&quot;B&quot;"/>
+                                </ns6:CONTRACTANT_HUISNR_ALFANUMERIEK>
+                                <ns6:CONTRACTANT_WOONPLAATS>
+                                    <xsl:value-of select="&quot;contractant woonplaats&quot;"/>
+                                </ns6:CONTRACTANT_WOONPLAATS>
+                                <ns6:CONTRACTANT_NAAM_CONTACTPERSOON>
+                                    <xsl:value-of select="&quot;contractant naam contractpersoon&quot;"/>
+                                </ns6:CONTRACTANT_NAAM_CONTACTPERSOON>
+                                <ns6:CONTRACTANT_TELEFOONNR_CONTACTPERSOON>
+                                    <xsl:value-of select="&quot;01-4574536&quot;"/>
+                                </ns6:CONTRACTANT_TELEFOONNR_CONTACTPERSOON>
+                                <ns6:CONTRACTANT_FAXNR_CONTACTPERSOON>
+                                    <xsl:value-of select="&quot;010-4573945&quot;"/>
+                                </ns6:CONTRACTANT_FAXNR_CONTACTPERSOON>
+                            </pfx6:CONTR_S-0100>
+                            <pfx6:INFRA_S-0100>
+                                <pfx17:CENTRALE_GEBIEDSCODE>
+                                    <xsl:value-of select="10"/>
+                                </pfx17:CENTRALE_GEBIEDSCODE>
+                                <pfx17:ISDN_TYPE_AANSLUITING>
+                                    <xsl:value-of select="&quot;T&quot;"/>
+                                </pfx17:ISDN_TYPE_AANSLUITING>
+                                <pfx17:POORT_ID_EQUIPEMENT_ADRES>
+                                    <xsl:value-of select="&quot;adres&quot;"/>
+                                </pfx17:POORT_ID_EQUIPEMENT_ADRES>
+                                <pfx17:POORT_ID_APPARATUUR>
+                                    <xsl:value-of select="&quot;apparatuur&quot;"/>
+                                </pfx17:POORT_ID_APPARATUUR>
+                                <pfx17:POORT_ID_EQUIPEMENT_TYPE>
+                                    <xsl:value-of select="&quot;Type&quot;"/>
+                                </pfx17:POORT_ID_EQUIPEMENT_TYPE>
+                                <pfx17:INFRAGEGEVENS>
+                                    <xsl:value-of select="&quot;Infragegevens&quot;"/>
+                                </pfx17:INFRAGEGEVENS>
+                                <pfx17:KWALITEITSCATEGORIE>
+                                    <xsl:value-of select="&quot;Kce&quot;"/>
+                                </pfx17:KWALITEITSCATEGORIE>
+                            </pfx6:INFRA_S-0100>
+                            <pfx6:MEET_S-0100>
+                                <pfx18:MEETGEGEVENS_1>
+                                    <xsl:value-of select="&quot;Meetgevens 1 vrije tekst&quot;"/>
+                                </pfx18:MEETGEGEVENS_1>
+                                <pfx18:MEETGEGEVENS_2>
+                                    <xsl:value-of select="&quot;Meetgevens 2 vrije tekst&quot;"/>
+                                </pfx18:MEETGEGEVENS_2>
+                            </pfx6:MEET_S-0100>
+                            <pfx6:OBSERV_S-0100>
+                                <pfx11:DATUM_IN_OBSERVATIE>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx11:DATUM_IN_OBSERVATIE>
+                                <pfx11:DATUM_UIT_OBSERVATIE>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx11:DATUM_UIT_OBSERVATIE>
+                            </pfx6:OBSERV_S-0100>
+                            <pfx6:OVERIG_S-0101>
+                                <pfx19:VERZAMELCODE>
+                                    <xsl:value-of select="&quot;vzc&quot;"/>
+                                </pfx19:VERZAMELCODE>
+                                <pfx19:INFOCENTER>
+                                    <xsl:value-of select="&quot;Infocenter&quot;"/>
+                                </pfx19:INFOCENTER>
+                            </pfx6:OVERIG_S-0101>
+                            <pfx6:PORTER_S-0100>
+                                <pfx12:KLACHT_1E_OPERATOR_CODE>
+                                    <xsl:value-of select="&quot;k1eoc&quot;"/>
+                                </pfx12:KLACHT_1E_OPERATOR_CODE>
+                                <pfx12:KLACHT_1E_OPERATOR_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Klacht 1e operator omschrijving&quot;"/>
+                                </pfx12:KLACHT_1E_OPERATOR_OMSCHRIJVING>
+                                <pfx12:KLACHT_1E_OPERATOR_TELEFOONNUMMER>
+                                    <xsl:value-of select="&quot;010-2345678&quot;"/>
+                                </pfx12:KLACHT_1E_OPERATOR_TELEFOONNUMMER>
+                                <pfx12:KLACHT_1E_MUTATIE_TYPE_CODE>
+                                    <xsl:value-of select="1"/>
+                                </pfx12:KLACHT_1E_MUTATIE_TYPE_CODE>
+                                <pfx12:KLACHT_1E_MUTATIE_TYPE_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Klancht 1e mutatie type omschrijving&quot;"/>
+                                </pfx12:KLACHT_1E_MUTATIE_TYPE_OMSCHRIJVING>
+                                <pfx12:KLACHT_1E_DATUM_PORTERING>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx12:KLACHT_1E_DATUM_PORTERING>
+                                <pfx12:KLACHT_2E_TELEFOONNUMMER>
+                                    <xsl:value-of select="&quot;010-3465786&quot;"/>
+                                </pfx12:KLACHT_2E_TELEFOONNUMMER>
+                                <pfx12:KLACHT_2E_OPERATOR_CODE>
+                                    <xsl:value-of select="&quot;k2eoc&quot;"/>
+                                </pfx12:KLACHT_2E_OPERATOR_CODE>
+                                <pfx12:KLACHT_2E_OPERATOR_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Klacht 2e operator omschrijving&quot;"/>
+                                </pfx12:KLACHT_2E_OPERATOR_OMSCHRIJVING>
+                                <pfx12:KLACHT_2E_OPERATOR_TELEFOONNUMMER>
+                                    <xsl:value-of select="&quot;010-98542344&quot;"/>
+                                </pfx12:KLACHT_2E_OPERATOR_TELEFOONNUMMER>
+                                <pfx12:KLACHT_2E_MUTATIE_TYPE_CODE>
+                                    <xsl:value-of select="3"/>
+                                </pfx12:KLACHT_2E_MUTATIE_TYPE_CODE>
+                                <pfx12:KLACHT_2E_MUTATIE_TYPE_OMSCHRIJVING>
+                                    <xsl:value-of select="&quot;Klacht mutatie typeomschrijving 2&quot;"/>
+                                </pfx12:KLACHT_2E_MUTATIE_TYPE_OMSCHRIJVING>
+                                <pfx12:KLACHT_2E_DATUM_PORTERING>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx12:KLACHT_2E_DATUM_PORTERING>
+                            </pfx6:PORTER_S-0100>
+                            <pfx6:TECH_S-0100>
+                                <ns7:BRONSYSTEEM_ORDER_REFERENTIE>
+                                    <xsl:value-of select="&quot;Bronsysteem order referentie&quot;"/>
+                                </ns7:BRONSYSTEEM_ORDER_REFERENTIE>
+                                <ns7:DOELSYSTEEM_ORDER_REFERENTIE>
+                                    <xsl:value-of select="&quot;Doelsysteem order referentie&quot;"/>
+                                </ns7:DOELSYSTEEM_ORDER_REFERENTIE>
+                                <ns7:AFHANDELEND_SYSTEEM>
+                                    <xsl:value-of select="&quot;EXT&quot;"/>
+                                </ns7:AFHANDELEND_SYSTEEM>
+                                <ns7:ABONNEMENT_OP_VOORTGANGSINFORMATIE>
+                                    <xsl:value-of select="&quot;J&quot;"/>
+                                </ns7:ABONNEMENT_OP_VOORTGANGSINFORMATIE>
+                            </pfx6:TECH_S-0100>
+                            <pfx6:SERBOX_S-0100>
+                                <pfx20:SERVICE_BOX_PROJECT_CODE>
+                                    <xsl:value-of select="&quot;Service box project code&quot;"/>
+                                </pfx20:SERVICE_BOX_PROJECT_CODE>
+                                <pfx20:SERVICE_BOX_TYPE_CONTRACT>
+                                    <xsl:value-of select="&quot;A&quot;"/>
+                                </pfx20:SERVICE_BOX_TYPE_CONTRACT>
+                                <pfx20:SERVICE_BOX_BIJZONDERHEDEN>
+                                    <xsl:value-of select="&quot;Service box bijzonderheden&quot;"/>
+                                </pfx20:SERVICE_BOX_BIJZONDERHEDEN>
+                            </pfx6:SERBOX_S-0100>
+                            <pfx6:STRBOX_S-0100>
+                                <pfx21:STRATA_AFGEMELDE_KLANT_INDICATIE>
+                                    <xsl:value-of select="&quot;S&quot;"/>
+                                </pfx21:STRATA_AFGEMELDE_KLANT_INDICATIE>
+                                <pfx21:STRATA_BIJZONDERHEDEN>
+                                    <xsl:value-of select="&quot;Strata bijzonderheden&quot;"/>
+                                </pfx21:STRATA_BIJZONDERHEDEN>
+                                <pfx21:STRATA_OORZAAK_GEVONDEN_INDICATOR>
+                                    <xsl:value-of select="&quot;K&quot;"/>
+                                </pfx21:STRATA_OORZAAK_GEVONDEN_INDICATOR>
+                                <pfx21:STRATA_AARD_VAN_STORING_CODE>
+                                    <xsl:value-of select="1"/>
+                                </pfx21:STRATA_AARD_VAN_STORING_CODE>
+                                <pfx21:STRATA_NAAM>
+                                    <xsl:value-of select="&quot;Strate naam&quot;"/>
+                                </pfx21:STRATA_NAAM>
+                                <pfx21:STRATA_IDENTIFICATIE_REGIOVOLGNUMMER>
+                                    <xsl:value-of select="&quot;SIR&quot;"/>
+                                </pfx21:STRATA_IDENTIFICATIE_REGIOVOLGNUMMER>
+                                <pfx21:STRATA_VOLGNUMMER>
+                                    <xsl:value-of select="&quot;0002&quot;"/>
+                                </pfx21:STRATA_VOLGNUMMER>
+                                <pfx21:STRATA_TELECOM_DISTRICT_CODE>
+                                    <xsl:value-of select="&quot;020&quot;"/>
+                                </pfx21:STRATA_TELECOM_DISTRICT_CODE>
+                                <pfx21:STRATA_WERKVELD_CODE>
+                                    <xsl:value-of select="&quot;021&quot;"/>
+                                </pfx21:STRATA_WERKVELD_CODE>
+                            </pfx6:STRBOX_S-0100>
+                            <pfx6:VV_S-0100>
+                                <pfx22:VV_A_ZIJDE_TELEFOONNR>
+                                    <xsl:value-of select="&quot;VV A zijde telefoonnr.&quot;"/>
+                                </pfx22:VV_A_ZIJDE_TELEFOONNR>
+                                <pfx22:VV_A_ZIJDE_NAAM>
+                                    <xsl:value-of select="&quot;VV A zijde maam&quot;"/>
+                                </pfx22:VV_A_ZIJDE_NAAM>
+                                <pfx22:VV_A_ZIJDE_ADRES>
+                                    <xsl:value-of select="&quot;VV A zijde Adres&quot;"/>
+                                </pfx22:VV_A_ZIJDE_ADRES>
+                                <pfx22:VV_A_ZIJDE_PLAATS>
+                                    <xsl:value-of select="&quot;VV A zijde plaats&quot;"/>
+                                </pfx22:VV_A_ZIJDE_PLAATS>
+                                <pfx22:VV_B_ZIJDE_TELEFOONNR>
+                                    <xsl:value-of select="&quot;VV B zijde telefoonnr.&quot;"/>
+                                </pfx22:VV_B_ZIJDE_TELEFOONNR>
+                                <pfx22:VV_B_ZIJDE_NAAM>
+                                    <xsl:value-of select="&quot;VV B zijde naam&quot;"/>
+                                </pfx22:VV_B_ZIJDE_NAAM>
+                                <pfx22:VV_B_ZIJDE_ADRES>
+                                    <xsl:value-of select="&quot;VV B zijde adres&quot;"/>
+                                </pfx22:VV_B_ZIJDE_ADRES>
+                                <pfx22:VV_B_ZIJDE_PLAATS>
+                                    <xsl:value-of select="&quot;VV B zijde plaats&quot;"/>
+                                </pfx22:VV_B_ZIJDE_PLAATS>
+                                <pfx22:VV_NIPO_TELEFOONNR>
+                                    <xsl:value-of select="&quot;VV nipe telefoonnr &quot;"/>
+                                </pfx22:VV_NIPO_TELEFOONNR>
+                                <pfx22:VV_NIPO_NAAM>
+                                    <xsl:value-of select="&quot;VV nipo naam&quot;"/>
+                                </pfx22:VV_NIPO_NAAM>
+                            </pfx6:VV_S-0100>
+                            <pfx6:VORANA_S-0100>
+                                <pfx13:VORIGE_ANALIST_CODE>
+                                    <xsl:value-of select="&quot;vac&quot;"/>
+                                </pfx13:VORIGE_ANALIST_CODE>
+                                <pfx13:DATUM_EINDE_ANALYSE>
+                                    <xsl:value-of select="&quot;2004-07-02T13:20:00-05:00&quot;"/>
+                                </pfx13:DATUM_EINDE_ANALYSE>
+                            </pfx6:VORANA_S-0100>
+                            <pfx6:VOROND_S-0100>
+                                <pfx14:VORIGE_ONDERZOEKER_AFDELING>
+                                    <xsl:value-of select="&quot;voa&quot;"/>
+                                </pfx14:VORIGE_ONDERZOEKER_AFDELING>
+                                <pfx14:VORIGE_ONDERZOEKER_NUMMER>
+                                    <xsl:value-of select="&quot;321&quot;"/>
+                                </pfx14:VORIGE_ONDERZOEKER_NUMMER>
+                                <pfx14:UITGIFTE_DATUM>
+                                    <xsl:value-of select="&quot;2004-01-02T13:20:00-05:00&quot;"/>
+                                </pfx14:UITGIFTE_DATUM>
+                                <pfx14:DATUM_AANVANG_WERKZAAMHEDEN>
+                                    <xsl:value-of select="&quot;2004-02-02T13:20:00-05:00&quot;"/>
+                                </pfx14:DATUM_AANVANG_WERKZAAMHEDEN>
+                                <pfx14:DATUM_EINDE_WERKZAAMHEDEN>
+                                    <xsl:value-of select="&quot;2004-03-02T13:20:00-05:00&quot;"/>
+                                </pfx14:DATUM_EINDE_WERKZAAMHEDEN>
+                            </pfx6:VOROND_S-0100>
+                        </pfx6:Loop>
+                    </pfx6:ENGIN>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetTickets Subscriber</pd:from>
+        <pd:to>Reply to Rendezvous Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to Rendezvous Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

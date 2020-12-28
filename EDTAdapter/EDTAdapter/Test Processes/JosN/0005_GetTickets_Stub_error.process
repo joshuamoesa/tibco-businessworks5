@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798344886" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802707930" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1087368660275" xmlns:pfx3="http://xmlns.example.com/unique/default/namespace/1087727306677" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1087727473027">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086798344886" schemaLocation="/XSDSchemas/EnginAdapter/Request/GetTickets.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802707930" schemaLocation="/XSDSchemas/EnginAdapter/Response/GetTickets.xsd"/>
+    <pd:name>EDTAdapter/Test Processes/JosN/0005_GetTickets_Stub_error.process</pd:name>
+    <pd:startName>GetTickets Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetTickets Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>153</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Order.EnginAdapter.Request.GetTickets.1</subject>
+            <xmlEncoding>true</xmlEncoding>
+            <sharedChannel>/EDTAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xsdString ref="pfx:GetTickets"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to GetTickets Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>318</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetTickets Subscriber</eventSource>
+            <xsdString ref="pfx2:GetTickets"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="$GetTickets-Subscriber/ActivityOutput/body/ns:CMH/ns:ID"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$GetTickets-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="&quot;REPLY&quot;"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="$GetTickets-Subscriber/ActivityOutput/body/ns:CMH/ns:OBJECT"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="$GetTickets-Subscriber/ActivityOutput/body/ns:CMH/ns:VERSION"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="&quot;STUBBBBBBB&quot;"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="&quot;Destination&quot;"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <xsl:for-each select="$GetTickets-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING">
+                            <ns:TRACKING>
+                                <ns:MESSAGE_ID>
+                                    <xsl:value-of select="ns:MESSAGE_ID"/>
+                                </ns:MESSAGE_ID>
+                                <xsl:if test="ns:EXTERNAL_REF">
+                                    <ns:EXTERNAL_REF>
+                                        <xsl:value-of select="ns:EXTERNAL_REF"/>
+                                    </ns:EXTERNAL_REF>
+                                </xsl:if>
+                                <xsl:for-each select="ns:ITEM">
+                                    <ns:ITEM>
+                                        <xsl:attribute name="ns:APPINFO">
+                                            <xsl:value-of select="@ns:APPINFO"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns:EVENT">
+                                            <xsl:value-of select="@ns:EVENT"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns:TIMESTAMP">
+                                            <xsl:value-of select="@ns:TIMESTAMP"/>
+                                        </xsl:attribute>
+                                    </ns:ITEM>
+                                </xsl:for-each>
+                                <xsl:for-each select="ns:SEQUENCE_NO">
+                                    <ns:SEQUENCE_NO>
+                                        <xsl:value-of select="."/>
+                                    </ns:SEQUENCE_NO>
+                                </xsl:for-each>
+                            </ns:TRACKING>
+                        </xsl:for-each>
+                    </ns:CMH>
+                    <RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;msg_code&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:ERROR_CODE">
+                            <xsl:value-of select="&quot;error_code&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:ERROR_DESCRIPTION">
+                            <xsl:value-of select="&quot;error_description&quot;"/>
+                        </xsl:attribute>
+                    </RESULT_STATUS>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetTickets Subscriber</pd:from>
+        <pd:to>Reply to GetTickets Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to GetTickets Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/JSON_GEN_Schemas/jsonSingleIssue.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/JSON_GEN_Schemas/jsontext.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/JSON_GEN_Schemas/jsontext.xsd" schemaLocation="/JSON_GEN_Schemas/jsontext.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/JSON_GEN_Schemas/jsonSingleIssue.xsd" schemaLocation="/JSON_GEN_Schemas/jsonSingleIssue.xsd"/>
+    <pd:name>updateIssues.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>53</pd:startX>
+    <pd:startY>244</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1340</pd:endX>
+    <pd:endY>238</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1406034638761</pd:targetNamespace>
+    <pd:activity name="getIssues">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>166</pd:x>
+        <pd:y>243</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/Resources/JDBC/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+            <statement>select id from issues</statement>
+            <Prepared_Param_DataType/>
+            <wizardData/>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>253</pd:x>
+        <pd:y>47</pd:y>
+        <pd:width>999</pd:width>
+        <pd:height>375</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$getIssues/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>current-record</pd:iterationElementSlot>
+            <pd:indexSlot>j</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>callJira</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>upsertLatestComment</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>parseResponse</pd:from>
+            <pd:to>updateInternalTicket</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>1=0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>updateAssignee</pd:from>
+            <pd:to>getLatestComment</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>getLatestComment</pd:from>
+            <pd:to>upsertLatestComment</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>updateInternalTicket</pd:from>
+            <pd:to>getLatestComment</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>parseResponse</pd:from>
+            <pd:to>updateIssue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>callJira</pd:from>
+            <pd:to>translateJson</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>translateJson</pd:from>
+            <pd:to>parseResponse</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>updateIssue</pd:from>
+            <pd:to>getLatestComment</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>parseResponse</pd:from>
+            <pd:to>updateAssignee</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="callJira">
+            <pd:type>com.tibco.plugin.http.client.HttpRequestActivity</pd:type>
+            <pd:resourceType>httppalette.httpRequest</pd:resourceType>
+            <pd:x>372</pd:x>
+            <pd:y>169</pd:y>
+            <config>
+                <inputOutputVersion>5.3.0</inputOutputVersion>
+                <newMimeSupport>true</newMimeSupport>
+                <authScheme>BASIC</authScheme>
+                <serverhost>jira.oss.local</serverhost>
+                <useSsl>true</useSsl>
+                <requireBasicAuth>true</requireBasicAuth>
+                <basicHttpAuthIdentity>/Identities/Identity.id</basicHttpAuthIdentity>
+                <policies>
+                    <incomingAttachmentPolicy>
+                        <writeToFile>false</writeToFile>
+                    </incomingAttachmentPolicy>
+                </policies>
+                <customField>
+                    <row>
+                        <attribute>jql</attribute>
+                        <attributeType>string</attributeType>
+                        <attributeCard>optional</attributeCard>
+                    </row>
+                </customField>
+                <serverport/>
+                <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                    <ns0:strongCipherSuitesOnly>false</ns0:strongCipherSuitesOnly>
+                    <ns0:cert isRef="true">/Cert/.folder</ns0:cert>
+                </ns0:ssl>
+                <InputHeaders>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </InputHeaders>
+                <OutputHeaders>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </OutputHeaders>
+            </config>
+            <pd:inputBindings>
+                <RequestActivityInput>
+                    <Method>
+                        <xsl:value-of select="'GET'"/>
+                    </Method>
+                    <RequestURI>
+                        <xsl:value-of select="concat('/jira/rest/api/2/issue/', $current-record/Record/ID)"/>
+                    </RequestURI>
+                    <Headers>
+                        <Content-Type>
+                            <xsl:value-of select="&quot;application/json&quot;"/>
+                        </Content-Type>
+                    </Headers>
+                </RequestActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="parseResponse">
+            <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
+            <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
+            <pd:x>634</pd:x>
+            <pd:y>171</pd:y>
+            <config>
+                <SchemaType>xsdType</SchemaType>
+                <BadgerfishCheck>false</BadgerfishCheck>
+                <ActivityOutputEditor ref="pfx2:JSON"/>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInputClass>
+                    <jsonString>
+                        <xsl:value-of select="$translateJson/root/outputString"/>
+                    </jsonString>
+                </ns:ActivityInputClass>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="updateAssignee">
+            <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
+            <pd:x>786</pd:x>
+            <pd:y>103</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <maxRows>100</maxRows>
+                <jdbcSharedConfig>/Resources/JDBC/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <jdbcGeneralActivityInput>
+                    <statement>
+                        <xsl:value-of select="concat(&quot;update issues set assignee = '&quot;, $parseResponse/ns:ActivityOutputClass/JSON/fields/assignee[1]/name, &quot;' where id = &quot;, $current-record/Record/ID)"/>
+                    </statement>
+                </jdbcGeneralActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="getLatestComment">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>1027</pd:x>
+            <pd:y>167</pd:y>
+            <config>
+                <processName>/getLatestComment.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ticketnumber>
+                        <xsl:value-of select="$parseResponse/ns:ActivityOutputClass/JSON/key"/>
+                    </ticketnumber>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="upsertLatestComment">
+            <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
+            <pd:x>1148</pd:x>
+            <pd:y>166</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <maxRows>100</maxRows>
+                <jdbcSharedConfig>/Resources/JDBC/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <jdbcGeneralActivityInput>
+                    <xsl:choose>
+                        <xsl:when test="$parseResponse/ns:ActivityOutputClass/JSON/fields/assignee[1]/name='icc-defect-mgmt'">
+                            <statement>
+                                <xsl:value-of select="concat(&quot;update issues set commentauthor = '&quot;, $getLatestComment/root/comment/author, &quot;', latestcomment='&quot;, concat(substring($getLatestComment/root/comment/commentbody, 0, 100), ' ') , &quot;', commentdate='&quot;, $getLatestComment/root/comment/updated, &quot;' where id = &quot;, $current-record/Record/ID)"/>
+                            </statement>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <statement>
+                                <xsl:value-of select="concat(&quot;update issues set commentauthor = '&quot;, $getLatestComment/root/comment/author, &quot;', latestcomment='&quot;, concat(&quot;...&quot;, &quot;...&quot;) , &quot;', commentdate='&quot;, $getLatestComment/root/comment/updated, &quot;' where id = &quot;, $current-record/Record/ID)"/>
+                            </statement>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </jdbcGeneralActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="updateInternalTicket">
+            <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
+            <pd:x>898</pd:x>
+            <pd:y>169</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <maxRows>100</maxRows>
+                <jdbcSharedConfig>/Resources/JDBC/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <jdbcGeneralActivityInput>
+                    <statement>
+                        <xsl:value-of select="concat(&quot;update issues set internalticket = '&quot;, $parseResponse/ns:ActivityOutputClass/JSON/fields/issuelinks[type/name = '3a) Relation']/*/key[starts-with(text(), 'ICC-')]/text(), &quot;' where id = &quot;, $current-record/Record/ID)"/>
+                    </statement>
+                </jdbcGeneralActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="translateJson">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>505</pd:x>
+            <pd:y>170</pd:y>
+            <config>
+                <processName>/translateJson.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <inputString>
+                        <xsl:value-of select="$callJira/RequestActivityOutput/asciiContent"/>
+                    </inputString>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="updateIssue">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>841</pd:x>
+            <pd:y>262</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>true</emptyStrAsNil>
+                <jdbcSharedConfig>/Resources/JDBC/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+                <schema>SYSTEM</schema>
+                <catalog>PKG_ICC_DFCT_MGMT</catalog>
+                <ProcedureName>UPDATE_ISSUE</ProcedureName>
+                <oraObjects/>
+                <oraTables/>
+                <parameterTypes>
+                    <parameter>
+                        <colName>ISSUEID</colName>
+                        <colType>2</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>ISSUESUMMARY</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PRIORITY</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>ASSIGNEE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>INTERNALTICKET</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <ISSUEID>
+                            <xsl:value-of select="$parseResponse/ns:ActivityOutputClass/JSON/id"/>
+                        </ISSUEID>
+                        <ISSUESUMMARY>
+                            <xsl:value-of select="$parseResponse/ns:ActivityOutputClass/JSON/fields/summary[1]"/>
+                        </ISSUESUMMARY>
+                        <PRIORITY>
+                            <xsl:choose>
+                                <xsl:when test="exists($parseResponse/ns:ActivityOutputClass/JSON/fields/priority[1]/name)">
+                                    <xsl:value-of select="$parseResponse/ns:ActivityOutputClass/JSON/fields/priority[1]/name"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PRIORITY>
+                        <ASSIGNEE>
+                            <xsl:choose>
+                                <xsl:when test="exists($parseResponse/ns:ActivityOutputClass/JSON/fields/assignee[1]/name)">
+                                    <xsl:value-of select="$parseResponse/ns:ActivityOutputClass/JSON/fields/assignee[1]/name"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ASSIGNEE>
+                        <INTERNALTICKET>
+                            <xsl:value-of select="$parseResponse/ns:ActivityOutputClass/JSON/fields/issuelinks[type/name = '3a) Relation']/*/key[starts-with(text(), 'ICC-')]/text()"/>
+                        </INTERNALTICKET>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>getIssues</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getIssues</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ExceptionRuleXslt="java://XSLTTransform" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/CLEver/HistoryRetain" xmlns:ns="http://www.tibco.com/CLEver/Rule" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes">
+    <pd:name>Processes/DataServices/RuleGeneration/Storage/LoadStoreXSLT.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns1:HistoryRetainsFull"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>45</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>531</pd:endX>
+    <pd:endY>103</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="ConstructTests">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>146</pd:x>
+        <pd:y>100</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/ConstructTests.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$Start/Input/ns1:HistoryRetainsFull"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RenderLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>300</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/RenderXslt.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Rules>
+                <xsl:for-each select="$ConstructTests/output/HistoryRetainXpath">
+                    <Storage>
+                        <Value>
+                            <xsl:value-of select="ns1:HistoryRetainFull/ns1:LogExpiry"/>
+                        </Value>
+                        <Test>
+                            <xsl:value-of select="TestLog"/>
+                        </Test>
+                    </Storage>
+                </xsl:for-each>
+            </Rules>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Init RuleXSLT">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>444</pd:x>
+        <pd:y>102</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Log" type="xsd:string"/>
+                            <xsd:element name="LogAttachment" type="xsd:string"/>
+                            <xsd:element name="Exception" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Log>
+                    <xsl:value-of select="ExceptionRuleXslt:loadXslt(&quot;StoreLog&quot;,$RenderLog/Output/Result)"/>
+                </Log>
+                <LogAttachment>
+                    <xsl:value-of select="ExceptionRuleXslt:loadXslt(&quot;StoreLogAttachement&quot;,$RenderLogAttachment/Output/Result)"/>
+                </LogAttachment>
+                <Exception>
+                    <xsl:value-of select="ExceptionRuleXslt:loadXslt(&quot;StoreException&quot;,$RenderException/Output/Result)"/>
+                </Exception>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RenderLogAttachment">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>308</pd:x>
+        <pd:y>101</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/RenderXslt.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Rules>
+                <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ConstructTests/output/HistoryRetainXpath[ns1:HistoryRetainFull/ns1:LogExpiry!=-1]">
+                    <Storage>
+                        <Value>
+                            <xsl:value-of select="if(ns1:HistoryRetainFull/ns1:StoreLogAttachements='true') then 1 else 0"/>
+                        </Value>
+                        <Test>
+                            <xsl:value-of select="TestLog"/>
+                        </Test>
+                    </Storage>
+                </xsl:for-each>
+            </Rules>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RenderException">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>308</pd:x>
+        <pd:y>195</pd:y>
+        <config>
+            <processName>/Processes/DataServices/RuleGeneration/Storage/Sub/RenderXslt.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Rules>
+                <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ConstructTests/output/HistoryRetainXpath">
+                    <Storage>
+                        <Value>
+                            <xsl:value-of select="ns1:HistoryRetainFull/ns1:ExceptionExpiry"/>
+                        </Value>
+                        <Test>
+                            <xsl:value-of select="TestException"/>
+                        </Test>
+                    </Storage>
+                </xsl:for-each>
+            </Rules>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>ConstructTests</pd:from>
+        <pd:to>RenderLog</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RenderLog</pd:from>
+        <pd:to>Init RuleXSLT</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init RuleXSLT</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ConstructTests</pd:from>
+        <pd:to>RenderLogAttachment</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ConstructTests</pd:from>
+        <pd:to>RenderException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RenderException</pd:from>
+        <pd:to>Init RuleXSLT</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RenderLogAttachment</pd:from>
+        <pd:to>Init RuleXSLT</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ConstructTests</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

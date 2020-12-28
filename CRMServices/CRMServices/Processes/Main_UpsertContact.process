@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:eai="java://com.kpn.eai.tools.Tools" xmlns:ns41="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:eai1="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx4="http://xmlns.kpn.com/fixed/SFAAdapter/Request/UpserAccount.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/CRMServices/Request/0426_UpsertContact.xsd" xmlns:ns7="http://xmlns.kpn.com/fixed/CRMServices/Response/0426_UpsertContact.xsd" xmlns:ns8="http://xmlns.kpn.com/EAI/fixed/0426_UpsertContact/1.0/Request" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns9="http://xmlns.kpn.com/EAI/fixed/0426_UpsertContact/1.0/Response" xmlns:ns10="http://schemas.tibco.com/bw/plugins/xml/5.0/xmlExceptions">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SFAAdapter/Request/UpserAccount.xsd" schemaLocation="/XSDSchemas/SFAAdapter/Request/UpsertAccount.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Request/0426_UpsertContact.xsd" schemaLocation="/XSDSchemas/CRMServices/Request/0426_UpsertContact.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/CRMServices/Response/0426_UpsertContact.xsd" schemaLocation="/XSDSchemas/CRMServices/Response/0426_UpsertContact.xsd"/>
+    <pd:name>CRMServices/Processes/Main_UpsertContact.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ReplyDestination" type="xsd:string"/>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>79</pd:startX>
+    <pd:startY>127</pd:startY>
+    <pd:returnBindings>
+        <ServiceOut>
+            <Body>
+                <xsl:copy-of select="$Specific-implementation/ns7:UpsertContactResponse"/>
+            </Body>
+        </ServiceOut>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="ServiceOut">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="ns7:UpsertContactResponse"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>547</pd:endX>
+    <pd:endY>130</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:ErrorReply"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse Request">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>232</pd:x>
+        <pd:y>129</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx5:UpsertContactRequest"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>266</pd:x>
+        <pd:y>235</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <pfx2:ErrorReply>
+                        <pfx2:Body>
+                            <ns7:UpsertContactResponse>
+                                <ns1:CMH>
+                                    <ns1:ID>
+                                        <xsl:value-of select="1048"/>
+                                    </ns1:ID>
+                                    <ns1:NAME>
+                                        <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                                    </ns1:NAME>
+                                    <ns1:MID>
+                                        <xsl:value-of select="&quot;1046.20&quot;"/>
+                                    </ns1:MID>
+                                    <ns1:PARADIGM>
+                                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                                    </ns1:PARADIGM>
+                                    <ns1:OBJECT>
+                                        <xsl:value-of select="&quot;CONTACT_PERSON&quot;"/>
+                                    </ns1:OBJECT>
+                                    <ns1:VERSION>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </ns1:VERSION>
+                                    <ns1:FROM>
+                                        <xsl:attribute name="ns1:COMPONENT_ID">
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CRMServices/ComponentId"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CRMServices/ComponentVersion"/>
+                                        </xsl:attribute>
+                                    </ns1:FROM>
+                                    <ns1:TO>
+                                        <xsl:attribute name="ns1:DESTINATION">
+                                            <xsl:value-of select="$Start/ServiceIn/ReplyDestination"/>
+                                        </xsl:attribute>
+                                    </ns1:TO>
+                                    <ns1:TRACKING>
+                                        <ns1:MESSAGE_ID>
+                                            <xsl:value-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                        </ns1:MESSAGE_ID>
+                                        <xsl:if test="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF">
+                                            <ns1:EXTERNAL_REF>
+                                                <xsl:value-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF"/>
+                                            </ns1:EXTERNAL_REF>
+                                        </xsl:if>
+                                        <xsl:copy-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:ITEM"/>
+                                        <ns1:ITEM>
+                                            <xsl:attribute name="ns1:APPINFO">
+                                                <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/CRMServices/ComponentDomain,'/',$_globalVariables/ns:GlobalVariables/CRMServices/ComponentId,'/',$_globalVariables/ns:GlobalVariables/CRMServices/ComponentVersion)"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:EVENT">
+                                                <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns1:TIMESTAMP">
+                                                <xsl:value-of select="tib:timestamp()"/>
+                                            </xsl:attribute>
+                                        </ns1:ITEM>
+                                        <xsl:for-each select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:SEQUENCE_NO">
+                                            <ns1:SEQUENCE_NO>
+                                                <xsl:value-of select="."/>
+                                            </ns1:SEQUENCE_NO>
+                                        </xsl:for-each>
+                                    </ns1:TRACKING>
+                                </ns1:CMH>
+                                <xsl:choose>
+                                    <xsl:when test="$_error_Parse-Request">
+                                        <ns7:RESULT_STATUS>
+                                            <xsl:attribute name="ns6:STATUS">
+                                                <xsl:value-of select="1"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                                                <xsl:value-of select="&quot;Technical Error&quot;"/>
+                                            </xsl:attribute>
+                                        </ns7:RESULT_STATUS>
+                                    </xsl:when>
+                                    <xsl:when test="$_error_Specific-implementation">
+                                        <xsl:choose>
+                                            <xsl:when test="$_error_Specific-implementation/ActivityErrors/Result_Status">
+                                                <ns7:RESULT_STATUS>
+                                                    <xsl:copy-of select="$_error_Specific-implementation/ActivityErrors/Result_Status/ancestor-or-self::*/namespace::node()"/>
+                                                    <xsl:copy-of select="$_error_Specific-implementation/ActivityErrors/Result_Status/@*"/>
+                                                    <xsl:copy-of select="$_error_Specific-implementation/ActivityErrors/Result_Status/node()"/>
+                                                </ns7:RESULT_STATUS>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <ns7:RESULT_STATUS>
+                                                    <xsl:attribute name="ns6:STATUS">
+                                                        <xsl:value-of select="1"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                                                        <xsl:value-of select="&quot;General Un-Attribute Error&quot;"/>
+                                                    </xsl:attribute>
+                                                </ns7:RESULT_STATUS>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <ns7:RESULT_STATUS>
+                                            <xsl:attribute name="ns6:STATUS">
+                                                <xsl:value-of select="1"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="ns6:ERROR_DESCRIPTION">
+                                                <xsl:value-of select="&quot;General Un-Attribute Error&quot;"/>
+                                            </xsl:attribute>
+                                        </ns7:RESULT_STATUS>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ns7:UpsertContactResponse>
+                        </pfx2:Body>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error_Parse-Request)">
+                                <pfx2:Errors>
+                                    <pfx2:Error>
+                                        <pfx2:MsgCode>
+                                            <xsl:value-of select="&quot;CRMS-03011&quot;"/>
+                                        </pfx2:MsgCode>
+                                        <xsl:if test="$Start/ServiceIn/Body">
+                                            <pfx2:Params>
+                                                <xsl:value-of select="$Start/ServiceIn/Body"/>
+                                            </pfx2:Params>
+                                        </xsl:if>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                                        <xsl:if test="$_error_Parse-Request/ActivityErrors">
+                                            <pfx2:ActivityError>
+                                                <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                                <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/@*"/>
+                                                <xsl:copy-of select="$_error_Parse-Request/ActivityErrors/node()"/>
+                                            </pfx2:ActivityError>
+                                        </xsl:if>
+                                    </pfx2:Error>
+                                </pfx2:Errors>
+                            </xsl:when>
+                            <xsl:when test="exists($_error_Specific-implementation)">
+                                <xsl:choose>
+                                    <xsl:when test="exists($_error_Specific-implementation/ActivityErrors/pfx2:Errors)">
+                                        <xsl:copy-of select="$_error_Specific-implementation/ActivityErrors/pfx2:Errors"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <pfx2:Errors>
+                                            <pfx2:Error>
+                                                <pfx2:MsgCode>
+                                                    <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                                </pfx2:MsgCode>
+                                                <xsl:if test="$_error_Specific-implementation/ActivityErrors/Result_Status/@ns6:ERROR_DESCRIPTION">
+                                                    <pfx2:Params>
+                                                        <xsl:value-of select="$_error_Specific-implementation/ActivityErrors/Result_Status/@ns6:ERROR_DESCRIPTION"/>
+                                                    </pfx2:Params>
+                                                </xsl:if>
+                                                <xsl:if test="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID">
+                                                    <pfx2:MsgId>
+                                                        <xsl:value-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                                    </pfx2:MsgId>
+                                                </xsl:if>
+                                            </pfx2:Error>
+                                        </pfx2:Errors>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx2:Errors>
+                                    <pfx2:Error>
+                                        <pfx2:MsgCode>
+                                            <xsl:value-of select="&quot;CRMS-03000&quot;"/>
+                                        </pfx2:MsgCode>
+                                        <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                                    </pfx2:Error>
+                                </pfx2:Errors>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </pfx2:ErrorReply>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Specific implementation">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>298</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/Sub_UpsertContact_UpsertContact.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx5:UpsertContactRequest>
+                    <ns1:CMH>
+                        <ns1:ID>
+                            <xsl:value-of select="&quot;1046&quot;"/>
+                        </ns1:ID>
+                        <ns1:NAME>
+                            <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                        </ns1:NAME>
+                        <ns1:FID>
+                            <xsl:value-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:FID"/>
+                        </ns1:FID>
+                        <ns1:MID>
+                            <xsl:value-of select="&quot;1046.20&quot;"/>
+                        </ns1:MID>
+                        <ns1:PARADIGM>
+                            <xsl:value-of select="&quot;REQUEST&quot;"/>
+                        </ns1:PARADIGM>
+                        <ns1:OBJECT>
+                            <xsl:value-of select="&quot;CONTACT_PERSON&quot;"/>
+                        </ns1:OBJECT>
+                        <ns1:VERSION>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns1:VERSION>
+                        <ns1:FROM>
+                            <xsl:attribute name="ns1:COMPONENT_ID">
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CRMServices/ComponentId"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="ns1:COMPONENT_VERSION">
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CRMServices/ComponentVersion"/>
+                            </xsl:attribute>
+                        </ns1:FROM>
+                        <ns1:TO>
+                            <xsl:attribute name="ns1:DESTINATION">
+                                <xsl:value-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TO/@ns1:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns1:TO>
+                        <ns1:TRACKING>
+                            <ns1:MESSAGE_ID>
+                                <xsl:value-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                            </ns1:MESSAGE_ID>
+                            <ns1:EXTERNAL_REF>
+                                <xsl:value-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:EXTERNAL_REF"/>
+                            </ns1:EXTERNAL_REF>
+                            <xsl:copy-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:ITEM" copy-namespaces="no"/>
+                            <ns1:ITEM>
+                                <xsl:attribute name="ns1:EVENT">
+                                    <xsl:value-of select="&quot;UpsertContact&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns1:TIMESTAMP">
+                                    <xsl:value-of select="tib:timestamp()"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns1:APPINFO">
+                                    <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/CRMServices/ComponentDomain,&quot;/&quot;,$_globalVariables/ns:GlobalVariables/CRMServices/ComponentId,'/',$_globalVariables/ns:GlobalVariables/CRMServices/ComponentVersion)"/>
+                                </xsl:attribute>
+                            </ns1:ITEM>
+                            <xsl:for-each select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:SEQUENCE_NO">
+                                <ns1:SEQUENCE_NO>
+                                    <xsl:value-of select="."/>
+                                </ns1:SEQUENCE_NO>
+                            </xsl:for-each>
+                        </ns1:TRACKING>
+                    </ns1:CMH>
+                    <xsl:copy-of select="$Parse-Request/pfx5:UpsertContactRequest/ns8:BODY"/>
+                </pfx5:UpsertContactRequest>
+                <ReplyDestination>
+                    <xsl:value-of select="$Start/ServiceIn/ReplyDestination"/>
+                </ReplyDestination>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Error Mail">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>357</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <processName>/CRMServices/Processes/SubProcesses/Send Mail.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ServiceIn>
+                <MessageId>
+                    <xsl:value-of select="$Parse-Request/pfx5:UpsertContactRequest/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                </MessageId>
+                <Body>
+                    <xsl:value-of select="concat(&quot;Location :upsertContact &#xA;&quot;,'&#xA;',&#xA;if(exists($_error_Specific-implementation/ActivityErrors/pfx2:Errors/pfx2:Error))&#xA;then $_error_Specific-implementation/ActivityErrors/pfx2:Errors/pfx2:Error[1]/pfx2:MsgCode&#xA;else $_error_Specific-implementation/ActivityErrors/Result_Status/@ns6:ERROR_DESCRIPTION&#xA;,'&#xA;','&#xA;',&#xA;&quot;Message Causing Error is : &#xA;&quot;,&#xA;tib:render-xml($Parse-Request/pfx5:UpsertContactRequest, false(),true()))"/>
+                </Body>
+                <Subject>
+                    <xsl:value-of select="&quot;Error in UpsertContact&quot;"/>
+                </Subject>
+            </ServiceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>451</pd:x>
+        <pd:y>227</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Request</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Request</pd:from>
+        <pd:to>Specific implementation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Specific implementation</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Specific implementation</pd:from>
+        <pd:to>Send Error Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Error Mail</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Error Mail</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

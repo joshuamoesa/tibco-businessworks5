@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" xmlns:ns5="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" xmlns:ns6="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:eai="java://com.kpn.eai.tools.Tools" xmlns:ns41="http://xmlns.kpn.com/fixed/common/test/notify/TestNotificationService" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1168876013400" xmlns:pfx5="http://xmlns.example.com/unique/default/namespace/1169120057621" xmlns:pfx6="http://xmlns.example.com/unique/default/namespace/1168879614243" xmlns:pfx7="http://engine.servicescanner.edgetech.nl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx8="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx9="http://xmlns.kpn.com/fixed/servicescanneradapter/request/PerformQualityOfServiceScan.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/servicescanneradapter/response/PerformQualityOfServiceScan.xsd" xmlns:pfx11="http://xmlns.kpn.com/fixed/servicescanneradapter/request/PerformQualityOfServiceScan_SOAPRequest.xsd" xmlns:pfx12="http://xmlns.kpn.com/fixed/annetadapter/request/PerformQualityOfServiceScan.xsd" xmlns:pfx13="http://xmlns.kpn.com/fixed/annetadapter/request/PerformQualityOfServiceScan_SOAPRequest.xsd" xmlns:pfx14="http://xmlns.kpn.com/fixed/annetadapter/response/PerformQualityOfServiceScan.xsd" xmlns:pfx15="http://xmlns.kpn.com/fixed/wbaadapter/publish/Order.xsd" xmlns:pfx16="http://xmlns.kpn.com/b2b/public/XDFAccess" xmlns:pfx17="http://wsdlns.kpn.com/fixed/B2BAdapter" xmlns:ns0="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:pfx18="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" xmlns:pfx19="urn:CustomerServiceRequest" xmlns:ns7="http://xmlns.kpn.com/EAI/fixed/0355_CustomerInteractionNotification/1.0/Publish" xmlns:ns8="http://xmlns.tibco.com/encodings/mime" xmlns:pfx20="http://tempuri.org" xmlns:pfx21="urn:B2B_CustomerServiceRequest">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/request/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Request/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/response/TestRequestService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent2/Response/TestRequestService.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/wbaadapter/publish/Order.xsd" schemaLocation="/XSDSchemas/xDFAdapter/ORDER.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/b2b/public/XDFAccess" schemaLocation="/WSDL/xDFAccessAdapter/XDFOrderMessage.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EDT/Publish/CustomerInteractionNotification.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerInteractionNotification.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="urn:CustomerServiceRequest" schemaLocation="/WSDL/EDTAdapter/840-CustomerServiceRequest.wsdl"/>
+    <xsd:import namespace="http://tempuri.org" schemaLocation="/WSDL/EDTAdapter/B2B_CustomerServiceRequest.wsdl"/>
+    <wsdl:import namespace="http://engine.servicescanner.edgetech.nl" location="/WSDL/ANNETAdapter/ServiceScanExecutionEngine.wsdl"/>
+    <wsdl:import namespace="http://wsdlns.kpn.com/fixed/B2BAdapter" location="/WSDL/xDFAccessAdapter/XDFOrderMessage.wsdl"/>
+    <wsdl:import namespace="urn:CustomerServiceRequest" location="/WSDL/EDTAdapter/840-CustomerServiceRequest.wsdl"/>
+    <wsdl:import namespace="urn:B2B_CustomerServiceRequest" location="/WSDL/EDTAdapter/B2B_CustomerServiceRequest.wsdl"/>
+    <pd:name>EDTAdapter/Processes/Inbound/SubProcesses/CustomerServiceRequest.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx18:CustomerInteractionNotification"/>
+    <pd:startX>30</pd:startX>
+    <pd:startY>182</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Map-SOAP-Response/pfx14:PerformQualityOfServiceScan"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>799</pd:endX>
+    <pd:endY>171</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>95</pd:x>
+        <pd:y>334</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Mapping-Error)">
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03004&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ActivityError/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ActivityError/@*"/>
+                                    <xsl:copy-of select="$_error_Mapping-Error/pfx2:Error/pfx2:ActivityError/node()"/>
+                                </pfx2:ActivityError>
+                            </pfx2:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Generate-Error)">
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03002&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/@*"/>
+                                    <xsl:copy-of select="$_error_Generate-Error/pfx2:Error/pfx2:ActivityError/node()"/>
+                                </pfx2:ActivityError>
+                            </pfx2:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_SOAPRequestReply)">
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03002&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                                <pfx2:ActivityError>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/node()"/>
+                                </pfx2:ActivityError>
+                            </pfx2:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx2:Error>
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="&quot;EDT-03003&quot;"/>
+                                </pfx2:MsgCode>
+                                <pfx2:ErrorReport>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                    <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                                </pfx2:ErrorReport>
+                            </pfx2:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>168</pd:x>
+        <pd:y>13</pd:y>
+        <pd:width>516</pd:width>
+        <pd:height>321</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map to SOAP Request</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SOAP Response</pd:from>
+            <pd:to>end</pd:to>
+            <pd:xpathDescription>No Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$SOAPRequestReply/outputMessage/pfx21:CreateResponse/pfx21:STATUS=0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map to SOAP Request</pd:from>
+            <pd:to>Log SOAP Request</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SOAP Request</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>Log SOAP Response</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log SOAP Response</pd:from>
+            <pd:to>Generate Error</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map to SOAP Request</pd:from>
+            <pd:to>Mapping Error</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Map to SOAP Request">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>269</pd:x>
+            <pd:y>187</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="SOAPInput">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Message" type="pfx20:Message"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <SOAPInput>
+                    <Message>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID)">
+                            <pfx20:GUID>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:GUID>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE)">
+                            <pfx20:managed_object_class>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/BUSINESS_INTERACTION_TYPE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:managed_object_class>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_ORIGINATION_IT_DOMAIN']/@ns1:VALUE)">
+                            <pfx20:message_origination_domain>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_ORIGINATION_IT_DOMAIN']/@ns1:VALUE"/>
+                            </pfx20:message_origination_domain>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_DESTINATION_IT_DOMAIN']/@ns1:VALUE)">
+                            <pfx20:message_destination_domain>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_DESTINATION_IT_DOMAIN']/@ns1:VALUE"/>
+                            </pfx20:message_destination_domain>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_CREATION_TIME']/@ns1:VALUE)">
+                            <pfx20:message_creation_time>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:ATTRIBUTE&#xA;[@ns1:NAME ='MESSAGE_CREATION_TIME']/@ns1:VALUE"/>
+                            </pfx20:message_creation_time>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_SUB_ID)">
+                            <pfx20:customer_service_request_identifier>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_SUB_ID)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_SUB_ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:customer_service_request_identifier>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_ID)">
+                            <pfx20:customer_service_request_reference_number>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_ID)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/EXTERNAL_ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:customer_service_request_reference_number>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_ID)">
+                            <pfx20:customer_service_request_number>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_ID)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:customer_service_request_number>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/DESCRIPTION)">
+                            <pfx20:request_description_long>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/DESCRIPTION)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/DESCRIPTION"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:request_description_long>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/NAME)">
+                            <pfx20:customer>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/NAME)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/NAME"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:customer>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/BUSINESS_UNIT)">
+                            <pfx20:customer_organisation>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/BUSINESS_UNIT)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/BUSINESS_UNIT"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:customer_organisation>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON/CONTACT_ROLE=&quot;Contact&quot;">
+                            <pfx20:co_contact_person>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[CONTACT_ROLE=&quot;Contact&quot;]/FULL_NAME"/>
+                            </pfx20:co_contact_person>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/CONTACT_ROLE=&quot;Contact&quot;">
+                            <pfx20:co_contact_person_electronic_mail_address>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/EMAIL_ADDRESS"/>
+                            </pfx20:co_contact_person_electronic_mail_address>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/CONTACT_ROLE=&quot;Contact&quot;">
+                            <pfx20:co_contact_person_fax_number>
+                                <xsl:value-of select="concat($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/FAX_NUMBER/COUNTRY_CODE,&#xA;$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/FAX_NUMBER/AREA_CODE,&#xA;$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/FAX_NUMBER/SUBSCRIBER_NUMBER)"/>
+                            </pfx20:co_contact_person_fax_number>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/CONTACT_ROLE=&quot;Contact&quot;">
+                            <pfx20:co_contact_person_telephone_number>
+                                <xsl:value-of select="concat($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/PHONE_NUMBER/COUNTRY_CODE,&#xA;$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/PHONE_NUMBER/AREA_CODE,&#xA;$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/PHONE_NUMBER/SUBSCRIBER_NUMBER)"/>
+                            </pfx20:co_contact_person_telephone_number>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/CONTACT_ROLE=&quot;Contact&quot;">
+                            <pfx20:co_contact_person_contact_method>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[1]/PREFERRED_CONTACT_METHOD"/>
+                            </pfx20:co_contact_person_contact_method>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON/CONTACT_ROLE=&quot;Reporter&quot;">
+                            <pfx20:co_request_reporter>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CUSTOMER/CONTACT_PERSON[CONTACT_ROLE=&quot;Reporter&quot;]/FULL_NAME"/>
+                            </pfx20:co_request_reporter>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INQUIRY/INQUIRY_TYPE)">
+                            <pfx20:customer_service_request_type>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INQUIRY/INQUIRY_TYPE)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INQUIRY/INQUIRY_TYPE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:customer_service_request_type>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/INTERACTION_ACTIVITY/ACTIVITY)">
+                            <pfx20:supported_service_proces>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/INTERACTION_ACTIVITY/ACTIVITY)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/INTERACTION_ACTIVITY/ACTIVITY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:supported_service_proces>
+                        </xsl:if>
+                        <pfx20:supported_service_parameters>
+                            <xsl:for-each select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/INTERACTION_ACTIVITY/PARAMETER">
+                                <pfx20:supported_service_parameters>
+                                    <xsl:if test="ORDER">
+                                        <pfx20:order>
+                                            <xsl:value-of select="ORDER"/>
+                                        </pfx20:order>
+                                    </xsl:if>
+                                    <pfx20:supported_service_specification_parameter>
+                                        <xsl:value-of select="NAME"/>
+                                    </pfx20:supported_service_specification_parameter>
+                                    <pfx20:supported_service_specification_value>
+                                        <xsl:value-of select="VALUE"/>
+                                    </pfx20:supported_service_specification_value>
+                                </pfx20:supported_service_parameters>
+                            </xsl:for-each>
+                        </pfx20:supported_service_parameters>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/SERVICE_NAME)">
+                            <pfx20:mo_supported_service_class>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/SERVICE_NAME)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/SERVICE_NAME"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:mo_supported_service_class>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/IMPACT)">
+                            <pfx20:mo_supported_service_impact>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/IMPACT)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/IMPACT"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:mo_supported_service_impact>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/URGENCY)">
+                            <pfx20:mo_supported_service_urgency>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/URGENCY)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/URGENCY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:mo_supported_service_urgency>
+                        </xsl:if>
+                        <pfx20:mo_attributes>
+                            <xsl:for-each select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/INTERACTION_ITEM/ATTRIBUTE">
+                                <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/CONTRACT/INTERACTION_ITEM/ATTRIBUTE)">
+                                    <pfx20:mo_attributes>
+                                        <xsl:if test="ORDER">
+                                            <pfx20:order>
+                                                <xsl:value-of select="ORDER"/>
+                                            </pfx20:order>
+                                        </xsl:if>
+                                        <pfx20:mo_attribute_name>
+                                            <xsl:value-of select="NAME"/>
+                                        </pfx20:mo_attribute_name>
+                                        <pfx20:mo_attribute_value_old>
+                                            <xsl:choose>
+                                                <xsl:when test="exists(OLD_VALUE)">
+                                                    <xsl:value-of select="OLD_VALUE"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </pfx20:mo_attribute_value_old>
+                                        <pfx20:mo_attribute_value_new>
+                                            <xsl:choose>
+                                                <xsl:when test="exists(NEW_VALUE)">
+                                                    <xsl:value-of select="NEW_VALUE"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </pfx20:mo_attribute_value_new>
+                                    </pfx20:mo_attributes>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </pfx20:mo_attributes>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_DATE)">
+                            <pfx20:request_wishdate>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_DATE)">
+                                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/INTERACTION_DATE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx20:request_wishdate>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[1]/ATTACHMENT_ID)">
+                            <pfx20:attachment_1_attachmentName>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[1]/ATTACHMENT_ID"/>
+                            </pfx20:attachment_1_attachmentName>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[1]/ATTACHMENT_DATA)">
+                            <pfx20:attachment_1_attachmentData>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[1]/ATTACHMENT_DATA"/>
+                            </pfx20:attachment_1_attachmentData>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[1]/ATTACHMENT_ORIGINAL_SIZE)">
+                            <pfx20:attachment_1_attachmentOrigSize>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[1]/ATTACHMENT_ORIGINAL_SIZE"/>
+                            </pfx20:attachment_1_attachmentOrigSize>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[2]/ATTACHMENT_ID)">
+                            <pfx20:attachment_2_attachmentName>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[2]/ATTACHMENT_ID"/>
+                            </pfx20:attachment_2_attachmentName>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[2]/ATTACHMENT_DATA)">
+                            <pfx20:attachment_2_attachmentData>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[2]/ATTACHMENT_DATA"/>
+                            </pfx20:attachment_2_attachmentData>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[2]/ATTACHMENT_ORIGINAL_SIZE)">
+                            <pfx20:attachment_2_attachmentOrigSize>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[2]/ATTACHMENT_ORIGINAL_SIZE"/>
+                            </pfx20:attachment_2_attachmentOrigSize>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[3]/ATTACHMENT_ID)">
+                            <pfx20:attachment_3_attachmentName>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[3]/ATTACHMENT_ID"/>
+                            </pfx20:attachment_3_attachmentName>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[3]/ATTACHMENT_DATA)">
+                            <pfx20:attachment_3_attachmentData>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[3]/ATTACHMENT_DATA"/>
+                            </pfx20:attachment_3_attachmentData>
+                        </xsl:if>
+                        <xsl:if test="exists($Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[3]/ATTACHMENT_ORIGINAL_SIZE)">
+                            <pfx20:attachment_3_attachmentOrigSize>
+                                <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns7:BODY/CUSTOMER_INTERACTION_NOTIFICATION/ATTACHMENT[3]/ATTACHMENT_ORIGINAL_SIZE"/>
+                            </pfx20:attachment_3_attachmentOrigSize>
+                        </xsl:if>
+                    </Message>
+                </SOAPInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log SOAP Request">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>398</pd:x>
+            <pd:y>80</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EDT-04001&quot;"/>
+                    </MsgCode>
+                    <MsgId>
+                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                    </MsgId>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($Map-to-SOAP-Request/SOAPInput, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log SOAP Response">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>559</pd:x>
+            <pd:y>79</pd:y>
+            <config>
+                <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+            </config>
+            <pd:inputBindings>
+                <TraceIn>
+                    <MsgCode>
+                        <xsl:value-of select="&quot;EDT-04002&quot;"/>
+                    </MsgCode>
+                    <MsgId>
+                        <xsl:value-of select="$Start/pfx18:CustomerInteractionNotification/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                    </MsgId>
+                    <Parameter>
+                        <xsl:value-of select="tib:render-xml($SOAPRequestReply/outputMessage/pfx21:CreateResponse, false(), true())"/>
+                    </Parameter>
+                </TraceIn>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPRequestReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>403</pd:x>
+            <pd:y>179</pd:y>
+            <config>
+                <timeout>%%EDTAdapter/Inbound/SOAP/Timeout%%</timeout>
+                <service>pfx21:B2B_CustomerServiceRequestService</service>
+                <servicePort>B2B_CustomerServiceRequestSoap</servicePort>
+                <operation>Create</operation>
+                <soapAction>urn:B2B_CustomerServiceRequest/Create</soapAction>
+                <endpointURL>%%EDTAdapter/Inbound/SOAP/EndpointUrls/EnpointPath%%%%EDTAdapter/Inbound/SOAP/EndpointUrls/CustomerServiceRequest%%</endpointURL>
+                <requireBasicAuth>false</requireBasicAuth>
+                <basicHttpAuthIdentity>/xDFAccessAdapter/Shared Resources/Client Identity.id</basicHttpAuthIdentity>
+                <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                    <ns0:strongCipherSuitesOnly>false</ns0:strongCipherSuitesOnly>
+                    <ns0:verifyHostName>false</ns0:verifyHostName>
+                    <ns0:cert isRef="true"/>
+                </ns0:ssl>
+                <useProxy>false</useProxy>
+                <proxyName>/xDFAccessAdapter/Shared Resources/Proxy Configuration.httpProxy</proxyName>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx21:Create>
+                        <xsl:copy-of select="$Map-to-SOAP-Request/SOAPInput/Message/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Map-to-SOAP-Request/SOAPInput/Message/@*"/>
+                        <xsl:copy-of select="$Map-to-SOAP-Request/SOAPInput/Message/node()"/>
+                    </pfx21:Create>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Generate Error">
+            <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+            <pd:resourceType>ae.activities.throw</pd:resourceType>
+            <pd:x>564</pd:x>
+            <pd:y>169</pd:y>
+            <config>
+                <faultName>Exception</faultName>
+            </config>
+            <pd:inputBindings>
+                <ns4:ActivityInput>
+                    <data>
+                        <pfx2:Error>
+                            <xsl:if test="$SOAPRequestReply/outputMessage/pfx21:CreateResponse/pfx21:MSG_CODE">
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx21:CreateResponse/pfx21:MSG_CODE"/>
+                                </pfx2:MsgCode>
+                            </xsl:if>
+                            <pfx2:Message>
+                                <xsl:value-of select="concat(&quot;SOAP response returned error code &quot;,$SOAPRequestReply/outputMessage/pfx21:CreateResponse/pfx21:STATUS)"/>
+                            </pfx2:Message>
+                            <pfx2:ErrorReport>
+                                <xsl:value-of select="concat($SOAPRequestReply/outputMessage/pfx21:CreateResponse/pfx21:ERROR_CODE,$SOAPRequestReply/outputMessage/pfx21:CreateResponse/pfx21:ERROR_DESCRIPTION)"/>
+                            </pfx2:ErrorReport>
+                        </pfx2:Error>
+                    </data>
+                </ns4:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Mapping Error">
+            <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+            <pd:resourceType>ae.activities.throw</pd:resourceType>
+            <pd:x>274</pd:x>
+            <pd:y>279</pd:y>
+            <config>
+                <faultName>Exception</faultName>
+            </config>
+            <pd:inputBindings>
+                <ns4:ActivityInput>
+                    <data>
+                        <pfx2:Error>
+                            <pfx2:MsgCode>
+                                <xsl:value-of select="&quot;EDT-03004&quot;"/>
+                            </pfx2:MsgCode>
+                            <pfx2:ErrorReport>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/@*"/>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport/node()"/>
+                            </pfx2:ErrorReport>
+                        </pfx2:Error>
+                    </data>
+                </ns4:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

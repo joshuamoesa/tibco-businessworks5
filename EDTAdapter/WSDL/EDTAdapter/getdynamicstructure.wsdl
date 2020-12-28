@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GET_DYNAMICSTRUCTURE" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GET_DYNAMICSTRUCTURE">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:GET_DYNAMICSTRUCTURE">
+            <xsd:element name="GetStructureRequest" type="s:KSD_GetDynamicStructure"/>
+            <xsd:complexType name="KSD_GetDynamicStructure">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="RequestType" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Request" type="s:RequestType"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="GetDynamicStructureResponse" type="s:KSD_Workorders"/>
+            <xsd:complexType name="KSD_Workorders">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="ERROR_CODE" type="xsd:string"/>
+                    <xsd:element name="ERROR_DESCRIPTION" type="xsd:string"/>
+                    <xsd:element name="STATUS_CODE" type="xsd:integer"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Items" type="s:ItemsType"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ItemsType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Item" type="s:Item"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Item">
+                <xsd:sequence>
+                    <xsd:element name="Order" type="xsd:string"/>
+                    <xsd:element name="Label" type="xsd:string"/>
+                    <xsd:element name="Type" type="xsd:string"/>
+                    <xsd:element name="Value" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="subItems" type="s:subItemsType"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="subItemsType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="subItem" type="s:subItem"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="subItem">
+                <xsd:sequence>
+                    <xsd:element name="Order" type="xsd:string"/>
+                    <xsd:element name="Label" type="xsd:string"/>
+                    <xsd:element name="Type" type="xsd:string"/>
+                    <xsd:element name="Value" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="RequestType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Request" type="s:Request"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Request">
+                <xsd:sequence>
+                    <xsd:element name="Label" type="xsd:string"/>
+                    <xsd:element name="Type" type="xsd:string"/>
+                    <xsd:element name="Value" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="GetStructureRequestMsg">
+        <part name="parameters" element="s:GetStructureRequest"/>
+    </message>
+    <message name="GetDynamicStructureResponseMsg">
+        <part name="parameters" element="s:GetDynamicStructureResponse"/>
+    </message>
+    <portType name="GET_DYNAMICSTRUCTUREPortType">
+        <operation name="GetDynamicStructure">
+            <input message="s:GetStructureRequestMsg"/>
+            <output message="s:GetDynamicStructureResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="GET_DYNAMICSTRUCTURESoapBinding" type="s:GET_DYNAMICSTRUCTUREPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetDynamicStructure">
+            <soap:operation soapAction="urn:GET_DYNAMICSTRUCTURE/GetDynamicStructure" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GET_DYNAMICSTRUCTURE_SERVICE">
+        <port name="GET_DYNAMICSTRUCTURESoap" binding="s:GET_DYNAMICSTRUCTURESoapBinding">
+            <soap:address location="http://localhost:9190/SOAPServletExpertDesk"/>
+        </port>
+    </service>
+</definitions>

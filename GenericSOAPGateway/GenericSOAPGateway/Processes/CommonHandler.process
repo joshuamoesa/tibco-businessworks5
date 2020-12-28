@@ -1,0 +1,1111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:pfx="http://ServiceName" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx2="urn:@ServiceName@" xmlns:pfx3="urn:I.ServiceName.I" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="I.RequestModule.II.ServiceName.IRequest" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1165941203761" xmlns:ns3="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns4="http://xmlns.example.com/unique/default/namespace/1165940699439" xmlns:ns5="I.RequestModule.II.ServiceName.IResponse" xmlns:pfx4="urn:I.RequestorEndServiceName.I" xmlns:ns6="I.Requestor.II.RequestorEndServiceName.IRequest" xmlns:ns7="I.Requestor.II.RequestorEndServiceName.IResponse" xmlns:pfx5="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:pfx6="http://xmlns.kpn.com/eai/common/errors" xmlns:ns8="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns9="http://www.tibco.com/pe/EngineTypes" xmlns:ns10="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx7="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:ns11="http://xmlns.kpn.com/common/errorGeneralization" xmlns:pfx8="http://xmlns.kpn.com/common/soap/ResultStatus.xsd" xmlns:ns12="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" xmlns:ns13="http://xmlns.kpn.com/fixed/ckradapter/common/CKRResponse.xsd" xmlns:ns14="http://xmlns.kpn.com/fixed/ckradapter/common/Customer.xsd" xmlns:pfx9="http://xmlns.kpn.com/EAI/fixed/authentication/version_001" xmlns:ns15="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:ns16="http://xmlns.kpn.com/EAI/fixed/authentication/version_002" xmlns:ns17="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:ns18="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" xmlns:ns19="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_input.xsd" xmlns:ns20="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_ParseResponse_output.xsd" xmlns:ns21="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" xmlns:ns22="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd" xmlns:ns23="http://www.tibco.com/pe/WriteToLogActivitySchema">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1165941203761" schemaLocation="/XSDSchemas/I.ServiceApplication.IAdapter/Response/I.ServiceName.I.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/response/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Response/FindCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/soap/ResultStatus.xsd" schemaLocation="/XSDSchemas/SharedObjects/SoapResultStatus.xsd"/>
+    <xsd:import namespace="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" schemaLocation="/XSDSchemas/WSS/oasis-200401-wss-wssecurity-secext-1.0.xsd"/>
+    <wsdl:import namespace="urn:@ServiceName@" location="/WSDL/@Application@Adapter/@ServiceName@.wsdl"/>
+    <wsdl:import namespace="urn:I.ServiceName.I" location="/WSDL/I.RequestModule.I/I.ServiceName.I.wsdl"/>
+    <wsdl:import namespace="urn:I.RequestorEndServiceName.I" location="/WSDL/I.Requestor.I/I.RequestorEndServiceName.I.wsdl"/>
+    <pd:name>GenericSOAPGateway/Processes/CommonHandler.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Operation" type="xsd:string"/>
+                    <xsd:element name="ServiceProvider" type="xsd:string"/>
+                    <xsd:element name="ServiceConsumer" type="xsd:string"/>
+                    <xsd:element name="BodyContainer">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:any/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>243</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Map-SOAP-Response/Output"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Result" type="pfx8:ResultStatus"/>
+                    <xsd:element name="BodyContainer">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:any minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1259</pd:endX>
+    <pd:endY>245</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx6:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <ResultVariable>
+            <xsd:element name="ResultStatus" type="pfx8:ResultStatus"/>
+        </ResultVariable>
+    </pd:processVariables>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1136</pd:x>
+        <pd:y>489</pd:y>
+        <config>
+            <variableName>ResultVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="exists($Map-Input-Error)">
+                    <ResultStatus>
+                        <pfx8:STATUS_CODE>
+                            <xsl:value-of select="2"/>
+                        </pfx8:STATUS_CODE>
+                        <pfx8:ERROR_CODE>
+                            <xsl:value-of select="2030"/>
+                        </pfx8:ERROR_CODE>
+                        <pfx8:ERROR_DESCRIPTION>
+                            <xsl:value-of select="&quot;Incorrect data supplied in message&quot;"/>
+                        </pfx8:ERROR_DESCRIPTION>
+                        <xsl:if test="$_error/ns9:ErrorReport/MsgCode">
+                            <pfx8:APPLICATION_ERROR_CODE>
+                                <xsl:value-of select="$_error/ns9:ErrorReport/MsgCode"/>
+                            </pfx8:APPLICATION_ERROR_CODE>
+                        </xsl:if>
+                        <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            <xsl:value-of select="$_error/ns9:ErrorReport/Msg"/>
+                        </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                    </ResultStatus>
+                </xsl:when>
+                <xsl:when test="exists($Map-Output-Error)">
+                    <ResultStatus>
+                        <pfx8:STATUS_CODE>
+                            <xsl:value-of select="2"/>
+                        </pfx8:STATUS_CODE>
+                        <pfx8:ERROR_CODE>
+                            <xsl:value-of select="2030"/>
+                        </pfx8:ERROR_CODE>
+                        <pfx8:ERROR_DESCRIPTION>
+                            <xsl:value-of select="&quot;Incorrect data supplied in message&quot;"/>
+                        </pfx8:ERROR_DESCRIPTION>
+                        <xsl:if test="$_error/ns9:ErrorReport/MsgCode">
+                            <pfx8:APPLICATION_ERROR_CODE>
+                                <xsl:value-of select="$_error/ns9:ErrorReport/MsgCode"/>
+                            </pfx8:APPLICATION_ERROR_CODE>
+                        </xsl:if>
+                        <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            <xsl:value-of select="$_error/ns9:ErrorReport/Msg"/>
+                        </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                    </ResultStatus>
+                </xsl:when>
+                <xsl:when test="exists($_error_Call-Service-RV)">
+                    <xsl:choose>
+                        <xsl:when test="$_error_Call-Service-RV/pfx6:Error/pfx6:MsgCode = &quot;EAI-03004&quot;">
+                            <ResultStatus>
+                                <pfx8:STATUS_CODE>
+                                    <xsl:value-of select="1"/>
+                                </pfx8:STATUS_CODE>
+                                <pfx8:ERROR_CODE>
+                                    <xsl:value-of select="1001"/>
+                                </pfx8:ERROR_CODE>
+                                <pfx8:ERROR_DESCRIPTION>
+                                    <xsl:value-of select="&quot;Service not available&quot;"/>
+                                </pfx8:ERROR_DESCRIPTION>
+                                <xsl:if test="$_error/ns9:ErrorReport/MsgCode">
+                                    <pfx8:APPLICATION_ERROR_CODE>
+                                        <xsl:value-of select="$_error/ns9:ErrorReport/MsgCode"/>
+                                    </pfx8:APPLICATION_ERROR_CODE>
+                                </xsl:if>
+                                <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                                    <xsl:value-of select="$_error/ns9:ErrorReport/Msg"/>
+                                </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            </ResultStatus>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ResultStatus>
+                                <pfx8:STATUS_CODE>
+                                    <xsl:value-of select="1"/>
+                                </pfx8:STATUS_CODE>
+                                <pfx8:ERROR_CODE>
+                                    <xsl:value-of select="1002"/>
+                                </pfx8:ERROR_CODE>
+                                <pfx8:ERROR_DESCRIPTION>
+                                    <xsl:value-of select="&quot;Application not available&quot;"/>
+                                </pfx8:ERROR_DESCRIPTION>
+                                <xsl:if test="$_error/ns9:ErrorReport/MsgCode">
+                                    <pfx8:APPLICATION_ERROR_CODE>
+                                        <xsl:value-of select="$_error/ns9:ErrorReport/MsgCode"/>
+                                    </pfx8:APPLICATION_ERROR_CODE>
+                                </xsl:if>
+                                <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                                    <xsl:value-of select="$_error/ns9:ErrorReport/Msg"/>
+                                </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            </ResultStatus>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:when test="exists($_error_Call-Service-EMS)">
+                    <ResultStatus>
+                        <pfx8:STATUS_CODE>
+                            <xsl:value-of select="1"/>
+                        </pfx8:STATUS_CODE>
+                        <pfx8:ERROR_DESCRIPTION>
+                            <xsl:value-of select="'Internal EAI error'"/>
+                        </pfx8:ERROR_DESCRIPTION>
+                    </ResultStatus>
+                </xsl:when>
+                <xsl:otherwise>
+                    <ResultStatus>
+                        <pfx8:STATUS_CODE>
+                            <xsl:value-of select="2"/>
+                        </pfx8:STATUS_CODE>
+                        <pfx8:ERROR_CODE>
+                            <xsl:value-of select="2010"/>
+                        </pfx8:ERROR_CODE>
+                        <pfx8:ERROR_DESCRIPTION>
+                            <xsl:value-of select="'General Unattributable Error'"/>
+                        </pfx8:ERROR_DESCRIPTION>
+                        <xsl:if test="$_error/ns9:ErrorReport/MsgCode">
+                            <pfx8:APPLICATION_ERROR_CODE>
+                                <xsl:value-of select="$_error/ns9:ErrorReport/MsgCode"/>
+                            </pfx8:APPLICATION_ERROR_CODE>
+                        </xsl:if>
+                        <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            <xsl:value-of select="$_error/ns9:ErrorReport/Msg"/>
+                        </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                    </ResultStatus>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign Application ResultStatus">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>849</pd:x>
+        <pd:y>124</pd:y>
+        <config>
+            <variableName>ResultVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Call-Application-Error-Handler/ResultStatus"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign ResultStatus">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>859</pd:x>
+        <pd:y>259</pd:y>
+        <config>
+            <variableName>ResultVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <ResultStatus>
+                <pfx8:STATUS_CODE>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:STATUS"/>
+                </pfx8:STATUS_CODE>
+                <xsl:if test="$Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:ERROR_CODE">
+                    <pfx8:APPLICATION_ERROR_CODE>
+                        <xsl:value-of select="$Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:ERROR_CODE"/>
+                    </pfx8:APPLICATION_ERROR_CODE>
+                </xsl:if>
+                <xsl:if test="$Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:ERROR_DESCRIPTION">
+                    <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                        <xsl:value-of select="$Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:ERROR_DESCRIPTION"/>
+                    </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                </xsl:if>
+            </ResultStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign ResultStatus for LDAP">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1134</pd:x>
+        <pd:y>91</pd:y>
+        <config>
+            <variableName>ResultVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="$Authenticate-Request/Response/ns16:ERROR_CODE=&quot;CONNECTION_ERROR&quot;">
+                    <ResultStatus>
+                        <pfx8:STATUS_CODE>
+                            <xsl:value-of select="2"/>
+                        </pfx8:STATUS_CODE>
+                        <pfx8:ERROR_CODE>
+                            <xsl:value-of select="&quot;2010&quot;"/>
+                        </pfx8:ERROR_CODE>
+                        <xsl:if test="$Authenticate-Request/Response/ns16:ERROR_CODE">
+                            <pfx8:ERROR_DESCRIPTION>
+                                <xsl:value-of select="&quot;General un-attributable error&quot;"/>
+                            </pfx8:ERROR_DESCRIPTION>
+                        </xsl:if>
+                        <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            <xsl:value-of select="$Authenticate-Request/Response/ns16:ERROR_CODE"/>
+                        </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                    </ResultStatus>
+                </xsl:when>
+                <xsl:when test="$Authenticate-Request/Response/ns16:ERROR_CODE=&quot;DATA_ERROR&quot;">
+                    <ResultStatus>
+                        <pfx8:STATUS_CODE>
+                            <xsl:value-of select="2"/>
+                        </pfx8:STATUS_CODE>
+                        <pfx8:ERROR_CODE>
+                            <xsl:value-of select="&quot;2010&quot;"/>
+                        </pfx8:ERROR_CODE>
+                        <pfx8:ERROR_DESCRIPTION>
+                            <xsl:value-of select="&quot;General un-attributable error&quot;"/>
+                        </pfx8:ERROR_DESCRIPTION>
+                        <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            <xsl:value-of select="$Authenticate-Request/Response/ns16:ERROR_CODE"/>
+                        </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                    </ResultStatus>
+                </xsl:when>
+                <xsl:when test="$Authenticate-Request/Response/ns16:ERROR_CODE=&quot;ILLEGAL_INPUT&quot;">
+                    <ResultStatus>
+                        <pfx8:STATUS_CODE>
+                            <xsl:value-of select="2"/>
+                        </pfx8:STATUS_CODE>
+                        <pfx8:ERROR_CODE>
+                            <xsl:value-of select="&quot;2030&quot;"/>
+                        </pfx8:ERROR_CODE>
+                        <pfx8:ERROR_DESCRIPTION>
+                            <xsl:value-of select="&quot;Incorrect data supplied in message&quot;"/>
+                        </pfx8:ERROR_DESCRIPTION>
+                        <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            <xsl:value-of select="$Authenticate-Request/Response/ns16:ERROR_CODE"/>
+                        </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                    </ResultStatus>
+                </xsl:when>
+                <xsl:otherwise>
+                    <ResultStatus>
+                        <pfx8:STATUS_CODE>
+                            <xsl:value-of select="2"/>
+                        </pfx8:STATUS_CODE>
+                        <pfx8:ERROR_CODE>
+                            <xsl:value-of select="&quot;2016&quot;"/>
+                        </pfx8:ERROR_CODE>
+                        <pfx8:ERROR_DESCRIPTION>
+                            <xsl:value-of select="&quot;Unauthorized transaction&quot;"/>
+                        </pfx8:ERROR_DESCRIPTION>
+                        <pfx8:APPLICATION_ERROR_DESCRIPTION>
+                            <xsl:value-of select="$Authenticate-Request/Response/ns16:ERROR_CODE"/>
+                        </pfx8:APPLICATION_ERROR_DESCRIPTION>
+                    </ResultStatus>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Application Error Handler">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>698</pd:x>
+        <pd:y>122</pd:y>
+        <config>
+            <processName>/SharedObjects/Processes/Error Handler.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ns11:ERROR_CODE>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:ERROR_CODE"/>
+                </ns11:ERROR_CODE>
+                <ns11:MID>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:CMH/ns3:MID"/>
+                </ns11:MID>
+                <ns11:SERVICE_NAME>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:CMH/ns3:NAME"/>
+                </ns11:SERVICE_NAME>
+                <ns11:SERVICE_NUMBER>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:CMH/ns3:ID"/>
+                </ns11:SERVICE_NUMBER>
+                <ns11:STATUS_CODE>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:STATUS"/>
+                </ns11:STATUS_CODE>
+                <ns11:ERROR_DESCRIPTION>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:ERROR_DESCRIPTION"/>
+                </ns11:ERROR_DESCRIPTION>
+                <ns11:COMPONENT_ID>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:CMH/ns3:FROM/@ns3:COMPONENT_ID"/>
+                </ns11:COMPONENT_ID>
+                <ns11:COMPONENT_VERSION>
+                    <xsl:value-of select="$Parse-Response/ns20:Output/ns20:CMH/ns3:FROM/@ns3:COMPONENT_VERSION"/>
+                </ns11:COMPONENT_VERSION>
+                <ns11:LDAP_USER>
+                    <xsl:value-of select="$GetContext/pfx7:Security/pfx7:UsernameToken[1]/pfx7:Username"/>
+                </ns11:LDAP_USER>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Input Map">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>416</pd:x>
+        <pd:y>245</pd:y>
+        <config>
+            <processName>/GenericSOAPGateway/Processes/Interfaces/IServiceInputMap.process</processName>
+            <processNameXPath>concat("/GenericSOAPGateway/Processes/Sub_Processes/",$Start/Input/Operation,'.InputMap.process')</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <ns17:Input>
+                <ns17:TrackingId>
+                    <xsl:value-of select="$Generate-Tracking-Id/Output/TrackingId"/>
+                </ns17:TrackingId>
+                <ns17:UserName>
+                    <xsl:value-of select="$GetContext/pfx7:Security/pfx7:UsernameToken[1]/pfx7:Username"/>
+                </ns17:UserName>
+                <xsl:if test="$Authenticate-Request/Response/ns16:APPLICATION_CREDENTIALS[1]/ns16:APPLICATION_ID">
+                    <ns17:ApplicationId>
+                        <xsl:value-of select="$AllAuthRequests/AccumulatedOutput/Response[1]/ns16:APPLICATION_CREDENTIALS[1]/ns16:APPLICATION_ID"/>
+                    </ns17:ApplicationId>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="count($GetContext/pfx7:Security/pfx7:UsernameToken) > 1">
+                        <ns17:UserId>
+                            <xsl:value-of select="$GetContext/pfx7:Security/pfx7:UsernameToken[last()]/pfx7:Username"/>
+                        </ns17:UserId>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ns17:UserId>
+                            <xsl:value-of select="$AllAuthRequests/AccumulatedOutput/Response[1]/ns16:APPLICATION_CREDENTIALS[1]/ns16:USER_ID"/>
+                        </ns17:UserId>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="$AllAuthRequests/AccumulatedOutput/Response">
+                    <xsl:for-each select="ns16:APPLICATION_CREDENTIALS">
+                        <ns17:APPLICATION_CREDENTIALS>
+                            <ns17:TARGET_APPLICATION>
+                                <xsl:value-of select="ns16:TARGET_APPLICATION"/>
+                            </ns17:TARGET_APPLICATION>
+                            <ns17:APPLICATION_ID>
+                                <xsl:value-of select="ns16:APPLICATION_ID"/>
+                            </ns17:APPLICATION_ID>
+                            <ns17:APPLICATION_PASSWORD>
+                                <xsl:value-of select="ns16:APPLICATION_PASSWORD"/>
+                            </ns17:APPLICATION_PASSWORD>
+                            <ns17:USER_ID>
+                                <xsl:value-of select="ns16:USER_ID"/>
+                            </ns17:USER_ID>
+                            <ns17:USER_PASSWORD>
+                                <xsl:value-of select="ns16:USER_PASSWORD"/>
+                            </ns17:USER_PASSWORD>
+                        </ns17:APPLICATION_CREDENTIALS>
+                    </xsl:for-each>
+                </xsl:for-each>
+                <ns17:BodyContainer>
+                    <xsl:copy-of select="$Start/Input/BodyContainer/*"/>
+                </ns17:BodyContainer>
+            </ns17:Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Output Map">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>977</pd:x>
+        <pd:y>246</pd:y>
+        <config>
+            <processName>/GenericSOAPGateway/Processes/Interfaces/IServiceOutputMap.process</processName>
+            <processNameXPath>concat("/GenericSOAPGateway/Processes/Sub_Processes/", $Start/Input/Operation, ".OutputMap.process")</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <ns21:BodyContainer>
+                <xsl:copy-of select="$Parse-Response/ns20:Output/ns20:CompleteBody/*"/>
+            </ns21:BodyContainer>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Service RV">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>568</pd:x>
+        <pd:y>248</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Requester.process</processName>
+        </config>
+        <pd:inputBindings>
+            <RequesterIn>
+                <Destination>
+                    <xsl:value-of select="$Call-Input-Map/ns18:Output/ns18:Destination"/>
+                </Destination>
+                <Timeout>
+                    <xsl:value-of select="$_globalVariables/ns10:GlobalVariables/GenericSOAPGateway/RV/Timeout"/>
+                </Timeout>
+                <additionalLogID>
+                    <xsl:value-of select="concat(&quot;ServiceConsumer = &quot;, $Start/Input/ServiceConsumer)"/>
+                </additionalLogID>
+                <Body>
+                    <xsl:copy-of select="$Call-Input-Map/ns18:Output/ns18:BodyContainer/*"/>
+                </Body>
+            </RequesterIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Tracking Id">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>118</pd:x>
+        <pd:y>250</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Output">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="TrackingId" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Output>
+                <TrackingId>
+                    <xsl:value-of select="eai:createGUID()"/>
+                </TrackingId>
+            </Output>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetContext">
+        <pd:type>com.tibco.ae.tools.palettes.servicepalette.GetContextActivity</pd:type>
+        <pd:resourceType>service.activity.getContext</pd:resourceType>
+        <pd:x>297</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <variableConfig>/GenericSOAPGateway/Shared Resources/Context Resource.contextResource</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>982</pd:x>
+        <pd:y>490</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <pfx6:Errors>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_Call-Service-RV)">
+                            <pfx6:Error>
+                                <xsl:if test="$_error_Call-Service-RV/pfx6:Error/pfx6:MsgCode">
+                                    <pfx6:MsgCode>
+                                        <xsl:value-of select="$_error_Call-Service-RV/pfx6:Error/pfx6:MsgCode"/>
+                                    </pfx6:MsgCode>
+                                </xsl:if>
+                                <pfx6:Params>
+                                    <xsl:value-of select="concat(&quot;ServiceConsumer = &quot;, $Start/Input/ServiceConsumer)"/>
+                                </pfx6:Params>
+                                <xsl:if test="$_error_Call-Service-RV/pfx6:Error/pfx6:MsgId">
+                                    <pfx6:MsgId>
+                                        <xsl:value-of select="$_error_Call-Service-RV/pfx6:Error/pfx6:MsgId"/>
+                                    </pfx6:MsgId>
+                                </xsl:if>
+                                <xsl:copy-of select="$_error_Call-Service-RV/pfx6:Error/ns9:ErrorReport"/>
+                                <xsl:if test="$_error_Call-Service-RV/pfx6:Error/pfx6:ActivityError">
+                                    <pfx6:ActivityError>
+                                        <xsl:value-of select="$_error_Call-Service-RV/pfx6:Error/pfx6:ActivityError"/>
+                                    </pfx6:ActivityError>
+                                </xsl:if>
+                                <xsl:if test="$_error_Call-Service-RV/pfx6:Error/pfx6:ApplicationError">
+                                    <pfx6:ApplicationError>
+                                        <xsl:value-of select="$_error_Call-Service-RV/pfx6:Error/pfx6:ApplicationError"/>
+                                    </pfx6:ApplicationError>
+                                </xsl:if>
+                            </pfx6:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Call-Service-EMS)">
+                            <pfx6:Error>
+                                <xsl:if test="$_error_Call-Service-EMS/pfx6:Error/pfx6:MsgCode">
+                                    <pfx6:MsgCode>
+                                        <xsl:value-of select="$_error_Call-Service-EMS/pfx6:Error/pfx6:MsgCode"/>
+                                    </pfx6:MsgCode>
+                                </xsl:if>
+                                <pfx6:Params>
+                                    <xsl:value-of select="concat(&quot;ServiceConsumer = &quot;, $Start/Input/ServiceConsumer)"/>
+                                </pfx6:Params>
+                                <xsl:if test="$_error_Call-Service-EMS/pfx6:Error/pfx6:MsgId">
+                                    <pfx6:MsgId>
+                                        <xsl:value-of select="$_error_Call-Service-EMS/pfx6:Error/pfx6:MsgId"/>
+                                    </pfx6:MsgId>
+                                </xsl:if>
+                                <xsl:copy-of select="$_error_Call-Service-EMS/pfx6:Error/ns9:ErrorReport"/>
+                                <xsl:if test="$_error_Call-Service-EMS/pfx6:Error/pfx6:ActivityError">
+                                    <pfx6:ActivityError>
+                                        <xsl:value-of select="$_error_Call-Service-EMS/pfx6:Error/pfx6:ActivityError"/>
+                                    </pfx6:ActivityError>
+                                </xsl:if>
+                                <xsl:if test="$_error_Call-Service-EMS/pfx6:Error/pfx6:ApplicationError">
+                                    <pfx6:ApplicationError>
+                                        <xsl:value-of select="$_error_Call-Service-EMS/pfx6:Error/pfx6:ApplicationError"/>
+                                    </pfx6:ApplicationError>
+                                </xsl:if>
+                            </pfx6:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($Map-Input-Error)">
+                            <pfx6:Error>
+                                <xsl:copy-of select="$Map-Input-Error/root/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Map-Input-Error/root/@*"/>
+                                <xsl:copy-of select="$Map-Input-Error/root/node()"/>
+                            </pfx6:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx6:Error>
+                                <xsl:copy-of select="$Map-Output-Error/root/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Map-Output-Error/root/@*"/>
+                                <xsl:copy-of select="$Map-Output-Error/root/node()"/>
+                            </pfx6:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pfx6:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>117</pd:x>
+        <pd:y>81</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GSG-BW-04001&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Generate-Tracking-Id/Output/TrackingId"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Start/Input/ServiceConsumer"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($Start/Input/BodyContainer/*, false(), true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1256</pd:x>
+        <pd:y>136</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;GSG-BW-04002&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Generate-Tracking-Id/Output/TrackingId"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="$Start/Input/ServiceConsumer"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="tib:render-xml($Map-SOAP-Response/Output, false(), true())"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Input Error">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>421</pd:x>
+        <pd:y>490</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root" type="pfx6:ErrorType"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx6:MsgCode>
+                    <xsl:value-of select="&quot;GSG-BW-03001&quot;"/>
+                </pfx6:MsgCode>
+                <pfx6:Params>
+                    <xsl:value-of select="$Start/Input/ServiceConsumer"/>
+                </pfx6:Params>
+                <xsl:copy-of select="$_error/ns9:ErrorReport"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Output Error">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>980</pd:x>
+        <pd:y>394</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root" type="pfx6:ErrorType"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx6:MsgCode>
+                    <xsl:value-of select="&quot;GSG-BW-03001&quot;"/>
+                </pfx6:MsgCode>
+                <pfx6:Params>
+                    <xsl:value-of select="$Start/Input/ServiceConsumer"/>
+                </pfx6:Params>
+                <xsl:copy-of select="$_error/ns9:ErrorReport"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map SOAP Response">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>1136</pd:x>
+        <pd:y>246</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Output">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Result" type="pfx8:ResultStatus"/>
+                            <xsd:element name="BodyContainer">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:any minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Output>
+                <Result>
+                    <xsl:copy-of select="$ResultVariable/ResultStatus/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$ResultVariable/ResultStatus/@*"/>
+                    <xsl:copy-of select="$ResultVariable/ResultStatus/node()"/>
+                </Result>
+                <BodyContainer>
+                    <xsl:if test="$Call-Output-Map">
+                        <xsl:copy-of select="$Call-Output-Map/ns22:BodyContainer/*"/>
+                    </xsl:if>
+                </BodyContainer>
+            </Output>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>297</pd:x>
+        <pd:y>242</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Parse Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>735</pd:x>
+        <pd:y>249</pd:y>
+        <config>
+            <processNameXPath>concat("/GenericSOAPGateway/Processes/Sub_Processes/",$Start/Input/Operation,'.ParseResponse.process')</processNameXPath>
+            <processName>/GenericSOAPGateway/Processes/Interfaces/IServiceParseResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns19:Input>
+                <ns19:ResultString>
+                    <xsl:value-of select="$Call-Service-RV/RequesterOut/Body"/>
+                </ns19:ResultString>
+            </ns19:Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>970</pd:x>
+        <pd:y>116</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>418</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>178</pd:width>
+        <pd:height>138</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>tib:tokenize($Start/Input/ServiceProvider, ",")</pd:over>
+            <pd:iterationElementSlot>curRecord</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:outSlot>AllAuthRequests</pd:outSlot>
+            <pd:activityOutputName>Authenticate Request</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Authenticate Request</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Authenticate Request</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Authenticate Request">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>506</pd:x>
+            <pd:y>73</pd:y>
+            <config>
+                <processName>/SharedObjects/Processes/Authenticate Request.process</processName>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$GetContext/pfx7:Security/pfx7:UsernameToken/pfx7:Username/(any attribute)" element="pfx7:Password"/>
+                <pd:coercion xpath="$GetContext/pfx7:Security/*" element="pfx7:UsernameToken"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <Request>
+                    <pfx9:USER_TOKEN>
+                        <pfx9:USERNAME>
+                            <xsl:value-of select="$GetContext/pfx7:Security/pfx7:UsernameToken[1]/pfx7:Username"/>
+                        </pfx9:USERNAME>
+                        <pfx9:PASSWORD>
+                            <xsl:value-of select="$GetContext/pfx7:Security/pfx7:UsernameToken[1]/*[2]"/>
+                        </pfx9:PASSWORD>
+                    </pfx9:USER_TOKEN>
+                    <pfx9:ADDITIONAL_REQUESTS>
+                        <pfx9:OPERATION_REQUESTED>
+                            <xsl:value-of select="tib:tokenize($Start/Input/ServiceProvider, &quot;,&quot;)[$i]"/>
+                        </pfx9:OPERATION_REQUESTED>
+                    </pfx9:ADDITIONAL_REQUESTS>
+                </Request>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Call Service EMS">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>983</pd:x>
+        <pd:y>586</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Publisher.process</processName>
+        </config>
+        <pd:inputBindings>
+            <PublisherIn>
+                <Destination>
+                    <xsl:value-of select="$Call-Input-Map/ns18:Output/ns18:Destination"/>
+                </Destination>
+                <AdditionalLogID>
+                    <xsl:value-of select="concat(&quot;ServiceConsumer = &quot;, $Start/Input/ServiceConsumer)"/>
+                </AdditionalLogID>
+                <Body>
+                    <xsl:copy-of select="$Call-Input-Map/ns18:Output/ns18:BodyContainer/*"/>
+                </Body>
+            </PublisherIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-ResultStatus-For-Asynch">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1258</pd:x>
+        <pd:y>584</pd:y>
+        <config>
+            <variableName>ResultVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <ResultStatus>
+                <pfx8:STATUS_CODE>
+                    <xsl:value-of select="0"/>
+                </pfx8:STATUS_CODE>
+            </ResultStatus>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Generate Tracking Id</pd:from>
+        <pd:to>Log Request</pd:to>
+        <pd:xpathDescription>Trace=ON</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GSG-BW-04001")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Input Map</pd:from>
+        <pd:to>Call Service RV</pd:to>
+        <pd:xpathDescription>RV</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Output Map</pd:from>
+        <pd:to>Map SOAP Response</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Input Map</pd:from>
+        <pd:to>Map Input Error</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Output Map</pd:from>
+        <pd:to>Map Output Error</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Service RV</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Output Error</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Input Error</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Tracking Id</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Generate Tracking Id</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Request</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Call Input Map</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>GetContext</pd:to>
+        <pd:xpathDescription>LDAP Authentication</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_globalVariables/ns10:GlobalVariables/GenericSOAPGateway/SOAP/Outbound/useLDAPAuthentication = "true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Service RV</pd:from>
+        <pd:to>Parse Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Response</pd:from>
+        <pd:to>Call Application Error Handler</pd:to>
+        <pd:xpathDescription>Status &gt; 0</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign ResultStatus</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Response</pd:from>
+        <pd:to>Assign ResultStatus</pd:to>
+        <pd:xpathDescription>Status=0</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>number($Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:STATUS) = 0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Application Error Handler</pd:from>
+        <pd:to>Assign Application ResultStatus</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign Application ResultStatus</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign ResultStatus for LDAP</pd:from>
+        <pd:to>Map SOAP Response</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map SOAP Response</pd:from>
+        <pd:to>Log Response</pd:to>
+        <pd:xpathDescription>Trace=ON</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>eai:isTraceOn("GSG-BW-04002")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map SOAP Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Response</pd:from>
+        <pd:to>Map Output Error</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>Map SOAP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>Call Output Map</pd:to>
+        <pd:xpathDescription>Map payload</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>number($Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:STATUS) = 0 or
+number($Parse-Response/ns20:Output/ns20:RESULT_STATUS/@pfx5:STATUS) &gt; 29</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>Map SOAP Response</pd:to>
+        <pd:xpathDescription>No payload</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Call Input Map</pd:to>
+        <pd:xpathDescription>OK</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Assign ResultStatus for LDAP</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($AllAuthRequests/AccumulatedOutput/Response[ns16:AUTHENTICATED = "false"])&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetContext</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Input Map</pd:from>
+        <pd:to>Call Service EMS</pd:to>
+        <pd:xpathDescription>EMS</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>upper-case($Call-Input-Map/ns18:Output/ns18:BodyContainer/*/*[local-name()='CMH']/*[local-name()='PARADIGM'])="PUBLISH"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Service EMS</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52480</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Service EMS</pd:from>
+        <pd:to>Assign-ResultStatus-For-Asynch</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-ResultStatus-For-Asynch</pd:from>
+        <pd:to>Map SOAP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

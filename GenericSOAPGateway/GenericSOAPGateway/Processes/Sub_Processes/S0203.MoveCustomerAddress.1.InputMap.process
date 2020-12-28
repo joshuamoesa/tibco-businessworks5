@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns2="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.kpn.com/fixed/ckradapter/common/CustomerReference.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/ckradapter/common/ExternalCustomerReference.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" xmlns:ns4="http://xmlns.kpn.com/fixed/ckradapter/common/PropertyAddress.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/ckradapter/request/MoveCustomerAddress.xsd" xmlns:ns5="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0203_MoveCustomerAddress_1.0_Request_EAI_BUS_SIDE.xsd" xmlns:ns6="http://xmlns.kpn.com/fixed/GenericSOAPGateway/XSDSchemas/GenericSOAPGateway/Request/0203_MoveCustomerAddress_1.0_Request_EAI_BUS_SIDE.xsd" xmlns:ns7="http://xmlns.kpn.com/EAI/fixed/0203_MoveCustomerAddress/1.0/Request" xmlns:pfx5="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" xmlns:pfx6="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0001_FindCustomer_2.2_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/FindCustomer.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/FindCustomer.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ckradapter/request/MoveCustomerAddress.xsd" schemaLocation="/XSDSchemas/CKRAdapter/Request/MoveCustomerAddress.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0203_MoveCustomerAddress/1.0/Request" schemaLocation="/XSDSchemas/GenericSOAPGateway/Request/0203_MoveCustomerAddress_1.0_Request_EAI_BUS_SIDE.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0203.MoveCustomerAddress.1.InputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx5:Input"/>
+    <pd:startX>155</pd:startX>
+    <pd:startY>163</pd:startY>
+    <pd:returnBindings>
+        <pfx6:Output>
+            <pfx6:Destination>
+                <xsl:value-of select="$Map-Data/pfx4:MoveCustomerAddress/ns2:CMH/ns2:TO/@ns2:DESTINATION"/>
+            </pfx6:Destination>
+            <pfx6:BodyContainer>
+                <xsl:copy-of select="$Map-Data/pfx4:MoveCustomerAddress"/>
+            </pfx6:BodyContainer>
+        </pfx6:Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx6:Output"/>
+    <pd:endX>522</pd:endX>
+    <pd:endY>163</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>328</pd:x>
+        <pd:y>169</pd:y>
+        <config>
+            <element ref="pfx4:MoveCustomerAddress"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx5:Input/pfx5:BodyContainer/*" element="ns7:BODY"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx4:MoveCustomerAddress>
+                <ns2:CMH>
+                    <ns2:ID>
+                        <xsl:value-of select="&quot;638&quot;"/>
+                    </ns2:ID>
+                    <ns2:NAME>
+                        <xsl:value-of select="&quot;MoveCustomerAddress&quot;"/>
+                    </ns2:NAME>
+                    <ns2:FID>
+                        <xsl:value-of select="concat($Start/pfx5:Input/pfx5:UserId,&quot;,&quot;,$Start/pfx5:Input/pfx5:ApplicationId,&quot;,&quot;,$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/CENTRAL_CUSTOMER_ID)"/>
+                    </ns2:FID>
+                    <ns2:MID>
+                        <xsl:value-of select="&quot;638.10&quot;"/>
+                    </ns2:MID>
+                    <ns2:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns2:PARADIGM>
+                    <ns2:OBJECT>
+                        <xsl:value-of select="&quot;CustomerAddress&quot;"/>
+                    </ns2:OBJECT>
+                    <ns2:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns2:VERSION>
+                    <ns2:FROM>
+                        <xsl:attribute name="ns2:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GenericSOAPGateway/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns2:FROM>
+                    <ns2:TO>
+                        <xsl:attribute name="ns2:DESTINATION">
+                            <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/Env, &quot;.FIXED.Order.CKRAdapter.Request.MoveCustomerAddress.1&quot;)"/>
+                        </xsl:attribute>
+                    </ns2:TO>
+                    <ns2:TRACKING>
+                        <ns2:MESSAGE_ID>
+                            <xsl:value-of select="$Start/pfx5:Input/pfx5:TrackingId"/>
+                        </ns2:MESSAGE_ID>
+                    </ns2:TRACKING>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;USER_ID&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx5:Input/pfx5:UserId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;APPLICATION_ID&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$Start/pfx5:Input/pfx5:ApplicationId"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                    <ns2:ATTRIBUTE>
+                        <xsl:attribute name="ns2:NAME">
+                            <xsl:value-of select="&quot;CKR_TEST_ENVIRONMENT&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns2:VALUE">
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/CKRAdapter/CKR_TEST_ENVIRONMENT"/>
+                        </xsl:attribute>
+                    </ns2:ATTRIBUTE>
+                </ns2:CMH>
+                <pfx4:IS_DOUBLE>
+                    <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/IS_DOUBLE"/>
+                </pfx4:IS_DOUBLE>
+                <pfx4:ADDRESS_CHECK>
+                    <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/ADDRESS_CHECK"/>
+                </pfx4:ADDRESS_CHECK>
+                <pfx4:IS_UPDATE>
+                    <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/IS_UPDATE"/>
+                </pfx4:IS_UPDATE>
+                <pfx4:CUSTOMER>
+                    <pfx4:CENTRAL_CUSTOMER_ID>
+                        <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/CENTRAL_CUSTOMER_ID"/>
+                    </pfx4:CENTRAL_CUSTOMER_ID>
+                    <pfx4:PROPERTY_ADDRESS>
+                        <pfx4:STREET_NAME>
+                            <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/STREET_NAME"/>
+                        </pfx4:STREET_NAME>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/HOUSE_NUMBER">
+                            <pfx4:HOUSE_NUMBER>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/HOUSE_NUMBER"/>
+                            </pfx4:HOUSE_NUMBER>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/HOUSE_NUMBER_EXTENSION">
+                            <pfx4:HOUSE_NUMBER_EXTENSION>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/HOUSE_NUMBER_EXTENSION"/>
+                            </pfx4:HOUSE_NUMBER_EXTENSION>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/DUTCH_POSTCODE_NUMBERS">
+                            <pfx4:DUTCH_POSTCODE_NUMBERS>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/DUTCH_POSTCODE_NUMBERS"/>
+                            </pfx4:DUTCH_POSTCODE_NUMBERS>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/DUTCH_POSTCODE_LETTERS">
+                            <pfx4:DUTCH_POSTCODE_LETTERS>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/DUTCH_POSTCODE_LETTERS"/>
+                            </pfx4:DUTCH_POSTCODE_LETTERS>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/ZIPCODE_BEFORE">
+                            <pfx4:ZIPCODE_BEFORE>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/ZIPCODE_BEFORE"/>
+                            </pfx4:ZIPCODE_BEFORE>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/CITY_NAME">
+                            <pfx4:CITY_NAME>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/CITY_NAME"/>
+                            </pfx4:CITY_NAME>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/ZIPCODE_AFTER">
+                            <pfx4:ZIPCODE_AFTER>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/ZIPCODE_AFTER"/>
+                            </pfx4:ZIPCODE_AFTER>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/COUNTRY">
+                            <pfx4:COUNTRY>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/COUNTRY"/>
+                            </pfx4:COUNTRY>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/CITY_CODE">
+                            <pfx4:CITY_CODE>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/CITY_CODE"/>
+                            </pfx4:CITY_CODE>
+                        </xsl:if>
+                        <xsl:if test="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/ADDRESS_CHECK_DATE">
+                            <pfx4:ADDRESS_CHECK_DATE>
+                                <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/ADDRESS_CHECK_DATE"/>
+                            </pfx4:ADDRESS_CHECK_DATE>
+                        </xsl:if>
+                        <pfx4:VALID_FROM_DATE>
+                            <xsl:value-of select="$Start/pfx5:Input/pfx5:BodyContainer/ns7:BODY/CUSTOMER/PROPERTY_ADDRESS/VALID_FROM_DATE"/>
+                        </pfx4:VALID_FROM_DATE>
+                    </pfx4:PROPERTY_ADDRESS>
+                </pfx4:CUSTOMER>
+            </pfx4:MoveCustomerAddress>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Import the build xsd here in InputEditor and design xsd after clicking the coersion button in Input tab</pd:description>
+        <pd:x>302</pd:x>
+        <pd:y>86</pd:y>
+        <pd:width>155</pd:width>
+        <pd:height>76</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

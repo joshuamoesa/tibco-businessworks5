@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>IKKAdapter/Test Processes/Utils/RunExportWSDL.process</pd:name>
+    <pd:description>Export all WSDL file from &lt;host&gt;:&lt;port&gt; to &lt;export WSDL Path&gt;</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>66</pd:startX>
+    <pd:startY>209</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>596</pd:endX>
+    <pd:endY>399</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Call_ParseURI_Inspection">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>183</pd:x>
+        <pd:y>211</pd:y>
+        <config>
+            <processName>/IKKAdapter/Test Processes/Utils/ParseURI.process</processName>
+        </config>
+        <pd:inputBindings>
+            <uri>
+                <xsl:value-of select="concat(&quot;http://&quot;,$_globalVariables/ns:GlobalVariables/IKKAdapter/Outbound/SOAP/Hostname,&quot;:&quot;,$_globalVariables/ns:GlobalVariables/IKKAdapter/Outbound/SOAP/Port,&quot;/inspection.wsil&quot;)"/>
+            </uri>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call_GetWsdlInspection">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>318</pd:x>
+        <pd:y>210</pd:y>
+        <config>
+            <processName>/IKKAdapter/Test Processes/Utils/GetWsdlInspection.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <soapUri>
+                    <xsl:copy-of select="$Call_ParseURI_Inspection/SoapUri/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Call_ParseURI_Inspection/SoapUri/@*"/>
+                    <xsl:copy-of select="$Call_ParseURI_Inspection/SoapUri/node()"/>
+                </soapUri>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="ForAllFoundLocation">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>419</pd:x>
+        <pd:y>130</pd:y>
+        <pd:width>348</pd:width>
+        <pd:height>142</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:over>$Call_GetWsdlInspection/inspection/service</pd:over>
+            <pd:indexSlot>idx</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Call_ParseURI</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Call_ExportWSDL</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Call_ParseURI</pd:from>
+            <pd:to>Call_ExportWSDL</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Call_ExportWSDL">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>656</pd:x>
+            <pd:y>211</pd:y>
+            <config>
+                <processName>/IKKAdapter/Test Processes/Utils/ExporWSDL.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <soapUri>
+                        <xsl:copy-of select="$Call_ParseURI/SoapUri/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Call_ParseURI/SoapUri/@*"/>
+                        <xsl:copy-of select="$Call_ParseURI/SoapUri/node()"/>
+                    </soapUri>
+                    <fileName>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/IKKAdapter/AppSetting/ExportWSDLPath, tib:substring-after-last($Call_ParseURI/SoapUri/resourcePath, &quot;/&quot;), &quot;.wsdl&quot;)"/>
+                    </fileName>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Call_ParseURI">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>527</pd:x>
+            <pd:y>210</pd:y>
+            <config>
+                <processName>/IKKAdapter/Test Processes/Utils/ParseURI.process</processName>
+            </config>
+            <pd:inputBindings>
+                <uri>
+                    <xsl:value-of select="$Call_GetWsdlInspection/inspection/service[$idx]/description/@location"/>
+                </uri>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>256</pd:x>
+        <pd:y>397</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call_ParseURI_Inspection</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_ParseURI_Inspection</pd:from>
+        <pd:to>Call_GetWsdlInspection</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ForAllFoundLocation</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_GetWsdlInspection</pd:from>
+        <pd:to>ForAllFoundLocation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_ParseURI_Inspection</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_GetWsdlInspection</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65434</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ForAllFoundLocation</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65434</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

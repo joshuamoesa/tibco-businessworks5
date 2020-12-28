@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.tibco.com/CLEver/ExtraTypes">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="/Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+    <pd:name>Processes/DataServices/Security/SecurityEntryPoint/ValidateOperation.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:ValidateOperation"/>
+    <pd:startX>140</pd:startX>
+    <pd:startY>63</pd:startY>
+    <pd:returnBindings>
+        <pfx:SecurityResult>
+            <pfx:Approved>
+                <xsl:value-of select="$AuthenticateUser/pfx:SecurityResult/pfx:Approved='true' and $AuthorizeOperation/pfx:SecurityResult/pfx:Approved='true'"/>
+            </pfx:Approved>
+            <pfx:Reason>
+                <xsl:value-of select="concat($AuthenticateUser/pfx:SecurityResult/pfx:Reason,$AuthorizeOperation/pfx:SecurityResult/pfx:Reason)"/>
+            </pfx:Reason>
+        </pfx:SecurityResult>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:SecurityResult"/>
+    <pd:endX>490</pd:endX>
+    <pd:endY>63</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1283180362363</pd:targetNamespace>
+    <pd:activity name="AuthenticateUser">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>244</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <processName>/Processes/DataServices/Security/Authentication/AuthenticateUser.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:Authentication>
+                <xsl:copy-of select="$Start/pfx:ValidateOperation/pfx:Security"/>
+            </pfx:Authentication>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AuthorizeOperation">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>369</pd:x>
+        <pd:y>178</pd:y>
+        <config>
+            <processName>/Processes/DataServices/Security/Authorization/AuthorizeOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:Authorization>
+                <pfx:UserName>
+                    <xsl:value-of select="$Start/pfx:ValidateOperation/pfx:Security/pfx:UserName"/>
+                </pfx:UserName>
+                <pfx:Object>
+                    <xsl:value-of select="$Start/pfx:ValidateOperation/pfx:Object"/>
+                </pfx:Object>
+                <pfx:Operation>
+                    <xsl:value-of select="$Start/pfx:ValidateOperation/pfx:Operation"/>
+                </pfx:Operation>
+                <pfx:Version>
+                    <xsl:value-of select="$Start/pfx:ValidateOperation/pfx:Version"/>
+                </pfx:Version>
+            </pfx:Authorization>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>AuthenticateUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuthenticateUser</pd:from>
+        <pd:to>AuthorizeOperation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuthorizeOperation</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuthenticateUser</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Disapproved</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$AuthenticateUser/pfx:SecurityResult/pfx:Approved='false'</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

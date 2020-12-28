@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by NLBSZSF2J (KPN Telecom) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--###################################################################################-->
+	<!--version = "1.0"-->
+	<!--date = "15/08/2007"-->
+	<!--###################################################################################-->
+	<xsd:group name="ProductGroup_xAuthority">
+		<xsd:choice>
+			<xsd:element name="ENTERPRISE_PRODUCT" type="xAuthEnterpriseProduct_Type"/>
+			<xsd:element name="SITE_PRODUCT" type="xAuthSiteProduct_Type"/>
+		</xsd:choice>
+	</xsd:group>
+	<!--###################################################################################-->
+	<xsd:complexType name="xAuthPackage_Type">
+		<xsd:sequence>
+			<xsd:element name="ID">
+				<xsd:annotation>
+					<xsd:documentation>Contains the identifier of the package, such as "BASIC" or "BRONZE"</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LIMIT" type="xAuthLimit_Type" default="unbounded" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies the limit of the 'consumption' of this item as an non negative integer. The default is 'unbounded'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SELECTION_SET_ID" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Used only in case of add-on packages, it then must match a selection set name defined in the publication for the selected user/group feature package.  This is left empty if the add-on package is not part of a selection set.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RATE_CODE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>rate code to override the package rate code defined in the publication</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ADD_ON_PACKAGE" type="xAuthPackage_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="xAuthProduct_Type">
+		<xsd:sequence>
+			<xsd:element name="ENTERPRISE_ACCOUNT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="NAME">
+							<xsd:annotation>
+								<xsd:documentation>This field contains the name of the enterprise account as it is known in the application providing &amp; provisioning the account.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DOMAIN" minOccurs="0"/>
+						<xsd:element name="ID" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SEND_NOTIFICATIONS_TO" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>List of comma separated email addresses to receive notification emails. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="xAuthEnterpriseProduct_Type">
+		<xsd:complexContent>
+			<xsd:extension base="xAuthProduct_Type">
+				<xsd:sequence>
+					<xsd:element name="RUNTIME_PARAMETERS" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>This element contains attributes that could not be identified as being part of the CDM.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="SIP_DOMAIN" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="NAME_VALUE_PAIR" minOccurs="0" maxOccurs="10">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="NAME">
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:minLength value="1"/>
+														<xsd:maxLength value="10"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:element>
+											<xsd:element name="VALUE">
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:maxLength value="30"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:element>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="ADMIN_LOGIN" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Provides the date for the administrator login account.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="USER_NAME" type="xsd:string"/>
+								<xsd:element name="PASSWORD" type="xsd:string"/>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="ENABLE_VOICEMAIL" type="xsd:boolean" default="false" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>This attribute has an unknown function. When not specified, the value false is used.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FEATURE_PACKAGE_CONFIG" type="xAuthPackage_Type" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="xAuthSiteProduct_Type">
+		<xsd:complexContent>
+			<xsd:extension base="xAuthProduct_Type">
+				<xsd:sequence>
+					<xsd:element name="SITE_ACCOUNT">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="NAME"/>
+								<xsd:element name="ID" minOccurs="0"/>
+								<xsd:element name="BILLING_TAG" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Tag stored with each billing event.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="CONTACT">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="CONTACT_MEDIUM" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="EMAIL" type="xsd:string"/>
+											<xsd:element name="PHONE_NUMBER" type="xsd:string"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="CONTACT_PERSON" minOccurs="0">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="FIRSTNAME" type="xsd:string"/>
+											<xsd:element name="LAST_NAME" type="xsd:string"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="ADDRESS" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PRovides the location of the site.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:choice>
+								<xsd:element name="PROPERTY_ADDRESS">
+									<xsd:annotation>
+										<xsd:documentation>This property address element is based on the more complete CDM version or property address. All fields that are not used in this message have been left out!</xsd:documentation>
+									</xsd:annotation>
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="STREET_NAME" type="xsd:string" minOccurs="0">
+												<xsd:annotation>
+													<xsd:documentation>The STREETNAME contains the localized name of the street-part of the address. There are several standards involved which may be specified using the attribute 'naming_standard'</xsd:documentation>
+												</xsd:annotation>
+											</xsd:element>
+											<xsd:element name="HOUSE_NUMBER" minOccurs="0">
+												<xsd:annotation>
+													<xsd:documentation>The housenumber contains common part of the address although the housenumber does not exist on all addresses in every country. Some have may use house names or even  other indicators.</xsd:documentation>
+												</xsd:annotation>
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:maxLength value="5"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:element>
+											<xsd:element name="HOUSE_NUMBER_EXTENSION" minOccurs="0">
+												<xsd:annotation>
+													<xsd:documentation>The house number extension is a detailed part of the house number which further specifies an property address.</xsd:documentation>
+												</xsd:annotation>
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:maxLength value="6"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:element>
+											<xsd:element name="POSTCODE" type="xsd:string" minOccurs="0">
+												<xsd:annotation>
+													<xsd:documentation>The POSTCODE is a logical description of the an area issued by some authoritive entity.</xsd:documentation>
+												</xsd:annotation>
+											</xsd:element>
+											<xsd:element name="CITY_NAME" minOccurs="0">
+												<xsd:annotation>
+													<xsd:documentation>The name of the city (aka town or place) of the address. </xsd:documentation>
+												</xsd:annotation>
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:maxLength value="24"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:element>
+											<xsd:element name="COUNTRY" type="xsd:string" minOccurs="0">
+												<xsd:annotation>
+													<xsd:documentation>The name of the country of the address in the language specified in address element.</xsd:documentation>
+												</xsd:annotation>
+											</xsd:element>
+											<xsd:element name="ADDRESS_TYPE" default="REGULAR" minOccurs="0">
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:enumeration value="REGULAR"/>
+														<xsd:enumeration value="HOUSEBOAT"/>
+														<xsd:enumeration value="TRAILER"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:element>
+											<xsd:element name="LOCATION_DESCRIPTION" type="xsd:string" minOccurs="0"/>
+											<xsd:element name="PROVINCE" type="xsd:string" minOccurs="0">
+												<xsd:annotation>
+													<xsd:documentation>If applicable, the name of the province the address is part of.</xsd:documentation>
+												</xsd:annotation>
+											</xsd:element>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:choice>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="NUMBER_OF_SEATS" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The number of 'seats' (aka users / phones) at a site.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="EXTENSION_LENGTH" default="4" minOccurs="0">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:nonNegativeInteger">
+								<xsd:minInclusive value="2"/>
+								<xsd:maxInclusive value="6"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="INCOMING_DIALING_SCHEME" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="LOCATION_CODE" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Site prefix for site to site dialing by extension (maximum of 30 digits)</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:maxLength value="30"/>
+								<xsd:pattern value="\d+"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="GROUP_FEATURE_PACKAGE" type="xAuthPackage_Type" minOccurs="0"/>
+					<xsd:element name="TRUNK_GROUP_CAPACITY_LIMIT" type="xAuthCapcityLimit_Type" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Can be an integer or 'unbounded' or 'disabled'. If the selected group feature package(s) do NOT include the “Trunk Group” feature, the limit is mandatory and must be set to 'disabled'.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RATE_CODE" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>rate code to override the package rate code defined in the publication</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PHONE_NUMBER_RANGE" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="COUNTRY_CODE">
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:string">
+											<xsd:maxLength value="3"/>
+											<xsd:pattern value="\d+"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="AREA_CODE">
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:string">
+											<xsd:maxLength value="6"/>
+											<xsd:pattern value="\d+"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="START_SUBSCRIBER_NUMBER">
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:string">
+											<xsd:maxLength value="15"/>
+											<xsd:pattern value="\d+"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:choice>
+									<xsd:element name="END_SUBSCRIBER_NUMBER">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:maxLength value="15"/>
+												<xsd:pattern value="\d+"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="SIZE">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:positiveInteger">
+												<xsd:minInclusive value="1"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:choice>
+								<xsd:element name="TYPE" minOccurs="0">
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:string">
+											<xsd:maxLength value="25"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="CALL_CAPACITY_GROUP" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+								<xsd:element name="MAXIMUM_CONCURRENT_CALLS" type="xsd:positiveInteger" minOccurs="0"/>
+								<xsd:element name="MAXIMUM_CONCURRENT_INBOUND_CALLS" type="xsd:positiveInteger" minOccurs="0"/>
+								<xsd:element name="MAXIMUM_CONCURRENT_OUTBOUND_CALLS" type="xsd:positiveInteger" minOccurs="0"/>
+								<xsd:element name="DEFAULT_GROUP" type="xsd:boolean" minOccurs="0"/>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="SHARED_DEVICE" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="NAME"/>
+								<xsd:element name="TYPE"/>
+								<xsd:element name="DESCRIPTION" minOccurs="0"/>
+								<xsd:element name="SERIAL_NUMBER" minOccurs="0"/>
+								<xsd:element name="MAC_ADDRESS" minOccurs="0"/>
+								<xsd:element name="IP_ADDRESS" minOccurs="0"/>
+								<xsd:element name="PORT" minOccurs="0"/>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="RUNTIME_PARAMETERS" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>This element contains attributes that could not be identified as being part of the CDM.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="ADDRESS_LINE_2" minOccurs="0"/>
+								<xsd:element name="NAME_VALUE_PAIR" minOccurs="0" maxOccurs="10">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="NAME">
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:minLength value="1"/>
+														<xsd:maxLength value="10"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:element>
+											<xsd:element name="VALUE">
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:maxLength value="30"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:element>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!--###################################################################################-->
+	<xsd:simpleType name="xAuthLimit_Type">
+		<xsd:union memberTypes="xsd:nonNegativeInteger">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="unbounded"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+	<xsd:simpleType name="xAuthCapcityLimit_Type">
+		<xsd:union memberTypes="xsd:nonNegativeInteger">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="unbounded"/>
+					<xsd:enumeration value="disabled"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+</xsd:schema>

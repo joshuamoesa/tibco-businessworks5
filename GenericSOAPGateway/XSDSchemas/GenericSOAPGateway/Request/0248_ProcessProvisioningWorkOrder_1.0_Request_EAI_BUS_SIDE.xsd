@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0248_ProcessProvisioningWorkOrder/1.0/Request" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0248_ProcessProvisioningWorkOrder/1.0/Request" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="organizationalUnit_type">
+    <xs:annotation>
+      <xs:documentation>Vakgroep/Uitvoeringseenheid</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="telecomDistrictCode_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>DEFINITIONS:
+KPN had previously divided the Netherlands into telecom districts which are (also) defined in the CKR code table. Districts can be mapped to telecom regions (but not the other way round due to one to many mapping)
+
+TYPE:
+String (3) enumerated
+
+VALUES:
+See attached file under 'Oude Districten'.
+
+NOTES:
+- KPN no longer actively uses the districts and has switched to rayons instead. Many systems still depend on the attribute.</xs:documentation>
+        <xs:documentation>Default value is:''</xs:documentation>
+        <xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="10" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="description_type">
+    <xs:annotation>
+      <xs:documentation>Wholesale Line Rental</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="guid_type">
+    <xs:restriction base="xs:string">
+      <xs:length value="38" />
+      <xs:pattern value="\{[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="phoneNumberSubscriberNumber_type">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse" />
+      <xs:minLength value="1" />
+      <xs:maxLength value="15" />
+      <xs:pattern value="\d+" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="phoneNumberAreaCode_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+      <xs:pattern value="\d*" />
+      <xs:whiteSpace value="collapse" />
+      <xs:minLength value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="phoneNumberCountryCode_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="3" />
+      <xs:minLength value="1" />
+      <xs:pattern value="\d+" />
+      <xs:whiteSpace value="collapse" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="phoneNumberFreeFormat_type">
+    <xs:annotation>
+      <xs:documentation>*** not mapped ***</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="25" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="serviceType_type">
+    <xs:annotation>
+      <xs:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1000" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="timeStamp_type">
+    <xs:restriction base="xs:dateTime" />
+  </xs:simpleType>
+  <xs:simpleType name="kvkNumber_type">
+    <xs:annotation>
+      <xs:documentation>*** not mapped***</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="13" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="houseNumber_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="houseNumberExtension_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="6" />
+      <xs:minLength value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dutchPostcode_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}[a-zA-Z]{2}" />
+      <xs:length value="6" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cityCode_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="6" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cityName_type">
+    <xs:restriction base="xs:string">
+      <xs:annotation>
+        <xs:documentation>Field size limitation copied from API definition as EAI side had no limitation.</xs:documentation>
+      </xs:annotation>
+      <xs:maxLength value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="centralCustomerId_type">
+    <xs:annotation>
+      <xs:documentation>CKR-Number</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z,0-9]{8}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="streetName_type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="24" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BODY">
+    <xs:annotation>
+      <xs:documentation>KPN EAI message body class.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Artificial sequence to separate.</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="1" maxOccurs="1" name="WORK_ORDER">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="WORK_ORDER_ITEM">
+                <xs:annotation>
+                  <xs:documentation>A workOrderItem is generated for each netline delivered in a workorder. Up to 100 netlines can be send by AWO so [0..n] to [0..100]
+</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="CFS">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="LOGICAL_RESOURCE">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="1" name="NEW_PHONE_NUMBER">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="SUBSCRIBER_NUMBER" type="tns:phoneNumberSubscriberNumber_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="AREA_CODE" type="tns:phoneNumberAreaCode_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="COUNTRY_CODE" type="tns:phoneNumberCountryCode_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER" type="tns:phoneNumberFreeFormat_type">
+                                        <xs:annotation>
+                                          <xs:documentation>*** not mapped ***</xs:documentation>
+                                          <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="OLD_PHONE_NUMBER">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="COUNTRY_CODE" type="tns:phoneNumberCountryCode_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="SUBSCRIBER_NUMBER" type="tns:phoneNumberSubscriberNumber_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="AREA_CODE" type="tns:phoneNumberAreaCode_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER" type="tns:phoneNumberFreeFormat_type">
+                                        <xs:annotation>
+                                          <xs:documentation>*** not mapped ***</xs:documentation>
+                                          <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="unbounded" name="IP">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="1" maxOccurs="1" name="ADDRESS" type="xs:string">
+                                        <xs:annotation>
+                                          <xs:documentation>*** For future use ***
+Format not specified. IP version not specified.</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                      <xs:element minOccurs="1" maxOccurs="1" name="SUBNET" type="xs:string">
+                                        <xs:annotation>
+                                          <xs:documentation>*** For future use ***
+IP Subnet mask. Format and version of IP neither specified.</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="PHYSICAL_RESOURCE">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="1" maxOccurs="1" name="MUTATION">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="1" maxOccurs="1" name="CODE" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="DESCRIPTION" type="tns:description_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="TYPE" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="TYPE_DESCRIPTION" type="tns:description_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="NOTE" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="BUILD_CODE" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="DEMOLITION_CODE" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="KANVAS_PLAATS" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="KANVAS_ADRES" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="KANVAS_HOST" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="KANVAS_CGB" type="xs:string" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="INVOERKABEL_SEQUENCE_NUMBER" type="xs:int">
+                                        <xs:annotation>
+                                          <xs:documentation>*** For future use ***</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="ADER_NUMMER" type="xs:integer">
+                                        <xs:annotation>
+                                          <xs:documentation>*** For future use ***</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="CAP_ID" type="xs:string">
+                                        <xs:annotation>
+                                          <xs:documentation>*** For future use ***</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="ENGINEER_ACTIVITY" type="xs:boolean" />
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="2" name="LINE">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="QUALITY" type="xs:string">
+                                        <xs:annotation>
+                                          <xs:documentation>Line quality for SDF access</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_TYPE" type="tns:serviceType_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="TELCO_DESCRIPTION" type="tns:description_type" />
+                                      <xs:element minOccurs="0" maxOccurs="1" name="ACTION" type="xs:string">
+                                        <xs:annotation>
+                                          <xs:documentation>Enumeration value: "BUILD" or "DEMOLISH"</xs:documentation>
+                                        </xs:annotation>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="FACILITY">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="DESCRIPTION" type="tns:description_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="MUTATION_CODE" type="xs:string" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="MUTATION_DESCRIPTION" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="CONNECTIONS_OVERVIEW">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="KANVAS_BLOCK">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="1" maxOccurs="1" name="KANVAS_LINE" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="RFS">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="HOOFDVERDELER">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="1" name="KANVAS_HVD_REGEL" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="KABELVERDELER">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="unbounded" name="KABELREGEL">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:annotation>
+                                        <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                      </xs:annotation>
+                                      <xs:element minOccurs="0" maxOccurs="1" name="KANVAS_KVD_REGEL" type="xs:string" />
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="1" maxOccurs="1" name="KANVAS_KVD_DISTRIBUTIE_ADRES" type="xs:string" />
+                                <xs:element minOccurs="1" maxOccurs="1" name="KANVAS_KVD_DISTRIBUTIE_PLAATS" type="xs:string" />
+                                <xs:element minOccurs="1" maxOccurs="1" name="KANVAS_KVD_DISTRIBUTIE_PUNT" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="ISRA">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="1" name="KANVAS_ISRA_REGEL" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="NETLINE_NUMBER" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="2" maxOccurs="2" name="MILESTONE">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="1" maxOccurs="1" name="NAME" type="xs:string" />
+                    <xs:element minOccurs="1" maxOccurs="1" name="TIMESTAMP" type="xs:dateTime" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="SERVICE_VISIT">
+                <xs:complexType>
+                  <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element minOccurs="1" maxOccurs="1" name="PLANNED_TIMESLOT">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="1" maxOccurs="1" name="START" type="xs:time">
+                            <xs:annotation>
+                              <xs:documentation>Values: 08:00:00, 12:00:00, 18:00:00
+</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="1" maxOccurs="1" name="END" type="xs:time">
+                            <xs:annotation>
+                              <xs:documentation>Values: 13:00:00, 18:00:00, 21:00:00</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="1" maxOccurs="1" name="URGENT" type="xs:boolean">
+                      <xs:annotation>
+                        <xs:documentation>Indicator for urgent delivery</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="MATERIAL">
+                <xs:annotation>
+                  <xs:documentation>
+</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="PRICE">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="1" maxOccurs="1" name="AMOUNT" type="xs:decimal" />
+                          <xs:element minOccurs="1" maxOccurs="1" name="CURRENCY" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="ATTRIBUTES">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="1" maxOccurs="1" name="NAME" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>*** For future use ***</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="1" maxOccurs="1" name="VALUE" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>*** For future use ***</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="1" maxOccurs="1" name="PART_NUMBER" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="DESCRIPTION" type="tns:description_type" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="QUANTITY" type="xs:int" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="QUANTITY_COLLECTED" type="xs:int" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="DELIVERING_METHOD" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="RELATED_ACTIVITY">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="1" maxOccurs="1" name="CODE" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="DESCRIPTION" type="tns:description_type" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="DATE" type="tns:timeStamp_type" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="PRODUCT">
+                <xs:annotation>
+                  <xs:documentation>Wholesale Line Rental</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="1" maxOccurs="1" name="ID" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>WholesaleLineRental</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="DESCRIPTION" type="tns:description_type">
+                      <xs:annotation>
+                        <xs:documentation>WholesaleLineRental</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="ACTIVITY">
+                <xs:annotation>
+                  <xs:documentation>Only element [0] is used in this service from ENGIN to Tango</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="1" maxOccurs="1" name="TASK_CODE" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Only element [0] is used</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="DESCRIPTION" type="tns:description_type">
+                      <xs:annotation>
+                        <xs:documentation>Only element [0] is used</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="NOTE">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="1" maxOccurs="1" name="DESCRIPTION" type="tns:description_type" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="1" maxOccurs="1" name="ID" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="CUSTOMER_ORDER_REFERENCE" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="BILLING_SYSTEM" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>Values: 'I' or 'B'. Meaning, ITCIS or BILLIT</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="INDOOR_OUTDOOR_ACTIVITY" type="xs:int">
+                <xs:annotation>
+                  <xs:documentation>Where is the activity to be performed. 1 = 'binnendienst' , 2 = 'buitendienst'</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="ORGANIZATIONAL_UNIT" type="tns:organizationalUnit_type">
+                <xs:annotation>
+                  <xs:documentation>Vakgroep/Uitvoeringseenheid</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="DISTRICT_AREA" type="tns:telecomDistrictCode_type" />
+              <xs:element minOccurs="0" maxOccurs="1" name="CUSTOMER_ORDER_ID" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>ID to be used to group workorders</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="NORM_DURATION" type="xs:int" />
+              <xs:element minOccurs="0" maxOccurs="1" name="TELCO_DESCRIPTION" type="tns:description_type">
+                <xs:annotation>
+                  <xs:documentation>Wholesale Line Rental</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="PRODUCT_CATEGORY" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="CUSTOMER">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:annotation>
+                <xs:documentation>Artificial sequence to separate.</xs:documentation>
+              </xs:annotation>
+              <xs:element minOccurs="0" maxOccurs="1" name="CONTRACTOR">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="ADDRESS">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="STREET_NAME" type="xs:string" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER" type="tns:houseNumber_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="DUTCH_POSTCODE" type="tns:dutchPostcode_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="CITY_CODE" type="tns:cityCode_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="CITY_NAME" type="tns:cityName_type" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="NAME" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="ID" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>CKR-Number</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="KVK_NUMBER" type="tns:kvkNumber_type">
+                      <xs:annotation>
+                        <xs:documentation>*** not mapped***</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="USER">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:annotation>
+                      <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element minOccurs="0" maxOccurs="1" name="ADDRESS">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="STREET_NAME" type="tns:streetName_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER" type="tns:houseNumber_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="DUTCH_POSTCODE" type="tns:dutchPostcode_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="CITY_CODE" type="tns:cityCode_type">
+                            <xs:annotation>
+                              <xs:documentation>*** For future use ***</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="CITY_NAME" type="tns:cityName_type" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="CONTACT_PERSON">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:annotation>
+                                  <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:element minOccurs="0" maxOccurs="1" name="COUNTRY_CODE" type="tns:phoneNumberCountryCode_type">
+                                  <xs:annotation>
+                                    <xs:documentation>*** For future use ***</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="AREA_CODE" type="tns:phoneNumberAreaCode_type">
+                                  <xs:annotation>
+                                    <xs:documentation>*** For future use ***</xs:documentation>
+                                  </xs:annotation>
+                                </xs:element>
+                                <xs:element minOccurs="0" maxOccurs="1" name="SUBSCRIBER_NUMBER" type="tns:phoneNumberSubscriberNumber_type" />
+                                <xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER" type="tns:phoneNumberFreeFormat_type" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="NAME" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="COUNTRY_CODE" type="tns:phoneNumberCountryCode_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="AREA_CODE" type="tns:phoneNumberAreaCode_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="SUBSCRIBER_NUMBER" type="tns:phoneNumberSubscriberNumber_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER" type="tns:phoneNumberFreeFormat_type" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="NEW_ADDRESS">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:annotation>
+                            <xs:documentation>Artificial sequence to separate.</xs:documentation>
+                          </xs:annotation>
+                          <xs:element minOccurs="0" maxOccurs="1" name="STREET_NAME" type="tns:streetName_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER" type="tns:houseNumber_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="HOUSE_NUMBER_EXTENSION" type="tns:houseNumberExtension_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="DUTCH_POSTCODE" type="tns:dutchPostcode_type" />
+                          <xs:element minOccurs="0" maxOccurs="1" name="CITY_CODE" type="tns:cityCode_type">
+                            <xs:annotation>
+                              <xs:documentation>*** For future use ***</xs:documentation>
+                              <xs:documentation>Default (autogenerated) min and max occurs values.</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="1" name="CITY_NAME" type="tns:cityName_type" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="NAME" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="ID" type="tns:centralCustomerId_type">
+                      <xs:annotation>
+                        <xs:documentation>CKR-Number</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="SCOPE" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/CLEver/FrontendServices/Transactional/Exception/ExceptionGroupingInterfaceSpecs"
+	 xmlns:ns1="http://www.tibco.com/CLEver/ExtraTypes"
+	 xmlns:ns0="http://www.tibco.com/CLEver/Exception"
+	 targetNamespace="http://www.tibco.com/CLEver/FrontendServices/Transactional/Exception/ExceptionGroupingInterfaceSpecs"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.tibco.com/CLEver/ExtraTypes" schemaLocation="../../../../Shared Resources/Schema Definitions/CLEver/ExtraTypes.xsd"/>
+	<xs:import namespace="http://www.tibco.com/CLEver/Exception" schemaLocation="../../../../Shared Resources/Schema Definitions/CLEver/Exception.xsd"/>
+	<xs:element name="Retrieve_ExceptionsGrouping_Input">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ns1:Security"/>
+				<xs:element ref="ns1:RestrictionParameters"/>
+				<xs:element name="OrderBy" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Name" type="xs:string"/>
+							<xs:element name="Asc" type="xs:boolean"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="FromRow" type="xs:long"/>
+				<xs:element name="ToRow" type="xs:long"/>
+				<xs:element name="GroupBy">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="StandardFields">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CustomFields" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Retrieve_ExceptionsGrouping_Output">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ns0:Exceptions"/>
+				<xs:element name="MaxRows" type="xs:long"/>
+				<xs:element name="FromRow" type="xs:long"/>
+				<xs:element name="ToRow" type="xs:long"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

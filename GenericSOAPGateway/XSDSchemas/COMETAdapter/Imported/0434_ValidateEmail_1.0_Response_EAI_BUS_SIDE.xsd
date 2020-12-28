@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by M. Claus (KPN Telecom) -->
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0434_ValidateEmail/1.0/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.kpn.com/EAI/fixed/0434_ValidateEmail/1.0/Response">
+	<xs:simpleType name="emailAddress_type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="320">
+				<xs:annotation>
+					<xs:documentation>Maximum length of an email address according to RFC 2821 is 64 for the local part (mail box) and 255 for the global part (domain). With the extra space for the '@' character the total is 320.</xs:documentation>
+				</xs:annotation>
+			</xs:maxLength>
+			<xs:pattern value="([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(([a-zA-Z0-9_-])*\.([a-zA-Z0-9_-])+)+">
+				<xs:annotation>
+					<xs:documentation>Validates whether an string conforms to the RFC 2822 which describes (among others) e-mail addresses.</xs:documentation>
+				</xs:annotation>
+			</xs:pattern>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>This is the BODY object for KPN EAI service number 0434 - ValidateEmail version 1.0 Response message.</xs:documentation>
+			<xs:documentation>Automatically generated schema for service:'ValidateEmail', version:'1.0'</xs:documentation>
+			<xs:documentation>Generated on 2008-08-05 13:25:26Z</xs:documentation>
+			<xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+			<xs:documentation>Service ID is:'0434'</xs:documentation>
+			<xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+			<xs:documentation>KPN EAI message body class.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:annotation>
+					<xs:documentation>Artificial sequence to separate.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="USER_NAME" type="tns:emailAddress_type" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

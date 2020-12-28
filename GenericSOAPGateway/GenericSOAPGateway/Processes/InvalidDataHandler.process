@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/common/soap/ResultStatus.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.tibco.com/pe/EngineTypes" xmlns:pfx6="http://xmlns.kpn.com/eai/common/errors">
+    <xsd:import namespace="http://www.tibco.com/pe/EngineTypes" schemaLocation="/Common/Shared Resources/PEPlugins.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/InvalidDataHandler.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ErrorReport"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>89</pd:startX>
+    <pd:startY>70</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <Result>
+                <pfx:STATUS_CODE>
+                    <xsl:value-of select="2"/>
+                </pfx:STATUS_CODE>
+                <pfx:ERROR_CODE>
+                    <xsl:value-of select="&quot;2030&quot;"/>
+                </pfx:ERROR_CODE>
+                <pfx:ERROR_DESCRIPTION>
+                    <xsl:value-of select="&quot;Incorrect data supplied in message&quot;"/>
+                </pfx:ERROR_DESCRIPTION>
+            </Result>
+            <BodyContainer/>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Result" type="pfx:ResultStatus"/>
+                    <xsd:element name="BodyContainer">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:any minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>460</pd:endX>
+    <pd:endY>70</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_ErrorTrace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ErrorTraceIn>
+                <pfx6:Errors>
+                    <pfx6:Error>
+                        <xsl:copy-of select="$Map-Input-Error/root/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Map-Input-Error/root/@*"/>
+                        <xsl:copy-of select="$Map-Input-Error/root/node()"/>
+                    </pfx6:Error>
+                </pfx6:Errors>
+            </ErrorTraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Input Error">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>206</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root" type="pfx6:ErrorType"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx6:MsgCode>
+                    <xsl:value-of select="&quot;GSG-BW-03002&quot;"/>
+                </pfx6:MsgCode>
+                <xsl:copy-of select="$Start/Input/pfx2:ErrorReport"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Input Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Input Error</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

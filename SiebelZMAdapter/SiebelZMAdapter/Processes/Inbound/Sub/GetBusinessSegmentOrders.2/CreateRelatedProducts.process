@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/ContactManagementAdapter/Common/OrderAndLineItems.xsd" xmlns:pfx3="http://www.siebel.com/xml/KZM%20Order%20Account%20Data%20Export" xmlns:pfx4="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/2.0/Response">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/ContactManagementAdapter/Common/OrderAndLineItems.xsd" schemaLocation="/XSDSchemas/ContactManagementAdapter/Common/OrderAndLineItems.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/SiebelZMAdapter/Common/Product.xsd" schemaLocation="/XSDSchemas/SiebelZMAdapter/Common/Product.xsd"/>
+    <xsd:import namespace="http://www.siebel.com/xml/KZM%20Order%20Account%20Data%20Export" schemaLocation="/WSDL/GetBusinessSegmentOrders.2.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/EAI/fixed/0365_GetBusinessSegmentOrders/2.0/Response" schemaLocation="/XSDSchemas/SiebelZMAdapter/Imported/0365_GetBusinessSegmentOrders_2.0_Response_EAI_BUS_SIDE.xsd"/>
+    <pd:name>SiebelZMAdapter/Processes/Inbound/Sub/GetBusinessSegmentOrders.2/CreateRelatedProducts.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="OrderEntry-LineItems" type="pfx3:OrderEntry-LineItems" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="ListOfAccount" type="pfx3:ListOfAccount" minOccurs="0"/>
+                    <xsd:element name="ListOfKzm-BillingAccount" type="pfx3:ListOfKzm-BillingAccount" minOccurs="0"/>
+                    <xsd:element name="ListOfKzm-ServiceAccount" type="pfx3:ListOfKzm-ServiceAccount" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>79</pd:startX>
+    <pd:startY>139</pd:startY>
+    <pd:returnBindings>
+        <output>
+            <xsl:copy-of select="$Map-PRODUCTLIST/PRODUCT_LIST/RELATED_PRODUCT"/>
+        </output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="RELATED_PRODUCT" type="pfx4:type_ProductV2" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>640</pd:endX>
+    <pd:endY>140</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:group name="Loop over OrderEntry-LineItems">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>183</pd:x>
+        <pd:y>38</pd:y>
+        <pd:width>255</pd:width>
+        <pd:height>193</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/input/OrderEntry-LineItems</pd:over>
+            <pd:iterationElementSlot>currOrderEntry-LineItem</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:outSlot>ProductsDone</pd:outSlot>
+            <pd:activityOutputName>Do OrderEntry - LineItem</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Do OrderEntry - LineItem</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Do OrderEntry - LineItem</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Do OrderEntry - LineItem">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>311</pd:x>
+            <pd:y>144</pd:y>
+            <config>
+                <processName>/SiebelZMAdapter/Processes/Inbound/Sub/GetBusinessSegmentOrders.2/CreateProduct.process</processName>
+                <processNameXPath/>
+            </config>
+            <pd:inputBindings>
+                <input>
+                    <xsl:copy-of select="$currOrderEntry-LineItem/OrderEntry-LineItems"/>
+                    <xsl:copy-of select="$Start/input/ListOfAccount"/>
+                    <xsl:copy-of select="$Start/input/ListOfKzm-BillingAccount"/>
+                    <xsl:copy-of select="$Start/input/ListOfKzm-ServiceAccount"/>
+                </input>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Map PRODUCTLIST">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>528</pd:x>
+        <pd:y>141</pd:y>
+        <config>
+            <element>
+                <xsd:element name="PRODUCT_LIST">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="RELATED_PRODUCT" type="pfx4:type_ProductV2" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <PRODUCT_LIST>
+                <RELATED_PRODUCT>
+                    <xsl:copy-of select="$ProductsDone/AccumulatedOutput/Output/PRODUCT/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$ProductsDone/AccumulatedOutput/Output/PRODUCT/@*"/>
+                    <xsl:copy-of select="$ProductsDone/AccumulatedOutput/Output/PRODUCT/node()"/>
+                </RELATED_PRODUCT>
+            </PRODUCT_LIST>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Loop over OrderEntry-LineItems</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop over OrderEntry-LineItems</pd:from>
+        <pd:to>Map PRODUCTLIST</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map PRODUCTLIST</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

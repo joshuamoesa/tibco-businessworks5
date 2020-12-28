@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/UtilityServices/request/ConvertKas2PhoneNumber.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://xmlns.kpn.com/fixed/UtilityServices/response/ConvertKas2PhoneNumber.xsd" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/request/ConvertKas2PhoneNumber.xsd" schemaLocation="/XSDSchemas/UtilityServices/Request/ConvertKas2PhoneNumber.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/UtilityServices/response/ConvertKas2PhoneNumber.xsd" schemaLocation="/XSDSchemas/UtilityServices/Response/ConvertKas2PhoneNumber.xsd"/>
+    <pd:name>IKKAdapter/Sub Processes/Sub_InvokeKas2PhoneNumber.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:ConvertKas2PhoneNumber"/>
+    <pd:startX>145</pd:startX>
+    <pd:startY>80</pd:startY>
+    <pd:returnBindings>
+        <pfx2:ConvertKas2PhoneNumber>
+            <xsl:copy-of select="$Send-Rendezvous-DQ-Request/ActivityOutput/body/ancestor-or-self::*/namespace::node()"/>
+            <xsl:copy-of select="$Send-Rendezvous-DQ-Request/ActivityOutput/body/@*"/>
+            <xsl:copy-of select="$Send-Rendezvous-DQ-Request/ActivityOutput/body/node()"/>
+        </pfx2:ConvertKas2PhoneNumber>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:ConvertKas2PhoneNumber"/>
+    <pd:endX>601</pd:endX>
+    <pd:endY>81</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Send Rendezvous DQ Request">
+        <pd:type>com.tibco.plugin.tibrv.RVRequestActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVRequestActivity</pd:resourceType>
+        <pd:x>313</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsXMLCompliantFieldNamesOutput>false</wantsXMLCompliantFieldNamesOutput>
+            <sharedChannel>/IKKAdapter/Shared Resources/EAI Rendezvous Transport.rvtransport</sharedChannel>
+            <operationTimeout>%%IKKAdapter/UtilityServices/Timeout%%</operationTimeout>
+            <xmlEncoding>true</xmlEncoding>
+            <subject>%%Env%%.FIXED.%%IKKAdapter/UtilityServices/MsgSubject%%.ConvertKas2PhoneNumber.1</subject>
+            <inputXsdString ref="pfx:ConvertKas2PhoneNumber"/>
+            <outputXsdString ref="pfx2:ConvertKas2PhoneNumber"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <xsl:if test="$Start/pfx:ConvertKas2PhoneNumber/pfx:KAS_NUMBER">
+                        <pfx:KAS_NUMBER>
+                            <xsl:value-of select="$Start/pfx:ConvertKas2PhoneNumber/pfx:KAS_NUMBER"/>
+                        </pfx:KAS_NUMBER>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ConvertKas2PhoneNumber/pfx:PHONE_NUMBER_10">
+                        <pfx:PHONE_NUMBER_10>
+                            <xsl:value-of select="$Start/pfx:ConvertKas2PhoneNumber/pfx:PHONE_NUMBER_10"/>
+                        </pfx:PHONE_NUMBER_10>
+                    </xsl:if>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogConvertKas2PhoneNumberError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>457</pd:x>
+        <pd:y>204</pd:y>
+        <config>
+            <processName>/IKKAdapter/Sub Processes/Sub_LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <param>
+                <AnyXMLMessage>
+                    <xsl:copy-of select="$_error/ns1:ErrorReport"/>
+                </AnyXMLMessage>
+                <StringMessage>
+                    <xsl:value-of select="&quot;Invoke ConvertKas2PhoneNumber Exception&quot;"/>
+                </StringMessage>
+            </param>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogConvertKas2PhoneNumber">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>460</pd:x>
+        <pd:y>79</pd:y>
+        <config>
+            <processName>/IKKAdapter/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <param>
+                <AnyXMLMessage>
+                    <xsl:copy-of select="$Send-Rendezvous-DQ-Request/ActivityOutput/body"/>
+                </AnyXMLMessage>
+                <StringMessage>
+                    <xsl:value-of select="&quot;InvokeConvertKas2PhoneNumberLog&quot;"/>
+                </StringMessage>
+                <LogLevel>
+                    <xsl:value-of select="&quot;TRACE&quot;"/>
+                </LogLevel>
+            </param>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>601</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Rendezvous DQ Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous DQ Request</pd:from>
+        <pd:to>LogConvertKas2PhoneNumberError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Rendezvous DQ Request</pd:from>
+        <pd:to>LogConvertKas2PhoneNumber</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogConvertKas2PhoneNumber</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogConvertKas2PhoneNumberError</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

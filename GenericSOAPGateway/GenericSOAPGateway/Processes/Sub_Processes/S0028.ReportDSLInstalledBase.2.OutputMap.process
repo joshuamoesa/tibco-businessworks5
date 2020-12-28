@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" xmlns:pfx2="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" xmlns:pfx3="http://xmlns.kpn.com/fixed/BaanAdapter/response/ReportDSLInstalledBase.xsd" xmlns:pfx4="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/BaanAdapter/common/Dsl.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_InputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_InputMap_output.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_OutputMap_input.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/BaanAdapter/response/ReportDSLInstalledBase.xsd" schemaLocation="/XSDSchemas/BaanAdapter/Response/ReportDSLInstalledBase.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd" schemaLocation="/XSDSchemas/GenericSOAPGateway/Common/EAI_OutputMap_output.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/BaanAdapter/common/Dsl.xsd" schemaLocation="/XSDSchemas/BaanAdapter/Common/Dsl.xsd"/>
+    <pd:name>GenericSOAPGateway/Processes/Sub_Processes/S0028.ReportDSLInstalledBase.2.OutputMap.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:BodyContainer"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>63</pd:startY>
+    <pd:returnBindings>
+        <pfx4:BodyContainer>
+            <xsl:copy-of select="$Map-Data/Ouput/pfx5:BAANRECORDS"/>
+        </pfx4:BodyContainer>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx4:BodyContainer"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>301</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Ouput">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx5:BAANRECORDS" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx2:BodyContainer/*" element="pfx3:ReportDSLInstalledBaseResponse"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <Ouput>
+                <xsl:if test="$Start/pfx2:BodyContainer/pfx3:ReportDSLInstalledBaseResponse/pfx3:BAANRECORD">
+                    <pfx5:BAANRECORDS>
+                        <xsl:for-each select="$Start/pfx2:BodyContainer/pfx3:ReportDSLInstalledBaseResponse/pfx3:BAANRECORD">
+                            <pfx5:BAANRECORD>
+                                <xsl:copy-of select="./ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="./@*"/>
+                                <xsl:copy-of select="./node()"/>
+                            </pfx5:BAANRECORD>
+                        </xsl:for-each>
+                    </pfx5:BAANRECORDS>
+                </xsl:if>
+            </Ouput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

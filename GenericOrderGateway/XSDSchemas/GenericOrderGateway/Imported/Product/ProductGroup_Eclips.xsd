@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by NLBSZSF2J (KPN Telecom) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="../Unallocated/Unallocated_Types.xsd"/>
+	<xsd:include schemaLocation="../Location/PropertyAddress_Type.xsd"/>
+
+	<!--####################################################################################-->
+	<!--version = "1.0"-->
+	<!--date = "15/08/2007"-->
+	<!--####################################################################################-->
+	<xsd:group name="ProductGroup_Eclips">
+		<xsd:choice>
+			<xsd:element name="MULTI_MEDIA_PRODUCT">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SERVICE" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:choice>
+									<xsd:element name="MULTI_MEDIA_SERVICE">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="FEATURES" minOccurs="0">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="FEATURE_ITEM" maxOccurs="100">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element name="FEATURE_PARAMETER" minOccurs="0" maxOccurs="100">
+																			<xsd:complexType>
+																				<xsd:sequence>
+																					<xsd:element name="NAME" type="xsd:string"/>
+																					<xsd:element name="VALUE" type="xsd:string"/>
+																				</xsd:sequence>
+																			</xsd:complexType>
+																		</xsd:element>
+																		<xsd:element name="FEATURE_CODE" type="Eclips_featureCode_type" minOccurs="0"/>
+																		<xsd:element name="FEATURE_ACTION" type="Eclips_featureAction_type" minOccurs="0"/>
+																		<xsd:element name="FEATURE_STATE" type="Eclips_featureState_type" minOccurs="0"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="SUBSCRIBER" minOccurs="0">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="LOGIN_USERNAME" type="Eclips_customerLoginName_type" minOccurs="0"/>
+															<xsd:element name="LOGIN_PASSWORD" type="Eclips_customerLoginPassword_type" minOccurs="0"/>
+															<xsd:element name="NUMBER" minOccurs="0">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:maxLength value="50"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element name="EXISTING_SUBSCRIBER_NUMBER" type="xsd:string" minOccurs="0"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="SERVICE_PROVIDER_ID" type="Eclips_networkOperatorId_type" minOccurs="0"/>
+												<xsd:element name="VOIP_PLATFORM_CODE" type="xsd:string" minOccurs="0"/>
+												<xsd:element name="TELCO_CODE" type="xsd:string" minOccurs="0"/>
+												<xsd:element name="ACCESS_LOCATION" minOccurs="0">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="DUTCH_POST_CODE" type="dutchPostCode_Type"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="STATUS_CODE" type="xsd:string" minOccurs="0"/>
+												<xsd:element name="RECIPIENT_SERVICE_PROVIDER_ID" type="Eclips_networkOperatorId_type" minOccurs="0"/>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="PORTING_SERVICE">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="ACCESS_LOCATION" minOccurs="0">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="STREET_NAME" type="StreetName_Type"/>
+															<xsd:element name="HOUSE_NUMBER" type="houseNumber_Type"/>
+															<xsd:element name="HOUSE_NUMBER_EXTENSION" type="houseNumberExtension_Type" minOccurs="0"/>
+															<xsd:element name="DUTCH_POSTCODE" type="dutchPostCode_Type" minOccurs="0"/>
+															<xsd:element name="CITY_NAME" type="cityName_Type"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="DONOR_SERVICE_PROVIDER_ID" type="xsd:string" minOccurs="0"/>
+												<xsd:element name="RECIPIENT_SERVICE_PROVIDER_ID" type="xsd:string" minOccurs="0"/>
+												<xsd:element name="PORTING_WISH_DATE_TIME" type="xsd:dateTime" minOccurs="0"/>
+												<xsd:element name="SUPPORTS_AUTOMATIC_SYNCHRONISATION" type="xsd:boolean" minOccurs="0"/>
+												<xsd:element name="PLATFORM_ID" type="xsd:string" minOccurs="0"/>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:choice>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="ACCESS_LOCATION" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Required to geographically map the subscriber of the service which in some circumstances is required e.g. emergency services or searching for local vendors</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:choice>
+									<xsd:element name="DUTCH_POSTCODE" type="Eclips_dutchPostcode_type"/>
+								</xsd:choice>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="RESOURCE" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:choice>
+									<xsd:element name="SIP">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="SERVER_NAME">
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:maxLength value="1000"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="PHONE_NUMBER">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="UNFORMATTED" type="xsd:string" minOccurs="0"/>
+												<xsd:element name="NUMBER_OF_PHONE_NUMBERS" type="xsd:integer" minOccurs="0"/>
+												<xsd:element name="IS_IN_BLOCK" type="xsd:boolean" minOccurs="0"/>
+												<xsd:element name="TCA_CODE" type="xsd:string" minOccurs="0"/>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="TCA_CODE_TYPE" type="Eclips_tcaType_type"/>
+									<xsd:element name="PHONE_NUMBER_SERIES">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="NUMBER_LOW" type="phoneNumber_Unformatted_Type" minOccurs="0"/>
+												<xsd:element name="NUMBER_HIGH" type="phoneNumber_Unformatted_Type" minOccurs="0"/>
+												<xsd:element name="IS_IN_BLOCK" type="xsd:boolean" minOccurs="0"/>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:choice>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="EXTERNAL_PRODUCT_REFERENCE" type="Eclips_servicePackageCode_type"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:simpleType name="Eclips_servicePackageCode_type">
+
+		<!--####################################################################################-->
+		<xsd:annotation>
+			<xsd:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Eclips_networkOperatorId_type">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="3"/>
+			<xsd:maxLength value="6"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Eclips_featureCode_type">
+		<xsd:annotation>
+			<xsd:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Eclips_featureAction_type">
+		<xsd:annotation>
+			<xsd:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Eclips_featureState_type">
+		<xsd:annotation>
+			<xsd:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Eclips_customerLoginName_type">
+		<xsd:annotation>
+			<xsd:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Eclips_customerLoginPassword_type">
+		<xsd:annotation>
+			<xsd:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Eclips_dutchPostcode_type">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="6"/>
+			<xsd:pattern value="\d{4}[a-zA-Z]{2}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Eclips_tcaType_type">
+		<xsd:annotation>
+			<xsd:documentation>String limitation 1000 added by KPN EAI automated guideline supervision. Increase size in Rose if desired.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:MAKE_APPOINTMENT" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:MAKE_APPOINTMENT">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:MAKE_APPOINTMENT">
+            <xsd:element name="MakeAppointment" type="s:KSD_MakeAppointment"/>
+            <xsd:complexType name="KSD_MakeAppointment">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="researchDepartmentCode" type="xsd:string"/>
+                    <xsd:element name="researchEmployeeCode" type="xsd:string"/><!-- EAI00001243 form date to string -->
+                    <xsd:element name="appointmentDate" type="xsd:string"/><!-- EAI00001243 form time to string -->
+                    <xsd:element name="visitWindowStartTime" type="xsd:string"/><!-- EAI00001243 form time to string -->
+                    <xsd:element name="visitWindowEndTime" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="MakeAppointmentResponse" type="s:KSD_Appointment"/>
+            <xsd:complexType name="KSD_Appointment">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="status" type="xsd:integer"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="MakeAppointmentRequestMsg">
+        <part name="parameters" element="s:MakeAppointment"/>
+    </message>
+    <message name="MakeAppointmentResponseMsg">
+        <part name="parameters" element="s:MakeAppointmentResponse"/>
+    </message>
+    <portType name="MAKE_APPOINTMENTPortType">
+        <operation name="MakeAppointment">
+            <input message="s:MakeAppointmentRequestMsg"/>
+            <output message="s:MakeAppointmentResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="MAKE_APPOINTMENTSoapBinding" type="s:MAKE_APPOINTMENTPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="MakeAppointment">
+            <soap:operation soapAction="urn:MAKE_APPOINTMENT/MakeAppointment" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="MAKE_APPOINTMENT_SERVICE">
+        <port name="MAKE_APPOINTMENTSoap" binding="s:MAKE_APPOINTMENTSoapBinding">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/MakeAppointment"/>
+        </port>
+    </service>
+</definitions>

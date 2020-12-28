@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by NLBSZSF2J (KPN Telecom) -->
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Atos Origin (Atos Origin) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="../Common/Common_Types.xsd"/>
+	<xsd:complexType name="Address_Type">
+		<xsd:annotation>
+			<xsd:documentation>Generic address type which allows for various commonly encountered formats.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="UNFORMATTED_ADDRESS" type="UnformatAddress_Type"/>
+				<xsd:element name="PROPERTY_ADDRESS" type="PropertyAddress_Type"/>
+				<xsd:element name="LOGICAL_ADDRESS" type="LogicalAddress_Type"/>
+			</xsd:choice>
+			<xsd:element name="VALIDITY" type="AddressValidity_Type" minOccurs="0"/>
+			<xsd:element name="RAYON" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A subdivision of all addresses to regions which have a meaning in terms of business and markteting.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PropertyAddress_Type">
+		<xsd:annotation>
+			<xsd:documentation>Generic property address structure</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="STREET_NAME" type="StreetName_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The STREETNAME contains the localized name of the street-part of the address. There are several standards involved which may be specified using the attribute 'naming_standard'</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="HOUSE_NUMBER" type="houseNumber_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The housenumber contains common part of the address although the housenumber does not exist on all addresses in every country. Some have may use house names or even  other indicators.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="HOUSE_NUMBER_EXTENSION" type="houseNumberExtension_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The house number extension is a detailed part of the house number which further specifies an property address.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="POSTCODE" type="Postcode_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The POSTCODE is a logical description of the an area issued by some authoritive entity.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CITY_NAME" type="cityName_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The name of the city (aka town or place) of the address. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CITY_CODE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A code identifying the city uniquely. The code could be assigned by an external authority or internally defined. This is indicated by the 'coding_standard' attribute. </xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="CityCode_Type"/>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="COUNTRY" type="country_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The name of the country of the address in the language specified in address element.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COUNTY_CODE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A code for the country (which should make translation easier)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="CountryCode_Type"/>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ADDRESS_TYPE" default="REGULAR" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="REGULAR"/>
+						<xsd:enumeration value="HOUSEBOAT"/>
+						<xsd:enumeration value="TRAILER"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="LOCATION_DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TELECOM_REGION_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="PROVINCE" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>If applicable, the name of the province the address is part of.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MUNICIPALITY" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The MUNICIPALITY (aka COUNCIL, SHIRE, BUROUGH or DISTRICT) and in Dutch 'GEMEENTE'.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="language" type="xsd:language" default="NL">
+			<xsd:annotation>
+				<xsd:documentation>Property addresses may be formatted/specified in a specific language. (E.g. the city name 'Den Haag' differs from the English 'The Hague') When the language differs from Dutch, then it must be specified here.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="UnformatAddress_Type">
+		<xsd:annotation>
+			<xsd:documentation>The FreeFormatAddress_Type contains an address including the format (order) of the separate elements of the address and can be printed out directly.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ADDRESS_LINE" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The ADDRESS_LINE contians a formatted piece of text of the entire address that can be used directly to print out. The separate elements of an address are contained within this text, but can't be parsed out easily.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:string">
+							<xsd:attribute name="sequenceNumber" type="xsd:positiveInteger" use="required">
+								<xsd:annotation>
+									<xsd:documentation>The sequence_number is required to make sure that when mapping to and from the sequence of ADDRESS_LINE elements the order may be modified unintentionally. Please note that parsers do not always respect the order of elements in sequences.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="language" type="xsd:language" default="nl"/>
+	</xsd:complexType>
+	<xsd:complexType name="LogicalAddress_Type">
+		<xsd:sequence>
+			<xsd:element name="POBOX_NUMBER" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The number of the post office box</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="POBOX_NAME" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The (optional) name of the post office box</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="POSTCODE" type="Postcode_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The POSTCODE is a logical description of the an area issued by some authoritive entity.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CITY_NAME" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The name of the city (aka town or place) of the address. </xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:maxLength value="24"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="CITY_CODE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A code identifying the city uniquely. The code could be assigned by an external authority or internally defined. This is indicated by the 'coding_standard' attribute. </xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="CityCode_Type"/>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="COUNTRY" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The name of the country of the address in the language specified in address element.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COUNTY_CODE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A code for the country (which should make translation easier)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="CountryCode_Type"/>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="language" type="xsd:language" default="NL">
+			<xsd:annotation>
+				<xsd:documentation>Property addresses may be formatted/specified in a specific language. (E.g. the city name 'Den Haag' differs from the English 'The Hague') When the language differs from Dutch, then it must be specified here.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="Postcode_Type">
+		<xsd:choice>
+			<xsd:element name="DUTCH_POSTCODE" type="dutchPostCode_Type">
+				<xsd:annotation>
+					<xsd:documentation>The DUTCH_POSTCODE is the postcode as it is used in the Netherlands. The postcode consists of four digits followed by two uppercase letters. There is no space inbetween.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="UNFORMATTED_POSTCODE">
+				<xsd:annotation>
+					<xsd:documentation>The UNFORMATTED_POSTCODE is a postcode of which the format could not be specified beforehand. This postcode is typically used for foreign (not Ducth) addresses.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="UnformatedPostcode_Type">
+							<xsd:attribute name="placeBeforeCity" type="xsd:boolean" default="true">
+								<xsd:annotation>
+									<xsd:documentation>Indicates whether the postcode should be printed infront of the city name or after it. The value depends on the customs of the language/country the address is used in.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:simpleType name="dutchPostCode_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="6"/>
+			<xsd:pattern value="\d{4}\p{Lu}{2}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="UnformatedPostcode_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="6"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="AddressValidity_Type">
+		<xsd:sequence>
+			<xsd:element name="ADDRESS_STATUS" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ADDRESS_CREATION_DATE" minOccurs="0">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:date">
+							<xsd:attribute name="ADDRESS_CREATION_DAT" type="xsd:dateTime"/>
+							<xsd:attribute name="ADDRESS_LAST_CHANGED_DATE" type="xsd:dateTime"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ADDRESS_LAST_CHANGED_DATE" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="ADDRESS_LAST_CHANGED_BY" minOccurs="0"/>
+			<xsd:element name="ADDRESS_CHECK" minOccurs="0"/>
+			<xsd:element name="ADDRESS_CHECK_DATE" type="xsd:date" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!--#######################################################################-->
+	<xsd:simpleType name="houseNumber_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="houseNumberExtension_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="6"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="StreetName_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="streetName_Type">
+				<xsd:attribute name="namingConvention" type="streetNameNamingStandard_Enum" default="NONE">
+					<xsd:annotation>
+						<xsd:documentation>If a standard naming convention is used for the street name it can be specified here. The naming convention may influence the way names are expanded or perceived by the receiving systems.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="streetName_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="24"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="streetNameNamingStandard_Enum">
+		<xsd:annotation>
+			<xsd:documentation>A List of possible standards used for naming a street. See values for more information</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="NONE">
+				<xsd:annotation>
+					<xsd:documentation>No naming standard has been used.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NEN_COMPLETE">
+				<xsd:annotation>
+					<xsd:documentation>The full, unabreviated steetname as assigned by the Dutch normalisation and standardasation agency</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NEN_SHORT">
+				<xsd:annotation>
+					<xsd:documentation>The abreviated steetname as assigned by the Dutch normalisation and standardasation agency</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MUNICIPALITY">
+				<xsd:annotation>
+					<xsd:documentation>The local municipality defined the name of the street. (Authoritive)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PTT">
+				<xsd:annotation>
+					<xsd:documentation>The (formar) dutch postal agency.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PROPRIETARY">
+				<xsd:annotation>
+					<xsd:documentation>Some internal naming standard</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="cityName_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="24"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="CityCode_Type">
+		<xsd:annotation>
+			<xsd:documentation>CityCode provides a unique code for a city, note that a codingStandard can optionally be provided.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="cityCode_Type">
+				<xsd:attribute name="codingStandard" type="cityCodeCodingStandard_Enum" default="NONE">
+					<xsd:annotation>
+						<xsd:documentation>A coding standard used for the city code. The standard should indicate whether the cisty_code is assigned by an external authority (and more usefull in communication) or locally defined</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="cityCode_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="6"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="cityCodeCodingStandard_Enum">
+		<xsd:annotation>
+			<xsd:documentation>A list of possible standards used for the city code. See values for more information.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="NONE">
+				<xsd:annotation>
+					<xsd:documentation>No standard applied
+</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PROPRIETARY">
+				<xsd:annotation>
+					<xsd:documentation>Some internal non-public standard is used.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="country_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="25"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="CountryCode_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="countryCode_Type">
+				<xsd:attribute name="codingStandard" type="countryCodeCodingStandard_Enum" default="ISO 3166-1 alpha-2">
+					<xsd:annotation>
+						<xsd:documentation>The coding standard used for the country code. See the CountryCodeCodingStandard enumeration for more inrofmation.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="countryCode_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="2"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="countryCodeCodingStandard_Enum">
+		<xsd:annotation>
+			<xsd:documentation>A list of possible standards used for the country code. See values for more information.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="NONE"/>
+			<xsd:enumeration value="ISO 3166-1 alpha-2">
+				<xsd:annotation>
+					<xsd:documentation>ISO 3166-1 alpha-2 codes are two-letter country codes in the ISO 3166-1 standard to represent countries and dependent areas. They are published by the International Organization for Standardization (ISO) as part of its ISO 3166 standard. They are the most widely used of the country codes published by ISO, and are used most prominently for the Internet country code top-level domains (with a few changes).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="ISO 3166-1 alpha-3">
+				<xsd:annotation>
+					<xsd:documentation>ISO 3166-1 alpha-3 codes are three-letter country codes in the ISO 3166-1 standard to represent countries and dependent areas. They are published by the International Organization for Standardization (ISO) as part of its ISO 3166 standard.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="ISO 3166-1 numeric-3">
+				<xsd:annotation>
+					<xsd:documentation>ISO 3166-1 numeric (or numeric-3) codes are 3-digit country codes in the ISO 3166-1 standard to represent countries and dependent areas. They are published by the International Organization for Standardization (ISO) as part of its ISO 3166 standard, and correspond to the 3-digit country codes developed and maintained by the United Nations Statistics Division.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PROPRIETARY"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

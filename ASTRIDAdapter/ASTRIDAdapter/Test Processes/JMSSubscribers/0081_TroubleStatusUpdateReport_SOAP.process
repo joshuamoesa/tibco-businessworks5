@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx2="urn:NotifyNumberInportingComplete" xmlns:pfx3="http://xmlns.kpn.com/fixed/portingservices/publish/NotifyNumberInportingComplete" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/JMSSubscribers/0081_TroubleStatusUpdateReport_SOAP.process</pd:name>
+    <pd:description>Purpose:
+Act as ASTRID wanting to publish.</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>78</pd:startX>
+    <pd:startY>55</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>323</pd:endX>
+    <pd:endY>55</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>196</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <timeout>%%ASTRIDAdapter/Test/Timeout%%</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>http://hdxs6k.telecom.ptt.nl:48093/ASTRIDAdapter/Processes/TroubleReportServices</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:GenericMessage>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="&quot;0081-TroubleStatusUpdateReport&quot;"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="&quot;Customer Incident Report State and Status Update Notification&quot;"/>
+                        </ns:managed_object_class>
+                        <ns:managed_object_class_extension>
+                            <xsl:value-of select="13"/>
+                        </ns:managed_object_class_extension>
+                        <ns:message_creation_time>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:message_creation_time>
+                        <ns:message_destination_it_domain>
+                            <xsl:value-of select="&quot;CRM&quot;"/>
+                        </ns:message_destination_it_domain>
+                    </ns:Header>
+                    <ns:General>
+                        <ns:customer_service_incident_report_identifier>
+                            <xsl:value-of select="&quot;1-6833422&quot;"/>
+                        </ns:customer_service_incident_report_identifier>
+                        <ns:trouble_report_identifier>
+                            <xsl:value-of select="&quot;CC0000003149054&quot;"/>
+                        </ns:trouble_report_identifier>
+                        <ns:trouble_description_short>
+                            <xsl:value-of select="&quot;short&quot;"/>
+                        </ns:trouble_description_short>
+                        <ns:trouble_description_long>
+                            <xsl:value-of select="&quot;long&quot;"/>
+                        </ns:trouble_description_long>
+                        <ns:trouble_found>
+                            <xsl:value-of select="&quot;troblefound&quot;"/>
+                        </ns:trouble_found>
+                        <ns:trouble_report_state>
+                            <xsl:value-of select="&quot;CLOSED&quot;"/>
+                        </ns:trouble_report_state>
+                        <ns:trouble_report_changedate>
+                            <xsl:value-of select="&quot;2008-07-16T13:08:25+02:00&quot;"/>
+                        </ns:trouble_report_changedate>
+                    </ns:General>
+                    <ns:Customer_info/>
+                </pfx:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

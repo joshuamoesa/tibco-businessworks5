@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1137414045923" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.kpn.com/eai/common/errors" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" xmlns:pfx4="http://xmlns.kpn.com/fixed/EDTAdapter/Publish/CustomerIncidentReport.xsd" xmlns:pfx5="urn:GenericMessageRequest" xmlns:pfx6="urn:NotifyNumberInportingComplete" xmlns:ns22="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns5="http://xmlns.kpn.com/fixed/EDTAdapter/common/CustomerIncidentReport.xsd" xmlns:ns6="http://xmlns.kpn.com/fixed/EDTAdapter/common/CustomerOrganization.xsd" xmlns:ns7="http://xmlns.kpn.com/fixed/common/PropertyAddress.xsd" xmlns:ns8="http://xmlns.kpn.com/fixed/EDTAdapter/common/ContactPerson.xsd" xmlns:ns9="http://xmlns.kpn.com/fixed/EDTAdapter/common/IncidentReporter.xsd" xmlns:ns10="http://xmlns.kpn.com/fixed/EDTAdapter/common/ManagedObject.xsd" xmlns:ns11="http://xmlns.kpn.com/fixed/EDTAdapter/common/SupportedService.xsd" xmlns:ns12="http://xmlns.kpn.com/fixed/EDTAdapter/common/ManagedObjectInTrouble.xsd" xmlns:ns13="http://xmlns.kpn.com/fixed/EDTAdapter/common/Attachment.xsd" xmlns:ns14="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:pfx7="urn:StartNumberInporting" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns15="http://xmlns.tibco.com/encodings/mime" xmlns:pfx8="http://xmlns.kpn.com/fixed/EDTAdapter/Publish/CustomerIncidentStatusUpdateReport.xsd" xmlns:pfx9="http://xmlns.kpn.com/fixed/Order/Publish/CustomerIncidentReport.xsd" xmlns:ns16="http://xmlns.kpn.com/fixed/Order/Common/CustomerIncidentReport.xsd" xmlns:ns17="http://xmlns.kpn.com/fixed/Order/Common/CustomerOrganization.xsd" xmlns:ns18="http://xmlns.kpn.com/fixed/Order/Common/ContactPerson.xsd" xmlns:ns19="http://xmlns.kpn.com/fixed/Order/Common/IncidentReporter.xsd" xmlns:ns20="http://xmlns.kpn.com/fixed/Order/Common/ManagedObject.xsd" xmlns:ns21="http://xmlns.kpn.com/fixed/Order/Common/SupportedService.xsd" xmlns:ns23="http://xmlns.kpn.com/fixed/Order/Common/ManagedObjectInTrouble.xsd" xmlns:ns24="http://xmlns.kpn.com/fixed/Order/Common/Attachment.xsd" xmlns:pfx10="http://xmlns.kpn.com/fixed/Order/Publish/CustomerIncidentReport" xmlns:ns25="http://xmlns.kpn.com/fixed/Order/common/CustomerIncidentReport.xsd" xmlns:ns26="http://xmlns.kpn.com/fixed/Order/common/CustomerOrganization.xsd" xmlns:ns27="http://xmlns.kpn.com/fixed/Order/common/ContactPerson.xsd" xmlns:ns28="http://xmlns.kpn.com/fixed/Order/common/IncidentReporter.xsd" xmlns:ns29="http://xmlns.kpn.com/fixed/Order/common/ManagedObject.xsd" xmlns:ns30="http://xmlns.kpn.com/fixed/Order/common/SupportedService.xsd" xmlns:ns31="http://xmlns.kpn.com/fixed/Order/common/ManagedObjectInTrouble.xsd" xmlns:ns32="http://xmlns.kpn.com/fixed/Order/common/Attachment.xsd" xmlns:pfx11="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/TroubleReport.xsd" xmlns:pfx12="http://xmlns.kpn.com/fixed/BSWAdapter/response/CreateTroubleReport.xsd" xmlns:pfx13="http://xmlns.kpn.com/fixed/BSWAdapter/response/GetTroubleReportStatus.xsd" xmlns:ns33="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1137414045923" schemaLocation="/Processes/Test Resources/TestPublish.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/test/publish/TestPublicationService" schemaLocation="/Common/Test Resources/XSDSchemas/TestComponent1/Publish/TestPublicationService.xsd"/>
+    <xsd:import namespace="urn:GenericMessageRequest" schemaLocation="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EDTAdapter/Publish/CustomerIncidentStatusUpdateReport.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerIncidentStatusUpdateReport.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/EDTAdapter/Publish/CustomerIncidentReport.xsd" schemaLocation="/XSDSchemas/EDTAdapter/Publish/CustomerIncidentReport.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/Order/Publish/CustomerIncidentReport" schemaLocation="/XSDSchemas/Order/Publish/CustomerIncidentReport.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ASTRIDAdapter/Publish/TroubleReport.xsd" schemaLocation="/XSDSchemas/ASTRIDAdapter/Publish/TroubleReport.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/BSWAdapter/response/CreateTroubleReport.xsd" schemaLocation="/XSDSchemas/BSWAdapter/Response/CreateTroubleReport.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/BSWAdapter/response/GetTroubleReportStatus.xsd" schemaLocation="/XSDSchemas/BSWAdapter/Response/GetTroubleReportStatus.xsd"/>
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Processes/Sub_Main_GetTroubleReportStatusResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="ServiceIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>29</pd:startX>
+    <pd:startY>148</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>613</pd:endX>
+    <pd:endY>277</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Errors"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Parse Message">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>146</pd:x>
+        <pd:y>151</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx13:GetTroubleReportStatus"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/ServiceIn/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>146</pd:x>
+        <pd:y>304</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <pfx2:Errors>
+                        <pfx2:Error>
+                            <pfx2:ErrorReport>
+                                <xsl:copy-of select="$_error/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$_error/@*"/>
+                                <xsl:copy-of select="$_error/node()"/>
+                            </pfx2:ErrorReport>
+                            <xsl:choose>
+                                <xsl:when test="exists($_error_Parse-Message/ActivityErrors)">
+                                    <pfx2:ActivityError>
+                                        <xsl:copy-of select="$_error_Parse-Message/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error_Parse-Message/ActivityErrors/@*"/>
+                                        <xsl:copy-of select="$_error_Parse-Message/ActivityErrors/node()"/>
+                                    </pfx2:ActivityError>
+                                </xsl:when>
+                                <xsl:when test="exists($_error_SOAPRequestReply/ActivityErrors)">
+                                    <pfx2:ActivityError>
+                                        <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                        <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/@*"/>
+                                        <xsl:copy-of select="$_error_SOAPRequestReply/ActivityErrors/node()"/>
+                                    </pfx2:ActivityError>
+                                </xsl:when>
+                            </xsl:choose>
+                        </pfx2:Error>
+                    </pfx2:Errors>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapSOAP">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>244</pd:x>
+        <pd:y>151</pd:y>
+        <config>
+            <element>
+                <xsd:element name="inputMessage">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx5:GenericMessage"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx5:GenericMessage>
+                    <ns22:Header>
+                        <ns22:GUID>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:TRACKING/ns1:MESSAGE_ID"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:GUID>
+                        <ns22:managed_object_class>
+                            <xsl:value-of select="&quot;Customer Incident Report State and Status Update Notification&quot;"/>
+                        </ns22:managed_object_class>
+                        <ns22:managed_object_class_extension>
+                            <xsl:value-of select="&quot;10&quot;"/>
+                        </ns22:managed_object_class_extension>
+                        <xsl:if test="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;managed_object_class_version&quot;]/@ns1:VALUE!=&quot;&quot;">
+                            <ns22:managed_object_class_version>
+                                <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;managed_object_class_version&quot;]/@ns1:VALUE"/>
+                            </ns22:managed_object_class_version>
+                        </xsl:if>
+                        <xsl:if test="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;message_origination_it_domain&quot;]/@ns1:VALUE!=&quot;&quot;">
+                            <ns22:message_origination_it_domain>
+                                <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;message_origination_it_domain&quot;]/@ns1:VALUE"/>
+                            </ns22:message_origination_it_domain>
+                        </xsl:if>
+                        <xsl:if test="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;message_instance&quot;]/@ns1:VALUE!=&quot;&quot;">
+                            <ns22:message_instance>
+                                <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;message_instance&quot;]/@ns1:VALUE"/>
+                            </ns22:message_instance>
+                        </xsl:if>
+                        <xsl:if test="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;message_creation_time&quot;]/@ns1:VALUE!=&quot;&quot;">
+                            <ns22:message_creation_time>
+                                <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;message_creation_time&quot;]/@ns1:VALUE"/>
+                            </ns22:message_creation_time>
+                        </xsl:if>
+                        <xsl:if test="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;message_destination_it_domain&quot;]/@ns1:VALUE!=&quot;&quot;">
+                            <ns22:message_destination_it_domain>
+                                <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:ATTRIBUTE[lower-case(@ns1:NAME)=&quot;message_destination_it_domain&quot;]/@ns1:VALUE"/>
+                            </ns22:message_destination_it_domain>
+                        </xsl:if>
+                    </ns22:Header>
+                    <ns22:General>
+                        <ns22:trouble_report_identifier>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_ID)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_ID"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:trouble_report_identifier>
+                        <ns22:service_provider_trouble_report_identifier>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:SERVICE_PROVIDER_TROUBLE_REPORT_ID)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:SERVICE_PROVIDER_TROUBLE_REPORT_ID"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:service_provider_trouble_report_identifier>
+                        <ns22:event_time>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:EVENT_TIME)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:EVENT_TIME"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:event_time>
+                        <ns22:error>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:RESULT_STATUS/@ns33:ERROR_CODE)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:RESULT_STATUS/@ns33:ERROR_CODE"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:error>
+                        <ns22:error_message>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:RESULT_STATUS/@ns33:ERROR_DESCRIPTION)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:RESULT_STATUS/@ns33:ERROR_DESCRIPTION"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:error_message>
+                        <ns22:activity_information_list>
+                            <xsl:for-each select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:STATUS_UPDATE">
+                                <ns22:activity_information_element>
+                                    <ns22:activity_information_value>
+                                        <xsl:choose>
+                                            <xsl:when test="exists(pfx13:ACTIVITY_INFORMATION)">
+                                                <xsl:value-of select="pfx13:ACTIVITY_INFORMATION"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </ns22:activity_information_value>
+                                    <ns22:activity_information_change_date>
+                                        <xsl:choose>
+                                            <xsl:when test="exists(pfx13:TROUBLE_REPORT_CHANGEDATE)">
+                                                <xsl:value-of select="pfx13:TROUBLE_REPORT_CHANGEDATE"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </ns22:activity_information_change_date>
+                                </ns22:activity_information_element>
+                            </xsl:for-each>
+                        </ns22:activity_information_list>
+                        <ns22:sla_clearing_time>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:SLA_CLEARING_TIME)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:SLA_CLEARING_TIME"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:sla_clearing_time>
+                        <ns22:sla_function>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:SLA_FUNCTION)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:SLA_FUNCTION"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:sla_function>
+                        <ns22:sla_name>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:SLA_NAME)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:SLA_NAME"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:sla_name>
+                        <ns22:reply_subject>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:REPLY_SUBJECT)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:REPLY_SUBJECT"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:reply_subject>
+                        <ns22:trouble_description_short>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_DESCRIPTION_SHORT)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_DESCRIPTION_SHORT"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:trouble_description_short>
+                        <ns22:trouble_report_state>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_STATE)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_STATE"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:trouble_report_state>
+                        <ns22:trouble_report_status_line_date>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_STATUS_LINE_DATE)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_STATUS_LINE_DATE"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:trouble_report_status_line_date>
+                        <ns22:trouble_report_status_line_date_send>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_STATUS_LINE_DATE_SEND)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_STATUS_LINE_DATE_SEND"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:trouble_report_status_line_date_send>
+                        <ns22:trouble_report_number_updates>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_NUMBER_UPDATES)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:TROUBLE_REPORT_NUMBER_UPDATES"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:trouble_report_number_updates>
+                        <ns22:end_user_name>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:CUSTOMER_ORGANIZATION/pfx13:CONTACT_PERSON/pfx13:NAME)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:CUSTOMER_ORGANIZATION/pfx13:CONTACT_PERSON/pfx13:NAME"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:end_user_name>
+                    </ns22:General>
+                    <ns22:Customer_info>
+                        <ns22:co_contact_person>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:END_USER/pfx13:NAME)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:TROUBLE_REPORT/pfx13:END_USER/pfx13:NAME"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:co_contact_person>
+                    </ns22:Customer_info>
+                    <ns22:Managed_Object_Info>
+                        <ns22:managed_object_instance>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:MANAGED_OBJECT_INSTANCE_ID)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:MANAGED_OBJECT_INSTANCE_ID"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:managed_object_instance>
+                        <ns22:mo_managed_object_instance>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:MANAGED_OBJECT_INSTANCE)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:MANAGED_OBJECT_INSTANCE"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:mo_managed_object_instance>
+                        <ns22:mo_mol_city>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:MO_MOL_CITY)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:MO_MOL_CITY"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:mo_mol_city>
+                        <ns22:mo_supported_service_repairtime>
+                            <xsl:choose>
+                                <xsl:when test="exists($Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:SUPPORTED_SERVICE[1]/pfx13:MO_SUPPORTED_SERVICE_REPAIRTIME)">
+                                    <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:SUPPORTED_SERVICE[1]/pfx13:MO_SUPPORTED_SERVICE_REPAIRTIME"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns22:mo_supported_service_repairtime>
+                        <xsl:if test="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:SUPPORTED_SERVICE/pfx13:MO_SUPPORTED_SERVICE_REPAIRENDTIME!=&quot;&quot;">
+                            <ns22:mo_supported_service_repairendtime>
+                                <xsl:value-of select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:SUPPORTED_SERVICE[1]/pfx13:MO_SUPPORTED_SERVICE_REPAIRENDTIME"/>
+                            </ns22:mo_supported_service_repairendtime>
+                        </xsl:if>
+                        <ns22:service_instance_list>
+                            <xsl:for-each select="$Parse-Message/pfx13:GetTroubleReportStatus/pfx13:MANAGED_OBJECT/pfx13:SUPPORTED_SERVICE">
+                                <ns22:service_instance>
+                                    <ns22:mo_supported_service_instance_id>
+                                        <xsl:choose>
+                                            <xsl:when test="exists(pfx13:MO_SUPPORTED_SERVICE_INSTANCE)">
+                                                <xsl:value-of select="pfx13:MO_SUPPORTED_SERVICE_INSTANCE"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </ns22:mo_supported_service_instance_id>
+                                    <ns22:mo_supported_service_instance_status>
+                                        <xsl:choose>
+                                            <xsl:when test="exists(pfx13:SUPPORTED_SERVICE_STATUS)">
+                                                <xsl:value-of select="pfx13:SUPPORTED_SERVICE_STATUS"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </ns22:mo_supported_service_instance_status>
+                                    <ns22:mo_supported_service_instance_status_UpTime>
+                                        <xsl:choose>
+                                            <xsl:when test="exists(pfx13:MO_SUPPORTED_SERVICE_UPTIME)">
+                                                <xsl:value-of select="pfx13:MO_SUPPORTED_SERVICE_UPTIME"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </ns22:mo_supported_service_instance_status_UpTime>
+                                </ns22:service_instance>
+                            </xsl:for-each>
+                        </ns22:service_instance_list>
+                    </ns22:Managed_Object_Info>
+                </pfx5:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogSOAPRequest">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>150</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns14:AnyXMLMessage>
+                    <xsl:copy-of select="$MapSOAP/inputMessage"/>
+                </ns14:AnyXMLMessage>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-01501&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="&quot;ASTRID inbound SOAP request for service [CustomerIncidentReport]&quot;"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>478</pd:x>
+        <pd:y>153</pd:y>
+        <config>
+            <timeout>%%ASTRIDAdapter/Inbound/SOAP/Timeout%%</timeout>
+            <service>pfx5:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>%%ASTRIDAdapter/Inbound/SOAP/Endpoint%%</endpointURL>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity>/ASTRIDAdapter/Shared Resources/Soap User Identity.id</basicHttpAuthIdentity>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/ASTRIDAdapter/Shared Resources/Trusted Certificates/.folder</ns0:cert>
+            </ns0:ssl>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <headers>
+                    <Header.parameters>
+                        <xsl:attribute name="mustUnderstand">
+                            <xsl:value-of select="&quot;false&quot;"/>
+                        </xsl:attribute>
+                    </Header.parameters>
+                </headers>
+                <xsl:for-each select="$MapSOAP/inputMessage/pfx5:GenericMessage">
+                    <pfx5:GenericMessage>
+                        <xsl:copy-of select="ns22:Header"/>
+                        <xsl:copy-of select="ns22:General"/>
+                        <xsl:copy-of select="ns22:Customer_info"/>
+                        <xsl:copy-of select="ns22:Managed_Object_Info"/>
+                        <xsl:copy-of select="ns22:Managed_object_in_trouble_info"/>
+                        <xsl:for-each select="ns22:Attachments">
+                            <ns22:Attachments>
+                                <xsl:if test="ns22:attachment_1_attachmentName">
+                                    <ns22:attachment_1_attachmentName>
+                                        <xsl:copy-of select="ns22:attachment_1_attachmentName/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_1_attachmentName"/>
+                                    </ns22:attachment_1_attachmentName>
+                                </xsl:if>
+                                <xsl:if test="ns22:attachment_1_attachmentData">
+                                    <ns22:attachment_1_attachmentData>
+                                        <xsl:copy-of select="ns22:attachment_1_attachmentData/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_1_attachmentData"/>
+                                    </ns22:attachment_1_attachmentData>
+                                </xsl:if>
+                                <xsl:if test="ns22:attachment_1_attachmentOrigSize">
+                                    <ns22:attachment_1_attachmentOrigSize>
+                                        <xsl:copy-of select="ns22:attachment_1_attachmentOrigSize/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_1_attachmentOrigSize"/>
+                                    </ns22:attachment_1_attachmentOrigSize>
+                                </xsl:if>
+                                <xsl:if test="ns22:attachment_2_attachmentName">
+                                    <ns22:attachment_2_attachmentName>
+                                        <xsl:copy-of select="ns22:attachment_2_attachmentName/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_2_attachmentName"/>
+                                    </ns22:attachment_2_attachmentName>
+                                </xsl:if>
+                                <xsl:if test="ns22:attachment_2_attachmentData">
+                                    <ns22:attachment_2_attachmentData>
+                                        <xsl:copy-of select="ns22:attachment_2_attachmentData/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_2_attachmentData"/>
+                                    </ns22:attachment_2_attachmentData>
+                                </xsl:if>
+                                <xsl:if test="ns22:attachment_2_attachmentOrigSize">
+                                    <ns22:attachment_2_attachmentOrigSize>
+                                        <xsl:copy-of select="ns22:attachment_2_attachmentOrigSize/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_2_attachmentOrigSize"/>
+                                    </ns22:attachment_2_attachmentOrigSize>
+                                </xsl:if>
+                                <xsl:if test="ns22:attachment_3_attachmentName">
+                                    <ns22:attachment_3_attachmentName>
+                                        <xsl:copy-of select="ns22:attachment_3_attachmentName/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_3_attachmentName"/>
+                                    </ns22:attachment_3_attachmentName>
+                                </xsl:if>
+                                <xsl:if test="ns22:attachment_3_attachmentData">
+                                    <ns22:attachment_3_attachmentData>
+                                        <xsl:copy-of select="ns22:attachment_3_attachmentData/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_3_attachmentData"/>
+                                    </ns22:attachment_3_attachmentData>
+                                </xsl:if>
+                                <xsl:if test="ns22:attachment_3_attachmentOrigSize">
+                                    <ns22:attachment_3_attachmentOrigSize>
+                                        <xsl:copy-of select="ns22:attachment_3_attachmentOrigSize/@xsi:nil"/>
+                                        <xsl:value-of select="ns22:attachment_3_attachmentOrigSize"/>
+                                    </ns22:attachment_3_attachmentOrigSize>
+                                </xsl:if>
+                            </ns22:Attachments>
+                        </xsl:for-each>
+                    </pfx5:GenericMessage>
+                </xsl:for-each>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogSOAPAcknowlege">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>607</pd:x>
+        <pd:y>154</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns14:AnyXMLMessage>
+                    <xsl:copy-of select="$SOAPRequestReply/outputMessage"/>
+                </ns14:AnyXMLMessage>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-01502&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="&quot;ASTRID SOAP acknowledge message for service [CustomerIncidentReport]&quot;"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogWarn">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>736</pd:x>
+        <pd:y>153</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_LogMessage.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <msgCode>
+                    <xsl:value-of select="&quot;ASTRID-BW-02500&quot;"/>
+                </msgCode>
+                <message>
+                    <xsl:value-of select="concat( &quot;Warning ASTRID returned a wrong or empty GUID: [&quot;, $SOAPRequestReply/outputMessage/pfx5:GenericMessageResponse/pfx5:GUID,&quot;]&quot;)"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Ign log REQ">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>357</pd:x>
+        <pd:y>50</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Ignore Log RESP">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>511</pd:x>
+        <pd:y>276</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Ignore-Log-WARN">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>737</pd:x>
+        <pd:y>276</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Parse Message</pd:from>
+        <pd:to>MapSOAP</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Message</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapSOAP</pd:from>
+        <pd:to>LogSOAPRequest</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPRequest</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>LogSOAPAcknowlege</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPAcknowlege</pd:from>
+        <pd:to>LogWarn</pd:to>
+        <pd:xpathDescription>Validate GUID</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$SOAPRequestReply/outputMessage/pfx5:GenericMessageResponse/pfx5:GUID="" or
+$SOAPRequestReply/outputMessage/pfx5:GenericMessageResponse/pfx5:GUID!=$Parse-Message/pfx13:GetTroubleReportStatus/ns1:CMH/ns1:TRACKING</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogWarn</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapSOAP</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Throw Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPAcknowlege</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPRequest</pd:from>
+        <pd:to>Ign log REQ</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Ign log REQ</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSOAPAcknowlege</pd:from>
+        <pd:to>Ignore Log RESP</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Ignore Log RESP</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogWarn</pd:from>
+        <pd:to>Ignore-Log-WARN</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Ignore-Log-WARN</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

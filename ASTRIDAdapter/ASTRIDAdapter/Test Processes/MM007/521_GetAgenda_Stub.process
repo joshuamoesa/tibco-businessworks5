@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798099673" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802525597" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086798099673" schemaLocation="/XSDSchemas/EnginAdapter/Request/GetAgenda.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802525597" schemaLocation="/XSDSchemas/EnginAdapter/Response/GetAgenda.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/521_GetAgenda_Stub.process</pd:name>
+    <pd:startName>GetAgenda Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetAgenda Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>114</pd:x>
+        <pd:y>83</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Order.EnginAdapter.Request.GetAgenda.1</subject>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx:GetAgenda"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to GetAgenda Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>293</pd:x>
+        <pd:y>82</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetAgenda Subscriber</eventSource>
+            <xsdString ref="pfx2:GetAgenda"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:ID"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <xsl:if test="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:FID">
+                            <ns:FID>
+                                <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:FID"/>
+                            </ns:FID>
+                        </xsl:if>
+                        <xsl:if test="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:MID">
+                            <ns:MID>
+                                <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:MID"/>
+                            </ns:MID>
+                        </xsl:if>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:PARADIGM"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:OBJECT"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:VERSION"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <ns:TRACKING>
+                            <ns:MESSAGE_ID>
+                                <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                            </ns:MESSAGE_ID>
+                            <xsl:copy-of select="$GetAgenda-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:ITEM"/>
+                        </ns:TRACKING>
+                    </ns:CMH>
+                    <RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;Nothing wrong&quot;"/>
+                        </xsl:attribute>
+                    </RESULT_STATUS>
+                    <SERVICE_VISIT_LIST>
+                        <INDEX>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </INDEX>
+                        <xsl:if test="$GetAgenda-Subscriber/ActivityOutput/body/START_DATE">
+                            <DATE>
+                                <xsl:value-of select="$GetAgenda-Subscriber/ActivityOutput/body/START_DATE"/>
+                            </DATE>
+                        </xsl:if>
+                        <START_TIME>
+                            <xsl:value-of select="&quot;20:20:00&quot;"/>
+                        </START_TIME>
+                        <END_TIME>
+                            <xsl:value-of select="&quot;23:24:00&quot;"/>
+                        </END_TIME>
+                        <AVAILABLE_APPOINTMENTS>
+                            <xsl:value-of select="6"/>
+                        </AVAILABLE_APPOINTMENTS>
+                    </SERVICE_VISIT_LIST>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetAgenda Subscriber</pd:from>
+        <pd:to>Reply to GetAgenda Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to GetAgenda Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

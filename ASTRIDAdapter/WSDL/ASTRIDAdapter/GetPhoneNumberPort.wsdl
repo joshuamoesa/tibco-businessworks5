@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:GetPhoneNumberPort" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:GetPhoneNumberPort">
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="urn:GetPhoneNumberPort">
+			<xsd:import namespace="http://tempuri.org"/>
+			<xsd:element name="GetInformation" type="s:GetInputMap"/>
+			<xsd:complexType name="GetInputMap">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="GUID" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="CURRENT_OR_FUTURE_FLAG" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="AREA_CODE" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="SUBSCRIBER_NUMBER" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetInformationResponse" type="ns0:Message"/>
+			<xsd:element name="AuthenticationInfo" type="s:AuthenticationInfo"/>
+			<xsd:complexType name="AuthenticationInfo">
+				<xsd:sequence>
+					<xsd:element name="userName" type="xsd:string"/>
+					<xsd:element name="password" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="authentication" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="locale" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="timeZone" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://tempuri.org" xmlns="http://tempuri.org" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:complexType name="Message">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="General" type="GeneralType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GeneralType">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="GUID" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="STATUS" nillable="true" type="xs:int"/>
+					<xs:element minOccurs="0" name="MSG_CODE" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="ERROR_CODE" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="ERROR_DESCRIPTION" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="ROUTING_TYPE" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="NODE" type="NODEType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="NODEType">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="NODE" type="NODE"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="NODE">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="index" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="NODE_NAME" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="PORT_ID" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="PORT_EQUIPMENT_CODE" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="PORT_EQUIPMENT_TYPE" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="0" name="PORT_FACILITY" nillable="true" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="GetInformationSoapOut">
+		<wsdl:part name="parameters" element="s:GetInformationResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetInformationSoapIn">
+		<wsdl:part name="parameters" element="s:GetInformation"/>
+	</wsdl:message>
+	<wsdl:message name="ARAuthenticate">
+		<wsdl:part name="parameters" element="s:AuthenticationInfo"/>
+	</wsdl:message>
+	<wsdl:portType name="GetPhoneNumberPortPortType">
+		<wsdl:operation name="GetInformation">
+			<wsdl:input message="s:GetInformationSoapIn"/>
+			<wsdl:output message="s:GetInformationSoapOut"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="GetPhoneNumberPortSoapBinding" type="s:GetPhoneNumberPortPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetInformation">
+			<soap:operation soapAction="urn:GetPhoneNumberPort/GetInformation" style="document"/>
+			<wsdl:input>
+				<soap:header message="s:ARAuthenticate" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="GetPhoneNumberPortService">
+		<wsdl:documentation>
+versie 2.0  </wsdl:documentation>
+		<wsdl:port name="GetPhoneNumberPortSoap" binding="s:GetPhoneNumberPortSoapBinding">
+			<soap:address location="http://manlab10/arsys/services/ARService?server=manlab10&amp;webService=GetPhoneNumberPort"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" elementFormDefault="qualified" attributeFormDefault="qualified" version="CDM_00.00.01" xmlns="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:complexType name="FormatIndicator">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="Format" type="FormatEnumeration" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="FormatEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Telecom number of Free format</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="TelecomNumber"/>
+			<xsd:enumeration value="FreeFormat"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RecoveryEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>ABANDON, RETRY, CONTINUE</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ABANDON"/>
+			<xsd:enumeration value="RETRY"/>
+			<xsd:enumeration value="CONTINUE"/>
+			<xsd:enumeration value="RESTART"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="RecoveryIndicator">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="Action" type="RecoveryEnumeration" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="MonetarySum">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:decimal">
+				<xsd:attribute name="CurrencyType" type="xsd:string" use="required"/>
+				<xsd:attribute name="Factor" type="xsd:decimal" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="CurrencyType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="CURRENCY_CODE" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="TelecomNumberDetailed">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="country" type="xsd:string" use="optional"/>
+				<xsd:attribute name="area" type="xsd:string" use="optional"/>
+				<xsd:attribute name="subscriber" type="xsd:string" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="TelecomNumberDetailedNotEmpty">
+		<xsd:simpleContent>
+			<xsd:extension base="NEString">
+				<xsd:attribute name="country" type="NEString" use="optional"/>
+				<xsd:attribute name="area" type="NEString" use="optional"/>
+				<xsd:attribute name="subscriber" type="NEString" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="TelecomNumber">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="TelecomNumberNotEmpty">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Sex">
+		<xsd:annotation>
+			<xsd:documentation>0 (NOT KNOWN), 1 (MALE), 2 (FEMALE), 9 (NOT SPECIFIED)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:integer">
+			<xsd:enumeration value="0"/>
+			<xsd:enumeration value="1"/>
+			<xsd:enumeration value="2"/>
+			<xsd:enumeration value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NEString">
+		<xsd:annotation>
+			<xsd:documentation>Not Empty String</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

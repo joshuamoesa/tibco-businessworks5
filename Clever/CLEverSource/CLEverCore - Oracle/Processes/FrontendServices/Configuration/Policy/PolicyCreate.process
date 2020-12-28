@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://www.tibco.com/CLEver/Configuration/Policy" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://www.tibco.com/CLEver/FrontendServices/Configuration/Policy/PolicyInterfaceSpecs" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns2="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns3="http://www.tibco.com/CLEver/Policy" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/CLEver/namespace/Custom" xmlns:ns5="http://www.tibco.com/CLEver/Exception" xmlns:ns6="http://www.tibco.com/CLEver/InternalException" xmlns:ns22="http://www.tibco.com/CLEver/Configuration/BusinessDomain" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:CleverUtils="java://Clever.CleverUtils">
+    <wsdl:import namespace="http://www.tibco.com/CLEver/Configuration/Policy" location="/Processes/FrontendServices/Configuration/Policy/Policy.wsdl"/>
+    <pd:name>Processes/FrontendServices/Configuration/Policy/PolicyCreate.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:Create_Policy_Input"/>
+    <pd:startX>145</pd:startX>
+    <pd:startY>179</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:Create_Policy_Output>
+            <part1>
+                <ns:Create_Policy_Output>
+                    <ns2:ReturnValue>
+                        <xsl:value-of select="''"/>
+                    </ns2:ReturnValue>
+                </ns:Create_Policy_Output>
+            </part1>
+        </wsdlPfx:Create_Policy_Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:Create_Policy_Output"/>
+    <pd:endX>445</pd:endX>
+    <pd:endY>181</pd:endY>
+    <pd:errorSchemas>
+        <Fault wsMsgRef="wsdlPfx:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Create Policy">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>292</pd:x>
+        <pd:y>185</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Configuration/Policy/Create.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Configuration/Policy/Create.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$Start/wsdlPfx:Create_Policy_Input/part1/ns:Create_Policy_Input/ns3:Policy"/>
+                <xsl:copy-of select="$Start/wsdlPfx:Create_Policy_Input/part1/ns:Create_Policy_Input/ns2:Security"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>50</pd:x>
+        <pd:y>289</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>286</pd:x>
+        <pd:y>300</pd:y>
+        <config>
+            <faultName>Fault</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <data>
+                    <wsdlPfx:Exception>
+                        <part1>
+                            <ns6:ExceptionEnvelope>
+                                <ns6:Exception>
+                                    <Service>
+                                        <xsl:value-of select="substring-after(substring-before($_error/ns4:ErrorReport/ProcessStack, '.'), 'FrontendServices/')"/>
+                                    </Service>
+                                    <ErrorMessage>
+                                        <xsl:value-of select="$FormatError/Output/ErrorMessage"/>
+                                    </ErrorMessage>
+                                    <xsl:if test="$_error/ns4:ErrorReport/MsgCode">
+                                        <ErrorCode>
+                                            <xsl:value-of select="$_error/ns4:ErrorReport/MsgCode"/>
+                                        </ErrorCode>
+                                    </xsl:if>
+                                    <ns6:Error>
+                                        <ns6:ErrorReport>
+                                            <xsl:copy-of select="$_error/ns4:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                                            <xsl:copy-of select="$_error/ns4:ErrorReport/@*"/>
+                                            <xsl:copy-of select="$_error/ns4:ErrorReport/node()"/>
+                                        </ns6:ErrorReport>
+                                    </ns6:Error>
+                                </ns6:Exception>
+                            </ns6:ExceptionEnvelope>
+                        </part1>
+                    </wsdlPfx:Exception>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FormatError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>178</pd:x>
+        <pd:y>305</pd:y>
+        <config>
+            <processName>/Processes/InternalServices/Exception Handler/FormatErrorHumanReadable.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ns6:Exception>
+                    <Service>
+                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/StaticVariables/ConfigurationObjects/ExceptionSeverity/Name,'.',$_globalVariables/ns1:GlobalVariables/StaticVariables/Operations/Create)"/>
+                    </Service>
+                    <ErrorMessage>
+                        <xsl:value-of select="$_error/ns4:ErrorReport/Msg"/>
+                    </ErrorMessage>
+                    <ErrorCode>
+                        <xsl:value-of select="$_error/ns4:ErrorReport/MsgCode"/>
+                    </ErrorCode>
+                    <ns6:Error>
+                        <ns6:ErrorReport>
+                            <xsl:copy-of select="$_error/ns4:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns4:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns4:ErrorReport/node()"/>
+                        </ns6:ErrorReport>
+                    </ns6:Error>
+                </ns6:Exception>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Create Policy</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Create Policy</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>FormatError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FormatError</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

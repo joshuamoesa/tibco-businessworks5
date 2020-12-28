@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://kpn.com/products/CoffeeManager/Order/v1/CreateImpl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns0="http://kpn.com/products/CoffeeManager/Order/data/v1.0" xmlns:ns1="http://kpn.com/eai/generic/order/1.0" xmlns:ns2="http://kpn.com/products/CoffeeManager" name="Untitled" targetNamespace="http://kpn.com/products/CoffeeManager/Order/v1/CreateImpl">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/products/CoffeeManager/Order/data/v1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+            <xs:import namespace="http://kpn.com/products/CoffeeManager"/>
+            <xs:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+            <xs:import namespace="http://kpn.com/products/CoffeeManager"/>
+            <xs:complexType name="CreateRequest">
+                <xs:sequence>
+                    <xs:element name="participants" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CreateResponse">
+                <xs:sequence>
+                    <xs:element name="servant" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OrderCreateRequest">
+                <xs:complexContent>
+                    <xs:extension base="ns1:Order">
+                        <xs:sequence>
+                            <xs:element name="OrderItem" type="ns0:OrderCreateRequestItem"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="OrderCreateRequestItem">
+                <xs:complexContent>
+                    <xs:extension base="ns2:CoffeeManagerOrderItem">
+                        <xs:sequence>
+                            <xs:element name="Parameters" type="ns0:CreateRequest"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="OrderCreateResponse">
+                <xs:complexContent>
+                    <xs:extension base="ns1:OrderStatus">
+                        <xs:sequence>
+                            <xs:element name="status" type="ns0:OrderStatusEnum"/>
+                            <xs:element name="OrderItem" type="ns0:OrderCreateResponseItem"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="OrderCreateResponseItem">
+                <xs:complexContent>
+                    <xs:extension base="ns2:CoffeeManagerOrderStatusItem">
+                        <xs:sequence>
+                            <xs:element name="Parameters" type="ns0:CreateResponse" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:simpleType name="OrderStatusEnum">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="INITIAL"/>
+                    <xs:enumeration value="ACCEPTED"/>
+                    <xs:enumeration value="REJECTED"/>
+                    <xs:enumeration value="ERROR"/>
+                    <xs:enumeration value="COMPLETED"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="OrderCreateRequest" type="ns0:OrderCreateRequest"/>
+            <xs:element name="OrderCreateResponse" type="ns0:OrderCreateResponse"/>
+        </xs:schema>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/eai/generic/order/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://kpn.com/products/CoffeeManager"/>
+            <xs:import namespace="http://kpn.com/products/CoffeeManager/Order/data/v1.0"/>
+            <xs:complexType name="Error">
+                <xs:sequence>
+                    <xs:element name="code" type="xs:string"/>
+                    <xs:element name="detail" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="description" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Order" abstract="true">
+                <xs:sequence>
+                    <xs:element name="customerOrderId" type="xs:string" minOccurs="0"/>
+                    <xs:element name="orderDateTime" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OrderStatus" abstract="true">
+                <xs:sequence>
+                    <xs:element name="customerOrderId" type="xs:string" minOccurs="0"/>
+                    <xs:element name="supplierOrderId" type="xs:string"/>
+                    <xs:element name="error" type="ns1:Error" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="OrderStatusEnumeration">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="INITIAL"/>
+                    <xs:enumeration value="ACCEPTED"/>
+                    <xs:enumeration value="REJECTED"/>
+                    <xs:enumeration value="ERROR"/>
+                    <xs:enumeration value="COMPLETED"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:schema>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/products/CoffeeManager" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://kpn.com/eai/generic/order/1.0"/>
+            <xs:import namespace="http://kpn.com/products/CoffeeManager/Order/data/v1.0"/>
+            <xs:complexType name="CoffeeManagerOrder"/>
+            <xs:complexType name="CoffeeManagerOrderItem"/>
+            <xs:complexType name="CoffeeManagerOrderStatus"/>
+            <xs:complexType name="CoffeeManagerOrderStatusItem"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:service name="CreateCoffeeServant">
+        <wsdl:port name="SOAPEventSource" binding="tns:SOAPEventSourceBinding">
+            <soap:address location="http://jmoesa-pc:8081/ProcessDefinitions/CreateCoffeeServant"/>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="OrderServices">
+        <wsdl:operation name="Create">
+            <wsdl:input message="tns:CreateRequest"/>
+            <wsdl:output message="tns:CreateResponse"/>
+            <wsdl:fault name="CreateFault" message="tns:Error"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="SOAPEventSourceBinding" type="tns:OrderServices">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="Create">
+            <soap:operation style="document" soapAction="/ProcessDefinitions/CreateCoffeeServant"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="OrderCreateRequest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="OrderCreateResponse"/>
+            </wsdl:output>
+            <wsdl:fault name="CreateFault">
+                <soap:fault use="literal" name="CreateFault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="CreateRequest">
+        <wsdl:part name="OrderCreateRequest" element="ns0:OrderCreateRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CreateResponse">
+        <wsdl:part name="OrderCreateResponse" element="ns0:OrderCreateResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Error">
+        <wsdl:part name="Error" type="ns1:Error"/>
+    </wsdl:message>
+</wsdl:definitions>

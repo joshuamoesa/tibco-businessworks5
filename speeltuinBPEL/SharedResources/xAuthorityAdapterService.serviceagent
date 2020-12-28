@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceResource xmlns:wsdl="http://xmlns.example.com/1224493579125" xmlns:pfx="http://xmlns.example.com/1224492298796">
+    <ns0:import xmlns:ns0="http://schemas.xmlsoap.org/wsdl/" namespace="http://xmlns.example.com/1224493579125" location="/PartnerWSDLS/xAuthorityWSDL.wsdl"/>
+    <ns0:import xmlns:ns0="http://schemas.xmlsoap.org/wsdl/" namespace="http://xmlns.example.com/1224492298796" location="/PartnerWSDLS/AdapterWSDL.wsdl"/>
+    <config>
+        <wsdl namespace="http://xmlns.example.com/1224495621140" embedWsdlComponents="true" embedSchemaComponents="true" embedJndiProperties="false"/>
+        <class>com.tibco.bw.service.serviceAgent.ServiceServiceAgent</class>
+        <implType>bwo</implType>
+        <groups>
+            <row isDefault="true" groupName="Default"/>
+        </groups>
+        <serviceChange>Mon Oct 20 15:58:45 CEST 2008</serviceChange>
+        <name>xAuthorityAdapterService</name>
+        <resourceType>service.definition</resourceType>
+        <partners>
+            <row partnerName="xAuthorityService" process="/Orchestration Process.orchestration" partnerConfig="/SharedResources/Partner Link Configuration.sharedpartner#ExternalxAuthorityService"/>
+        </partners>
+        <interfaceImpl>
+            <tab>
+                <tabName>AdapterPortType</tabName>
+                <tabType>bwo</tabType>
+                <config>
+                    <wsdlDetail location="/PartnerWSDLS/AdapterWSDL.wsdl" portType="AdapterPortType" ns="http://xmlns.example.com/1224492298796"/>
+                    <detail>
+                        <tab>
+                            <tabName>service.definition.impl.tab.label</tabName>
+                            <tabType>impl</tabType>
+                            <config>
+                                <operations>
+                                    <row opName="RequestToCreateServiceOperation" timeout="0" opImpl="/Orchestration Process.orchestration#xAuthorityAdapter"/>
+                                </operations>
+                            </config>
+                        </tab>
+                        <tab>
+                            <tabName>service.definition.ep.tab.label</tabName>
+                            <tabType>ep</tabType>
+                            <config>
+                                <epBindings>
+                                    <row epName="AdapterPortTypeEndpoint2" epType="soap">
+                                        <config>
+                                            <epDetail>
+                                                <tab>
+                                                    <tabName>soap.service.transport.ui.transport.tab.label</tabName>
+                                                    <tabType>transport</tabType>
+                                                    <config>
+                                                        <sharedChannel>/SharedResources/HTTP Connection.sharedhttp</sharedChannel>
+                                                        <transport>
+                                                            <config>
+                                                                <useBasicAuthentication>false</useBasicAuthentication>
+                                                                <httpURI>/SharedResources/xAuthorityAdapterService.serviceagent/AdapterPortTypeEndpoint2</httpURI>
+                                                            </config>
+                                                        </transport>
+                                                    </config>
+                                                </tab>
+                                                <tab>
+                                                    <tabName>soap.service.transport.ui.details.tab.label</tabName>
+                                                    <tabType>details</tabType>
+                                                    <config>
+                                                        <operationStyle>document</operationStyle>
+                                                        <soapVersion>SOAP 1.2</soapVersion>
+                                                        <soap>
+                                                            <operation name="RequestToCreateServiceOperation">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/SharedResources/xAuthorityAdapterService.serviceagent/AdapterPortTypeEndpoint2/RequestToCreateServiceOperation</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                        </soap>
+                                                    </config>
+                                                </tab>
+                                            </epDetail>
+                                        </config>
+                                    </row>
+                                </epBindings>
+                            </config>
+                        </tab>
+                    </detail>
+                </config>
+            </tab>
+        </interfaceImpl>
+    </config>
+</serviceResource>

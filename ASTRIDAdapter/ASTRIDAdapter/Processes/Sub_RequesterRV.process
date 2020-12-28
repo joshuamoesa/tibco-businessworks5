@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" xmlns:pfx="http://xmlns.kpn.com/eai/common/errors" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns2="http://schemas.tibco.com/bw/pe/plugin/5.0/exceptions" xmlns:ns3="http://schemas.tibco.com/bw/plugins/tibrv/5.0/tibrvExceptions" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://xmlns.tibco.com/2003/5/bw/plugins/tibrv" schemaLocation="/Common/Shared Resources/RawRVMsg2.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>ASTRIDAdapter/Processes/Sub_RequesterRV.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="TransportReqIn">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Destination" type="xsd:string"/>
+                    <xsd:element name="ReplyToDestination" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="Timeout" type="xsd:long" minOccurs="0"/>
+                    <xsd:element name="Body" type="xsd:string"/>
+                    <xsd:element name="MessageId" type="xsd:string"/>
+                    <xsd:element name="JMS" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Selector" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Expiration" type="xsd:long" minOccurs="0"/>
+                                <xsd:element name="Priority" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="CorrelationId" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="XGroupSeq" type="xsd:int" minOccurs="0"/>
+                                <xsd:element name="Trace" minOccurs="0">
+                                    <xsd:complexType>
+                                        <xsd:choice>
+                                            <xsd:element name="header" type="xsd:anyType"/>
+                                            <xsd:element name="full" type="xsd:anyType"/>
+                                        </xsd:choice>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>45</pd:startY>
+    <pd:returnBindings>
+        <TransportReqOut>
+            <Body>
+                <xsl:value-of select="$Send-RV-Request/ActivityOutput/body/ns1:field[ns1:name='xml']/ns1:simple"/>
+            </Body>
+        </TransportReqOut>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="TransportReqOut">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Body" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>564</pd:endX>
+    <pd:endY>44</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Send RV Request">
+        <pd:type>com.tibco.plugin.tibrv.RVRequestActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVRequestActivity</pd:resourceType>
+        <pd:x>334</pd:x>
+        <pd:y>45</pd:y>
+        <config>
+            <wantsValidationForOutput>true</wantsValidationForOutput>
+            <wantsFiltrationForOutput>true</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <wantsXMLCompliantFieldNamesOutput>false</wantsXMLCompliantFieldNamesOutput>
+            <sharedChannel>/Common/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <inputXsdString ref="ns1:msg"/>
+            <outputXsdString ref="ns1:msg"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <subject>
+                    <xsl:value-of select="$Start/TransportReqIn/Destination"/>
+                </subject>
+                <xsl:if test="$Start/TransportReqIn/ReplyToDestination">
+                    <replySubject>
+                        <xsl:value-of select="$Start/TransportReqIn/ReplyToDestination"/>
+                    </replySubject>
+                </xsl:if>
+                <xsl:if test="$Start/TransportReqIn/Timeout">
+                    <timeout>
+                        <xsl:value-of select="$Start/TransportReqIn/Timeout"/>
+                    </timeout>
+                </xsl:if>
+                <body>
+                    <ns1:field>
+                        <ns1:name>
+                            <xsl:value-of select="&quot;xml&quot;"/>
+                        </ns1:name>
+                        <ns1:id>
+                            <xsl:value-of select="0"/>
+                        </ns1:id>
+                        <ns1:simple xsi:type="ns1:tibrvXml">
+                            <xsl:value-of select="$Start/TransportReqIn/Body"/>
+                        </ns1:simple>
+                    </ns1:field>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log RV Request">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>198</pd:x>
+        <pd:y>46</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04003&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Start/TransportReqIn/MessageId"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="concat(&quot;Sending RV message on subject :&quot;, $Start/TransportReqIn/Destination)"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$Start/TransportReqIn/Body"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log RV Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>455</pd:x>
+        <pd:y>45</pd:y>
+        <config>
+            <processName>/Common/Sub Processes/Sub_Trace.process</processName>
+        </config>
+        <pd:inputBindings>
+            <TraceIn>
+                <MsgCode>
+                    <xsl:value-of select="&quot;EAI-04004&quot;"/>
+                </MsgCode>
+                <MsgId>
+                    <xsl:value-of select="$Start/TransportReqIn/MessageId"/>
+                </MsgId>
+                <Parameter>
+                    <xsl:value-of select="&quot;Received RV message :&quot;"/>
+                </Parameter>
+                <Parameter>
+                    <xsl:value-of select="$Send-RV-Request/ActivityOutput/body/ns1:field[ns1:name='xml']/ns1:simple"/>
+                </Parameter>
+            </TraceIn>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>335</pd:x>
+        <pd:y>243</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <xsl:variable name="varMsgCode" select="if (exists($_error_Send-RV-Request/ActivityErrors/ns2:ActivityTimedOutException))&#xA;then &quot;EAI-03004&quot;&#xA;else &quot;EAI-03052&quot;"/>
+            <ns12:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns:ErrorReport/Msg"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$varMsgCode"/>
+                </messageCode>
+                <data>
+                    <pfx:Error>
+                        <xsl:choose>
+                            <xsl:when test="$_error_Send-RV-Request/ActivityErrors/ns2:ActivityTimedOutException">
+                                <pfx:MsgCode>
+                                    <xsl:value-of select="&quot;EAI-03004&quot;"/>
+                                </pfx:MsgCode>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx:MsgCode>
+                                    <xsl:value-of select="&quot;EAI-03052&quot;"/>
+                                </pfx:MsgCode>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error_Send-RV-Request)">
+                                <pfx:ActivityError>
+                                    <xsl:copy-of select="$_error_Send-RV-Request/ActivityErrors/ancestor-or-self::*/namespace::node()"/>
+                                    <xsl:copy-of select="$_error_Send-RV-Request/ActivityErrors/@*"/>
+                                    <xsl:copy-of select="$_error_Send-RV-Request/ActivityErrors/node()"/>
+                                </pfx:ActivityError>
+                            </xsl:when>
+                        </xsl:choose>
+                    </pfx:Error>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Log RV Request</pd:from>
+        <pd:to>Send RV Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send RV Request</pd:from>
+        <pd:to>Log RV Response</pd:to>
+        <pd:xpathDescription>Trace</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log RV Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log RV Request</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send RV Request</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log RV Response</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log RV Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

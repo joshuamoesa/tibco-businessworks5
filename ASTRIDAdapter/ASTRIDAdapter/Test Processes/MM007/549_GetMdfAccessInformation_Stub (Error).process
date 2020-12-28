@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.example.com/unique/default/namespace/1086798248097" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1086802778671" xmlns:ns="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns2="http://xmlns.example.com/unique/default/namespace/1087395513868" xmlns:pfx3="http://xmlns.example.com/unique/default/namespace/1113223925765" xmlns:pfx4="http://xmlns.example.com/unique/default/namespace/1113223891468" xmlns:ns3="http://xmlns.kpn.com/fixed/kanvascontractadapter/common/KanvasResponse.xsd" xmlns:pfx5="http://xmlns.example.com/unique/default/namespace/1111410706296" xmlns:pfx6="http://xmlns.example.com/unique/default/namespace/1111410864015">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086798248097" schemaLocation="/XSDSchemas/EnginAdapter/Request/CheckAppointment.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1086802778671" schemaLocation="/XSDSchemas/EnginAdapter/Response/CheckAppointment.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1113223925765" schemaLocation="/XSDSchemas/KanvasContractAdapter/Request/GetCtpLineDetails.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1113223891468" schemaLocation="/XSDSchemas/KanvasContractAdapter/Response/GetCtpLineDetails.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1111410706296" schemaLocation="/XSDSchemas/KanvasContractAdapter/Request/GetMdfAccessInformation.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.example.com/unique/default/namespace/1111410864015" schemaLocation="/XSDSchemas/KanvasContractAdapter/Response/GetMdfAccessInformation.xsd"/>
+    <pd:name>ASTRIDAdapter/Test Processes/MM007/549_GetMdfAccessInformation_Stub (Error).process</pd:name>
+    <pd:startName>GetMdfAccessInformation Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="GetMdfAccessInformation Subscriber">
+        <pd:type>com.tibco.plugin.tibrv.RVEventSource</pd:type>
+        <pd:resourceType>ae.rvpalette.RVEventSource</pd:resourceType>
+        <pd:x>111</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <wantsValidationForOutput>false</wantsValidationForOutput>
+            <wantsFiltrationForOutput>false</wantsFiltrationForOutput>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <subject>%%Env%%.FIXED.Operations.KanvasRouter.Request.GetMdfAccessInformation.1</subject>
+            <sharedChannel>/ASTRIDAdapter/Shared Resources/RV Transport.rvtransport</sharedChannel>
+            <xmlEncoding>true</xmlEncoding>
+            <xsdString ref="pfx5:GetMdfAccessInformation"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>53</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Reply to GetMdfAccessInformation Request">
+        <pd:type>com.tibco.plugin.tibrv.RVReplyActivity</pd:type>
+        <pd:resourceType>ae.rvpalette.RVReplyActivity</pd:resourceType>
+        <pd:x>276</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <wantsXMLCompliantFieldNames>false</wantsXMLCompliantFieldNames>
+            <eventSource>GetMdfAccessInformation Subscriber</eventSource>
+            <xsdString ref="pfx6:GetMdfAccessInformation"/>
+        </config>
+        <pd:inputBindings>
+            <ActivityInput>
+                <body>
+                    <ns:CMH>
+                        <ns:ID>
+                            <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:ID"/>
+                        </ns:ID>
+                        <ns:NAME>
+                            <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:NAME"/>
+                        </ns:NAME>
+                        <xsl:if test="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:FID">
+                            <ns:FID>
+                                <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:FID"/>
+                            </ns:FID>
+                        </xsl:if>
+                        <xsl:if test="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:MID">
+                            <ns:MID>
+                                <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:MID"/>
+                            </ns:MID>
+                        </xsl:if>
+                        <ns:PARADIGM>
+                            <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:PARADIGM"/>
+                        </ns:PARADIGM>
+                        <ns:OBJECT>
+                            <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:OBJECT"/>
+                        </ns:OBJECT>
+                        <ns:VERSION>
+                            <xsl:value-of select="&quot;last&quot;"/>
+                        </ns:VERSION>
+                        <ns:FROM>
+                            <xsl:attribute name="ns:COMPONENT_ID">
+                                <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:FROM/@ns:COMPONENT_ID"/>
+                            </xsl:attribute>
+                        </ns:FROM>
+                        <ns:TO>
+                            <xsl:attribute name="ns:DESTINATION">
+                                <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:TO/@ns:DESTINATION"/>
+                            </xsl:attribute>
+                        </ns:TO>
+                        <ns:TRACKING>
+                            <ns:MESSAGE_ID>
+                                <xsl:value-of select="$GetMdfAccessInformation-Subscriber/ActivityOutput/body/ns:CMH/ns:TRACKING/ns:MESSAGE_ID"/>
+                            </ns:MESSAGE_ID>
+                            <ns:ITEM>
+                                <xsl:attribute name="ns:APPINFO">
+                                    <xsl:value-of select="&quot;expertdesk_stub_checkappointment&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:EVENT">
+                                    <xsl:value-of select="&quot;very eventful&quot;"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ns:TIMESTAMP">
+                                    <xsl:value-of select="tib:timestamp()"/>
+                                </xsl:attribute>
+                            </ns:ITEM>
+                        </ns:TRACKING>
+                    </ns:CMH>
+                    <ns3:RESULT_STATUS>
+                        <xsl:attribute name="ns1:STATUS">
+                            <xsl:value-of select="&quot;2&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:MSG_CODE">
+                            <xsl:value-of select="&quot;Status 2 error&quot;"/>
+                        </xsl:attribute>
+                    </ns3:RESULT_STATUS>
+                </body>
+            </ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetMdfAccessInformation Subscriber</pd:from>
+        <pd:to>Reply to GetMdfAccessInformation Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to GetMdfAccessInformation Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

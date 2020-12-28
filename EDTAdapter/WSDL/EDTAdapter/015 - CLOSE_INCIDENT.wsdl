@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://tempuri.org" xmlns:s="urn:CLOSE_INCIDENT" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:CLOSE_INCIDENT">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:CLOSE_INCIDENT">
+            <xsd:element name="CloseIncident" type="s:KSD_CloseIncident"/>
+            <xsd:complexType name="KSD_CloseIncident">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/><!-- EAI00001243 form integer to string -->
+                    <xsd:element name="customerRefNo" type="xsd:string"/><!-- EAI00001243 form integer to string -->
+                    <xsd:element name="productTypeId" type="xsd:string"/>
+                    <xsd:element name="repairRemarks" type="xsd:string"/><!-- EAI00001243 form integer to string -->
+                    <xsd:element name="closureReportCode" type="xsd:string"/><!-- EAI00001243 form dateTime to string -->
+                    <xsd:element name="createdOnDateTime" type="xsd:string"/><!-- EAI00001243 form dateTime to string -->
+                    <xsd:element name="closedOnDateTime" type="xsd:string"/><!-- EAI00001243 form integer to string -->
+                    <xsd:element name="causeCode" type="xsd:string"/>
+                    <xsd:element name="closureMethod" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="CloseIncidentResponse" type="s:KSD_Incident"/>
+            <xsd:complexType name="KSD_Incident">
+                <xsd:sequence>
+                    <xsd:element name="GUID" type="xsd:string"/>
+                    <xsd:element name="status" type="xsd:integer"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="CloseIncidentRequestMsg">
+        <part name="parameters" element="s:CloseIncident"/>
+    </message>
+    <message name="CloseIncidentResponseMsg">
+        <part name="parameters" element="s:CloseIncidentResponse"/>
+    </message>
+    <portType name="CLOSE_INCIDENTPortType">
+        <operation name="CloseIncident">
+            <input message="s:CloseIncidentRequestMsg"/>
+            <output message="s:CloseIncidentResponseMsg"/>
+        </operation>
+    </portType>
+    <binding name="CLOSE_INCIDENTSoapBinding" type="s:CLOSE_INCIDENTPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="CloseIncident">
+            <soap:operation soapAction="urn:CLOSE_INCIDENT/CloseIncident" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="CLOSE_INCIDENT_SERVICE">
+        <port name="CLOSE_INCIDENTSoap" binding="s:CLOSE_INCIDENTSoapBinding">
+            <soap:address location="http://localhost:48093/EDTAdapter/Processes/CloseIncident"/>
+        </port>
+    </service>
+</definitions>

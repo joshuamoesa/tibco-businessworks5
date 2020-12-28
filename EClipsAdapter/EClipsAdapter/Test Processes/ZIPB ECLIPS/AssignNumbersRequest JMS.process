@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/CreateSubscriberRequest.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://xmlns.kpn.com/EAI/fixed/0292_CreateSubscriber/1.0/Request" xmlns:pfx2="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/UpdateSubscriptionRequest.xsd" xmlns:ns4="http://xmlns.kpn.com/EAI/fixed/0295_UpdateSubscription/1.0/Request" xmlns:pfx3="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/AssignNumbersRequest.xsd" xmlns:ns5="http://xmlns.kpn.com/EAI/fixed/0304_AssignNumbers/1.0/Request" xmlns:pfx4="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns6="http://xmlns.kpn.com/imported/ordermessage.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/CreateSubscriberRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/CreateSubscriber.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/UpdateSubscriptionRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/UpdateSubscription.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/EClipsAdapter/Request/AssignNumbersRequest.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/AssignNumbers.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/Outbound/Publish/SubmitOrder.xsd" schemaLocation="/XSDSchemas/EClipsAdapter/Request/SubmitOrder.xsd"/>
+    <pd:name>EClipsAdapter/Test Processes/ZIPB ECLIPS/AssignNumbersRequest JMS.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>76</pd:startX>
+    <pd:startY>93</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>459</pd:endX>
+    <pd:endY>89</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>197</pd:x>
+        <pd:y>92</pd:y>
+        <config>
+            <element ref="pfx4:SubmitOrder"/>
+        </config>
+        <pd:inputBindings>
+            <pfx4:SubmitOrder>
+                <ns1:CMH>
+                    <ns1:ID>
+                        <xsl:value-of select="&quot;709&quot;"/>
+                    </ns1:ID>
+                    <ns1:NAME>
+                        <xsl:value-of select="&quot;AssignNumbers&quot;"/>
+                    </ns1:NAME>
+                    <ns1:MID>
+                        <xsl:value-of select="&quot;709.30&quot;"/>
+                    </ns1:MID>
+                    <ns1:PARADIGM>
+                        <xsl:value-of select="&quot;REQUEST&quot;"/>
+                    </ns1:PARADIGM>
+                    <ns1:OBJECT>
+                        <xsl:value-of select="&quot;PhoneNumber&quot;"/>
+                    </ns1:OBJECT>
+                    <ns1:VERSION>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns1:VERSION>
+                    <ns1:FROM>
+                        <xsl:attribute name="ns1:COMPONENT_ID">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentId"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:COMPONENT_VERSION">
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EClipsAdapter/ComponentVersion"/>
+                        </xsl:attribute>
+                    </ns1:FROM>
+                    <ns1:TO>
+                        <xsl:attribute name="ns1:DESTINATION">
+                            <xsl:value-of select="&quot;a&quot;"/>
+                        </xsl:attribute>
+                    </ns1:TO>
+                    <ns1:TRACKING>
+                        <ns1:MESSAGE_ID>
+                            <xsl:value-of select="eai:createGUID()"/>
+                        </ns1:MESSAGE_ID>
+                    </ns1:TRACKING>
+                    <ns1:ATTRIBUTE>
+                        <xsl:attribute name="ns1:NAME">
+                            <xsl:value-of select="&quot;SENDER&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:VALUE">
+                            <xsl:value-of select="&quot;b&quot;"/>
+                        </xsl:attribute>
+                    </ns1:ATTRIBUTE>
+                    <ns1:ATTRIBUTE>
+                        <xsl:attribute name="ns1:NAME">
+                            <xsl:value-of select="&quot;RECEIVER&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="ns1:VALUE">
+                            <xsl:value-of select="&quot;r&quot;"/>
+                        </xsl:attribute>
+                    </ns1:ATTRIBUTE>
+                </ns1:CMH>
+                <ns6:BODY>
+                    <ORDER>
+                        <ORDER_HEADER>
+                            <ORDER_TYPE>
+                                <xsl:value-of select="&quot;ZIPB&quot;"/>
+                            </ORDER_TYPE>
+                            <CUSTOMER_ID>
+                                <ID_PACKAGER>
+                                    <INTERNAL>
+                                        <xsl:value-of select="&quot;INT&quot;"/>
+                                    </INTERNAL>
+                                    <EXTERNAL>
+                                        <xsl:value-of select="&quot;EXT&quot;"/>
+                                    </EXTERNAL>
+                                </ID_PACKAGER>
+                            </CUSTOMER_ID>
+                            <EXTERNAL_REFERENCE>
+                                <xsl:value-of select="&quot;02&quot;"/>
+                            </EXTERNAL_REFERENCE>
+                            <CREATION_DATE>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </CREATION_DATE>
+                        </ORDER_HEADER>
+                        <ORDER_ITEM>
+                            <ORDER_ITEM_HEADER>
+                                <ORDER_ITEM_TYPE>
+                                    <xsl:value-of select="&quot;AssignNumbers&quot;"/>
+                                </ORDER_ITEM_TYPE>
+                            </ORDER_ITEM_HEADER>
+                            <PRODUCT_CATEGORY>
+                                <xsl:value-of select="&quot;Assign&quot;"/>
+                            </PRODUCT_CATEGORY>
+                            <PRODUCT>
+                                <MULTI_MEDIA_PRODUCT>
+                                    <SERVICES>
+                                        <MULTI_MEDIA_SERVICE>
+                                            <VOIP_PLATFORM_CODE>
+                                                <xsl:value-of select="&quot;1323&quot;"/>
+                                            </VOIP_PLATFORM_CODE>
+                                            <SERVICE_PROVIDER_ID>
+                                                <xsl:value-of select="&quot;134&quot;"/>
+                                            </SERVICE_PROVIDER_ID>
+                                            <TELCO_CODE>
+                                                <xsl:value-of select="&quot;123&quot;"/>
+                                            </TELCO_CODE>
+                                            <ACCESS_LOCATION>
+                                                <DUTCH_POST_CODE>
+                                                    <xsl:value-of select="&quot;9999AD&quot;"/>
+                                                </DUTCH_POST_CODE>
+                                            </ACCESS_LOCATION>
+                                        </MULTI_MEDIA_SERVICE>
+                                    </SERVICES>
+                                    <RESOURCES>
+                                        <PHONE_NUMBER_SERIES>
+                                            <NUMBER_HIGH>
+                                                <xsl:value-of select="&quot;345&quot;"/>
+                                            </NUMBER_HIGH>
+                                            <NUMBER_LOW>
+                                                <xsl:value-of select="&quot;145&quot;"/>
+                                            </NUMBER_LOW>
+                                        </PHONE_NUMBER_SERIES>
+                                    </RESOURCES>
+                                </MULTI_MEDIA_PRODUCT>
+                            </PRODUCT>
+                        </ORDER_ITEM>
+                    </ORDER>
+                </ns6:BODY>
+            </pfx4:SubmitOrder>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>327</pd:x>
+        <pd:y>90</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Env%%.FIXED.%%EClipsAdapter/ComponentDomain%%.%%EClipsAdapter/ComponentId%%.Request.AssignNumberSequence.1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Common/Shared Resources/JMS Queue Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Common/Shared Resources/JMS Default Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <OtherProperties>
+                    <JMS_TIBCO_COMPRESS>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_COMPRESS>
+                    <JMS_TIBCO_PRESERVE_UNDELIVERED>
+                        <xsl:value-of select="false()"/>
+                    </JMS_TIBCO_PRESERVE_UNDELIVERED>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="tib:render-xml($Map-Data/pfx4:SubmitOrder, false(), true())"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

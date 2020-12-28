@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1095237788188" xmlns:ns="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx3="http://xmlns.kpn.com/fixed/common/Message.xsd" xmlns:pfx4="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" xmlns:pfx5="http://xmlns.kpn.com/fixed/ordermanageradapter/namespace/1121158287078" xmlns:pfx6="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/AnyXMLMessage.xsd" xmlns:pfx7="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" xmlns:pfx8="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/LogLevel.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns3="http://www.tibco.com/pe/EngineTypes">
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/Base.xsd" schemaLocation="/XSDSchemas/Common/Base.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ResultStatus.xsd" schemaLocation="/XSDSchemas/Common/ResultStatus.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/Message.xsd" schemaLocation="/XSDSchemas/Common/Message.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/common/AnyXMLMessage.xsd" schemaLocation="/XSDSchemas/Common/AnyXMLMessage.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/fixed/ordermanageradapter/namespace/1121158287078" schemaLocation="/XSDSchemas/OrderManagerAdapter/Common/AnyXMLMessage.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/common/cdm/ErrorMessage.xsd" schemaLocation="/XSDSchemas/Common/ErrorMessage.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/AnyXMLMessage.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Common/AnyXMLMessage.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/XSDSchemas/IKKAdapter/Common/LogLevel.xsd" schemaLocation="/XSDSchemas/IKKAdapter/Common/LogLevel.xsd"/>
+    <pd:name>IKKAdapter/Sub Processes/Sub_LogMessage.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="param">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx6:AnyXMLMessage" minOccurs="0"/>
+                    <xsd:element name="StringMessage" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="LogLevel" type="pfx8:LogLevelName" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>139</pd:startX>
+    <pd:startY>170</pd:startY>
+    <pd:returnBindings>
+        <ErrorStatus>
+            <xsl:copy-of select="$Start/root/ResultStatus/ancestor-or-self::*/namespace::node()"/>
+            <xsl:copy-of select="$Start/root/ResultStatus/@*"/>
+            <xsl:copy-of select="$Start/root/ResultStatus/node()"/>
+        </ErrorStatus>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>659</pd:endX>
+    <pd:endY>440</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <SettingLogLevel>
+            <xsd:element name="SettingLogLevel" type="pfx8:LogLevelName"/>
+        </SettingLogLevel>
+        <ValidLogMessageSet ref="pfx8:ValidLogLevelSet"/>
+    </pd:processVariables>
+    <pd:activity name="Render XML">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>649</pd:x>
+        <pd:y>173</pd:y>
+        <config>
+            <renderAsText>text</renderAsText>
+            <validateInput>false</validateInput>
+            <textEncoding>UTF-8</textEncoding>
+            <term ref="pfx6:AnyXMLMessage"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/param/AnyXMLMessage"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log XML">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>786</pd:x>
+        <pd:y>174</pd:y>
+        <config>
+            <role>%%IKKAdapter/AppSetting/LogRole%%</role>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="$Render-XML/xmlString"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="concat(&quot;&lt;&quot;, if (exists($Start/param/LogLevel)) then $Start/param/LogLevel else &quot;&quot;, &quot;> &quot;, if (exists($Start/param/StringMessage)) then $Start/param/StringMessage else &quot;&quot;)"/>
+                </msgCode>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Init ValidLevel">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>383</pd:x>
+        <pd:y>172</pd:y>
+        <config>
+            <variableName>ValidLogMessageSet</variableName>
+        </config>
+        <pd:inputBindings>
+            <ValidLogLevelSet>
+                <LogLevelSet>
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="1"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="&quot;FATAL&quot;"/>
+                </LogLevelSet>
+                <LogLevelSet>
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="2"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="&quot;ERROR&quot;"/>
+                </LogLevelSet>
+                <LogLevelSet>
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="3"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="&quot;WARN&quot;"/>
+                </LogLevelSet>
+                <LogLevelSet>
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="4"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="&quot;INFO&quot;"/>
+                </LogLevelSet>
+                <LogLevelSet>
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="5"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="&quot;TRACE&quot;"/>
+                </LogLevelSet>
+                <LogLevelSet>
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="6"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </LogLevelSet>
+            </ValidLogLevelSet>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log XML Error">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>655</pd:x>
+        <pd:y>287</pd:y>
+        <config>
+            <role>%%IKKAdapter/AppSetting/LogRole%%</role>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="&quot;Sub_LogMessage.RenderXML error: &quot;"/>
+                </msgCode>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check SettingLevel">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>254</pd:x>
+        <pd:y>172</pd:y>
+        <config>
+            <variableName>SettingLogLevel</variableName>
+        </config>
+        <pd:inputBindings>
+            <SettingLogLevel>
+                <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/IKKAdapter/AppSetting/LogLevelThreshold"/>
+            </SettingLogLevel>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Threshold Value Error">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>442</pd:x>
+        <pd:y>299</pd:y>
+        <config>
+            <role>%%IKKAdapter/AppSetting/LogRole%%</role>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="&quot;Sub_LogMessageSettingLevel error: &quot;"/>
+                </msgCode>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="if-then-else-fi">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:description>This NULL operation is for separating Init. and transsation conditions.</pd:description>
+        <pd:x>509</pd:x>
+        <pd:y>173</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Render XML</pd:from>
+        <pd:to>Log XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log XML</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render XML</pd:from>
+        <pd:to>Log XML Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log XML Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Check SettingLevel</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check SettingLevel</pd:from>
+        <pd:to>Init ValidLevel</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check SettingLevel</pd:from>
+        <pd:to>Log Threshold Value Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65434</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Threshold Value Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>if-then-else-fi</pd:from>
+        <pd:to>Render XML</pd:to>
+        <pd:xpathDescription>log</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>if-then-else-fi</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>skip log</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ValidLogMessageSet/ValidLogLevelSet/LogLevelSet[. = $_globalVariables/ns2:GlobalVariables/IKKAdapter/AppSetting/LogLevelThreshold ]/@value &lt; $ValidLogMessageSet/ValidLogLevelSet/LogLevelSet[. = $Start/param/LogLevel ]/@value</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init ValidLevel</pd:from>
+        <pd:to>if-then-else-fi</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

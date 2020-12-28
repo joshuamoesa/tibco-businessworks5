@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:tns="http://xmlns.kpn.com/EAI/fixed/0195_GetNumberInfo/2.0/Response"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.kpn.com/EAI/fixed/0195_GetNumberInfo/2.0/Response"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:simpleType name="phoneNumberAreaCode_type">
+		<xs:annotation>
+			<xs:documentation>Phone number area code, only filled if TYPE_OF_NUMBER= 'V'.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="5"/>
+			<xs:pattern value="\d*"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:minLength value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberRangeOriginDeterminationFlags_type">
+		<xs:annotation>
+			<xs:documentation>Tells which owner flags are active (Y) or not (N) for the connected numbers.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="20"/>
+			<xs:maxLength value="20"/>
+			<xs:pattern value="[YN ]{20}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="networkOperatorId_type">
+		<xs:annotation>
+			<xs:documentation>Code of the network operator the number was in operation before porting of the number (only filled when number has been ported).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="3"/>
+			<xs:maxLength value="6"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="serviceTypeCode_type">
+		<xs:annotation>
+			<xs:documentation>Possible service type values:
+EP = single PSTN
+MP = multiple PSTN
+EI = single ISDN
+MI = multiple ISDN
+Field is only filled when CURRENT/OPERATOR_ID indicates KPN.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumber_type">
+		<xs:annotation>
+			<xs:documentation>Request phone number.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="26"/>
+			<xs:pattern value="\+?[\d\-\(\)\s]{1,25}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberSubscriberNumber_type">
+		<xs:annotation>
+			<xs:documentation>Subscriber part of Central access number for a dial-direct sequence. Field is available if:
+- number is in a direct dial series, and
+- CURRENT/OPERATOR_ID indicates KPN Telecom, and
+- TYPE_NUMBER indicates the fixed network.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:minLength value="1"/>
+			<xs:maxLength value="15"/>
+			<xs:pattern value="\d+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="centralAreaCode_type">
+		<xs:annotation>
+			<xs:documentation>Code for identification of the switch area.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{6}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="nodeName_type">
+		<xs:annotation>
+			<xs:documentation>Name of 'CE' host of the original exchange series of the number.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="nodeType_type">
+		<xs:annotation>
+			<xs:documentation>SPC_ID of 'CE' host of the original exchange series of the number.
+Field is present if 
+- ORIGINAL/NETWORK_OPERATOR_ID indicates KPN Telecom and
+- TYPE_NUMMER = V (fixed network) and
+- the number is assigned to a switching unit (the number falls in a host number series).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="telecomRegionCode_type">
+		<xs:annotation>
+			<xs:documentation>Original tcr-code is filled when a number is gone into operation at KPN.When a number consequently is ported to an OLO, the original tcr-code remains unchanged.
+When an OLO number is ported in, its gets an original tcr-code as well.
+If switch maintenance does change the tcr of a series, the original tcr-code of all numbers in the series is changed.</xs:documentation>
+			<xs:documentation>DEFINITIONS:
+KPN has divided the Netherlands into telecom regions which are (also) defined in the CKR code table this division is depricated, but still widely used within KPN.
+
+TYPE:
+String (2) enumerated, numerics
+
+VALUES:
+See attached file, under 'Oude Telecomregio's'.
+
+NOTES:
+- This attributes uses the numeric code for each region, there is another field that uses the abbreveated text version of the region (telecomRegionCodeName).
+- KPN no longer actively uses the regions and has switched to rayons instead. Many systems still depend on the attribute.</xs:documentation>
+			<xs:documentation>Default value is:''</xs:documentation>
+			<xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="telecomDistrictCode_type">
+		<xs:annotation>
+			<xs:documentation>For KPN this is district the number originally belongs to. This will never change, not even after a porting of the location, nor an operator porting. For an OLO number that is inported the receiving tcd is filled in.If the inported OLO number is cancelled, the field is cleared.
+Field is present if 
+- CURRENT/NETWORK_OPERATOR_ID or ORIGINAL/NETWORK_OPERATOR_ID indicates KPN Telecom and
+- TYPE_NUMMER = V (fixed network).</xs:documentation>
+			<xs:documentation>DEFINITIONS:
+KPN had previously divided the Netherlands into telecom districts which are (also) defined in the CKR code table. Districts can be mapped to telecom regions (but not the other way round due to one to many mapping)
+
+TYPE:
+String (3) enumerated
+
+VALUES:
+See attached file under 'Oude Districten'.
+
+NOTES:
+- KPN no longer actively uses the districts and has switched to rayons instead. Many systems still depend on the attribute.</xs:documentation>
+			<xs:documentation>Default value is:''</xs:documentation>
+			<xs:documentation>Size limitation taken from API side, since EAI definition did not have one.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="BODY">
+		<xs:annotation>
+			<xs:documentation>This is the BODY object for KPN EAI service number 0195 - GetNumberInfo version 2.0 Response message.</xs:documentation>
+			<xs:documentation>Automatically generated schema for service:'GetNumberInfo', version:'2.0'</xs:documentation>
+			<xs:documentation>Generated on 2007-05-03 17:24:07Z</xs:documentation>
+			<xs:documentation>Service paradigm is intended to be Request/Response</xs:documentation>
+			<xs:documentation>Service ID is:'0195'</xs:documentation>
+			<xs:documentation>The body must always have MinOccurs=0 and MaxOccurs=1, by definition of KPN EAI AG. (For request messages this has no apparent benefit)</xs:documentation>
+			<xs:documentation>KPN EAI message body class.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:annotation>
+					<xs:documentation>Artificial sequence to separate.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="PHONE_NUMBER" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Phone number use and routing details.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Artificial sequence to separate.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="ORIGINAL" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Original number location information (before any porting, location of original exchange series of the number).</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="CENTRAL_AREA_CODE" type="tns:centralAreaCode_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Code for identification of the switch area.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="HOST" type="tns:nodeName_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Name of 'CE' host of the original exchange series of the number.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="NETWORK_OPERATOR_ID" type="tns:networkOperatorId_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Code of the networkoperator the number series ithe number originally belongs to.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SPC_ID_HOST" type="tns:nodeType_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>SPC_ID of 'CE' host of the original exchange series of the number.
+Field is present if 
+- ORIGINAL/NETWORK_OPERATOR_ID indicates KPN Telecom and
+- TYPE_NUMMER = V (fixed network) and
+- the number is assigned to a switching unit (the number falls in a host number series).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TELECOM_REGION_CODE" type="tns:telecomRegionCode_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Original tcr-code is filled when a number is gone into operation at KPN.When a number consequently is ported to an OLO, the original tcr-code remains unchanged.
+When an OLO number is ported in, its gets an original tcr-code as well.
+If switch maintenance does change the tcr of a series, the original tcr-code of all numbers in the series is changed.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CURRENT" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Location information indicating where the number is currently in operation.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="CENTRAL_AREA_CODE" type="tns:centralAreaCode_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Code for identification of switch area in which a 'switch unit' is located for a customer connection.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="HOST" type="tns:nodeName_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Name of current 'CE' host of the connection.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="NETWORK_OPERATOR_ID" type="tns:networkOperatorId_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Code of the network operator the number is currently in operation.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SPC_ID_HOST" type="tns:nodeType_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>SPC_ID of the current 'CE' host of the connection.
+Field is present if 
+- CURRENT/NETWORK_OPERATOR_ID indicates KPN Telecom and
+- TYPE_NUMMER = V (fixed network) and
+- the number is assigned to a switching unit (the number falls in a host number series).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TELECOM_DISTRICT_CODE" type="tns:telecomDistrictCode_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>For KPN this is district the number originally belongs to. This will never change, not even after a porting of the location, nor an operator porting. For an OLO number that is inported the receiving tcd is filled in.If the inported OLO number is cancelled, the field is cleared.
+Field is present if 
+- CURRENT/NETWORK_OPERATOR_ID or ORIGINAL/NETWORK_OPERATOR_ID indicates KPN Telecom and
+- TYPE_NUMMER = V (fixed network).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TELECOM_REGION_CODE" type="tns:telecomRegionCode_type" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Unique number assigned to a telecom region. A telecom region is a organization unit with a telecom district of KPN.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="ACTION_TYPE" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Artificial sequence to separate.</xs:documentation>
+										</xs:annotation>
+										<xs:element name="ACTION_TYPE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Denotes the type of modification that has been applied. In Numbes 12 externally the term 'mutatie-type' is used,. Emphasis has shifted form registration of status changoe onto registration of the status itself. </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TIME_AND_DATE" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Time and date of modification.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AREA_CODE" type="tns:phoneNumberAreaCode_type" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Phone number area code, only filled if TYPE_OF_NUMBER= 'V'.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="BHS_FLAGS" type="tns:phoneNumberRangeOriginDeterminationFlags_type" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Tells which owner flags are active (Y) or not (N) for the connected numbers.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="IS_CVI" type="xs:boolean" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Indicates that the CVI service is active for the phone number.
+This CVI service routes all calls to this number to a gateway delivering the CVI functionality.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="LRI" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Logical Router Identifier for the switching unit the number is ported to.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NUMBER_CATEGORY" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Type of number:
+'0' = common numbers
+'D' = dial direct series</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="PREVIOUS_NETWORK_OPERATOR_ID" type="tns:networkOperatorId_type" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Code of the network operator the number was in operation before porting of the number (only filled when number has been ported).</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SERVICE_TYPE" type="tns:serviceTypeCode_type" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Possible service type values:
+EP = single PSTN
+MP = multiple PSTN
+EI = single ISDN
+MI = multiple ISDN
+Field is only filled when CURRENT/OPERATOR_ID indicates KPN.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="1" name="PHONE_NUMBER" type="tns:phoneNumber_type">
+                <xs:annotation>
+                  <xs:documentation>Request phone number.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+
+							<xs:element name="SNR1" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Request phone number.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="STATUS_DESCRIPTION" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Number status description.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="STATUS_EXCHANGE_NR_SERIE" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Status of exchange number series, possible values: 
+'5' = 'blocked for release, available for NO
+'6' = 'loss NO'
+'7' = 'available for release by SP'
+' ' = 'direct dial series'</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="STATUS_NUMBER" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Number status code.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CALL_NUMBER" type="tns:phoneNumberSubscriberNumber_type" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Subscriber part of Central access number for a dial-direct sequence. Field is available if:
+- number is in a direct dial series, and
+- CURRENT/OPERATOR_ID indicates KPN Telecom, and
+- TYPE_NUMBER indicates the fixed network.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TYPE_OF_NUMBER" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Indicated number type, possible values:
+"V" for fixed
+"M " for mobile </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

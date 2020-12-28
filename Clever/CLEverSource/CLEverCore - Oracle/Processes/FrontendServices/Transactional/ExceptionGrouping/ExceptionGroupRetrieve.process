@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://www.tibco.com/CLEver/Configuration/Exception" xmlns:ns12="http://www.tibco.com/CLEver/Exception" xmlns:ns5="http://www.tibco.com/CLEver/FrontendServices/Transactional/Exception/ExceptionGroupingInterfaceSpecs" xmlns:pfx="http://www.tibco.com/CLEver/Transactional/Exception" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/CLEver/ExtraTypes" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/CLEver/InternalException" xmlns:ns3="http://www.tibco.com/CLEver/FrontendServices/Transactional/Exception/ExceptionInterfaceSpecs" xmlns:pfx2="http://www.tibco.com/CLEver/Transactional/ExceptionGrouping">
+    <wsdl:import namespace="http://www.tibco.com/CLEver/Transactional/Exception" location="/Processes/FrontendServices/Transactional/Exception/Exception.wsdl"/>
+    <wsdl:import namespace="http://www.tibco.com/CLEver/Transactional/ExceptionGrouping" location="/Processes/FrontendServices/Transactional/ExceptionGrouping/ExceptionGrouping.wsdl"/>
+    <pd:name>Processes/FrontendServices/Transactional/ExceptionGrouping/ExceptionGroupRetrieve.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx2:Retrieve_ExceptionGrouping_Input"/>
+    <pd:startX>81</pd:startX>
+    <pd:startY>82</pd:startY>
+    <pd:returnBindings>
+        <pfx2:Retrieve_ExceptionGrouping_Output>
+            <part1>
+                <ns5:Retrieve_ExceptionsGrouping_Output>
+                    <xsl:copy-of select="$Retrieve-Exceptions/Output/ns12:Exceptions"/>
+                    <ns5:MaxRows>
+                        <xsl:value-of select="$Retrieve-Exceptions/Output/MaxRows"/>
+                    </ns5:MaxRows>
+                    <ns5:FromRow>
+                        <xsl:value-of select="$Retrieve-Exceptions/Output/FromRow"/>
+                    </ns5:FromRow>
+                    <ns5:ToRow>
+                        <xsl:value-of select="$Retrieve-Exceptions/Output/ToRow"/>
+                    </ns5:ToRow>
+                </ns5:Retrieve_ExceptionsGrouping_Output>
+            </part1>
+        </pfx2:Retrieve_ExceptionGrouping_Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx2:Retrieve_ExceptionGrouping_Output"/>
+    <pd:endX>389</pd:endX>
+    <pd:endY>78</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1279829086308</pd:targetNamespace>
+    <pd:activity name="Retrieve Exceptions">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>228</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <processName>/Processes/DataServices_Oracle/Transactional/ExceptionGrouping/Retrieve.process</processName>
+            <processNameXPath>'/Processes/DataServices_%%DbType%%/Transactional/ExceptionGrouping/Retrieve.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/pfx2:Retrieve_ExceptionGrouping_Input/part1/ns5:Retrieve_ExceptionsGrouping_Input"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>229</pd:x>
+        <pd:y>222</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="FormatError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>386</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <processName>/Processes/InternalServices/Exception Handler/FormatErrorHumanReadable.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <ns4:Exception>
+                    <Service>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/StaticVariables/ConfigurationObjects/BusinessDomain/Name,'.',$_globalVariables/ns:GlobalVariables/StaticVariables/Operations/Create)"/>
+                    </Service>
+                    <ErrorMessage>
+                        <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                    </ErrorMessage>
+                    <ErrorCode>
+                        <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                    </ErrorCode>
+                    <ns4:Error>
+                        <ns4:ErrorReport>
+                            <xsl:copy-of select="$_error/ns1:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$_error/ns1:ErrorReport/@*"/>
+                            <xsl:copy-of select="$_error/ns1:ErrorReport/node()"/>
+                        </ns4:ErrorReport>
+                    </ns4:Error>
+                </ns4:Exception>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Retrieve Exceptions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Retrieve Exceptions</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>FormatError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FormatError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://kpn.com/eai/generic/order" xmlns:tns="http://kpn.com/eai/generic/order/weak/wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kpn.com/eai/generic/order/weak/wsdl">
+    <import namespace="http://kpn.com/eai/generic/order" location="WeakOrder.xsd"/>
+    <import namespace="http://kpn.com/eai/generic/order"/>
+    <import namespace="http://kpn.com/eai/generic/order" location="WeakOrderStatus.xsd"/>
+    <message name="SubmitWeakOrder">
+        <part name="SubmitWeakOrder" element="ns:WeakOrder"/>
+    </message>
+    <message name="SubmitWeakOrderFault">
+        <part element="ns:WeakOrderFault" name="SubmitWeakOrderFault"/>
+    </message>
+    <message name="SubmitWeakOrderOut">
+        <part name="SubmitWeakOrderOut" element="ns:WeakOrderOut"/>
+    </message>
+    <message name="UpdateWeakOrderStatusOut">
+        <part name="UpdateWeakOrderStatusOut" element="ns:WeakOrderStatus"/>
+    </message>
+    <portType name="WeakOrderServices">
+        <operation name="SubmitWeakOrder">
+            <input name="SubmitWeakOrder" message="tns:SubmitWeakOrder"/>
+            <output name="SubmitWeakOrderOut" message="tns:SubmitWeakOrderOut"/>
+            <fault name="SubmitWeakOrderFault" message="tns:SubmitWeakOrderFault"/>
+        </operation>
+    </portType>
+    <portType name="WeakOrderCallbackServices">
+        <operation name="UpdateWeakOrderStatus">
+            <input name="UpdateWeakOrderStatus"/>
+            <fault message="tns:SubmitWeakOrderFault" name="SubmitWeakOrderFault"/>
+        </operation>
+    </portType>
+</definitions>

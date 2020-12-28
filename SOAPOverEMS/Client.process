@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://kpn.com/products/ZM-SNI-Products/alarmMonitoring/v1/createStatusUpdateImpl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://kpn.com/products/ZM-SNI-Products/alarmMonitoring/data/v1.0" xmlns:pfx2="http://kpn.com/eai/generic/order/1.0" xmlns:pfx3="http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl" xmlns:ns2="http://kpn.com/eai/generic/order">
+    <wsdl:import namespace="http://kpn.com/products/ZM-SNI-Products/alarmMonitoring/v1/createStatusUpdateImpl"/>
+    <wsdl:import namespace="http://kpn.com/eai/generic/order/weak/wsdl/SubmitWeakOrderImpl" location="/GOGConcrete.wsdl"/>
+    <pd:name>Client.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>72</pd:startX>
+    <pd:startY>79</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>539</pd:endX>
+    <pd:endY>80</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>295</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <service>pfx3:SubmitWeakOrder</service>
+            <servicePort>SOAPEventSource</servicePort>
+            <operation>SubmitWeakOrder</operation>
+            <soapAction>/Server</soapAction>
+            <sharedChannels>
+                <jmsChannel>
+                    <NamingURL>tibjmsnaming://localhost:7222</NamingURL>
+                    <NamingInitialContextFactory>com.tibco.tibjms.naming.TibjmsInitialContextFactory</NamingInitialContextFactory>
+                    <NamingPrincipal>admin</NamingPrincipal>
+                    <NamingCredential/>
+                    <ConnectionFactory>QueueConnectionFactory</ConnectionFactory>
+                    <JMSTo>MYQUEUE</JMSTo>
+                    <JMSMessageType>Text</JMSMessageType>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSPriority>4</JMSPriority>
+                    <JMSTimeToLive>0</JMSTimeToLive>
+                    <JMSUserName>admin</JMSUserName>
+                    <JMSPassword/>
+                    <NamingProperties/>
+                </jmsChannel>
+            </sharedChannels>
+            <endpointURL>http://vm344:13400/GenericOrderGateway/Processes/Outbound/SubmitWeakOrder</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns2:WeakOrder>
+                    <ns2:orderDateTime>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </ns2:orderDateTime>
+                    <ns2:OrderParameters/>
+                    <ns2:OrderItem>
+                        <ns2:OrderItemParameters/>
+                        <ns2:Product>
+                            <ns2:Group>
+                                <xsl:value-of select="1"/>
+                            </ns2:Group>
+                            <ns2:Name>
+                                <xsl:value-of select="1"/>
+                            </ns2:Name>
+                            <ns2:Version>
+                                <xsl:value-of select="1"/>
+                            </ns2:Version>
+                            <ns2:Action>
+                                <ns2:Name>
+                                    <xsl:value-of select="1"/>
+                                </ns2:Name>
+                                <ns2:Parameters/>
+                            </ns2:Action>
+                        </ns2:Product>
+                    </ns2:OrderItem>
+                </ns2:WeakOrder>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

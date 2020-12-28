@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://wsdlns.kpn.com/fixed/B2BGFAMAdapter" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:partyInfo="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns5="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1response.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns9="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns="http://xmlns.kpn.com/mobile/m2c/cdm/registercleanorder.1request.xsd" xmlns:ns10="http://xmlns.kpn.com/mobile/m2c/cdm/registercleanorder.1response.xsd" name="MOBILEB2BService" targetNamespace="http://wsdlns.kpn.com/fixed/B2BGFAMAdapter">
+    <wsdl:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/registercleanorder.1response.xsd" location="../DesignModel/Common/XSDSchemas/RegisterCleanOrder.1/Response/RegisterCleanOrder.1Response.xsd"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/registercleanorder.1request.xsd" location="../DesignModel/Common/XSDSchemas/RegisterCleanOrder.1/Request/RegisterCleanOrder.1Request.xsd"/>
+    <wsdl:types>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1response.xsd" xmlns:ns5="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:complexType name="MonetarySum">
+                <xs:simpleContent>
+                    <xs:extension base="xs:decimal">
+                        <xs:attribute name="CurrencyType" use="required" form="qualified" type="xs:string"/>
+                        <xs:attribute name="Factor" use="required" form="qualified" type="xs:decimal"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:simpleType name="NEString">
+                <xs:annotation>
+                    <xs:documentation>Not Empty String</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="KAMCheckCustomerOrderRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="BODY">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="CUSTOMER_ACCEPTANCE_INFO">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="ACCEPTANCE">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="ID" type="tns:NEString"/>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="CUSTOMER_ORDER">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="NUMBER" type="tns:NEString"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="CUSTOMER_ORDER_LIST">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="CUSTOMER_ORDER" maxOccurs="20">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="NUMBER" type="tns:NEString"/>
+                                                            <xs:element name="TYPE" type="tns:NEString"/>
+                                                            <xs:element name="NEW_CONNECTIONS" type="xs:integer" minOccurs="0"/>
+                                                            <xs:element name="DELIVERY_DATE" type="xs:date"/>
+                                                            <xs:element name="PAYMENT_FORM" type="tns:NEString"/>
+                                                            <xs:element name="TOTAL_PRICE" type="tns:MonetarySum" minOccurs="0"/>
+                                                            <xs:element name="RECIPIENT" minOccurs="0">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="ADDRESS">
+                                                                            <xs:complexType>
+                                                                                <xs:sequence>
+                                                                                    <xs:element name="STREET_NAME" type="tns:NEString"/>
+                                                                                    <xs:element name="HOUSE_NR" type="tns:NEString"/>
+                                                                                    <xs:element name="HOUSE_NR_EXTENSION" type="xs:string" minOccurs="0"/>
+                                                                                    <xs:element name="POSTCODE" type="tns:NEString"/>
+                                                                                    <xs:element name="CITY" type="tns:NEString"/>
+                                                                                </xs:sequence>
+                                                                            </xs:complexType>
+                                                                        </xs:element>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="ORDER_ITEM_INFO_LIST" minOccurs="0">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="ORDER_ITEM_INFO" maxOccurs="40">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="CUSTOMER_ORDER">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="NUMBER" type="tns:NEString"/>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                            <xs:element name="ORDER_ITEM">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="PRODUCT">
+                                                                            <xs:complexType>
+                                                                                <xs:sequence>
+                                                                                    <xs:element name="PRODUCT_ID" type="tns:NEString"/>
+                                                                                    <xs:element name="DESCRIPTION" type="tns:NEString"/>
+                                                                                    <xs:element name="TYPE" type="tns:NEString"/>
+                                                                                    <xs:element name="NUMBER_OF_PRODUCTS" type="xs:integer"/>
+                                                                                </xs:sequence>
+                                                                            </xs:complexType>
+                                                                        </xs:element>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd"/>
+            <xs:element name="KAMCheckCustomerResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="BODY" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="CUSTOMER_ACCEPTANCE_INFO" minOccurs="0">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="ACCEPTANCE">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="ID" type="xs:string"/>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="EXTERNAL_RESULT">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="CODE" type="xs:string"/>
+                                                <xs:element name="DESCRIPTION" type="xs:string"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="RESULT">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="CODE" type="xs:string"/>
+                                                <xs:element name="STANDARD_DEVIATION" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="REASON_LIST" minOccurs="0">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="REASON" maxOccurs="unbounded">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="CODE" type="xs:string"/>
+                                                                        <xs:element name="DESCRIPTION" type="xs:string"/>
+                                                                        <xs:element name="PRIORITY" type="xs:string"/>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="RESULTSTATUSSTACK" type="ns0:ResultStatusStack"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1response.xsd" xmlns:ns5="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:complexType name="CurrencyType">
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="CURRENCY_CODE" form="qualified" type="xs:string"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:simpleType name="FormatEnumeration">
+                <xs:annotation>
+                    <xs:documentation>Telecom number of Free format</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="TelecomNumber"/>
+                    <xs:enumeration value="FreeFormat"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="FormatIndicator">
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="Format" use="required" form="qualified" type="tns:FormatEnumeration"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:complexType name="MonetarySum">
+                <xs:simpleContent>
+                    <xs:extension base="xs:decimal">
+                        <xs:attribute name="CurrencyType" use="required" form="qualified" type="xs:string"/>
+                        <xs:attribute name="Factor" use="required" form="qualified" type="xs:decimal"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:simpleType name="NEString">
+                <xs:annotation>
+                    <xs:documentation>Not Empty String</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="RecoveryEnumeration">
+                <xs:annotation>
+                    <xs:documentation>ABANDON, RETRY, CONTINUE</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="ABANDON"/>
+                    <xs:enumeration value="RETRY"/>
+                    <xs:enumeration value="CONTINUE"/>
+                    <xs:enumeration value="RESTART"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="RecoveryIndicator">
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="Action" use="required" form="qualified" type="tns:RecoveryEnumeration"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:simpleType name="Sex">
+                <xs:annotation>
+                    <xs:documentation>0 (NOT KNOWN), 1 (MALE), 2 (FEMALE), 9 (NOT SPECIFIED)</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:integer">
+                    <xs:enumeration value="0"/>
+                    <xs:enumeration value="1"/>
+                    <xs:enumeration value="2"/>
+                    <xs:enumeration value="9"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="TelecomNumber">
+                <xs:simpleContent>
+                    <xs:extension base="xs:string"/>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:complexType name="TelecomNumberDetailed">
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="area" form="qualified" type="xs:string"/>
+                        <xs:attribute name="country" form="qualified" type="xs:string"/>
+                        <xs:attribute name="subscriber" form="qualified" type="xs:string"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:complexType name="TelecomNumberDetailedNotEmpty">
+                <xs:simpleContent>
+                    <xs:extension base="tns:NEString">
+                        <xs:attribute name="area" form="qualified" type="tns:NEString"/>
+                        <xs:attribute name="country" form="qualified" type="tns:NEString"/>
+                        <xs:attribute name="subscriber" form="qualified" type="tns:NEString"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:simpleType name="TelecomNumberNotEmpty">
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd"/>
+            <xs:element name="KAMCheckCustomerOrderResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="BODY" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="CUSTOMER_ACCEPTANCE_INFO">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="ACCEPTANCE">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="ID" type="xs:string"/>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="CUSTOMER_ORDER_ACCEPTANCE_INFO" minOccurs="0">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="ACCEPTANCE">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="ID" type="xs:string"/>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="EXTERNAL_RESULT">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="CODE" type="xs:string"/>
+                                                <xs:element name="DESCRIPTION" type="xs:string"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="CUSTOMER_ORDER_RESULT_INFO_LIST" minOccurs="0">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="CUSTOMER_ORDER_RESULT_INFO" maxOccurs="unbounded">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="CUSTOMER_ORDER">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="NUMBER" type="xs:string"/>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                            <xs:element name="RESULT">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="CODE" type="xs:string"/>
+                                                                        <xs:element name="STANDARD_DEVIATION" type="xs:string" minOccurs="0"/>
+                                                                        <xs:element name="REASON_LIST" minOccurs="0">
+                                                                            <xs:complexType>
+                                                                                <xs:sequence>
+                                                                                    <xs:element name="REASON" maxOccurs="unbounded">
+                                                                                        <xs:complexType>
+                                                                                            <xs:sequence>
+                                                                                                <xs:element name="CODE" type="xs:string"/>
+                                                                                                <xs:element name="DESCRIPTION" type="xs:string"/>
+                                                                                                <xs:element name="PRIORITY" type="xs:string"/>
+                                                                                            </xs:sequence>
+                                                                                        </xs:complexType>
+                                                                                    </xs:element>
+                                                                                </xs:sequence>
+                                                                            </xs:complexType>
+                                                                        </xs:element>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="RESULTSTATUSSTACK" type="ns0:ResultStatusStack"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1response.xsd" xmlns:ns5="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:complexType name="MOBILE_CONNECTION">
+                <xs:sequence>
+                    <xs:element name="BRAND" type="xs:string" minOccurs="0"/>
+                    <xs:element name="MSISDN" type="tns:TelecomNumberDetailed"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="NEString">
+                <xs:annotation>
+                    <xs:documentation>Not Empty String</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="RUNTIME_PARAMETER">
+                <xs:sequence>
+                    <xs:element name="NAME" type="tns:NEString"/>
+                    <xs:element name="VALUE" type="tns:NEString"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="TARIFF_PLAN">
+                <xs:sequence>
+                    <xs:element name="NAME" type="tns:NEString"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="TARIFF_PLAN_REGISTRATION">
+                <xs:sequence>
+                    <xs:element name="TARIFF_PLAN" type="tns:TARIFF_PLAN"/>
+                    <xs:element name="FEE_ENABLED" type="xs:boolean"/>
+                    <xs:element name="EFFECTIVE_DATETIME" type="xs:dateTime" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="TelecomNumberDetailed">
+                <xs:simpleContent>
+                    <xs:extension base="tns:NEString">
+                        <xs:attribute name="area" use="required" form="qualified" type="tns:NEString"/>
+                        <xs:attribute name="country" use="required" form="qualified" type="tns:NEString"/>
+                        <xs:attribute name="subscriber" use="required" form="qualified" type="tns:NEString"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:element name="ChangePrepaidTariffPlanRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="BODY">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="MOBILE_CONNECTION" type="tns:MOBILE_CONNECTION"/>
+                                    <xs:element name="TARIFF_PLAN_REGISTRATION" type="tns:TARIFF_PLAN_REGISTRATION"/>
+                                    <xs:element name="RUNTIME_PARAMETER" type="tns:RUNTIME_PARAMETER"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns5="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1response.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1response.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd"/>
+            <xs:complexType name="PREPAID_SUBSCRIPTION">
+                <xs:sequence>
+                    <xs:element name="SERVICE_OFFER_GROUP" type="tns:SERVICE_OFFER_GROUP"/>
+                    <xs:element name="FEE_AVAILABLE_INDICATOR" type="xs:boolean"/>
+                    <xs:element name="CREATION_DATE_TIME" type="xs:dateTime"/>
+                    <xs:element name="START_DATE_TIME" type="xs:dateTime" minOccurs="0"/>
+                    <xs:element name="SUSPENSION_DATE_TIME" type="xs:dateTime" minOccurs="0"/>
+                    <xs:element name="SYNC_CHARGING_DATE_TIME" type="xs:dateTime" minOccurs="0"/>
+                    <xs:element name="REACTIVATION_DATE_TIME" type="xs:dateTime" minOccurs="0"/>
+                    <xs:element name="END_DATE_TIME" type="xs:dateTime" minOccurs="0"/>
+                    <xs:element name="STATUS" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PREPAID_SUBSCRIPTION_LIST">
+                <xs:sequence>
+                    <xs:element name="PREPAID_SUBSCRIPTION" type="tns:PREPAID_SUBSCRIPTION" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SERVICE_OFFER_GROUP">
+                <xs:sequence>
+                    <xs:element name="NAME" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="OSPGetRegisteredPPAServiceOfferGroupListResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="BODY" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="PREPAID_SUBSCRIPTION_LIST" type="tns:PREPAID_SUBSCRIPTION_LIST"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="RESULTSTATUSSTACK" type="ns0:ResultStatusStack"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns5="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1response.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd"/>
+            <xs:element name="ChangePrepaidTariffPlanResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="RESULTSTATUSSTACK" type="ns0:ResultStatusStack"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:simpleType name="NEString">
+                <xs:annotation>
+                    <xs:documentation>Not Empty String</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="KAMCheckCustomerRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="BODY">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="APPLICATION">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="NAME" type="tns:NEString"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="DISTRIBUTION_NETWORK">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="NAME" type="tns:NEString"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="SALESMAN">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="CODE" type="tns:NEString"/>
+                                                <xs:element name="DESCRIPTION" type="tns:NEString"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="DATE_INFO">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="DATE" type="xs:date"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="CUSTOMER_ORDER">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="TYPE" type="tns:NEString"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="CUSTOMER">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="PRIVATE_BUSINESS" type="tns:NEString"/>
+                                                <xs:element name="CUSTOMER_NR" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="GENDER" type="xs:integer" minOccurs="0"/>
+                                                <xs:element name="NAME">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="SURNAME" type="tns:NEString"/>
+                                                            <xs:element name="PREFIX" type="xs:string" minOccurs="0"/>
+                                                            <xs:element name="INITIALS" type="xs:string" minOccurs="0"/>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="DATE_OF_BIRTH" type="xs:date" minOccurs="0"/>
+                                                <xs:element name="ADDRESS">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="STREET_NAME" type="tns:NEString"/>
+                                                            <xs:element name="HOUSE_NR" type="tns:NEString"/>
+                                                            <xs:element name="HOUSE_NR_EXTENSION" type="xs:string" minOccurs="0"/>
+                                                            <xs:element name="POSTCODE" type="tns:NEString"/>
+                                                            <xs:element name="CITY" type="tns:NEString"/>
+                                                            <xs:element name="COUNTRY" minOccurs="0">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="COUNTRY_NAME" type="tns:NEString"/>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="IDENTIFICATION" minOccurs="0">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="TYPE" type="tns:NEString"/>
+                                                            <xs:element name="ID" type="tns:NEString"/>
+                                                            <xs:element name="EXPIRATION_DATE" type="xs:date" minOccurs="0"/>
+                                                            <xs:element name="ISSUED" minOccurs="0">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="ADDRESS">
+                                                                            <xs:complexType>
+                                                                                <xs:sequence>
+                                                                                    <xs:element name="CITY" type="xs:string" minOccurs="0"/>
+                                                                                    <xs:element name="COUNTRY" minOccurs="0">
+                                                                                        <xs:complexType>
+                                                                                            <xs:sequence>
+                                                                                                <xs:element name="COUNTRY_NAME" type="tns:NEString"/>
+                                                                                            </xs:sequence>
+                                                                                        </xs:complexType>
+                                                                                    </xs:element>
+                                                                                </xs:sequence>
+                                                                            </xs:complexType>
+                                                                        </xs:element>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="STAY_REASON" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="EMAIL_ADDRESS" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="KVK_NUMBER" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="LEGAL_FORM" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="IS_REQUESTOR" type="xs:boolean"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="REQUESTOR" minOccurs="0">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="GENDER" type="xs:integer" minOccurs="0"/>
+                                                <xs:element name="NAME">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="SURNAME" type="tns:NEString"/>
+                                                            <xs:element name="PREFIX" type="xs:string" minOccurs="0"/>
+                                                            <xs:element name="INITIALS" type="tns:NEString"/>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="DATE_OF_BIRTH" type="xs:date"/>
+                                                <xs:element name="ADDRESS">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="STREET_NAME" type="tns:NEString"/>
+                                                            <xs:element name="HOUSE_NR" type="tns:NEString"/>
+                                                            <xs:element name="HOUSE_NR_EXTENSION" type="xs:string" minOccurs="0"/>
+                                                            <xs:element name="POSTCODE" type="tns:NEString"/>
+                                                            <xs:element name="CITY" type="tns:NEString"/>
+                                                            <xs:element name="COUNTRY" minOccurs="0">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="COUNTRY_NAME" type="tns:NEString"/>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="IDENTIFICATION">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="TYPE" type="tns:NEString"/>
+                                                            <xs:element name="ID" type="tns:NEString"/>
+                                                            <xs:element name="EXPIRATION_DATE" type="xs:date" minOccurs="0"/>
+                                                            <xs:element name="ISSUED" minOccurs="0">
+                                                                <xs:complexType>
+                                                                    <xs:sequence>
+                                                                        <xs:element name="ADDRESS">
+                                                                            <xs:complexType>
+                                                                                <xs:sequence>
+                                                                                    <xs:element name="CITY" type="xs:string" minOccurs="0"/>
+                                                                                    <xs:element name="COUNTRY" minOccurs="0">
+                                                                                        <xs:complexType>
+                                                                                            <xs:sequence>
+                                                                                                <xs:element name="COUNTRY_NAME" type="tns:NEString"/>
+                                                                                            </xs:sequence>
+                                                                                        </xs:complexType>
+                                                                                    </xs:element>
+                                                                                </xs:sequence>
+                                                                            </xs:complexType>
+                                                                        </xs:element>
+                                                                    </xs:sequence>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="STAY_REASON" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="EMAIL_ADDRESS" type="xs:string" minOccurs="0"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:complexType name="ResultStatusStack">
+                <xs:sequence>
+                    <xs:element name="ERROR" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:attribute name="ERROR_CODE" use="required" form="qualified" type="xs:string"/>
+                            <xs:attribute name="ERROR_DESCRIPTION" form="qualified" type="xs:string"/>
+                            <xs:attribute name="ERROR_PART_CODE" form="qualified" type="xs:string"/>
+                            <xs:attribute name="SERVICE_NAME" use="required" form="qualified" type="xs:string"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="STATUS_CODE" use="required" form="qualified" type="xs:integer"/>
+            </xs:complexType>
+            <xs:element name="ResultStatusStack" type="tns:ResultStatusStack"/>
+        </xs:schema>
+        <xs:schema xmlns:ns0="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1request.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1response.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomerorder.1response.xsd" xmlns:ns4="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1request.xsd" xmlns:ns6="http://xmlns.kpn.com/mobile/m2c/cdm/changeprepaidtariffplan.1response.xsd" xmlns:ns7="http://xmlns.kpn.com/mobile/m2c/cdm/kamcheckcustomer.1request.xsd" xmlns:ns8="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns9="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" xmlns:tns="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" targetNamespace="http://xmlns.kpn.com/mobile/m2c/cdm/ospgetregisteredppaserviceoffergrouplist.1request.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd"/>
+            <xs:complexType name="PREPAID_ACCOUNT">
+                <xs:sequence>
+                    <xs:element name="SERVICE_RETAILER" type="ns0:NEString"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PREPAID_CONNECTION">
+                <xs:sequence>
+                    <xs:element name="PHONE_NUMBER" type="tns:TelecomNumberDetailed"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="TelecomNumberDetailed">
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="area" use="required" form="qualified" type="ns0:NEString"/>
+                        <xs:attribute name="country" use="required" form="qualified" type="ns0:NEString"/>
+                        <xs:attribute name="subscriber" use="required" form="qualified" type="ns0:NEString"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:element name="OSPGetRegisteredPPAServiceOfferGroupListRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="BODY">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="PREPAID_CONNECTION" type="tns:PREPAID_CONNECTION"/>
+                                    <xs:element name="PREPAID_ACCOUNT" type="tns:PREPAID_ACCOUNT" minOccurs="0"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pi="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" targetNamespace="http://www.tibco.com/namespaces/bc/2002/04/partyinfo.xsd" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+            <complexType name="party">
+                <sequence>
+                    <element name="domain" type="xsd:string" minOccurs="0"/>
+                    <element name="name" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <element name="PartyInfo">
+                <complexType>
+                    <sequence>
+                        <element name="from" type="pi:party"/>
+                        <element name="to" type="pi:party"/>
+                        <element name="operationID" type="xsd:string"/>
+                        <element name="operationType" type="xsd:string"/>
+                        <element name="transactionID" type="xsd:string"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="MOBILE_RegisterCleanOrder_request">
+        <wsdl:part name="body___1.0" element="ns:RegisterCleanOrderRequest"/>
+        <wsdl:part name="PartyInfo" element="partyInfo:PartyInfo"/>
+    </wsdl:message>
+    <wsdl:message name="MOBILE_RegisterCleanOrder_response">
+        <wsdl:part name="body___1.0" element="ns10:RegisterCleanOrderResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="MOBILE">
+        <wsdl:documentation>BCWSDL:MOBILE</wsdl:documentation>
+        <wsdl:operation name="ChangePrepaidTariffPlan">
+            <wsdl:documentation>BCWSDL:ChangePrepaidTariffPlan</wsdl:documentation>
+            <wsdl:input message="tns:MOBILE_ChangePrepaidTariffPlan_request"/>
+            <wsdl:output message="tns:MOBILE_ChangePrepaidTariffPlan_response"/>
+        </wsdl:operation>
+        <wsdl:operation name="KAMCheckCustomer">
+            <wsdl:documentation>BCWSDL:KAMCheckCustomer</wsdl:documentation>
+            <wsdl:input message="tns:MOBILE_KAMCheckCustomer_request"/>
+            <wsdl:output message="tns:MOBILE_KAMCheckCustomer_response"/>
+        </wsdl:operation>
+        <wsdl:operation name="OSPGetRegisteredPPAServiceOfferGroupList">
+            <wsdl:documentation>BCWSDL:OSPGetRegisteredPPAServiceOfferGroupList</wsdl:documentation>
+            <wsdl:input message="tns:MOBILE_OSPGetRegisteredPPAServiceOfferGroupList_request"/>
+            <wsdl:output message="tns:MOBILE_OSPGetRegisteredPPAServiceOfferGroupList_response"/>
+        </wsdl:operation>
+        <wsdl:operation name="RegisterCleanOrder">
+            <wsdl:documentation>BCWSDL:RegisterCleanOrder</wsdl:documentation>
+            <wsdl:input message="tns:MOBILE_RegisterCleanOrder_request"/>
+            <wsdl:output message="tns:MOBILE_RegisterCleanOrder_response"/>
+        </wsdl:operation>
+        <wsdl:operation name="Operation">
+            <wsdl:input message="tns:MOBILE_RegisterCleanOrder_request"/>
+            <wsdl:output message="tns:MOBILE_RegisterCleanOrder_response"/>
+        </wsdl:operation>
+        <wsdl:operation name="KAMCheckCustomerOrder">
+            <wsdl:documentation>BCWSDL:KAMCheckCustomerOrder</wsdl:documentation>
+            <wsdl:input message="tns:MOBILE_KAMCheckCustomerOrder_request"/>
+            <wsdl:output message="tns:MOBILE_KAMCheckCustomerOrder_response"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="MOBILE__1.0" type="tns:MOBILE">
+        <wsdl:documentation>BCWSDL:1.0</wsdl:documentation>
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="ChangePrepaidTariffPlan">
+            <soap:operation style="document" soapAction="ChangePrepaidtTariffPlan"/>
+            <wsdl:input>
+                <soap:body parts="body___1.0" use="literal"/>
+                <soap:header part="PartyInfo" message="tns:MOBILE_ChangePrepaidTariffPlan_request" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body parts="body___1.0" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="KAMCheckCustomer">
+            <soap:operation style="document" soapAction="KAMCheckCustomer"/>
+            <wsdl:input>
+                <soap:body parts="body___1.0" use="literal"/>
+                <soap:header part="PartyInfo" message="tns:MOBILE_KAMCheckCustomer_request" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body parts="body___1.0" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OSPGetRegisteredPPAServiceOfferGroupList">
+            <soap:operation style="document" soapAction="OSPGetRegisteredPPAServiceOfferGroupList"/>
+            <wsdl:input>
+                <soap:body parts="body___1.0" use="literal"/>
+                <soap:header part="PartyInfo" message="tns:MOBILE_OSPGetRegisteredPPAServiceOfferGroupList_request" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body parts="body___1.0" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="KAMCheckCustomerOrder">
+            <soap:operation style="document" soapAction="KAMCheckCustomerOrder"/>
+            <wsdl:input>
+                <soap:body parts="body___1.0" use="literal"/>
+                <soap:header part="PartyInfo" message="tns:MOBILE_KAMCheckCustomerOrder_request" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body parts="body___1.0" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="MOBILE_ChangePrepaidTariffPlan_request">
+        <wsdl:part name="body___1.0" element="ns0:ChangePrepaidTariffPlanRequest"/>
+        <wsdl:part name="PartyInfo" element="partyInfo:PartyInfo"/>
+    </wsdl:message>
+    <wsdl:message name="MOBILE_ChangePrepaidTariffPlan_response">
+        <wsdl:part name="body___1.0" element="ns1:ChangePrepaidTariffPlanResponse"/>
+    </wsdl:message>
+    <wsdl:message name="MOBILE_KAMCheckCustomer_request">
+        <wsdl:part name="body___1.0" element="ns2:KAMCheckCustomerRequest"/>
+        <wsdl:part name="PartyInfo" element="partyInfo:PartyInfo"/>
+    </wsdl:message>
+    <wsdl:message name="MOBILE_KAMCheckCustomer_response">
+        <wsdl:part name="body___1.0" element="ns3:KAMCheckCustomerResponse"/>
+    </wsdl:message>
+    <wsdl:message name="MOBILE_OSPGetRegisteredPPAServiceOfferGroupList_request">
+        <wsdl:part name="body___1.0" element="ns4:OSPGetRegisteredPPAServiceOfferGroupListRequest"/>
+        <wsdl:part name="PartyInfo" element="partyInfo:PartyInfo"/>
+    </wsdl:message>
+    <wsdl:message name="MOBILE_OSPGetRegisteredPPAServiceOfferGroupList_response">
+        <wsdl:part name="body___1.0" element="ns5:OSPGetRegisteredPPAServiceOfferGroupListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="MOBILE_KAMCheckCustomerOrder_request">
+        <wsdl:part name="body___1.0" element="ns6:KAMCheckCustomerOrderRequest"/>
+        <wsdl:part name="PartyInfo" element="partyInfo:PartyInfo"/>
+    </wsdl:message>
+    <wsdl:message name="MOBILE_KAMCheckCustomerOrder_response">
+        <wsdl:part name="body___1.0" element="ns7:KAMCheckCustomerOrderResponse"/>
+    </wsdl:message>
+    <wsdl:service name="MOBILEB2BServiceService">
+        <wsdl:port name="MOBILE__1.0_HTTPPort" binding="tns:MOBILE__1.0">
+            <soap:address location="http://localhost:6700/SOAP"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

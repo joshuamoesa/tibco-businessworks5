@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.kpn.com/mobile/m2c/cdm/handleexceptionrequest.xsd" xmlns:pfx2="http://xmlns.kpn.com/mobile/m2c/cdm/handleexceptionresponse.xsd" xmlns:ns1="http://xmlns.kpn.com/mobile/m2c/cdm/resultstatusstack.xsd" xmlns:ns2="http://xmlns.kpn.com/mobile/m2c/cdm/base.xsd" xmlns:ns3="http://xmlns.kpn.com/mobile/m2c/cdm/customtypes.xsd">
+    <xsd:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/handleexceptionrequest.xsd" schemaLocation="/DesignModel/Common/XSDSchemas/HandleException/Request/HandleExceptionRequest.xsd"/>
+    <xsd:import namespace="http://xmlns.kpn.com/mobile/m2c/cdm/handleexceptionresponse.xsd" schemaLocation="/DesignModel/Common/XSDSchemas/HandleException/Response/HandleExceptionResponse.xsd"/>
+    <pd:name>DesignModel/Back End Adapters/M2C Infrastructure/HandleException.process</pd:name>
+    <pd:description>HandleException service should be invoked for exceptions which 
+require investigation of an operator (manually or automatic) before 
+it can continue or finish its processing. During the time that the 
+exception is send and a reply is coming back, the process is 
+suspended. The operator can instruct the suspended process 
+how to continue its path, by picking one of the available recovery 
+actions which are provided by the process service that throws the 
+exception in the first place. 
+&lt;br&gt;
+If this service should be invoked the type 
+of error is an Exception.</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startDescription>Property	Value
+Version	?
+Interaction	Synchronous
+Visibility	Private 
+SOx sensitive	No
+Status	Active
+Model	functional</pd:startDescription>
+    <pd:startType ref="pfx:HandleExceptionRequest"/>
+    <pd:startX>149</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <pfx2:HandleExceptionResponse>
+            <pfx2:BODY>
+                <pfx2:REPLY_FILTER>
+                    <xsl:value-of select="$Start/pfx:HandleExceptionRequest/pfx:BODY/pfx:REPLY_FILTER"/>
+                </pfx2:REPLY_FILTER>
+                <pfx2:RECOVERY_ACTION>
+                    <xsl:choose>
+                        <xsl:when test="&quot;Intention&quot; = &quot;end the process&quot;">
+                            <xsl:attribute name="ns3:Action">
+                                <xsl:value-of select="&quot;ABANDON&quot;"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="&quot;Intention&quot; = &quot;continue the process for the next task&quot;">
+                            <xsl:attribute name="ns3:Action">
+                                <xsl:value-of select="&quot;CONTINUE&quot;"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="&quot;Intention&quot; = &quot;attempt to repeat the task that generated the exception&quot;">
+                            <xsl:attribute name="ns3:Action">
+                                <xsl:value-of select="&quot;RETRY&quot;"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="ns3:Action">
+                                <xsl:value-of select="&quot;RESTART&quot;"/>
+                            </xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:value-of select="&quot;ABANDON | CONTINUE | RETRY | RESTART&quot;"/>
+                </pfx2:RECOVERY_ACTION>
+            </pfx2:BODY>
+            <pfx2:RESULTSTATUSSTACK>
+                <xsl:attribute name="ns1:STATUS_CODE">
+                    <xsl:value-of select="0"/>
+                </xsl:attribute>
+            </pfx2:RESULTSTATUSSTACK>
+        </pfx2:HandleExceptionResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endDescription>The return message to the Process Services contains a recovery indicator telling the process how to 
+recover from the exception this will be either:
+&lt;ul&gt;
+&lt;li&gt;ABANDON - end the process;
+&lt;li&gt;CONTINUE - continue the process for the next task;
+&lt;li&gt;RETRY - attempt to repeat the task that generated the exception;
+&lt;li&gt;RESTART - restart the service which throws the exception to the Exception Handler.
+&lt;/ul&gt;</pd:endDescription>
+    <pd:endType ref="pfx2:HandleExceptionResponse"/>
+    <pd:endX>452</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas>
+        <Recovery>
+            <xsd:element name="Indicator">
+                <xsd:complexType>
+                    <xsd:choice>
+                        <xsd:element name="ABANDON" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="CONTINUE" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="RETRY" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="RESTART" type="xsd:string" minOccurs="0"/>
+                    </xsd:choice>
+                </xsd:complexType>
+            </xsd:element>
+        </Recovery>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="Resolve Exception">
+        <pd:type>com.tibco.plugin.cmdexec.CmdExecActivity</pd:type>
+        <pd:resourceType>ae.activities.CmdExecActivity</pd:resourceType>
+        <pd:x>293</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <outputToString>false</outputToString>
+            <lineSplit>None</lineSplit>
+        </config>
+        <pd:inputBindings>
+            <CmdInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Resolve Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Resolve Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>History	Comment	Author
+09-05-2007	created based on [4]	StHa</pd:description>
+        <pd:x>34</pd:x>
+        <pd:y>19</pd:y>
+        <pd:width>53</pd:width>
+        <pd:height>26</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-39322</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

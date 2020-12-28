@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdlPfx="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0028.ReportDSLInstalledBase.2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns8="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:ns="http://xmlns.kpn.com/fixed/BaanAdapter/common/Dsl.xsd" xmlns:ns1="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:ns2="http://xmlns.kpn.com/fixed/BaanAdapter/response/ReportDSLInstalledBase.xsd" xmlns:ns3="http://xmlns.kpn.com/common/cdm/Base.xsd" xmlns:ns4="http://www.tibco.com/pe/EngineTypes">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" schemaLocation="/XSDSchemas/WSS/oasis-200401-wss-wssecurity-secext-1.0.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/BaanAdapter/response/ReportDSLInstalledBase.xsd" schemaLocation="/XSDSchemas/BaanAdapter/Response/ReportDSLInstalledBase.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://xmlns.kpn.com/fixed/BaanAdapter/common/Dsl.xsd" schemaLocation="/XSDSchemas/BaanAdapter/Common/Dsl.xsd"/>
+    <wsdl:import namespace="http://xmlns.kpn.com/fixed/GenericSOAPGateway/S0028.ReportDSLInstalledBase.2" location="/WSDL/S0028.ReportDSLInstalledBase.2.wsdl"/>
+    <pd:name>GenericSOAPGateway/Processes/Services/S0028.ReportDSLInstalledBase.2.SOAPHandler.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:S0028.ReportDSLInstalledBase.2.Request"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$Call_Main/Output/BodyContainer/*" element="ns:BAANRECORDS" cardinality="?"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:S0028.ReportDSLInstalledBase.2.Response>
+            <parameters>
+                <xsl:choose>
+                    <xsl:when test="exists($Call_InvalidDataHandler)">
+                        <wsdlPfx:Response>
+                            <wsdlPfx:RESULT>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/@*"/>
+                                <xsl:copy-of select="$Call_InvalidDataHandler/Output/Result/node()"/>
+                            </wsdlPfx:RESULT>
+                        </wsdlPfx:Response>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <wsdlPfx:Response>
+                            <wsdlPfx:RESULT>
+                                <xsl:copy-of select="$Call_Main/Output/Result/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$Call_Main/Output/Result/@*"/>
+                                <xsl:copy-of select="$Call_Main/Output/Result/node()"/>
+                            </wsdlPfx:RESULT>
+                            <xsl:copy-of select="$Call_Main/Output/BodyContainer/ns:BAANRECORDS" copy-namespaces="no"/>
+                        </wsdlPfx:Response>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </parameters>
+        </wsdlPfx:S0028.ReportDSLInstalledBase.2.Response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:S0028.ReportDSLInstalledBase.2.Response"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>62</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="Call_Main">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>42</pd:y>
+        <config>
+            <processName>/GenericSOAPGateway/Processes/CommonHandler.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/wsdlPfx:S0028.ReportDSLInstalledBase.2.Request/headerparameters/ns8:Security/*" element="ns8:UsernameToken"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <Input>
+                <Operation>
+                    <xsl:value-of select="&quot;S0028.ReportDSLInstalledBase.2&quot;"/>
+                </Operation>
+                <ServiceProvider>
+                    <xsl:value-of select="&quot;BaanAdapter&quot;"/>
+                </ServiceProvider>
+                <ServiceConsumer>
+                    <xsl:value-of select="$Start/wsdlPfx:S0028.ReportDSLInstalledBase.2.Request/headerparameters/ns8:Security/ns8:UsernameToken[1]/ns8:Username"/>
+                </ServiceConsumer>
+                <BodyContainer>
+                    <xsl:copy-of select="$Start/wsdlPfx:S0028.ReportDSLInstalledBase.2.Request/parameters/wsdlPfx:Request/ns:DSL" copy-namespaces="no"/>
+                </BodyContainer>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call_InvalidDataHandler">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>304</pd:x>
+        <pd:y>179</pd:y>
+        <config>
+            <processName>/GenericSOAPGateway/Processes/InvalidDataHandler.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <xsl:copy-of select="$_error/ns4:ErrorReport"/>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call_Main</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call_InvalidDataHandler</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_Main</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_InvalidDataHandler</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

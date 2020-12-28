@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:eai="java://com.kpn.eai.component.common.CommonXPathFunctions" xmlns:ns="http://www.tibco.com/pe/CheckpointSchema" xmlns:ns1="http://java.sun.com/products/oss/xml/Common" xmlns:ns2="http://java.sun.com/products/oss/xml/ServiceActivation" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns22="http://xmlns.kpn.com/eai/common/errors" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://xmlns.kpn.com/eai/common/errors" schemaLocation="/Common/Shared Resources/Errors.xsd"/>
+    <pd:name>xAuthorityAdapter/Processes/Inbound/Subprocesses/OSS_Framework_Messages/StartOrder.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="type" type="xsd:string"/>
+                    <xsd:element name="primaryKey" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>53</pd:startX>
+    <pd:startY>138</pd:startY>
+    <pd:returnBindings>
+        <output>
+            <type>
+                <xsl:value-of select="$Wait-for-startOrderResponse/Group/ns2:createOrderByValueResponse/ns2:orderKey/ns1:type"/>
+            </type>
+            <primaryKey>
+                <xsl:value-of select="$Wait-for-startOrderResponse/Group/ns2:createOrderByValueResponse/ns2:orderKey/ns2:primaryKey"/>
+            </primaryKey>
+            <startOrderCorrelationID>
+                <xsl:value-of select="$JMS-MessageID/JMS/messageID"/>
+            </startOrderCorrelationID>
+        </output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="type" type="xsd:string"/>
+                    <xsd:element name="primaryKey" type="xsd:string"/>
+                    <xsd:element name="startOrderCorrelationID" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>535</pd:endX>
+    <pd:endY>123</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="ns22:Error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:activity name="JMS MessageID">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>179</pd:x>
+        <pd:y>131</pd:y>
+        <config>
+            <element>
+                <xsd:element name="JMS">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="messageID" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <JMS>
+                <messageID>
+                    <xsl:value-of select="eai:createGUID()"/>
+                </messageID>
+            </JMS>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Start Order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>294</pd:x>
+        <pd:y>129</pd:y>
+        <config>
+            <processName>/xAuthorityAdapter/Processes/Inbound/Subprocesses/Requests/startOrderByKeyRequest.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <correlationID>
+                    <xsl:value-of select="$JMS-MessageID/JMS/messageID"/>
+                </correlationID>
+                <type>
+                    <xsl:value-of select="$Start/input/type"/>
+                </type>
+                <primaryKey>
+                    <xsl:value-of select="$Start/input/primaryKey"/>
+                </primaryKey>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Wait for startOrderResponse">
+        <pd:type>com.tibco.plugin.waitnotify.WaitActivity</pd:type>
+        <pd:resourceType>ae.activities.waitActivity</pd:resourceType>
+        <pd:x>420</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <sharedConfig>/xAuthorityAdapter/Shared Resources/Inbound/Responses.sharednotify</sharedConfig>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <key>
+                    <xsl:value-of select="$JMS-MessageID/JMS/messageID"/>
+                </key>
+                <timeout>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/xAuthorityAdapter/OSSJMessages/timeout"/>
+                </timeout>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate-Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>297</pd:x>
+        <pd:y>260</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <data>
+                    <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                        <xsl:when test="exists($_error_Start-Order)">
+                            <xsl:copy-of select="$_error_Start-Order/ns22:Error"/>
+                        </xsl:when>
+                        <xsl:when test="exists($_error_Wait-for-startOrderResponse)">
+                            <ns22:Error>
+                                <ns22:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03012&quot;"/>
+                                </ns22:MsgCode>
+                                <ns22:Params>
+                                    <xsl:value-of select="&quot;startOrderResponse&quot;"/>
+                                </ns22:Params>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                            </ns22:Error>
+                        </xsl:when>
+                        <xsl:when test="exists($Wait-for-startOrderResponse)">
+                            <ns22:Error>
+                                <ns22:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03019&quot;"/>
+                                </ns22:MsgCode>
+                                <ns22:Params>
+                                    <xsl:value-of select="&quot;startOrderResponse&quot;"/>
+                                </ns22:Params>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Wait-for-startOrderResponse/Group/ns2:startOrderByKeyException/ns2:illegalStateException)">
+                                        <ns22:ApplicationError>
+                                            <xsl:value-of select="$Wait-for-startOrderResponse/Group/ns2:startOrderByKeyException/ns2:illegalStateException/ns1:message"/>
+                                        </ns22:ApplicationError>
+                                    </xsl:when>
+                                    <xsl:when test="exists($Wait-for-startOrderResponse/Group/ns2:startOrderByKeyException/ns2:objectNotFoundException)">
+                                        <ns22:ApplicationError>
+                                            <xsl:value-of select="$Wait-for-startOrderResponse/Group/ns2:startOrderByKeyException/ns2:objectNotFoundException/ns1:message"/>
+                                        </ns22:ApplicationError>
+                                    </xsl:when>
+                                    <xsl:when test="exists($Wait-for-startOrderResponse/Group/ns2:startOrderByKeyException/ns2:illegalArgumentException)">
+                                        <ns22:ApplicationError>
+                                            <xsl:value-of select="$Wait-for-startOrderResponse/Group/ns2:startOrderByKeyException/ns2:illegalArgumentException/ns1:message"/>
+                                        </ns22:ApplicationError>
+                                    </xsl:when>
+                                    <xsl:when test="exists($Wait-for-startOrderResponse/Group/ns2:startOrderByKeyException/ns2:remoteException)">
+                                        <ns22:ApplicationError>
+                                            <xsl:value-of select="$Wait-for-startOrderResponse/Group/ns2:startOrderByKeyException/ns2:remoteException/ns1:message"/>
+                                        </ns22:ApplicationError>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <ns22:ApplicationError>
+                                            <xsl:value-of select="&quot;&quot;"/>
+                                        </ns22:ApplicationError>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ns22:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns22:Error>
+                                <ns22:MsgCode>
+                                    <xsl:value-of select="&quot;XAuth-03014&quot;"/>
+                                </ns22:MsgCode>
+                                <ns22:Params>
+                                    <xsl:value-of select="&quot;startOrder&quot;"/>
+                                </ns22:Params>
+                                <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                            </ns22:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>424</pd:x>
+        <pd:y>258</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMS MessageID</pd:from>
+        <pd:to>Start Order</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start Order</pd:from>
+        <pd:to>Wait for startOrderResponse</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JMS MessageID</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for startOrderResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS MessageID</pd:from>
+        <pd:to>Generate-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start Order</pd:from>
+        <pd:to>Generate-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for startOrderResponse</pd:from>
+        <pd:to>Generate-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for startOrderResponse</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:xpathDescription>EXCEPTION</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains(local-name($Wait-for-startOrderResponse/Group/*),"Exception")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Generate-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

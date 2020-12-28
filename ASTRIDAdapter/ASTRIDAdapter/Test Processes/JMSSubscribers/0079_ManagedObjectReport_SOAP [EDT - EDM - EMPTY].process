@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="urn:GenericMessageRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://tempuri.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx2="http://xmlns.kpn.com/fixed/portingservices/publish/NotifyNumberInportingComplete">
+    <wsdl:import namespace="urn:GenericMessageRequest" location="/WSDL/ASTRIDAdapter/GenericMessageRequest.wsdl"/>
+    <pd:name>ASTRIDAdapter/Test Processes/JMSSubscribers/0079_ManagedObjectReport_SOAP [EDT - EDM - EMPTY].process</pd:name>
+    <pd:description>Purpose:
+Act as ASTRID wanting to publish.</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>77</pd:startX>
+    <pd:startY>57</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>391</pd:endX>
+    <pd:endY>58</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>228</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <timeout>%%ASTRIDAdapter/Test/Timeout%%</timeout>
+            <service>pfx:GenericMessageRequestService</service>
+            <servicePort>GenericMessageRequestSoap</servicePort>
+            <operation>GenericMessage</operation>
+            <soapAction>urn:GenericMessageRequest/GenericMessage</soapAction>
+            <endpointURL>%%ASTRIDAdapter/Test/Endpoint%%</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:GenericMessage>
+                    <ns:Header>
+                        <ns:GUID>
+                            <xsl:value-of select="&quot;078-ManagedObjectReport&quot;"/>
+                        </ns:GUID>
+                        <ns:managed_object_class>
+                            <xsl:value-of select="&quot;Managed Object Report&quot;"/>
+                        </ns:managed_object_class>
+                        <ns:managed_object_class_extension>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </ns:managed_object_class_extension>
+                        <ns:managed_object_class_version>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns:managed_object_class_version>
+                        <ns:message_origination_it_domain>
+                            <xsl:value-of select="&quot;ASTRID&quot;"/>
+                        </ns:message_origination_it_domain>
+                        <ns:message_instance>
+                            <xsl:value-of select="&quot;Message_Instance&quot;"/>
+                        </ns:message_instance>
+                        <ns:message_creation_time>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns:message_creation_time>
+                        <ns:message_destination_it_domain>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns:message_destination_it_domain>
+                    </ns:Header>
+                    <ns:General>
+                        <ns:trouble_report_identifier>
+                            <xsl:value-of select="&quot;Trouble_Report_Identifier&quot;"/>
+                        </ns:trouble_report_identifier>
+                    </ns:General>
+                    <ns:Managed_Object_Info>
+                        <ns:mo_managed_object_backup>
+                            <xsl:value-of select="&quot;mo_managed_object_backup&quot;"/>
+                        </ns:mo_managed_object_backup>
+                        <ns:mo_managed_object_class>
+                            <xsl:value-of select="&quot;mo_managed_object_class&quot;"/>
+                        </ns:mo_managed_object_class>
+                        <ns:mo_managed_object_graphical_representation>
+                            <xsl:value-of select="&quot;mo_managed_object_graphical_representation&quot;"/>
+                        </ns:mo_managed_object_graphical_representation>
+                        <ns:mo_managed_object_instance>
+                            <xsl:value-of select="&quot;mo_managed_object_instance&quot;"/>
+                        </ns:mo_managed_object_instance>
+                        <ns:mo_mol_city>
+                            <xsl:value-of select="&quot;mo_mol_city&quot;"/>
+                        </ns:mo_mol_city>
+                        <ns:mo_mol_country>
+                            <xsl:value-of select="&quot;mo_mol_country&quot;"/>
+                        </ns:mo_mol_country>
+                        <ns:mo_mol_house_number>
+                            <xsl:value-of select="&quot;mo_mol_house_number&quot;"/>
+                        </ns:mo_mol_house_number>
+                        <ns:mo_mol_house_number_extension>
+                            <xsl:value-of select="&quot;mo_mol_house_number_extension&quot;"/>
+                        </ns:mo_mol_house_number_extension>
+                        <ns:mo_mol_location_code>
+                            <xsl:value-of select="&quot;mo_mol_location_code&quot;"/>
+                        </ns:mo_mol_location_code>
+                        <ns:mo_mol_street>
+                            <xsl:value-of select="&quot;mo_mol_street&quot;"/>
+                        </ns:mo_mol_street>
+                        <ns:mo_mol_zip_code>
+                            <xsl:value-of select="&quot;mo_mol_zip_code&quot;"/>
+                        </ns:mo_mol_zip_code>
+                        <ns:mo_network_class>
+                            <xsl:value-of select="&quot;mo_network_class&quot;"/>
+                        </ns:mo_network_class>
+                        <ns:mo_network_instance>
+                            <xsl:value-of select="&quot;mo_network_instance&quot;"/>
+                        </ns:mo_network_instance>
+                        <ns:mo_ssl_city>
+                            <xsl:value-of select="&quot;mo_ssl_city&quot;"/>
+                        </ns:mo_ssl_city>
+                        <ns:mo_ssl_country>
+                            <xsl:value-of select="&quot;mo_ssl_county&quot;"/>
+                        </ns:mo_ssl_country>
+                        <ns:mo_ssl_house_number>
+                            <xsl:value-of select="&quot;mo_ssl_house_number&quot;"/>
+                        </ns:mo_ssl_house_number>
+                        <ns:mo_ssl_house_number_extension>
+                            <xsl:value-of select="&quot;mo_ssl_house_number_extension&quot;"/>
+                        </ns:mo_ssl_house_number_extension>
+                        <ns:mo_ssl_location_code>
+                            <xsl:value-of select="&quot;mo_ssl_location_code&quot;"/>
+                        </ns:mo_ssl_location_code>
+                        <ns:mo_ssl_street>
+                            <xsl:value-of select="&quot;mo_ssl_street&quot;"/>
+                        </ns:mo_ssl_street>
+                        <ns:mo_ssl_zip_code>
+                            <xsl:value-of select="&quot;mo_ssl_zip_code&quot;"/>
+                        </ns:mo_ssl_zip_code>
+                        <ns:mo_supported_service_backup>
+                            <xsl:value-of select="&quot;mo_supported_service_backup&quot;"/>
+                        </ns:mo_supported_service_backup>
+                        <ns:mo_supported_service_class>
+                            <xsl:value-of select="&quot;mo_supported_service_class&quot;"/>
+                        </ns:mo_supported_service_class>
+                        <ns:mo_supported_service_graphical_representation>
+                            <xsl:value-of select="&quot;mo_supported_service_graphical_representation&quot;"/>
+                        </ns:mo_supported_service_graphical_representation>
+                        <ns:mo_supported_service_instance>
+                            <xsl:value-of select="&quot;mo_supported_service_instance&quot;"/>
+                        </ns:mo_supported_service_instance>
+                    </ns:Managed_Object_Info>
+                </pfx:GenericMessage>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

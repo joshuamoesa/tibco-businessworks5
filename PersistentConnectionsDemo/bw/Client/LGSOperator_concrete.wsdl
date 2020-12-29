@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++>
+	Changelog
+	1.0.0: JM: Initial
+	1.0.1: JM: Changes in Response_Type due to backend service (Mapper application) change.
+	1.1.0: JM: Changes due to update to LGS berichtdefinitie v2.19.
+	1.1.1: JM: Changed Response_Type cause of updated Mapper WSDL. Added KlantCode to Request_Type.
+<!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<wsdl:definitions xmlns="urn:pakketten:esb:LGSOperatorService:v1" xmlns:ns3="urn:pakketten:esb:LGSLabelGeneratedService:fault" xmlns:tns="urn:pakketten:esb:LGSOperatorService:v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="urn:pakketten:esb:LGSOperatorService:v1">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:pakketten:esb:LGSOperatorService:v1">
+            <xs:element name="getOperatorRequest" type="tns:Request_Type"/>
+            <xs:element name="getOperatorResponse" type="tns:Response_Type"/>
+            <xs:element name="fault" type="ns3:Fault_Type"/>
+            <xs:complexType name="Detail_Type">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="detailEntry" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType mixed="true" name="FaultCode_Type">
+                <xs:attribute name="type" type="xs:string" use="required"/>
+            </xs:complexType>
+            <xs:complexType mixed="true" name="FaultString_Type">
+                <xs:attribute name="type" type="xs:string" use="required"/>
+            </xs:complexType>
+            <xs:complexType name="Fault_Type">
+                <xs:sequence>
+                    <xs:element name="faultCode" type="tns:FaultCode_Type"/>
+                    <xs:element name="faultString" type="tns:FaultString_Type"/>
+                    <xs:element minOccurs="0" name="faultActor" type="xs:string"/>
+                    <xs:element name="detail" type="tns:Detail_Type"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Request_Type">
+                <xs:sequence>
+                    <xs:element maxOccurs="1" minOccurs="0" name="KlantCode" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Response_Type">
+                <xs:sequence>
+                    <xs:element name="Result" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ProductOptieType">
+                <xs:annotation>
+                    <xs:documentation>SAP R/3 ISIS product optie</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="OptieSrt" type="GecodeerdeOmschrijvingType">
+                        <xs:annotation>
+                            <xs:documentation>Referentie naar de betreffende productOptie volgens de bijhorende Kenmerksoort</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="KenmSrt" type="GecodeerdeOmschrijvingType">
+                        <xs:annotation>
+                            <xs:documentation>De Kenmerksoort van de bijhorende Productoptie</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GecodeerdeOmschrijvingType">
+                <xs:sequence>
+                    <xs:element name="Code" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Omschrijving" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Begindatum" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="Einddatum" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns="urn:pakketten:esb:LGSLabelGeneratedService:fault" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:pakketten:esb:LGSLabelGeneratedService:fault">
+            <xs:complexType name="Detail_Type">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="detailEntry" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Fault_Type">
+                <xs:sequence>
+                    <xs:element name="faultCode" type="xs:string"/>
+                    <xs:element name="faultString" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultActor" type="xs:string"/>
+                    <xs:element minOccurs="0" name="detail" type="ns3:Detail_Type"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:service name="LGSOperatorService">
+        <wsdl:port binding="getOperatorPortEndpointBinding" name="getOperatorReceivedEventPortEndpoint">
+            <soap:address location="http://localhost:10001/LGSOperatorService"/>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="getOperatorPort">
+        <wsdl:operation name="getOperator">
+            <wsdl:input message="getOperatorRequestMsg"/>
+            <wsdl:output message="getOperatorResponseMsg"/>
+            <wsdl:fault message="faultMsg" name="fault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="getOperatorPortEndpointBinding" type="getOperatorPort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getOperator">
+            <soap:operation soapAction="getOperator" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="fault">
+                <soap:fault name="fault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="getOperatorRequestMsg">
+        <wsdl:part element="tns:getOperatorRequest" name="body"/>
+    </wsdl:message>
+    <wsdl:message name="getOperatorResponseMsg">
+        <wsdl:part element="tns:getOperatorResponse" name="body"/>
+    </wsdl:message>
+    <wsdl:message name="faultMsg">
+        <wsdl:part element="tns:fault" name="fault"/>
+    </wsdl:message>
+</wsdl:definitions>

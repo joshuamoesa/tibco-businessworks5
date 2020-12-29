@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="urn:pakketten:esb:LGSOperatorService:v1">
+    <wsdl:import namespace="urn:pakketten:esb:LGSOperatorService:v1" location="/LGSOperator_concrete.wsdl"/>
+    <pd:name>RequestorProcess.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="group">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="maxIterationCount" type="xsd:int" minOccurs="0"/>
+                    <xsd:element name="sleepAfterIteration_msec" type="xsd:int" minOccurs="0"/>
+                    <xsd:element name="iterationCount" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>141</pd:startX>
+    <pd:startY>138</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>871</pd:endX>
+    <pd:endY>150</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1474826355174</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>347</pd:x>
+        <pd:y>66</pd:y>
+        <pd:width>374</pd:width>
+        <pd:height>140</pd:height>
+        <pd:collapsedWidth>52</pd:collapsedWidth>
+        <pd:collapsedHeight>69</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>$i&gt;$Start/group/iterationCount</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SOAPRequestReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply</pd:from>
+            <pd:to>Sleep</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="SOAPRequestReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>438</pd:x>
+            <pd:y>141</pd:y>
+            <config>
+                <timeout>0</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <servicePort>getOperatorReceivedEventPortEndpoint</servicePort>
+                <operation>getOperator</operation>
+                <service>pfx:LGSOperatorService</service>
+                <soapAction>getOperator</soapAction>
+                <endpointURL>https://%%Client/host%%:%%Client/port%%%%Client/endpointurl%%</endpointURL>
+                <authScheme>NONE</authScheme>
+                <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                    <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                    <ns0:cert isRef="true">/SharedResources/Certs/.folder</ns0:cert>
+                </ns0:ssl>
+                <useProxy>false</useProxy>
+                <proxyName>/Proxy Configuration.httpProxy</proxyName>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx:getOperatorRequest>
+                        <pfx:KlantCode>
+                            <xsl:value-of select="1"/>
+                        </pfx:KlantCode>
+                    </pfx:getOperatorRequest>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Sleep">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>591</pd:x>
+            <pd:y>142</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns0:SleepInputSchema xmlns:ns0="www.tibco.com/plugin/Sleep">
+                    <IntervalInMillisec>
+                        <xsl:value-of select="$Start/group/sleepAfterIteration_msec"/>
+                    </IntervalInMillisec>
+                </ns0:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>257</pd:x>
+        <pd:y>143</pd:y>
+        <config>
+            <element>
+                <xsd:element name="group">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="IterationCount" type="xsd:int" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <group>
+                <xsl:choose>
+                    <xsl:when test="$Start/group/maxIterationCount=0">
+                        <IterationCount>
+                            <xsl:value-of select="$Start/group/maxIterationCount"/>
+                        </IterationCount>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <IterationCount>
+                            <xsl:value-of select="$Start/group/iterationCount"/>
+                        </IterationCount>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </group>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,43 @@
+https://support.tibco.com/s/article/Tibco-KnowledgeArticle-Article-45336
+
+Details
+
+Description:
+Enable more logging to see how BW treats persistent connection differently. Use the following lines to enable a persistent connection and change log4j.properties to log more details:
+
+# Enter the the following lines to use persistent connection manager for HTTPS.
+#bw.plugin.http.client.usePersistentConnectionManagerForSSL=true
+#bw.plugin.http.client.ResponseThreadPool=100
+#bw.plugin.http.client.usePersistentConnectionManager=true
+#bw.plugin.http.client.maxConnectionsPerHost=100
+#bw.plugin.http.client.checkForStaleConnections=true
+Resolution
+
+ 
+Enabled the following in "F:\tibco\bw\5.12\lib\log4j.properties":
+
+
+
+log4j.logger.org.apache=DEBUG, tibco_bw_log
+log4j.logger.httpclient.wire.header=DEBUG, tibco_bw_log
+
+Attached is a zip and properties file (Filename:debugComparationFor_PersistentConnectionManager.zip, log4j.properties) containing the debug file for comparison regarding if persistence is used or not.
+
+The "httpclient.wire.header" will print the HTTP header "close" if persistence is not used. The "org.apache" log will print the lines below if persistence is used :
+
+2015 Oct 19 16:49:42:412 GMT +0800 BW.BW513SSL_TLSv1_issueL3 Debug [org.apache.commons.httpclient.HttpMethodBase] BW-EXT-LOG-300002 Resorting to protocol version default close connection policy 
+2015 ?? 19 16:49:42 CST   Resorting to protocol version default close connection policy 
+2015 Oct 19 16:49:42:413 GMT +0800 BW.BW513SSL_TLSv1_issueL3 Debug [org.apache.commons.httpclient.HttpMethodBase] BW-EXT-LOG-300002 Should NOT close connection, using HTTP/1.1 
+2015 ?? 19 16:49:42 CST   Should NOT close connection, using HTTP/1.1 
+2015 Oct 19 16:49:42:413 GMT +0800 BW.BW513SSL_TLSv1_issueL3 Debug [org.apache.commons.httpclient.HttpConnection] BW-EXT-LOG-300002 Releasing connection back to connection manager. 
+2015 ?? 19 16:49:42 CST   Releasing connection back to connection manager. 
+2015 Oct 19 16:49:42:414 GMT +0800 BW.BW513SSL_TLSv1_issueL3 Debug [org.apache.commons.httpclient.MultiThreadedHttpConnectionManager] BW-EXT-LOG-300002 Freeing connection, hostConfig=HostConfiguration[host=https://localhost:9696] 
+2015 ?? 19 16:49:42 CST   Freeing connection, hostConfig=HostConfiguration[host=https://localhost:9696] 
+2015 Oct 19 16:49:42:415 GMT +0800 BW.BW513SSL_TLSv1_issueL3 Debug [org.apache.commons.httpclient.util.IdleConnectionHandler] BW-EXT-LOG-300002 Adding connection at: 1445244582414 
+2015 ?? 19 16:49:42 CST   Adding connection at: 1445244582414 
+2015 Oct 19 16:49:42:425 GMT +0800 BW.BW513SSL_TLSv1_issueL3 Debug [org.apache.commons.httpclient.MultiThreadedHttpConnectionManager] BW-EXT-LOG-300002 Notifying no-one, there are no waiting threads 
+2015 ?? 19 16:49:42 CST   Notifying no-one, there are no waiting threads 
+2015 Oct 19 16:49:42:427 GMT +0800 BW.BW513SSL_TLSv1_issueL3 Debug [org.apache.commons.httpclient.util.IdleConnectionHandler] BW-EXT-LOG-300002 Checking for connections, idleTimeout: 1445244579427 
+2015 ?? 19 16:49:42 CST   Checking for connections, idleTimeout: 1445244579427 
+2015 Oct 19 16:49:43:428 GMT +0800 BW.BW513SSL_TLSv1_issueL3 Debug [org.apache.commons.httpclient.util.IdleConnectionHandler] BW-EXT-LOG-300002 Checking for connections, idleTimeout: 1445244580428 
+2015 ?? 19 16:49:43 CST   Checking for connections, idleTimeout: 1445244580428 

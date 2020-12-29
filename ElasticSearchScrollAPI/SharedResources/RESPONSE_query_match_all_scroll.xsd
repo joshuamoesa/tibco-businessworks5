@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="JSON" type="JSONType"/>
+	<xs:complexType name="_shardsType">
+		<xs:all>
+			<xs:element name="total" type="xs:byte" minOccurs="0"/>
+			<xs:element name="successful" type="xs:byte" minOccurs="0"/>
+			<xs:element name="failed" type="xs:byte" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="JSONType">
+		<xs:all>
+			<xs:element name="_scroll_id" type="xs:string" minOccurs="0"/>
+			<xs:element name="took" type="xs:byte" minOccurs="0"/>
+			<xs:element name="timed_out" type="xs:string" minOccurs="0"/>
+			<xs:element name="_shards" type="_shardsType" minOccurs="0"/>
+			<xs:element name="hits" type="hitsType" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="hitsType">
+		<xs:sequence>
+			<xs:element name="_index" type="xs:string" minOccurs="0"/>
+			<xs:element name="_type" type="xs:string" minOccurs="0"/>
+			<xs:element name="_id" type="xs:string" minOccurs="0"/>
+			<xs:element name="_score" type="xs:byte" minOccurs="0"/>
+			<xs:element name="total" type="xs:short" minOccurs="0"/>
+			<xs:element name="max_score" type="xs:byte" minOccurs="0"/>
+			<xs:element name="hits" type="hitsType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

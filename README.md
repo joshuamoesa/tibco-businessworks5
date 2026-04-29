@@ -6,3 +6,6 @@ This is my personal repository for my TIBCO BusinessWorks 5 proof-of-concepts an
 
 Best regards,
 Joshua
+
+License
+This project is dual-licensed under the EPL 2.0 and the MIT License. You may choose which license you'd like to use.
